@@ -1,66 +1,82 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
-/**
- *
- * @author Admin
- */
 public class Account {
-    String Email;
-    String Username;
-    String Passowrd;
-    String Role;
+    private int idAccount;
+    private String email;
+    private String username;
+    private String password;
+    private String role;
+    private boolean isActive;
 
-    public Account() {
+    // Constructor
+    public Account(int idAccount, String email, String username, String password, String role, boolean isActive) {
+        this.idAccount = idAccount;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.isActive = isActive;
     }
 
-    public Account(String Email, String Username, String Passowrd, String Role) {
-        this.Email = Email;
-        this.Username = Username;
-        this.Passowrd = Passowrd;
-        this.Role = Role;
+    // Getters and Setters
+    public int getIdAccount() {
+        return idAccount;
+    }
+
+    public void setIdAccount(int idAccount) {
+        this.idAccount = idAccount;
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
-    public void setEmail(String Email) {
-        this.Email = Email;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getUsername() {
-        return Username;
+        return username;
     }
 
-    public void setUsername(String Username) {
-        this.Username = Username;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getPassowrd() {
-        return Passowrd;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPassowrd(String Passowrd) {
-        this.Passowrd = Passowrd;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getRole() {
-        return Role;
+        return role;
     }
 
-    public void setRole(String Role) {
-        this.Role = Role;
+    public void setRole(String role) {
+        this.role = role;
     }
 
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    // toString method for easy printing
     @Override
     public String toString() {
-        return "Account{" + "Email=" + Email + ", Username=" + Username + ", Passowrd=" + Passowrd + ", Role=" + Role + '}';
+        return "Account{" +
+                "idAccount=" + idAccount +
+                ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
+                ", isActive=" + isActive +
+                '}';
     }
-    
-    
-    
 }

@@ -4,13 +4,17 @@
  */
 package model;
 
+import java.util.List;
+
 /**
  *
  * @author Admin
  */
 public class Phong {
+
     private int ID_Phong;
-    private int ID_LoaiPhong;;
+    private int ID_LoaiPhong;
+
     private String TenPhongTro;
     private int ID_NhaTro;
     private String TenLoaiPhong;
@@ -21,6 +25,7 @@ public class Phong {
     private String URL_AnhPhongTro;
     private int Gia;
     private String Mo_ta;
+    private List<String> images;
 
     public Phong() {
     }
@@ -38,6 +43,28 @@ public class Phong {
         this.URL_AnhPhongTro = URL_AnhPhongTro;
         this.Gia = Gia;
         this.Mo_ta = Mo_ta;
+    }
+
+    public Phong(int ID_LoaiPhong, String TenPhongTro, int ID_NhaTro, int Tang, String Trang_thai, float Dien_tich, int Gia, List<String> images) {
+        this.ID_LoaiPhong = ID_LoaiPhong;
+        this.TenPhongTro = TenPhongTro;
+        this.ID_NhaTro = ID_NhaTro;
+        this.Tang = Tang;
+        this.Trang_thai = Trang_thai;
+        this.Dien_tich = Dien_tich;
+        this.Gia = Gia;
+        this.images = images;
+    }
+
+    public Phong(int ID_Phong, int ID_LoaiPhong, String TenPhongTro, int ID_NhaTro, int Tang, String Trang_thai, float Dien_tich, int Gia) {
+        this.ID_LoaiPhong = ID_LoaiPhong;
+        this.TenPhongTro = TenPhongTro;
+        this.ID_NhaTro = ID_NhaTro;
+        this.Tang = Tang;
+        this.Trang_thai = Trang_thai;
+        this.Dien_tich = Dien_tich;
+        this.Gia = Gia;
+        this.ID_Phong = ID_Phong;
     }
 
     public int getID_Phong() {
@@ -135,5 +162,18 @@ public class Phong {
     public void setMo_ta(String Mo_ta) {
         this.Mo_ta = Mo_ta;
     }
-    
+
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
+
+    @Override
+    public String toString() {
+        return "Room{" + "ID_Phong=" + ID_Phong + ", ID_LoaiPhong=" + ID_LoaiPhong + ", TenPhongTro=" + TenPhongTro + ", ID_NhaTro=" + ID_NhaTro + ", TenLoaiPhong=" + TenLoaiPhong + ", TenNhaTro=" + TenNhaTro + ", Tang=" + Tang + ", Trang_thai=" + Trang_thai + ", Dien_tich=" + Dien_tich + ", URL_AnhPhongTro=" + URL_AnhPhongTro + ", Gia=" + Gia + ", Mo_ta=" + Mo_ta + '}';
+    }
+
 }

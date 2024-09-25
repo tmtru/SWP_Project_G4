@@ -5,25 +5,20 @@
 
 package controller;
 
-import dal.NhaTroDAO;
-import dal.PhongDAO;
+import dal.DichVuDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
-import model.NhaTro;
-import model.Phong;
+import model.DichVu;
 
 /**
  *
  * @author Admin
  */
-public class homeRooms extends HttpServlet {
+public class addDichVu extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -40,10 +35,10 @@ public class homeRooms extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet homeRooms</title>");  
+            out.println("<title>Servlet addDichVu</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet homeRooms at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet addDichVu at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,19 +55,8 @@ public class homeRooms extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
-        PhongDAO daor = new PhongDAO();
-        List<Phong> rooms = daor.getAllRooms();
-        HttpSession session = request.getSession();
-        NhaTroDAO nhaTroDAO = new NhaTroDAO();
-
-        ArrayList<NhaTro> danhSachNhaTro = nhaTroDAO.getAll();
-        
-        session.setAttribute("nhatros", danhSachNhaTro);
-       request.getRequestDispatcher("home.jsp").forward(request, response);
-    }
-    
+        processRequest(request, response);
+    } 
 
     /** 
      * Handles the HTTP <code>POST</code> method.
@@ -84,7 +68,26 @@ public class homeRooms extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        String tenDichVu = request.getParameter("tendichvu");
+        int donGia = Integer.parseInt(request.getParameter("donGia"));
+        String donVi = request.getParameter("donvi");
+        String moTa = request.getParameter("mota");
+
+        // Tạo đối tượng DichVu
+        DichVu dichVu = new DichVu();
+        dichVu.setTenDichVu(tenDichVu);
+        dichVu.setDon_gia(donGia);
+        dichVu.setDon_vi(donVi);
+        dichVu.setMo_ta(moTa);
+
+        // Tạo đối tượng DAO để thêm dịch vụ vào cơ sở dữ liệu
+        DichVuDAO dichVuDAO = new DichVuDAO();
+        dichVuDAO.addDichVu(dichVu);
+
+        // Chuyển hướng về trang danh sách dịch vụ
+        response.sendRedirect("loaddichvu"); 
     }
 
     /** 

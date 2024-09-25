@@ -6,7 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page import="java.util.List, java.util.ArrayList,java.text.DecimalFormat, model.NhaTro, model.Phong, dal.NhaTroDAO, dal.PhongDAO"%>
+<%@page import="java.util.List, java.util.ArrayList,java.text.DecimalFormat, model.NhaTro, model.Phong, dal.NhaTroDAO, dal.PhongDAO, model.AnhNhaTro, dal.AnhNhaTroDAO"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -31,7 +31,7 @@
         <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
         <!-- Stylesheet -->
-        <link href="assets/css/style.css" rel="stylesheet">
+        <link href="css/style.css" rel="stylesheet">
 
     </head>
     <body>
@@ -224,6 +224,10 @@
                         <%  Integer idNhaTro = (Integer) pageContext.getAttribute("nhatro");
                         NhaTroDAO daont= new NhaTroDAO();
                         ArrayList<Phong> rooms=daont.getAllPhongTro(idNhaTro);
+                        AnhNhaTroDAO dao = new AnhNhaTroDAO();
+                        // Gọi phương thức để lấy danh sách ảnh
+                        ArrayList<AnhNhaTro> anhNhaTroList = dao.getAllAnhByNhaTroId(idNhaTro);
+                        
                         float allPrice=0;
                         for (int i=0; i<rooms.size();i++){
                             allPrice+=rooms.get(i).getGia();
@@ -236,14 +240,23 @@
 
                         // Set các giá trị vào request để truyền sang phần hiển thị
                         request.setAttribute("avePrice", formattedAvePrice);
+                        request.setAttribute("imgNhaTro", anhNhaTroList);
                         request.setAttribute("rooms",rooms);
                         %>
 
                         <div class="listings-content mb-2" data-aos="fade-right" data-aos-duration="700">
                             <article class="featured-listing">
                                 <div class="featured-card">
-                                    <img src="${nt.URL_AnhNhaTro}"
-                                         alt="Featured property image" class="featured-image">
+                                    <c:if test="${not empty imgNhaTro}">
+                                        <c:forEach var="anh" items="${imgNhaTro}" varStatus="status">
+                                            <c:if test="${status.index == 0}">
+                                                <img src="${anh.URL_AnhNhaTro.get(0)}" alt="Ảnh nhà trọ" />
+                                            </c:if>
+                                        </c:forEach>
+                                    </c:if>
+                                    <c:if test="${empty imgNhaTro}">
+                                        <p>Không có ảnh cho nhà trọ này.</p>
+                                    </c:if>
                                     <div class="featured-details">
                                         <div class="price-title-wrapper">
                                             <div>

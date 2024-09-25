@@ -13,17 +13,15 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.List;
 import model.NhaTro;
 import model.Phong;
 
 /**
  *
- * @author Admin
+ * @author hihihihaha
  */
-public class homeRooms extends HttpServlet {
+public class searchRoomByName extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -40,10 +38,10 @@ public class homeRooms extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet homeRooms</title>");  
+            out.println("<title>Servlet searchRoomByName</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet homeRooms at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet searchRoomByName at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -57,22 +55,31 @@ public class homeRooms extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
-        PhongDAO daor = new PhongDAO();
-        List<Phong> rooms = daor.getAllRooms();
-        HttpSession session = request.getSession();
-        NhaTroDAO nhaTroDAO = new NhaTroDAO();
+    private PhongDAO phongDAO;
 
-        ArrayList<NhaTro> danhSachNhaTro = nhaTroDAO.getAll();
-        
-        session.setAttribute("nhatros", danhSachNhaTro);
-       request.getRequestDispatcher("home.jsp").forward(request, response);
+    @Override
+    public void init() throws ServletException {
+        phongDAO = new PhongDAO();
     }
-    
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+    String tenPhongTro = request.getParameter("tenPhongTro");
+    List<Phong> rooms = phongDAO.getRoomsByName(tenPhongTro);  
+
+    // availabe floor
+    List<Integer> tangList = phongDAO.getAvailableTang();
+    request.setAttribute("tangList", tangList);
+
+    // available house
+    NhaTroDAO nhaTroDAO = new NhaTroDAO();
+    List<NhaTro> nhaTroList = nhaTroDAO.getAvailableNhaTro();
+    request.setAttribute("nhaTroList", nhaTroList);
+
+    request.setAttribute("rooms", rooms);
+    request.getRequestDispatcher("room.jsp").forward(request, response);
+}
 
     /** 
      * Handles the HTTP <code>POST</code> method.

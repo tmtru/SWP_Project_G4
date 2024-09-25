@@ -31,7 +31,7 @@
         <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
         <!-- Stylesheet -->
-        <link href="assets/css/style.css" rel="stylesheet">
+        <link href="css/style.css" rel="stylesheet">
 
 
     </head>

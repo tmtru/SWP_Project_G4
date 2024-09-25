@@ -1,0 +1,178 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f6fa;
+    display: flex;
+    min-height: 100vh;
+}
+.container {
+    display: flex;
+    flex-grow: 1;
+}
+.sidebar {
+    width: 250px;
+    background-color: #fff;
+    border-right: 1px solid #e0e0e0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+.sidebar h1 {
+    font-size: 24px;
+    color: #3b3b3b;
+    margin-bottom: 40px;
+}
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    flex-grow: 1;
+}
+.sidebar ul li {
+    margin-bottom: 20px;
+}
+.sidebar ul li a {
+    text-decoration: none;
+    color: #3b3b3b;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+}
+.sidebar ul li a i {
+    margin-right: 10px;
+}
+.sidebar ul li a.active {
+    color: #5a67d8;
+}
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+}
+.main-content h2 {
+    font-size: 24px;
+    color: #3b3b3b;
+    margin-bottom: 20px;
+}
+.main-content .filters {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.main-content .filters select,
+.main-content .filters button,
+.main-content .filters input {
+    margin-right: 10px;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    background-color: #fff;
+    font-size: 14px;
+    color: #3b3b3b;
+}
+.main-content .filters button {
+    background-color: #5a67d8;
+    color: #fff;
+    border: none;
+}
+.main-content .filters button.secondary {
+    background-color: #38a169;
+}
+.main-content .filters button.tertiary {
+    background-color: #e53e3e;
+}
+.main-content .filters button.quaternary {
+    background-color: #4a5568;
+}
+.main-content .account-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.main-content .account-table th,
+.main-content .account-table td {
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    text-align: left;
+}
+.main-content .account-table th {
+    background-color: #f0f0f0;
+    font-weight: 500;
+}
+.main-content .account-table td {
+    background-color: #fff;
+}
+.main-content .account-table .actions button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
+.main-content .account-table .actions button.edit {
+    background-color: #5a67d8;
+    color: #fff;
+}
+.main-content .account-table .actions button.delete {
+    background-color: #e53e3e;
+    color: #fff;
+}
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 34px;
+    height: 20px;
+}
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+input:checked + .slider {
+    background-color: #5a67d8;
+}
+input:checked + .slider:before {
+    transform: translateX(14px);
+}
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+.pagination button {
+    padding: 10px 15px;
+    margin: 0 5px;
+    border: 1px solid #e0e0e0;
+    background-color: #fff;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.pagination button.active {
+    background-color: #5a67d8;
+    color: #fff;
+    border: none;
+}
+.form-group{
+    max-width: 500px
+}

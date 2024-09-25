@@ -4,20 +4,22 @@
  */
 package controller;
 
+import dal.PhongDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import model.Phong;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
- * @author Admin
+ * @author hihihihaha
  */
-public class classifyRoomHome extends HttpServlet {
+public class deleteRoomServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,10 +38,10 @@ public class classifyRoomHome extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet classifyRoomHome</title>");
+            out.println("<title>Servlet deleteRoomServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet classifyRoomHome at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet deleteRoomServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -57,39 +59,30 @@ public class classifyRoomHome extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-    }
-    
-    //filter room by price in range min-max
-    public ArrayList<Phong> filterRoomsByPrice(ArrayList<Phong> phongList, double min, double max) {
-        ArrayList<Phong> filteredList = new ArrayList<>();
-        for (Phong phong : phongList) {
-            if (phong.getGia() >= min && phong.getGia() <= max) {
-                filteredList.add(phong);
+        String roomIdStr = request.getParameter("id");
+        if (roomIdStr != null) {
+            try {
+                int roomId = Integer.parseInt(roomIdStr);
+                PhongDAO dao = new PhongDAO();
+
+                if (dao.isRoomDeletable(roomId)) {
+                    boolean success = dao.deleteRoomById(roomId);
+                    if(success) {
+                        response.sendRedirect("room?deleteSuccess=true");
+                    }else {
+                        response.sendRedirect("room?deleteError=true");
+                    }
+                }else {
+                    response.sendRedirect("room?deleteError=true");
+                }
+            } catch (NumberFormatException | SQLException e) {
+                response.sendRedirect("room?deleteError=true");
             }
+        }else {
+            response.sendRedirect("room?deleteError=true");
         }
-        return filteredList;
-    }
-    
-    //filter room by area in range min-max
-    public ArrayList<Phong> filterRoomsByArea(ArrayList<Phong> phongList, double minArea, double maxArea) {
-        ArrayList<Phong> filteredList = new ArrayList<>();
-        for (Phong phong : phongList) {
-            if (phong.getDien_tich() >= minArea && phong.getDien_tich() <= maxArea) {
-                filteredList.add(phong);
-            }
-        }
-        return filteredList;
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

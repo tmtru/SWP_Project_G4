@@ -11,7 +11,9 @@ package dal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import model.NhaTro;
 import model.Phong;
 
@@ -19,25 +21,44 @@ public class NhaTroDAO extends DBContext {
 
     public ArrayList<NhaTro> getAll() {
         ArrayList<NhaTro> nhaTroList = new ArrayList<>();
-        String sql = "SELECT * FROM NHA_TRO p "
-                + "LEFT JOIN ANH_NHA_TRO a ON p.ID_NhaTro = a.ID_NhaTro ";
-        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery();) {
-            // Tạo câu lệnh SQL để lấy tất cả nhà trọ
-
+        String sql = "SELECT p.*, a.URL_AnhNhaTro FROM NHA_TRO p "
+                + "LEFT JOIN ANH_NHA_TRO a ON p.ID_NhaTro = a.ID_NhaTro";
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             // Lặp qua các kết quả và thêm vào danh sách
             while (rs.next()) {
                 NhaTro nhaTro = new NhaTro();
                 nhaTro.setID_NhaTro(rs.getInt("ID_NhaTro"));
                 nhaTro.setTenNhaTro(rs.getNString("TenNhaTro"));
-                nhaTro.setID_ChuTro(rs.getString("ID_ChuTro"));
+                nhaTro.setID_ChuTro(rs.getInt("ID_ChuTro"));  // Chuyển sang getInt
                 nhaTro.setDia_chi(rs.getNString("Dia_Chi"));
                 nhaTro.setMo_ta(rs.getNString("Mo_ta"));
-                nhaTro.setURL_AnhNhaTro(rs.getNString("URL_AnhNhaTro"));
                 nhaTroList.add(nhaTro);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return nhaTroList;
+    }
+    //mang danh sach theo ten nha tro
+
+    public List<NhaTro> getAvailableNhaTro() {
+        List<NhaTro> nhaTroList = new ArrayList<>();
+        String sql = "SELECT DISTINCT ID_NhaTro, TenNhaTro FROM  nha_tro ORDER BY TenNhaTro";
+
+        try (PreparedStatement st = connection.prepareStatement(sql); ResultSet rs = st.executeQuery()) {
+            while (rs.next()) {
+                NhaTro n = new NhaTro();
+                n.setID_NhaTro(rs.getInt("ID_NhaTro"));
+                n.setTenNhaTro(rs.getString("TenNhaTro"));
+                n.setID_ChuTro(rs.getInt("ID_ChuTro"));  // Chuyển sang getInt
+                n.setDia_chi(rs.getNString("Dia_Chi"));
+                n.setMo_ta(rs.getNString("Mo_ta"));
+                nhaTroList.add(n);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in NhaTroDAO.getAvailableNhaTro: " + e.getMessage());
+        }
+
         return nhaTroList;
     }
 
@@ -87,10 +108,9 @@ public class NhaTroDAO extends DBContext {
                 nhaTro = new NhaTro();
                 nhaTro.setID_NhaTro(rs.getInt("ID_NhaTro"));
                 nhaTro.setTenNhaTro(rs.getNString("TenNhaTro"));
-                nhaTro.setID_ChuTro(rs.getString("ID_ChuTro"));
+                nhaTro.setID_ChuTro(Integer.parseInt(rs.getString("ID_ChuTro")));
                 nhaTro.setDia_chi(rs.getNString("Dia_Chi"));
                 nhaTro.setMo_ta(rs.getNString("Mo_ta"));
-                nhaTro.setURL_AnhNhaTro(rs.getNString("URL_AnhNhaTro"));
 
             }
         } catch (Exception e) {
@@ -126,7 +146,6 @@ public class NhaTroDAO extends DBContext {
                 phong.setTang(rs.getInt("Tang"));
                 phong.setTrang_thai(rs.getString("Trang_thai"));
                 phong.setDien_tich(rs.getFloat("Dien_Tich"));
-                phong.setURL_AnhPhongTro(rs.getString("URL_AnhPhongTro"));
                 phong.setGia(rs.getInt("Gia"));
                 phong.setMo_ta(rs.getString("Mo_ta"));
                 phongList.add(phong);
@@ -148,7 +167,6 @@ public class NhaTroDAO extends DBContext {
             System.out.println("Tên nhà trọ: " + nhaTro.getTenNhaTro());
             System.out.println("ID chủ trọ: " + nhaTro.getID_ChuTro());
             System.out.println("Địa chỉ: " + nhaTro.getDia_chi());
-            System.out.println("Địa chỉ: " + nhaTro.getURL_AnhNhaTro());
             System.out.println("--------------------------");
         }
 

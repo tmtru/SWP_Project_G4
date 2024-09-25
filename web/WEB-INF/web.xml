@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+    <!--For home page-->
     <servlet>
         <servlet-name>homeRooms</servlet-name>
         <servlet-class>controller.homeRooms</servlet-class>
@@ -13,10 +14,6 @@
         <servlet-class>controller.loadRoomsHome</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>classifyRoomHome</servlet-name>
-        <servlet-class>controller.classifyRoomHome</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>filterRoomsHome</servlet-name>
         <servlet-class>controller.filterRoomsHome</servlet-class>
     </servlet>
@@ -24,36 +21,98 @@
         <servlet-name>homeRooms</servlet-name>
         <url-pattern>/homer</url-pattern>
     </servlet-mapping>
-    <servlet>
-        <servlet-name>login</servlet-name>
-        <servlet-class>controller.login</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>register</servlet-name>
-        <servlet-class>controller.register</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>login</servlet-name>
-        <url-pattern>/login</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>register</servlet-name>
-        <url-pattern>/register</url-pattern>
-    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>homeCategory</servlet-name>
         <url-pattern>/category</url-pattern>
+    </servlet-mapping>
+    <!--    For Rooms manegement in DashBoard -->
+    <servlet>
+        <servlet-name>AddRoomServlet</servlet-name>
+        <servlet-class>controller.AddRoomServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditRoomServlet</servlet-name>
+        <servlet-class>controller.EditRoomServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RoomServlet</servlet-name>
+        <servlet-class>controller.RoomServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>deleteRoomServlet</servlet-name>
+        <servlet-class>controller.deleteRoomServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>detailRoomServlet</servlet-name>
+        <servlet-class>controller.detailRoomServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>searchRoomByName</servlet-name>
+        <servlet-class>controller.searchRoomByName</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AccountControllerServlet</servlet-name>
+        <servlet-class>controller.AccountControllerServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AddRoomServlet</servlet-name>
+        <url-pattern>/insertRoom</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditRoomServlet</servlet-name>
+        <url-pattern>/editRoom</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RoomServlet</servlet-name>
+        <url-pattern>/room</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>deleteRoomServlet</servlet-name>
+        <url-pattern>/deleteRoom</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>detailRoomServlet</servlet-name>
+        <url-pattern>/detailRoom</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>loadRoomsHome</servlet-name>
         <url-pattern>/allrooms</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>classifyRoomHome</servlet-name>
-        <url-pattern>/classify</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>filterRoomsHome</servlet-name>
         <url-pattern>/filterrooms</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>searchRoomByName</servlet-name>
+        <url-pattern>/searchRoomByName</url-pattern>
+    </servlet-mapping>
+    <!--For Dich vu in Dashboard-->
+    <servlet>
+        <servlet-name>actionDichvu</servlet-name>
+        <servlet-class>controller.actionDichvu</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>addDichVu</servlet-name>
+        <servlet-class>controller.addDichVu</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>loadDichVu</servlet-name>
+        <servlet-class>controller.loadDichVu</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>actionDichvu</servlet-name>
+        <url-pattern>/action</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>addDichVu</servlet-name>
+        <url-pattern>/adddichvu</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>loadDichVu</servlet-name>
+        <url-pattern>/loaddichvu</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AccountControllerServlet</servlet-name>
+        <url-pattern>/accountController</url-pattern>
     </servlet-mapping>
 </web-app>

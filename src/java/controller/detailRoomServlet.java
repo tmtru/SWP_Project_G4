@@ -4,26 +4,20 @@
  */
 package controller;
 
-import dal.AnhNhaTroDAO;
-import dal.NhaTroDAO;
+import dal.PhongDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import model.AnhNhaTro;
-import model.NhaTro;
 import model.Phong;
 
 /**
  *
- * @author Admin
+ * @author hihihihaha
  */
-public class loadRoomsHome extends HttpServlet {
+public class detailRoomServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,7 +31,18 @@ public class loadRoomsHome extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet detailRoomServlet</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet detailRoomServlet at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -52,35 +57,26 @@ public class loadRoomsHome extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
-        /*Load house and all rooms of the house*/
-        Integer idNhaTro = Integer.parseInt(request.getParameter("id"));
-        NhaTroDAO daont = new NhaTroDAO();
-        NhaTro nt = daont.getNhaTroById(idNhaTro);
-        ArrayList<Phong> rooms = daont.getAllPhongTro(idNhaTro);
-        AnhNhaTroDAO dao = new AnhNhaTroDAO();
-        // Gọi phương thức để lấy danh sách ảnh
-        ArrayList<AnhNhaTro> anhNhaTroList = dao.getAllAnhByNhaTroId(idNhaTro);
-        float allPrice = 0;
-        for (int i = 0; i < rooms.size(); i++) {
-            allPrice += rooms.get(i).getGia();
+        String roomIdStr = request.getParameter("id");
+
+        if (roomIdStr != null && !roomIdStr.isEmpty()) {
+            try {
+                int roomId = Integer.parseInt(roomIdStr);
+                PhongDAO phongDAO = new PhongDAO();
+                Phong room = phongDAO.getDetailRoom(roomId);
+
+                if (room != null) {
+                    request.setAttribute("room", room);
+                    request.getRequestDispatcher("detailRoom.jsp").forward(request, response);
+                } else {
+                    response.sendRedirect("room.jsp");
+                }
+            } catch (NumberFormatException e) {
+                response.sendRedirect("room.jsp");
+            }
+        } else {
+            response.sendRedirect("home.jsp");
         }
-        float avePrice = allPrice / rooms.size();
-
-        // Làm tròn giá trị avePrice đến 2 chữ số thập phân
-        DecimalFormat df = new DecimalFormat("#.##");
-        String formattedAvePrice = df.format(avePrice / 1000000);
-        HttpSession session = request.getSession();
-
-        // Set các giá trị vào request để truyền sang phần hiển thị
-        session.setAttribute("avePrice", formattedAvePrice);
-        session.setAttribute("allrooms", rooms);
-        request.setAttribute("rooms", rooms);
-        session.setAttribute("currenthouse", nt);
-        request.setAttribute("imgNhaTro", anhNhaTroList);
-        request.getRequestDispatcher("detailHouseHome.jsp").forward(request, response);
-
     }
 
     /**

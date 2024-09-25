@@ -31,8 +31,8 @@
         <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
         <!-- Stylesheet -->
-        <link href="assets/css/styleHomeCatagory.css" rel="stylesheet">
-        <link href="assets/css/style.css" rel="stylesheet">
+        <link href="css/styleHomeCatagory.css" rel="stylesheet">
+        <link href="css/style.css" rel="stylesheet">
         <!--jquery-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
@@ -45,11 +45,30 @@
         <!-- Header End -->
 
         <!-- Room Start -->
+        <div class="container">
+            <nav aria-label="breadcrumb" class="m-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="homer">Trang chủ</a></li>
+                    <li class="breadcrumb-item"><a href="category">Nhà trọ</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">${currenthouse.tenNhaTro}</li>
+                </ol>
+            </nav>
+        </div>
 
         <section class="rental-property">
 
             <div class="image-column">
-                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/f299eeb47dd0512eba1ff08fe44bf5c8e776d8394ce0b0a0983ae447e3d1ed08?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826" alt="Rental property exterior view" class="property-image" />
+
+                <c:if test="${not empty imgNhaTro}">
+                    <c:forEach var="anh" items="${imgNhaTro}" varStatus="status">
+                        <c:if test="${status.index == 0}">
+                            <img src="${anh.URL_AnhNhaTro.get(0)}" alt="Ảnh nhà trọ" class="property-image"/>
+                        </c:if>
+                    </c:forEach>
+                </c:if>
+                <c:if test="${empty imgNhaTro}">
+                    <p>Không có ảnh cho nhà trọ này.</p>
+                </c:if>
             </div>
             <div class="details-column">
                 <div class="price-section">

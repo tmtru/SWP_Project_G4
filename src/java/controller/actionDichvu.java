@@ -4,26 +4,20 @@
  */
 package controller;
 
-import dal.AnhNhaTroDAO;
-import dal.NhaTroDAO;
+import dal.DichVuDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import model.AnhNhaTro;
-import model.NhaTro;
-import model.Phong;
+import model.DichVu;
 
 /**
  *
  * @author Admin
  */
-public class loadRoomsHome extends HttpServlet {
+public class actionDichvu extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,7 +31,33 @@ public class loadRoomsHome extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        String action = request.getParameter("action");
+        int idDichVu = Integer.parseInt(request.getParameter("id"));
+        DichVuDAO dvDao = new DichVuDAO();
+        switch (action) {
+            case "dele":
+                dvDao.deleteDichVu(idDichVu);
+                break;
+            case "edit":
+                String tenDichVu = request.getParameter("tendichvu");
+                int donGia = Integer.parseInt(request.getParameter("donGia"));
+                String donVi = request.getParameter("donvi");
+                String moTa = request.getParameter("mota");
 
+                // Tạo đối tượng DichVu
+                DichVu dichVu = new DichVu();
+                dichVu.setTenDichVu(tenDichVu);
+                dichVu.setDon_gia(donGia);
+                dichVu.setDon_vi(donVi);
+                dichVu.setMo_ta(moTa);
+                dichVu.setID_DichVu(idDichVu);
+                dvDao.updateDichVu(dichVu);
+                break;
+            default:
+                break;
+        }
+        response.sendRedirect("loaddichvu");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -52,35 +72,7 @@ public class loadRoomsHome extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
-        /*Load house and all rooms of the house*/
-        Integer idNhaTro = Integer.parseInt(request.getParameter("id"));
-        NhaTroDAO daont = new NhaTroDAO();
-        NhaTro nt = daont.getNhaTroById(idNhaTro);
-        ArrayList<Phong> rooms = daont.getAllPhongTro(idNhaTro);
-        AnhNhaTroDAO dao = new AnhNhaTroDAO();
-        // Gọi phương thức để lấy danh sách ảnh
-        ArrayList<AnhNhaTro> anhNhaTroList = dao.getAllAnhByNhaTroId(idNhaTro);
-        float allPrice = 0;
-        for (int i = 0; i < rooms.size(); i++) {
-            allPrice += rooms.get(i).getGia();
-        }
-        float avePrice = allPrice / rooms.size();
-
-        // Làm tròn giá trị avePrice đến 2 chữ số thập phân
-        DecimalFormat df = new DecimalFormat("#.##");
-        String formattedAvePrice = df.format(avePrice / 1000000);
-        HttpSession session = request.getSession();
-
-        // Set các giá trị vào request để truyền sang phần hiển thị
-        session.setAttribute("avePrice", formattedAvePrice);
-        session.setAttribute("allrooms", rooms);
-        request.setAttribute("rooms", rooms);
-        session.setAttribute("currenthouse", nt);
-        request.setAttribute("imgNhaTro", anhNhaTroList);
-        request.getRequestDispatcher("detailHouseHome.jsp").forward(request, response);
-
+        processRequest(request, response);
     }
 
     /**

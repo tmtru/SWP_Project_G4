@@ -1,33 +1,31 @@
 <%-- 
-    Document   : UserDashBoard
-    Created on : Sep 22, 2024, 11:36:15 PM
-    Author     : Admin
+    Document   : detailRoom
+    Created on : Sep 22, 2024, 10:01:51 PM
+    Author     : hihihihaha
 --%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
-
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Room Details</title>
         <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <!----======== CSS ======== -->
-        <link rel="stylesheet" href="css/styleDashBoard.css">
-
-       
-
-        <!----===== Boxicons CSS ===== -->
-        <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css">
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="css/styleRoom.css">
+        <!-- Boxicons CSS -->
         <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+        <!-- Them font awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
         <!-- Bootstrap JS and dependencies -->
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
     </head>
     <body>
         <nav class="sidebar close">
@@ -134,90 +132,7 @@
 
         </nav>
 
-        <section class="home">
-            <section class="property-management">
-                <div class="header">
-                    <h3>Danh sách phòng trọ của</h3>
-                    <div class="property-selector">
-                        <select>
-                            <option value="tmt">Nhà trọ TMT</option>
-                            <option value="other">Nhà trọ khác</option>
-                        </select>
-                        <span>Còn trống 2 | Đã thuê 6 | Chưa thu phí 0</span>
-                    </div>
-                </div>
-
-                <div class="action-buttons">
-                    <button class="btn add-property">+ Thêm nhà trọ</button>
-                    <button class="btn edit-property">Sửa thông tin nhà</button>
-                    <button class="btn delete-property">Xóa nhà</button>
-                </div>
-
-                <div class="room-actions">
-                    <button class="btn add-room">+ Thêm phòng trọ</button>
-                    <button class="btn quick-add-room">+ Thêm phòng trọ nhanh</button>
-                </div>
-
-                <div class="filters">
-                    <select>
-                        <option value="floor">Số Tầng</option>
-                    </select>
-                    <select>
-                        <option value="room-status">Trạng thái phòng</option>
-                    </select>
-                    <select>
-                        <option value="payment-status">Trạng thái trả phí</option>
-                    </select>
-                    <input type="text" placeholder="Search..." />
-                </div>
-            </section>
-            <section class="ftco-section">
-
-                <div class="container">
-                    <div class="row mt-4">        
-                        <c:choose>
-                            <c:when test="">
-                                <c:forEach >
-                                    <div class="col-md-4 mb-4">
-                                        <div class="card h-100">
-                                            <img src="#'}" 
-                                                 class="card-img-top" >
-                                            <div class="card-body text-center">
-                                                <h5 class="card-title"></h5>
-                                                <p class="card-text">
-
-                                                </p>
-                                                <div class="d-flex justify-content-around">
-                                                    <a href="#" class="btn btn-outline-secondary btn-sm">
-                                                        <i class="ion-ios-menu"></i> Chi tiết
-                                                    </a>
-                                                    <a href="#"" class="btn btn-outline-primary btn-sm">
-                                                        <i class="ion-ios-cart"></i> Chỉnh sửa
-                                                    </a>
-                                                    <a href="compare?action=add&productId=${product.id}" class="btn btn-outline-danger btn-sm"> Xóa 
-                                                        <i class="ion-ios-heart"></i> 
-                                                    </a>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </c:forEach>
-                            </c:when>
-                            <c:otherwise>
-                                <div class="col-12 text-center">
-                                    <p>No room available at the moment.</p>
-                                </div>
-                            </c:otherwise>
-                        </c:choose>
-                    </div>
-
-                    <!-- Pagination -->
-
-                </div>
-            </section>
-        </section>
-
+        
 
         <script>
             const body = document.querySelector('body'),
@@ -247,8 +162,25 @@
                     localStorage.setItem("darkMode", "disabled");
                 }
             });
-        </script>
+            //filter room by floor ko can submit
+            function filterRoomsByFloor(select) {
+                var selectedFloor = select.value;
+                window.location.href = 'room?tang=' + selectedFloor;
+            }
+            function filterRoomsByNhaTro(select) {
+                var selectedNhaTro = select.value;
+                window.location.href = 'room?nhaTro=' + selectedNhaTro; // Chú ý sử dụng 'nhaTro'
+            }
 
+
+            //delete room confirm
+            function confirmDelete(roomId) {
+                if (confirm('Are you sure you want to delete this room?')) {
+                    window.location.href = 'deleteRoom?id=' + roomId;
+                }
+            }
+        </script>
+        
 
     </body>
 </html>
