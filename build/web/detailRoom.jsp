@@ -69,13 +69,13 @@
                         </li>
 
                         <li class="">
-                            <a href="#">
+                            <a href="">
                                 <i class='bx bx-face icon' ></i>
                                 <span class="text nav-text">Nhân viên</span>
                             </a>
                         </li>
 
-                        <li class="s">
+                        <li class="loaddichvu">
                             <a href="#">
                                 <i class='bx bx-bell icon'></i>
                                 <span class="text nav-text">Dịch vụ</span>

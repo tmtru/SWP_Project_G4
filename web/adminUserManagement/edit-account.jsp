@@ -44,7 +44,7 @@
                         <h2>Edit Account</h2>
                         <form action="accountController" method="post">
                             <input type="hidden" name="action" value="update">
-                            <input type="hidden" name="id" value="${account.idAccount}">
+                            <input type="hidden" name="id" value="${account.ID_Account}">
                         <div class="form-group">
                             <label for="username">Username:</label>
                             <input type="text" id="username" name="username" value="${account.username}" required>

@@ -14,7 +14,7 @@
     <body>
         <div class="container">
             <jsp:include page="sidebar.jsp"></jsp:include>
-            <section class="home mx-5">
+                <section class="home mx-5">
                     <div class="main-content">
                         <h2>
                             Quản lý tài khoản
@@ -56,12 +56,12 @@
                                     <td>${account.role}</td>
                                     <td>
                                         <label class="switch">
-                                            <input type="checkbox" ${account.active ? 'checked' : ''} data-account-id="${account.idAccount}">
+                                            <input type="checkbox" ${account.active ? 'checked' : ''} data-account-id="${account.ID_Account}">
                                             <span class="slider"></span>
                                         </label>
                                     </td>
                                     <td class="actions">
-                                        <button onclick="window.location.href = 'accountController?action=edit&id=${account.idAccount}'" class="edit">Chỉnh sửa</button>
+                                        <button onclick="window.location.href = 'accountController?action=edit&id=${account.ID_Account}'" class="edit">Chỉnh sửa</button>
                                     </td>
                                 </tr>
                             </c:forEach>

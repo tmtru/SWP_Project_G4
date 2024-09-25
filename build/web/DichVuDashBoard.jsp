@@ -19,7 +19,7 @@
 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <!----======== CSS ======== -->
-        <link rel="stylesheet" href="css/styleDashBoard.css">
+        <link rel="stylesheet" href="css/styleRoom.css">
 
 
 
@@ -38,14 +38,12 @@
         <nav class="sidebar close">
             <header>
                 <div class="image-text">
-                    <span class="image">
-                        <img src="images/logo.png" alt="alt" style="margin-top: 15px"/>
-                        <!--<img src="logo.png" alt="">-->
-                    </span>
-
-                    <div class="text logo-text">
-                        <h2 style="margin: 28px 10px">TQATM</h2>
-                    </div>
+                    <a href="homer">
+                        <span class="image">
+                            <img src="assets/img/Logo_nhatro.png" alt="alt" style="margin-top: 15px; width: 100%; margin-left:10px"/>
+                            <!--<img src="logo.png" alt="">-->
+                        </span>
+                    </a>
                 </div>
 
                 <i class='bx bx-chevron-right toggle'></i>
@@ -67,23 +65,29 @@
                                 <span class="text nav-text">Trang chủ</span>
                             </a>
                         </li>
+                        <li class="">
+                            <a href="nhatro" >
+                                <i class='bx bxs-home icon' ></i>
+                                <span class="text nav-text">Nhà trọ</span>
+                            </a>
+                        </li>
 
                         <li class="">
-                            <a href="#">
+                            <a href="room">
                                 <i class='bx bx-bar-chart-alt-2 icon' ></i>
                                 <span class="text nav-text">Phòng trọ</span>
                             </a>
                         </li>
 
                         <li class="">
-                            <a href="#">
+                            <a href="accountController">
                                 <i class='bx bx-face icon' ></i>
                                 <span class="text nav-text">Nhân viên</span>
                             </a>
                         </li>
 
                         <li class="s">
-                            <a href="#">
+                            <a href="loaddichvu" class="active">
                                 <i class='bx bx-bell icon'></i>
                                 <span class="text nav-text active">Dịch vụ</span>
                             </a>

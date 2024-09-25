@@ -58,7 +58,12 @@
                                 <span class="text nav-text">Trang chủ</span>
                             </a>
                         </li>
-
+                        <li class="">
+                            <a href="nhatro">
+                                <i class='bx bxs-home icon' ></i>
+                                <span class="text nav-text">Nhà trọ</span>
+                            </a>
+                        </li>
                         <li class="">
                             <a href="room">
                                 <i class='bx bx-bar-chart-alt-2 icon' ></i>
@@ -67,14 +72,14 @@
                         </li>
 
                         <li class="">
-                            <a href="#" class="active">
+                            <a href="accountController" class="active">
                                 <i class='bx bx-face icon' ></i>
                                 <span class="text nav-text">Người dùng</span>
                             </a>
                         </li>
 
-                        <li class="s">
-                            <a href="#">
+                        <li class="">
+                            <a href="loaddichvu">
                                 <i class='bx bx-bell icon'></i>
                                 <span class="text nav-text">Dịch vụ</span>
                             </a>

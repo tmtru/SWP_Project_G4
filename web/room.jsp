@@ -55,10 +55,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             <header>
                 <div class="image-text">
                     <a href="homer">
-                    <span class="image">
-                        <img src="assets/img/Logo_nhatro.png" alt="alt" style="margin-top: 15px; width: 100%; margin-left:10px"/>
-                        <!--<img src="logo.png" alt="">-->
-                    </span>
+                        <span class="image">
+                            <img src="assets/img/Logo_nhatro.png" alt="alt" style="margin-top: 15px; width: 100%; margin-left:10px"/>
+                            <!--<img src="logo.png" alt="">-->
+                        </span>
                     </a>
 
 
@@ -83,6 +83,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                 <span class="text nav-text">Trang chủ</span>
                             </a>
                         </li>
+                        <li class="">
+                            <a href="nhatro">
+                                <i class='bx bxs-home icon' ></i>
+                                <span class="text nav-text">Nhà trọ</span>
+                            </a>
+                        </li>
 
                         <li class="">
                             <a href="room" class="active">
@@ -99,7 +105,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         </li>
 
                         <li class="s">
-                            <a href="#">
+                            <a href="loaddichvu">
                                 <i class='bx bx-bell icon'></i>
                                 <span class="text nav-text">Dịch vụ</span>
                             </a>
@@ -168,7 +174,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             </c:if>
             <section class="property-management">
                 <div class="header">
-                    <h3>Danh sách phòng trọ của</h3>
+                    <h2>Danh sách phòng trọ của</h2>
                     <div class="property-selector">
                         <select name="nhaTro" id="nhaTro" onchange="filterRoomsByNhaTro(this)">
                             <option value="">Chọn nhà trọ</option> <!-- Placeholder option -->

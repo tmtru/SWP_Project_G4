@@ -21,8 +21,8 @@ public class NhaTroDAO extends DBContext {
 
     public ArrayList<NhaTro> getAll() {
         ArrayList<NhaTro> nhaTroList = new ArrayList<>();
-        String sql = "SELECT p.*, a.URL_AnhNhaTro FROM NHA_TRO p "
-                + "LEFT JOIN ANH_NHA_TRO a ON p.ID_NhaTro = a.ID_NhaTro";
+        String sql = "SELECT * FROM NHA_TRO ";
+                
         try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             // Lặp qua các kết quả và thêm vào danh sách
             while (rs.next()) {
@@ -156,6 +156,74 @@ public class NhaTroDAO extends DBContext {
         return phongList; // Trả về danh sách các phòng có trạng thái khác trạng thái truyền vào
     }
 
+    // Method to insert a new NhaTro
+    public void insertNhaTro(NhaTro nhaTro) {
+        String sql = "INSERT INTO NHA_TRO (TenNhaTro, Dia_chi, Mo_ta, ID_ChuTro) VALUES (?, ?, ?,?)";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)){
+
+            statement.setString(1, nhaTro.getTenNhaTro());
+            statement.setString(2, nhaTro.getDia_chi());
+            statement.setString(3, nhaTro.getMo_ta());
+            statement.setInt(4, nhaTro.getID_ChuTro());
+            statement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Method to update an existing NhaTro
+    public void updateNhaTro(NhaTro nhaTro) {
+        String sql = "UPDATE NHA_TRO SET TenNhaTro = ?, Dia_chi = ?, Mo_ta = ? WHERE ID_NhaTro = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)){
+
+            statement.setString(1, nhaTro.getTenNhaTro());
+            statement.setString(2, nhaTro.getDia_chi());
+            statement.setString(3, nhaTro.getMo_ta());
+            statement.setInt(4, nhaTro.getID_NhaTro());
+
+            statement.executeUpdate();
+            statement.close();
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    // Method to search NhaTro by name or address
+    public List<NhaTro> searchNhaTro(String searchQuery) {
+        List<NhaTro> list = new ArrayList<>();
+        NhaTro nhaTro = null;
+        String sql = "SELECT * FROM NHA_TRO WHERE TenNhaTro LIKE ? OR Dia_chi LIKE ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setString(1, "%" + searchQuery + "%");
+            statement.setString(2, "%" + searchQuery + "%");
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+                nhaTro = new NhaTro();
+                nhaTro.setID_NhaTro(rs.getInt("ID_NhaTro"));
+                nhaTro.setTenNhaTro(rs.getNString("TenNhaTro"));
+                nhaTro.setID_ChuTro(Integer.parseInt(rs.getString("ID_ChuTro")));
+                nhaTro.setDia_chi(rs.getNString("Dia_Chi"));
+                nhaTro.setMo_ta(rs.getNString("Mo_ta"));
+
+                list.add(nhaTro);
+            }
+
+            rs.close();
+            statement.close();
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     public static void main(String[] args) {
         NhaTroDAO nhaTroDAO = new NhaTroDAO();
 
@@ -184,5 +252,14 @@ public class NhaTroDAO extends DBContext {
             System.out.println("Giá: " + phong.getGia());
             System.out.println(nhaTroDAO.getNhaTroById(1));
         }
+        NhaTroDAO dao = new NhaTroDAO();
+
+        // Tạo đối tượng NhaTro
+        NhaTro nhaTro = new NhaTro(1,"Nha Tro A", "123 Đường A",  1,"Phòng thoáng mát, giá rẻ");
+
+        // Gọi phương thức để chèn NhaTro vào cơ sở dữ liệu
+        dao.insertNhaTro(nhaTro);
+        
+        System.out.println("Insert completed!");
     }
 }
