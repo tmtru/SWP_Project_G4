@@ -6,7 +6,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Login Page</title>
         <link rel="stylesheet" href="css/styleLogin.css">
-        <script src="js/utils.js"></script>
     </head>
     <body>
         <img src="assets/img/Web.png" alt="Logo" width="100" class="logo">

@@ -16,7 +16,10 @@
                 <input type="email" id="email" name="email" class="input-field" placeholder="Email address" required>
 
                 <label for="new-password">Enter your new password</label>
-                <input type="password" id="new-password" name="newPassword" class="input-field" placeholder="New password" required onclick="checkPassword()">
+                <input type="password" id="new-password" name="newPassword" class="input-field" placeholder="New password" required oninput="checkPassword()">
+
+                <label for="confirm-password">Confirm your new password</label>
+                <input type="password" id="confirm-password" name="confirmPassword" class="input-field" placeholder="Confirm password" required>
 
                 <button type="submit" class="reset-password-btn">Reset Password</button>
             </form>
