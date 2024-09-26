@@ -51,7 +51,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
     <body>
         <!--Room manegement dash board-->
 
-        <nav class="sidebar close">
+        <nav class="sidebar">
             <header>
                 <div class="image-text">
                     <a href="homer">
