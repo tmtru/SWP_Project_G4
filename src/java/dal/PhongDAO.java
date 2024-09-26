@@ -166,7 +166,7 @@ public class PhongDAO extends DBContext {
         return rooms;
     }
 
-    public List<Phong> getRoomsByNhaTroAndTang(int idNhaTro, int tang) {
+     public List<Phong> getRoomsByNhaTroAndTang(int idNhaTro, int tang) {
         List<Phong> rooms = new ArrayList<>();
         String sql = "SELECT p.ID_Phong, n.TenNhaTro, p.TenPhongTro, p.ID_LoaiPhong, p.Tang, p.Dien_Tich, "
                 + "l.TenLoaiPhong, p.Gia, l.Mo_ta, p.Trang_thai, p.ID_NhaTro "
@@ -174,7 +174,6 @@ public class PhongDAO extends DBContext {
                 + "JOIN nha_tro n ON p.ID_NhaTro = n.ID_NhaTro "
                 + "JOIN loai_phong l ON p.ID_LoaiPhong = l.ID_LoaiPhong "
                 + "WHERE p.ID_NhaTro = ? AND p.Tang = ?";
-
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setInt(1, idNhaTro);
             st.setInt(2, tang);
@@ -192,7 +191,6 @@ public class PhongDAO extends DBContext {
                     r.setMo_ta(rs.getString("Mo_ta"));
                     r.setTrang_thai(rs.getString("Trang_thai"));
                     r.setID_NhaTro(rs.getInt("ID_NhaTro"));
-
                     List<String> images = getImagesByPhongId(rs.getInt("ID_Phong"));
                     r.setImages(images);
                     rooms.add(r);
@@ -532,5 +530,24 @@ public class PhongDAO extends DBContext {
         return 0;
     }
 
+//get tat ca trang thai dang co
+    public List<String> getAvailableStatuses() {
+    List<String> statusList = new ArrayList<>();
+    String sql = "SELECT DISTINCT Trang_thai FROM phong_tro ORDER BY Trang_thai";
 
+    try (PreparedStatement st = connection.prepareStatement(sql);
+         ResultSet rs = st.executeQuery()) {
+
+        while (rs.next()) {
+            String status = rs.getString("Trang_thai");
+            if (status != null && !status.trim().isEmpty()) {
+                statusList.add(status);
+            }
+        }
+    } catch (SQLException e) {
+        System.out.println("Error in PhongDAO.getAvailableStatuses: " + e.getMessage());
+    }
+
+    return statusList;
+}
 }

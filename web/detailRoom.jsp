@@ -134,7 +134,7 @@
 
         <section class="home">
             <div class="container mt-5">
-                <h2>Room Details</h2>
+                <h2>Chi tiết phòng</h2>
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
@@ -175,7 +175,7 @@
                     </div>
                     <div class="card-footer">
                         
-                        <a href="room" class="btn btn-secondary">Back to Room List</a>
+                        <a href="room" class="btn btn-secondary">Quay lại danh sách phòng</a>
                     </div>
                 </div>
             </div>
