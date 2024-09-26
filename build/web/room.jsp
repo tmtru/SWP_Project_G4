@@ -164,12 +164,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         <section class="home">
             <c:if test="${param.deleteSuccess eq 'true'}">
                 <div class="alert alert-success" role="alert">
-                    Room deleted successfully.
+                    Xóa phòng trọ thành công
                 </div>
             </c:if>
             <c:if test="${param.deleteError eq 'true'}">
                 <div class="alert alert-danger" role="alert">
-                    An error occurred while deleting the room.
+                    Nhà trọ đang có người thuê
                 </div>
             </c:if>
             <section class="property-management">
@@ -188,11 +188,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     </div>
                 </div>
 
-                <div class="action-buttons">
-                    <button class="btn add-property">+ Thêm nhà trọ</button>
-                    <button class="btn edit-property">Sửa thông tin nhà</button>
-                    <button class="btn delete-property">Xóa nhà</button>
-                </div>
+                
 
                 <div class="room-actions">
                     <button class="btn add-room" data-toggle="modal" data-target="#addRoomModal">+ Thêm phòng trọ</button>
@@ -365,10 +361,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                     <div class="card-body">
                                         <h5 class="card-title">${room.tenPhongTro}</h5>
                                         <p class="card-text">
-                                            <strong>Floor:</strong> ${room.tang}<br>
-                                            <strong>Area:</strong> ${room.dien_tich} m²<br>
-                                            <strong>Price:</strong> <fmt:formatNumber value="${room.gia}" type="currency" currencyCode="VND"/><br>
-                                            <strong>Status:</strong> 
+                                            <strong>Tầng:</strong> ${room.tang}<br>
+                                            <strong>Diện tích:</strong> ${room.dien_tich} m²<br>
+                                            <strong>Giá tiền:</strong> <fmt:formatNumber value="${room.gia}" type="currency" currencyCode="VND"/><br>
+                                            <strong>Trạng thái:</strong> 
                                             <span class="badge
                                                   ${room.trang_thai == 'T' ? 'badge-success' : 'badge-danger'}">
                                                 ${room.trang_thai == 'T' ? 'Trống' : 'Đang thuê'}
@@ -379,7 +375,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                     <div class="card-footer bg-transparent">
                                         <div class="d-flex justify-content-between">
                                             <a href="detailRoom?id=${room.ID_Phong}" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;">
-                                                <i class="bx bx-info-circle"></i> Details
+                                                <i class="bx bx-info-circle"></i> Chi tiết
                                             </a>
                                             <a href="#" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;"
                                                onclick='openEditModal(
@@ -397,12 +393,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                                </c:forEach>]
                                                                );
                                                        return false;'>
-                                                <i class="bx bx-edit"></i> Edit
+                                                <i class="bx bx-edit"></i> Chỉnh sửa
                                             </a>
                                             <a href="#" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;" 
                                                onclick="confirmDelete(${room.ID_Phong});
                                                        return false;">
-                                                <i class="bx bx-minus-circle"></i> Delete
+                                                <i class="bx bx-minus-circle"></i> Xóa
                                             </a>
                                         </div>
                                     </div>
