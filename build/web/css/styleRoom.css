@@ -169,7 +169,49 @@ body.dark .sidebar header .toggle{
     cursor: pointer;
     transition: var(--tran-05);
 }
+/*css cho thanh search*/
+.search-container {
+        position: absolute;
+        top: 137px;
+        right: 10px;
+    }
 
+    .search-container form {
+        display: flex;
+        align-items: center;
+    }
+
+    .search-container input[type="text"] {
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 7px 0 0 7px;
+        outline: none;
+        width: 200px;
+        transition: all 0.3s ease;
+    }
+
+    .search-container input[type="text"]:focus {
+        width: 250px;
+        border-color: #4CAF50;
+    }
+
+    .search-container button {
+        padding: 8px 15px;
+        background-color: #5a67d8;
+        color: white;
+        border: none;
+        border-radius: 0 10px 10px 0;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .search-container button:hover {
+        background-color: #45a049;
+    }
+
+    .search-container i {
+        font-size: 18px;
+    }
 .sidebar li.search-box input{
     height: 100%;
     width: 100%;
@@ -327,15 +369,25 @@ body.dark .home .text{
 }
 
 .property-selector {
-    display: flex;
-    align-items: center;
-    gap: 15px;
+    margin-top: 10px; /* Adds space between the h2 and the select */
 }
 
 .property-selector select {
+    width: 100%; /* Makes the select dropdown take up the full width (optional) */
     padding: 8px;
     font-size: 16px;
+    border-radius: 4px; /* Rounded corners */
+    border: 1px solid #ccc; /* Light gray border */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+    transition: box-shadow 0.3s ease; /* Smooth transition for shadow effect */
 }
+
+.property-selector select:hover {
+    box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
+}
+
+
+
 
 .action-buttons, .room-actions {
     margin-top: 15px;
@@ -380,7 +432,7 @@ body .btn {
 }
 
 .btn.add-room {
-    background-color: #2E073F;
+    background-color: #5a67d8;
 }
 
 .btn.quick-add-room {
@@ -430,43 +482,43 @@ body.dark .btn:hover {
 .prev-next {
     text-decoration: none;
     color: #000; /* Màu chữ */
-    padding: 8px 12px;
-    border: 1px solid #ccc; /* Viền */
+    padding: 4px 11px;
+    border: 1px  #5a67d8; /* Viền */
     margin: 0 5px; /* Khoảng cách giữa các nút */
     border-radius: 5px; /* Bo góc */
-    background-color: #f0f0f0; /* Nền màu sáng */
+    background-color: #5a67d8; /* Nền màu sáng */
 }
 
 .page-number {
     text-decoration: none;
-    color: #000; /* Màu chữ */
-    padding: 8px 12px;
+    color: #5a67d8; /* Màu chữ */
+    padding: 4px 11px;
     margin: 0 5px; /* Khoảng cách giữa các số trang */
-    border: 1px solid transparent; /* Đặt viền mặc định */
     border-radius: 5px; /* Bo góc */
 }
 
 .page-number:hover {
-    border: 1px solid #d5a6e9; /* Viền tím nhạt khi hover */
-    background-color: #e9d8f4; /* Nền khi hover */
+    border: 1px solid #5a67d8; /* Viền tím nhạt khi hover */
+    background-color: #89bced; /* Nền khi hover */
 }
 
 .current-page {
-    padding: 8px 12px;
+    padding: 4px 11px;
+    color: #000; /* Màu chữ */
     margin: 0 5px; /* Khoảng cách giữa các số trang */
-    border: 1px solid #d5a6e9; /* Viền màu tím nhạt */
+    border: 1px solid ; /* Viền màu tím nhạt */
     border-radius: 5px; /* Bo góc */
-    background-color: #d5a6e9; /* Nền màu tím nhạt */
+    background-color: #5a67d8; /* Nền màu tím nhạt */
     color: white; /* Màu chữ cho trang hiện tại */
 }
 .prev-next {
     text-decoration: none;
-    color: #000; /* Màu chữ */
-    padding: 10px 15px;
+    color: white; /* Màu chữ */
+    padding: 8px 12px;
     border: 1px solid #ccc; /* Viền */
     margin: 0 5px; /* Khoảng cách giữa các nút */
     border-radius: 5px; /* Bo góc */
-    background-color: #d5a6e9; /* Nền màu sáng */
+    background-color: #5a67d8; /* Nền màu sáng */
     display: flex; /* Để căn giữa biểu tượng */
     align-items: center; /* Căn giữa theo chiều dọc */
     justify-content: center; /* Căn giữa theo chiều ngang */
