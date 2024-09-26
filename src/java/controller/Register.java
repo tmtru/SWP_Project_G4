@@ -43,17 +43,25 @@ public class Register extends HttpServlet {
         String username = request.getParameter("username");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
+        String confirmPassword = request.getParameter("confirmPassword");
+
+        // Kiểm tra xem hai mật khẩu có khớp nhau không
+        if (!password.equals(confirmPassword)) {
+            request.setAttribute("errorMessage", "Passwords do not match. Please try again.");
+            request.getRequestDispatcher("register.jsp").forward(request, response);
+            return;
+        }
 
         AccountDAO userdao = new AccountDAO();
 
         if (!userdao.isEmailExist(email)) {
             String encryptedPassword = encryptPassword(password);
-            if (encryptedPassword != null) { // Kiá»ƒm tra náº¿u mÃ£ hÃ³a thÃ nh cÃ´ng
+            if (encryptedPassword != null) { // Kiểm tra nếu mã hóa thành công
                 boolean accountAdded = userdao.addAccount(email, username, encryptedPassword);
                 if (accountAdded) {
                     response.sendRedirect("login.jsp");
                 } else {
-                    request.setAttribute("errorMessage", "Failed to create account!");
+                    request.setAttribute("errorMessage", "Username already exists!");
                     request.getRequestDispatcher("register.jsp").forward(request, response);
                 }
             } else {
@@ -76,7 +84,7 @@ public class Register extends HttpServlet {
             return Base64.getEncoder().encodeToString(encryptedData);
         } catch (Exception e) {
             e.printStackTrace(); // Log error
-            return null; // Tráº£ vá» null náº¿u cÃ³ lá»—i
+            return null; // Trả về null nếu có lỗi
         }
     }
 

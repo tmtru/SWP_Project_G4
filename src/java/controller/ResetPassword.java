@@ -69,7 +69,15 @@ public class ResetPassword extends HttpServlet {
             throws ServletException, IOException {
         String email = request.getParameter("email");
         String newPassword = request.getParameter("newPassword");
-        
+        String confirmPassword = request.getParameter("confirmPassword");
+
+        // Kiểm tra xem hai mật khẩu có khớp nhau không
+        if (!newPassword.equals(confirmPassword)) {
+            request.setAttribute("errorMessage", "Passwords do not match. Please try again.");
+            request.getRequestDispatcher("resetpassword.jsp").forward(request, response);
+            return;
+        }
+
         String encryptedPassword = encryptPassword(newPassword);
 
         AccountDAO userdao = new AccountDAO();
@@ -79,11 +87,13 @@ public class ResetPassword extends HttpServlet {
             isUpdated = userdao.updatePassword(email, encryptedPassword);
             if (isUpdated) {
                 response.sendRedirect("login.jsp");
+            } else {
+                request.setAttribute("errorMessage", "Failed to reset the password. Please try again.");
+                request.getRequestDispatcher("resetpassword.jsp").forward(request, response);
             }
         } else {
-            request.setAttribute("errorMessage", "Failed to reset the password.");
+            request.setAttribute("errorMessage", "Email not found. Please check your email address.");
             request.getRequestDispatcher("resetpassword.jsp").forward(request, response);
-            return;
         }
     }
     
@@ -97,7 +107,7 @@ public class ResetPassword extends HttpServlet {
             return Base64.getEncoder().encodeToString(encryptedData);
         } catch (Exception e) {
             e.printStackTrace(); // Log error
-            return null; // Tráº£ vá» null náº¿u cÃ³ lá»—i
+            return null; // Trả về null nếu có lỗi
         }
     }
 
