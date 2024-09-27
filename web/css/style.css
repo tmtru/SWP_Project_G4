@@ -74,6 +74,40 @@ a {
         padding: 10px 0;
     }
 }
+ul {
+    margin:0;
+}
+/* Profile Picture */
+.profile-pic{
+   display: inline-block;
+   vertical-align: middle;
+    width: 42px;
+    height: 40px;
+    overflow: hidden;
+   border-radius: 50%;
+}
+
+.profile-pic img{
+   width: 100%;
+   height: auto;
+   object-fit: cover;
+}
+.profile-menu .dropdown-menu {
+  right: 15px;
+  left: unset;
+}
+.profile-menu .fa-fw {
+  margin-right: 10px;
+}
+
+.toggle-change::after {
+  border-top: 0;
+  border-bottom: 0.3em solid;
+}
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    color: var(--bs-nav-pills-link-active-color);
+    background-color: #7065f0;
+}
 /*** Carousel ****/
 .carousel .carousel-inner {
     overflow: hidden;
@@ -2294,9 +2328,7 @@ nav{
     
     margin-top:10px;
 }
-nav ul{
-     margin-top:30px;
-}
+
 nav button {
     border: none;
     background-color: transparent;
@@ -2307,4 +2339,7 @@ nav button {
     color: #f3f3f3;
     background-color: #7065f0;
     border-color: #7065f0;
+}
+.pagination-nav{
+    margin-top:25px;
 }

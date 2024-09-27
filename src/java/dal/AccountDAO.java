@@ -178,11 +178,13 @@ public class AccountDAO extends DBContext {
                 int idAccount = rs.getInt("ID_Account");
                 String retrievedUsername = rs.getString("Username");
                 String retrievedPassword = rs.getString("Password");
+                String email = rs.getString("Email");
 
                 Account account = new Account();
                 account.setID_Account(idAccount);
                 account.setUsername(retrievedUsername);
                 account.setPassword(retrievedPassword);
+                account.setEmail(email);
                 return account;
             }
         } catch (SQLException e) {
@@ -326,6 +328,8 @@ public class AccountDAO extends DBContext {
         dao.getAllAccounts().stream().forEach(item -> {
             System.out.println(item);
         });
+        Account a=dao.getAccount("trungtm", "123");
+        System.out.println(a);
     }
 
 }

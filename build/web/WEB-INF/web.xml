@@ -30,24 +30,16 @@
         <servlet-class>controller.ResetPassword</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>LoginGoogle</servlet-name>
-        <servlet-class>controller.LoginGoogle</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>Verification</servlet-name>
-        <servlet-class>controller.Verification</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>SendEmail</servlet-name>
-        <servlet-class>controller.SendEmail</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>NhaTroServlet</servlet-name>
         <servlet-class>controller.NhaTroServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Logout</servlet-name>
         <servlet-class>controller.Logout</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>addRoomExcel</servlet-name>
+        <servlet-class>controller.addRoomExcel</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>homeRooms</servlet-name>
@@ -160,23 +152,15 @@
         <url-pattern>/resetpassword</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>LoginGoogle</servlet-name>
-        <url-pattern>/logingoogle</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>Verification</servlet-name>
-        <url-pattern>/verification</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>SendEmail</servlet-name>
-        <url-pattern>/sendemail</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>NhaTroServlet</servlet-name>
         <url-pattern>/nhatro</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Logout</servlet-name>
         <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>addRoomExcel</servlet-name>
+        <url-pattern>/addRoomExcel</url-pattern>
     </servlet-mapping>
 </web-app>

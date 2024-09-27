@@ -160,7 +160,7 @@
         </c:forEach>
     </c:if>
 
-    <nav aria-label="Page navigation example d-flex mt-5">
+    <nav aria-label="Page navigation example d-flex mt-5" class="pagination-nav">
         <ul class="pagination  justify-content-center">
             <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
                 <span class="page-link" aria-label="Previous" onclick="loadPage(${page-1})">
