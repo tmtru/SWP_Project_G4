@@ -11,17 +11,11 @@ import jakarta.servlet.http.HttpSession;
 import model.Account;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import java.security.Security;
 import java.util.Base64;
 
 public class Login extends HttpServlet {
 
     private static final String SECRET_KEY = "1234567890123456"; // 16 bytes key for AES
-    
-    static {
-        Security.addProvider(new BouncyCastleProvider());
-    }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -55,7 +49,7 @@ public class Login extends HttpServlet {
         AccountDAO userdao = new AccountDAO();
         String encryptedPassword = encryptPassword(password);
 
-        // Thay Ä‘á»•i Ä‘á»ƒ sá»­ dá»¥ng máº­t kháº©u Ä‘Ã£ mÃ£ hÃ³a cho viá»‡c xÃ¡c thá»±c
+        // Thay đổi để sử dụng mật khẩu đã mã hóa cho việc xác thực
         Account acc = userdao.getAccount(username, encryptedPassword);
 
         if (acc != null) {
@@ -63,7 +57,7 @@ public class Login extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("ID_Account", ID_Account);
 
-            response.sendRedirect("homer");
+            response.sendRedirect("home.jsp");
         } else {
             request.setAttribute("errorMessage", "Invalid email or password");
             request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -80,7 +74,7 @@ public class Login extends HttpServlet {
             return Base64.getEncoder().encodeToString(encryptedData);
         } catch (Exception e) {
             e.printStackTrace(); // Log error
-            return null; // Tráº£ vá» null náº¿u cÃ³ lá»—i
+            return null; // Trả về null nếu có lỗi
         }
     }
 

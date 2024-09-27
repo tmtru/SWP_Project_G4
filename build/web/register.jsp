@@ -5,16 +5,16 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Create an Account</title>
-        <link rel="stylesheet" href="css/styleRegister.css">
+        <link rel="stylesheet" href="assets/css/styleRegister.css">
     </head>
     <body>
-        <img src="assets/img/Web.png" alt="Logo" width="100" class="logo"> 
+        <img src="assets/images/Web.png" alt="Logo" width="100" class="logo"> 
         <div class="container">
             <h2>Create an account</h2>
 
             <form action="register" method="post">
                 <input type="text" name="username" class="input-field" placeholder="Enter your name" required>
-                <input type="email" name="email" class="input-field" placeholder="Enter your email address" required>
+                <input type="email" name="email" class="input-field" placeholder="Enter your Gmail" required>
                 <input type="password" name="password" class="input-field" placeholder="Create a password" required>
                 <input type="password" name="confirmPassword" class="input-field" placeholder="Confirm password" required>
                 <label class="checkbox-label">
@@ -30,13 +30,13 @@
             <p>OR Continue with</p>
             <div class="social-login-container">
                 <button class="social-login">
-                    <img src="assets/img/Facebook.jpg" alt="Facebook" width="20"> Facebook
+                    <img src="assets/images/Facebook.jpg" alt="Facebook" width="20"> Facebook
                 </button>
                 <button class="social-login">
-                    <img src="assets/img/Google.jpg" alt="Google" width="20"> Google
+                    <img src="assets/images/Google.jpg" alt="Google" width="20"> Google
                 </button>
                 <button class="social-login">
-                    <img src="assets/img/Apple.jpg" alt="Apple" width="20"> Apple
+                    <img src="assets/images/Apple.jpg" alt="Apple" width="20"> Apple
                 </button>
             </div>
 
