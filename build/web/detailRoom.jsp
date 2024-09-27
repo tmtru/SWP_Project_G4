@@ -171,7 +171,7 @@
                                         ${room.trang_thai == 'T' ? 'Trống' : 'Đang thuê'}
                                     </span>
                                 </p>
-                                <p><strong>Quay lại danh sách phòng:</strong> ${room.mo_ta}</p>
+                                <p><strong>Mô tả:</strong> ${room.mo_ta}</p>
                             </div>
                         </div>
                     </div>
