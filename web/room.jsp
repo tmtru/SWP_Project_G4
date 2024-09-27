@@ -164,35 +164,33 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         <section class="home">
             <c:if test="${param.deleteSuccess eq 'true'}">
                 <div class="alert alert-success" role="alert">
-                    Room deleted successfully.
+                    Xóa phòng trọ thành công
                 </div>
             </c:if>
             <c:if test="${param.deleteError eq 'true'}">
                 <div class="alert alert-danger" role="alert">
-                    An error occurred while deleting the room.
+                    Nhà trọ đang có người thuê
                 </div>
             </c:if>
             <section class="property-management">
                 <div class="header">
-                    <h2>Danh sách phòng trọ của</h2>
+                    <h2>Danh sách phòng trọ </h2>
                     <div class="property-selector">
                         <select name="nhaTro" id="nhaTro" onchange="filterRoomsByNhaTro(this)">
-                            <option value="">Chọn nhà trọ</option> <!-- Placeholder option -->
+                            <option value="">Nhà trọ</option> <!-- Placeholder option -->
                             <c:forEach var="nhaTro" items="${nhaTroList}">
-                                <option value="${nhaTro.ID_NhaTro}" <c:if test="${param.nhaTro == nhaTro.ID_NhaTro}">selected</c:if>>${nhaTro.tenNhaTro}</option>
+                                <option value="${nhaTro.ID_NhaTro}" 
+                                        <c:if test="${param.nhaTro != null && param.nhaTro == nhaTro.ID_NhaTro}">selected</c:if>>
+                                    ${nhaTro.tenNhaTro}
+                                </option>
                             </c:forEach>
                         </select>
 
-
-                        <span>Còn trống 2 | Đã thuê 6 | Chưa thu phí 0</span>
                     </div>
+
                 </div>
 
-                <div class="action-buttons">
-                    <button class="btn add-property">+ Thêm nhà trọ</button>
-                    <button class="btn edit-property">Sửa thông tin nhà</button>
-                    <button class="btn delete-property">Xóa nhà</button>
-                </div>
+
 
                 <div class="room-actions">
                     <button class="btn add-room" data-toggle="modal" data-target="#addRoomModal">+ Thêm phòng trọ</button>
@@ -334,22 +332,27 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
 
                 <div class="filters">
                     <select name="tang" id="tang" onchange="filterRoomsByFloor(this)">
-                        <option value="">Chọn tầng</option> <!-- Placeholder option -->
+                        <option value="">Tầng</option> <!-- Placeholder option -->
                         <c:forEach var="tang" items="${tangList}">
                             <option value="${tang}" <c:if test="${param.tang == tang}">selected</c:if>>Tầng ${tang}</option>
                         </c:forEach>
                     </select>
-                    <select>
-                        <option value="room-status">Trạng thái phòng</option>
+                    <select name="status">
+                        <option value="">Trạng thái</option>
+                        <c:forEach items="${statusMap}" var="entry">
+                            <option value="${entry.key}" ${entry.key eq selectedStatus ? 'selected' : ''}>${entry.value}</option>
+                        </c:forEach>
                     </select>
                     <select>
                         <option value="payment-status">Trạng thái trả phí</option>
                     </select>
 
-                    <form action="searchRoomByName" method="get">
-                        <input type="text" name="tenPhongTro" placeholder="Search.." required>
-                        <button type="submit"><i class='bx bx-search icon' ></i></button>
-                    </form>
+                    <div class="search-container">
+                        <form action="searchRoomByName" method="get">
+                            <input type="text" name="tenPhongTro" placeholder="Tìm kiếm phòng..." required>
+                            <button type="submit"><i class='bx bx-search'></i></button>
+                        </form>
+                    </div>
                 </div>
             </section>
             <section class="ftco-section">
@@ -365,10 +368,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                     <div class="card-body">
                                         <h5 class="card-title">${room.tenPhongTro}</h5>
                                         <p class="card-text">
-                                            <strong>Floor:</strong> ${room.tang}<br>
-                                            <strong>Area:</strong> ${room.dien_tich} m²<br>
-                                            <strong>Price:</strong> <fmt:formatNumber value="${room.gia}" type="currency" currencyCode="VND"/><br>
-                                            <strong>Status:</strong> 
+                                            <strong>Tầng:</strong> ${room.tang}<br>
+                                            <strong>Diện tích:</strong> ${room.dien_tich} m²<br>
+                                            <strong>Giá tiền:</strong> <fmt:formatNumber value="${room.gia}" type="currency" currencyCode="VND"/><br>
+                                            <strong>Trạng thái:</strong> 
                                             <span class="badge
                                                   ${room.trang_thai == 'T' ? 'badge-success' : 'badge-danger'}">
                                                 ${room.trang_thai == 'T' ? 'Trống' : 'Đang thuê'}
@@ -379,7 +382,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                     <div class="card-footer bg-transparent">
                                         <div class="d-flex justify-content-between">
                                             <a href="detailRoom?id=${room.ID_Phong}" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;">
-                                                <i class="bx bx-info-circle"></i> Details
+                                                <i class="bx bx-info-circle"></i> Chi tiết
                                             </a>
                                             <a href="#" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;"
                                                onclick='openEditModal(
@@ -397,12 +400,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                                </c:forEach>]
                                                                );
                                                        return false;'>
-                                                <i class="bx bx-edit"></i> Edit
+                                                <i class="bx bx-edit"></i> Chỉnh sửa
                                             </a>
                                             <a href="#" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;" 
                                                onclick="confirmDelete(${room.ID_Phong});
                                                        return false;">
-                                                <i class="bx bx-minus-circle"></i> Delete
+                                                <i class="bx bx-minus-circle"></i> Xóa
                                             </a>
                                         </div>
                                     </div>
@@ -469,12 +472,26 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             //filter room by floor ko can submit
             function filterRoomsByFloor(select) {
                 var selectedFloor = select.value;
-                window.location.href = 'room?tang=' + selectedFloor;
+                var selectedHouse = document.getElementById("nhaTro").value; // Get the selected house
+                // Build the query string
+                var url = 'room?tang=' + selectedFloor;
+                if (selectedHouse) { // Include the house if it's selected
+                    url += '&nhaTro=' + selectedHouse;
+                }
+                window.location.href = url;
             }
+
             function filterRoomsByNhaTro(select) {
                 var selectedNhaTro = select.value;
-                window.location.href = 'room?nhaTro=' + selectedNhaTro; // Chú ý sử dụng 'nhaTro'
+                var selectedFloor = document.getElementById("tang").value; // Get the selected floor
+                // Build the query string
+                var url = 'room?nhaTro=' + selectedNhaTro;
+                if (selectedFloor) { // Include the floor if it's selected
+                    url += '&tang=' + selectedFloor;
+                }
+                window.location.href = url;
             }
+
 
 
             //delete room confirm

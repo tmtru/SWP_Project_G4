@@ -14,7 +14,7 @@
 
             <form action="register" method="post">
                 <input type="text" name="username" class="input-field" placeholder="Enter your name" required>
-                <input type="email" name="email" class="input-field" placeholder="Enter your email address" required>
+                <input type="email" name="email" class="input-field" placeholder="Enter your Gmail" required>
                 <input type="password" name="password" class="input-field" placeholder="Create a password" required>
                 <input type="password" name="confirmPassword" class="input-field" placeholder="Confirm password" required>
                 <label class="checkbox-label">
