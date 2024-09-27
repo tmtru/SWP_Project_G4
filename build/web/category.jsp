@@ -104,8 +104,8 @@
                                 request.setAttribute("avePrice", formattedAvePrice);
                                 request.setAttribute("rooms", rooms);
                             %>
-                            <a class="link-house" href="allrooms?id=${nt.ID_NhaTro}">
-                                <div class="listings-content mb-2 d-flex" data-aos="fade-right" data-aos-duration="700">
+                            <a class="link-house mb-2" href="allrooms?id=${nt.ID_NhaTro}">
+                                <div class="listings-content mb-1 d-flex" data-aos="fade-right" data-aos-duration="700">
                                     <article class="featured-listing">
                                         <div class="featured-card">
                                             <c:if test="${not empty imgNhaTro}">

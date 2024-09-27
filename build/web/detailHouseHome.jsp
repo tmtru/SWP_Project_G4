@@ -48,7 +48,7 @@
         <div class="container">
             <nav aria-label="breadcrumb" class="m-4">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="homer">Trang chủ</a></li>
+                    <li class="breadcrumb-item"><a href="home.jsp">Trang chủ</a></li>
                     <li class="breadcrumb-item"><a href="category">Nhà trọ</a></li>
                     <li class="breadcrumb-item active" aria-current="page">${currenthouse.tenNhaTro}</li>
                 </ol>

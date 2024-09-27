@@ -38,7 +38,7 @@
         <nav class="sidebar">
             <header>
                 <div class="image-text">
-                    <a href="homer">
+                    <a href="home.jsp">
                     <span class="image">
                         <img src="assets/img/Logo_nhatro.png" alt="alt" style="margin-top: 15px; width: 100%; margin-left:10px"/>
                         <!--<img src="logo.png" alt="">-->
