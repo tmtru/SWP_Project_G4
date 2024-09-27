@@ -18,37 +18,36 @@ import model.DichVu;
  */
 public class AnhNhaTroDAO extends DBContext {
 
-    // Phương thức lấy tất cả ảnh theo ID nhà trọ
     public ArrayList<AnhNhaTro> getAllAnhByNhaTroId(int idNhaTro) {
         ArrayList<AnhNhaTro> anhNhaTroList = new ArrayList<>();
         String query = "SELECT ID_AnhPhong, URL_AnhNhaTro FROM ANH_NHA_TRO WHERE ID_NhaTro = ?";
 
+        // Sử dụng try-with-resources để tự động đóng tài nguyên
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, idNhaTro);
-            ResultSet rs = stmt.executeQuery();
+            try (ResultSet rs = stmt.executeQuery()) {
+                // Tạo một danh sách tạm để chứa các URL
+                ArrayList<String> urlList = new ArrayList<>();
+                int idAnhNhaTro = -1; // Lưu trữ ID Anh hiện tại
 
-            // Tạo một danh sách tạm để chứa các URL
-            ArrayList<String> urlList = new ArrayList<>();
-            int idAnhNhaTro = -1; // Lưu trữ ID Anh hiện tại
+                // Duyệt qua tất cả các kết quả
+                while (rs.next()) {
+                    if (idAnhNhaTro == -1) {
+                        // Lấy ID Anh chỉ một lần vì tất cả đều thuộc về cùng một ID_NhaTro
+                        idAnhNhaTro = rs.getInt("ID_AnhPhong");
+                    }
 
-            // Duyệt qua tất cả các kết quả
-            while (rs.next()) {
-                if (idAnhNhaTro == -1) {
-                    // Lấy ID Anh chỉ một lần vì tất cả đều thuộc về cùng một ID_NhaTro
-                    idAnhNhaTro = rs.getInt("ID_AnhPhong");
+                    // Thêm từng URL vào danh sách
+                    String url = rs.getString("URL_AnhNhaTro");
+                    urlList.add(url);
                 }
 
-                // Thêm từng URL vào danh sách
-                String url = rs.getString("URL_AnhNhaTro");
-                urlList.add(url);
+                // Tạo đối tượng AnhNhaTro và thêm vào danh sách nếu có dữ liệu
+                if (!urlList.isEmpty()) {
+                    AnhNhaTro anhNhaTro = new AnhNhaTro(idAnhNhaTro, urlList, idNhaTro);
+                    anhNhaTroList.add(anhNhaTro);
+                }
             }
-
-            // Tạo đối tượng AnhNhaTro và thêm vào danh sách nếu có dữ liệu
-            if (!urlList.isEmpty()) {
-                AnhNhaTro anhNhaTro = new AnhNhaTro(idAnhNhaTro, urlList, idNhaTro);
-                anhNhaTroList.add(anhNhaTro);
-            }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }

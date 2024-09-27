@@ -19,7 +19,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 
 .property-image {
     aspect-ratio: 1.7;
-    object-fit: contain;
+    object-fit: cover;
     object-position: center;
     width: 100%;
 }

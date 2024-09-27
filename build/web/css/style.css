@@ -52,7 +52,9 @@ body {
     padding-left: 2px;
     
 }
-
+a {
+    text-decoration: none;
+}
 .navbar-light .navbar-nav .nav-link:hover,
 .navbar-light .navbar-nav .nav-link.active {
     color: #7065F0;
@@ -1641,7 +1643,7 @@ body {
     overflow: hidden;
     align-items: center;
     justify-content: center;
-    padding: 90px 30px;
+    padding: 50px 30px;
     font-family: Plus Jakarta Sans, sans-serif;
 }
 
@@ -1679,7 +1681,7 @@ body {
 }
 
 .listings-content {
-    margin-top: 41px;
+    margin-top: 20px;
     display: flex;
     gap: 20px;
 }
@@ -1705,7 +1707,7 @@ body {
     border: 1.5px solid #f0effb;
     background-color: #fff;
     display: flex;
-    padding-bottom: 32px;
+    padding-bottom: 20px;
     flex-direction: column;
 }
 .link-house{
@@ -1772,12 +1774,12 @@ body {
     font-weight: 500;
     opacity: 0.5;
     align-self: flex-start;
-    margin-top: 19px;
+  
 }
 
 .divider {
     background-color: #f0effb;
-    margin-top: 21px;
+
     height: 2px;
     border: 2px solid #f0effb;
 }
@@ -1818,7 +1820,7 @@ body {
 .listings-list-title {
     color: #000;
     align-self: flex-start;
-    margin-top: 48px;
+    margin-top: 20px;
     font-size: 24px;
     font-weight: 500;
 }
@@ -2288,5 +2290,21 @@ body {
     padding-right: 0;
     border-right: none;
 }
-
-
+nav{
+    
+    margin-top:10px;
+}
+nav ul{
+     margin-top:30px;
+}
+nav button {
+    border: none;
+    background-color: transparent;
+    padding: 0px;
+}
+.active>.page-link, .page-link.active {
+    z-index: 3;
+    color: #f3f3f3;
+    background-color: #7065f0;
+    border-color: #7065f0;
+}

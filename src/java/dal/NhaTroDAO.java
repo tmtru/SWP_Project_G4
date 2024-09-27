@@ -22,7 +22,7 @@ public class NhaTroDAO extends DBContext {
     public ArrayList<NhaTro> getAll() {
         ArrayList<NhaTro> nhaTroList = new ArrayList<>();
         String sql = "SELECT * FROM NHA_TRO ";
-                
+
         try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             // Lặp qua các kết quả và thêm vào danh sách
             while (rs.next()) {
@@ -73,21 +73,22 @@ public class NhaTroDAO extends DBContext {
                 + "WHERE p.ID_NhaTro = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql);) {
             ps.setInt(1, idNhaTro);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                Phong phong = new Phong();
-                phong.setID_Phong(rs.getInt("ID_Phong"));
-                phong.setID_LoaiPhong(rs.getInt("ID_LoaiPhong"));
-                phong.setTenPhongTro(rs.getString("TenPhongTro"));
-                phong.setID_NhaTro(rs.getInt("ID_NhaTro"));
-                phong.setTenNhaTro(rs.getNString("TenNhaTro"));
-                phong.setTang(rs.getInt("Tang"));
-                phong.setTrang_thai(rs.getString("Trang_thai"));
-                phong.setDien_tich(rs.getFloat("Dien_Tich"));
-                phong.setURL_AnhPhongTro(rs.getString("URL_AnhPhongTro"));
-                phong.setGia(rs.getInt("Gia"));
-                phong.setMo_ta(rs.getString("Mo_ta"));
-                phongList.add(phong);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Phong phong = new Phong();
+                    phong.setID_Phong(rs.getInt("ID_Phong"));
+                    phong.setID_LoaiPhong(rs.getInt("ID_LoaiPhong"));
+                    phong.setTenPhongTro(rs.getString("TenPhongTro"));
+                    phong.setID_NhaTro(rs.getInt("ID_NhaTro"));
+                    phong.setTenNhaTro(rs.getNString("TenNhaTro"));
+                    phong.setTang(rs.getInt("Tang"));
+                    phong.setTrang_thai(rs.getString("Trang_thai"));
+                    phong.setDien_tich(rs.getFloat("Dien_Tich"));
+                    phong.setURL_AnhPhongTro(rs.getString("URL_AnhPhongTro"));
+                    phong.setGia(rs.getInt("Gia"));
+                    phong.setMo_ta(rs.getString("Mo_ta"));
+                    phongList.add(phong);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -103,15 +104,16 @@ public class NhaTroDAO extends DBContext {
                 + "WHERE p.ID_NhaTro = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql);) {
             ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                nhaTro = new NhaTro();
-                nhaTro.setID_NhaTro(rs.getInt("ID_NhaTro"));
-                nhaTro.setTenNhaTro(rs.getNString("TenNhaTro"));
-                nhaTro.setID_ChuTro(Integer.parseInt(rs.getString("ID_ChuTro")));
-                nhaTro.setDia_chi(rs.getNString("Dia_Chi"));
-                nhaTro.setMo_ta(rs.getNString("Mo_ta"));
 
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    nhaTro = new NhaTro();
+                    nhaTro.setID_NhaTro(rs.getInt("ID_NhaTro"));
+                    nhaTro.setTenNhaTro(rs.getNString("TenNhaTro"));
+                    nhaTro.setID_ChuTro(Integer.parseInt(rs.getString("ID_ChuTro")));
+                    nhaTro.setDia_chi(rs.getNString("Dia_Chi"));
+                    nhaTro.setMo_ta(rs.getNString("Mo_ta"));
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -133,22 +135,23 @@ public class NhaTroDAO extends DBContext {
             ps.setInt(1, idNhaTro);
             ps.setString(2, status); // Truyền trạng thái loại trừ (ví dụ: "D")
 
-            ResultSet rs = ps.executeQuery();
-
             // Lặp qua các kết quả và thêm vào danh sách
-            while (rs.next()) {
-                Phong phong = new Phong();
-                phong.setID_Phong(rs.getInt("ID_Phong"));
-                phong.setID_LoaiPhong(rs.getInt("ID_LoaiPhong"));
-                phong.setTenPhongTro(rs.getString("TenPhongTro"));
-                phong.setID_NhaTro(rs.getInt("ID_NhaTro"));
-                phong.setTenNhaTro(rs.getNString("TenNhaTro"));
-                phong.setTang(rs.getInt("Tang"));
-                phong.setTrang_thai(rs.getString("Trang_thai"));
-                phong.setDien_tich(rs.getFloat("Dien_Tich"));
-                phong.setGia(rs.getInt("Gia"));
-                phong.setMo_ta(rs.getString("Mo_ta"));
-                phongList.add(phong);
+            try (ResultSet rs = ps.executeQuery()) {
+                // Lặp qua các kết quả và thêm vào danh sách
+                while (rs.next()) {
+                    Phong phong = new Phong();
+                    phong.setID_Phong(rs.getInt("ID_Phong"));
+                    phong.setID_LoaiPhong(rs.getInt("ID_LoaiPhong"));
+                    phong.setTenPhongTro(rs.getString("TenPhongTro"));
+                    phong.setID_NhaTro(rs.getInt("ID_NhaTro"));
+                    phong.setTenNhaTro(rs.getNString("TenNhaTro"));
+                    phong.setTang(rs.getInt("Tang"));
+                    phong.setTrang_thai(rs.getString("Trang_thai"));
+                    phong.setDien_tich(rs.getFloat("Dien_Tich"));
+                    phong.setGia(rs.getInt("Gia"));
+                    phong.setMo_ta(rs.getString("Mo_ta"));
+                    phongList.add(phong);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -160,7 +163,7 @@ public class NhaTroDAO extends DBContext {
     public void insertNhaTro(NhaTro nhaTro) {
         String sql = "INSERT INTO NHA_TRO (TenNhaTro, Dia_chi, Mo_ta, ID_ChuTro) VALUES (?, ?, ?,?)";
 
-        try (PreparedStatement statement = connection.prepareStatement(sql)){
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, nhaTro.getTenNhaTro());
             statement.setString(2, nhaTro.getDia_chi());
@@ -176,7 +179,7 @@ public class NhaTroDAO extends DBContext {
     public void updateNhaTro(NhaTro nhaTro) {
         String sql = "UPDATE NHA_TRO SET TenNhaTro = ?, Dia_chi = ?, Mo_ta = ? WHERE ID_NhaTro = ?";
 
-        try (PreparedStatement statement = connection.prepareStatement(sql)){
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, nhaTro.getTenNhaTro());
             statement.setString(2, nhaTro.getDia_chi());
@@ -185,13 +188,11 @@ public class NhaTroDAO extends DBContext {
 
             statement.executeUpdate();
             statement.close();
-            connection.close();
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-
 
     // Method to search NhaTro by name or address
     public List<NhaTro> searchNhaTro(String searchQuery) {
@@ -199,7 +200,7 @@ public class NhaTroDAO extends DBContext {
         NhaTro nhaTro = null;
         String sql = "SELECT * FROM NHA_TRO WHERE TenNhaTro LIKE ? OR Dia_chi LIKE ?";
 
-        try (PreparedStatement statement = connection.prepareStatement(sql)){
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, "%" + searchQuery + "%");
             statement.setString(2, "%" + searchQuery + "%");
             ResultSet rs = statement.executeQuery();
@@ -217,7 +218,7 @@ public class NhaTroDAO extends DBContext {
 
             rs.close();
             statement.close();
-            connection.close();
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -255,11 +256,11 @@ public class NhaTroDAO extends DBContext {
         NhaTroDAO dao = new NhaTroDAO();
 
         // Tạo đối tượng NhaTro
-        NhaTro nhaTro = new NhaTro(1,"Nha Tro A", "123 Đường A",  1,"Phòng thoáng mát, giá rẻ");
+        NhaTro nhaTro = new NhaTro(1, "Nha Tro A", "123 Đường A", 1, "Phòng thoáng mát, giá rẻ");
 
         // Gọi phương thức để chèn NhaTro vào cơ sở dữ liệu
         dao.insertNhaTro(nhaTro);
-        
+
         System.out.println("Insert completed!");
     }
 }

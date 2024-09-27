@@ -41,7 +41,7 @@
             <div class="container-fluid bg-light px-0">
                 <div class="row gx-0">
                     <div class="col-lg-5 bg-light d-none d-lg-block">
-                        <a href="index.html"
+                        <a href="home.jsp"
                            class="navbar-brand w-100 h-100 m-0 p-0 d-flex align-items-center justify-content-center">
                             <img src="assets/img/Logo_nhatro.png" alt="logo-nhatro" />
                         </a>
@@ -49,7 +49,7 @@
                     <div class="col-lg-7">
 
                         <nav class="navbar navbar-expand-lg bg-light navbar-light p-3 p-lg-0">
-                            <a href="index.html" class="navbar-brand d-block d-lg-none m-0 p-0">
+                            <a href="home.jsp" class="navbar-brand d-block d-lg-none m-0 p-0">
                                 <img src="assets/img/Logo_nhatro.png" alt="logo-nhatro" />
                             </a>
                             <button type="button" class="navbar-toggler" data-bs-toggle="collapse"
@@ -58,7 +58,7 @@
                             </button>
                             <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                                 <div class="navbar-nav mr-auto py-0">
-                                    <a href="homer" class="nav-item nav-link ${pageContext.request.servletPath == '/home.jsp' ? 'active' : ''}">Trang chủ</a>
+                                    <a href="home.jsp" class="nav-item nav-link ${pageContext.request.servletPath == '/home.jsp' ? 'active' : ''}">Trang chủ</a>
 
                                 <a href="category" class="nav-item nav-link ${pageContext.request.servletPath == '/category.jsp' || pageContext.request.servletPath == '/detailHouseHome.jsp' ? 'active' : ''}">Nhà trọ
                                 </a>
@@ -96,7 +96,8 @@
         <!-- Header End -->
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-        <script src="js/main.js"></script>
+        
+        
 
         <!-- JavaScript Libraries -->
         <!--font awasome-->
