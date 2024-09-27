@@ -48,13 +48,20 @@ public class Login extends HttpServlet {
 
         AccountDAO userdao = new AccountDAO();
         String encryptedPassword = encryptPassword(password);
-
+        HttpSession session = request.getSession();
         // Thay đổi để sử dụng mật khẩu đã mã hóa cho việc xác thực
         Account acc = userdao.getAccount(username, encryptedPassword);
-
+        
         if (acc != null) {
             int ID_Account = acc.getID_Account();
-            HttpSession session = request.getSession();
+            String email= acc.getEmail();
+            
+            Account acc1=new Account();
+            acc1.setEmail(email);
+            acc1.setUsername(username);
+            session.setAttribute("account", acc1);
+                    
+
             session.setAttribute("ID_Account", ID_Account);
 
             response.sendRedirect("home.jsp");
