@@ -159,17 +159,19 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <h3>${room.tenNhaTro} - ${room.tenPhongTro}</h3>
-                                <p><strong>Floor:</strong> ${room.tang}</p>
-                                <p><strong>Area:</strong> ${room.dien_tich} m²</p>
-                                <p><strong>Price:</strong> <fmt:formatNumber value="${room.gia}" type="currency" currencyCode="VND"/></p>
-                                <p><strong>Room Type:</strong> ${room.tenLoaiPhong}</p>
-                                <p><strong>Status:</strong> 
+                                <h3>Phòng: ${room.tenPhongTro}</h3>
+                                <p><strong>Nhà trọ:</strong> ${room.tenNhaTro}</p>
+                                <p><strong>Loại phòng:</strong> ${room.tenLoaiPhong}</p>
+                                <p><strong>Tầng:</strong> ${room.tang}</p>
+                                <p><strong>Diện tích:</strong> ${room.dien_tich} m²</p>
+                                <p><strong>Giá tiền:</strong> <fmt:formatNumber value="${room.gia}" type="currency" currencyCode="VND"/></p>
+                                
+                                <p><strong>Trạng thái:</strong> 
                                     <span class="badge ${room.trang_thai == 'T' ? 'badge-success' : 'badge-danger'}">
                                         ${room.trang_thai == 'T' ? 'Trống' : 'Đang thuê'}
                                     </span>
                                 </p>
-                                <p><strong>Description:</strong> ${room.mo_ta}</p>
+                                <p><strong>Quay lại danh sách phòng:</strong> ${room.mo_ta}</p>
                             </div>
                         </div>
                     </div>

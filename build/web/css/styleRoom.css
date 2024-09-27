@@ -399,6 +399,7 @@ body.dark .home .text{
     margin-bottom: 15px;
 }
 
+
 .filters {
     display: flex;
     gap: 10px;
@@ -438,6 +439,10 @@ body .btn {
 .btn.quick-add-room {
     background-color: #7A1CAC;
 }
+
+
+
+
 /* darkmode for home*/
 /* General Dark Mode Styles */
 body.dark {
@@ -528,7 +533,34 @@ body.dark .btn:hover {
     font-size: 0.8em; /* Kích thước biểu tượng */
     
 }
+.btn.export-to-excel {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 10px 15px !important;
+    font-size: 13px !important;
+    border: none !important;
+    border-radius: 7px !important;
+    cursor: pointer !important;
+    background-color: #4CAF50 !important;
+    color: #ffffff !important;
+}
 
+.btn.export-to-excel:hover {
+    background-color: #45a049 !important;
+}
 
+.btn.export-to-excel i {
+    margin-right: 5px !important;
+}
 
+.room-actions {
+    display: flex !important;
+    gap: 10px !important;
+    align-items: center !important;
+}
 
+.room-actions .btn,
+.room-actions form {
+    flex: 0 0 auto !important;
+}
