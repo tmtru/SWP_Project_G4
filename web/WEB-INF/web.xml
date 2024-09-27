@@ -30,6 +30,18 @@
         <servlet-class>controller.ResetPassword</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>LoginGoogle</servlet-name>
+        <servlet-class>controller.LoginGoogle</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Verification</servlet-name>
+        <servlet-class>controller.Verification</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SendEmail</servlet-name>
+        <servlet-class>controller.SendEmail</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>NhaTroServlet</servlet-name>
         <servlet-class>controller.NhaTroServlet</servlet-class>
     </servlet>
@@ -146,6 +158,18 @@
     <servlet-mapping>
         <servlet-name>ResetPassword</servlet-name>
         <url-pattern>/resetpassword</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoginGoogle</servlet-name>
+        <url-pattern>/logingoogle</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Verification</servlet-name>
+        <url-pattern>/verification</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SendEmail</servlet-name>
+        <url-pattern>/sendemail</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>NhaTroServlet</servlet-name>

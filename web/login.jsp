@@ -13,7 +13,7 @@
             <h2>Log in</h2>
             <button class="social-login">
                 <img src="assets/img/Google.jpg" alt="Google" width="20">
-                <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:9999/WebApplication1/logingoogle&response_type=code&client_id=973218303475-v2dh2eglhdv165jlcln5esv1je0c8j2b.apps.googleusercontent.com&approval_prompt=force">Continue with Google</a>
+                <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:9999/NhaTroTQAT/logingoogle&response_type=code&client_id=973218303475-v2dh2eglhdv165jlcln5esv1je0c8j2b.apps.googleusercontent.com&approval_prompt=force">Continue with Google</a>
             </button>
             <button class="social-login">
                 <img src="assets/img/Facebook.jpg" alt="Facebook" width="20">
