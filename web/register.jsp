@@ -5,10 +5,10 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Create an Account</title>
-        <link rel="stylesheet" href="assets/css/styleRegister.css">
+        <link rel="stylesheet" href="css/styleRegister.css">
     </head>
     <body>
-        <img src="assets/images/Web.png" alt="Logo" width="100" class="logo"> 
+        <img src="assets/img/Web.png" alt="Logo" width="100" class="logo"> 
         <div class="container">
             <h2>Create an account</h2>
 
@@ -30,13 +30,13 @@
             <p>OR Continue with</p>
             <div class="social-login-container">
                 <button class="social-login">
-                    <img src="assets/images/Facebook.jpg" alt="Facebook" width="20"> Facebook
+                    <img src="assets/img/Facebook.jpg" alt="Facebook" width="20"> Facebook
                 </button>
                 <button class="social-login">
-                    <img src="assets/images/Google.jpg" alt="Google" width="20"> Google
+                    <img src="assets/img/Google.jpg" alt="Google" width="20"> Google
                 </button>
                 <button class="social-login">
-                    <img src="assets/images/Apple.jpg" alt="Apple" width="20"> Apple
+                    <img src="assets/img/Apple.jpg" alt="Apple" width="20"> Apple
                 </button>
             </div>
 
