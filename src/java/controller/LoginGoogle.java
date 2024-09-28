@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.Account;
 import model.GoogleAccount;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Form;
@@ -39,11 +40,17 @@ public class LoginGoogle extends HttpServlet {
         } else {
             System.out.println("Account already exists.");
         }
-        
+
         GoogleAccount acc = ggaccDAO.getAccount(user.getEmail());
         int ID_Account = acc.getID_Account();
         HttpSession session = request.getSession();
         session.setAttribute("ID_Account", ID_Account);
+        String email = acc.getEmail();
+        String username = acc.getUsername();
+        Account acc1 = new Account();
+        acc1.setEmail(email);
+        acc1.setUsername(username);
+        session.setAttribute("account", acc1);
 
         response.sendRedirect("home.jsp");
     }

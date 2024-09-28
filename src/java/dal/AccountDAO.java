@@ -269,7 +269,7 @@ public class AccountDAO extends DBContext {
      * @return
      */
     public boolean addAccount(String email, String username, String password) {
-        String sql = "INSERT INTO ACCOUNT (Email, Username, Password, Role) VALUES (?, ?, ?, 'Khach Thue')";
+        String sql = "INSERT INTO ACCOUNT (Email, Username, Password, Role) VALUES (?, ?, ?, 'Quản lý')";
 
         try {
             PreparedStatement st = connection.prepareStatement(sql);
