@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.io.PrintWriter;
 import model.Account;
 import model.GoogleAccount;
 import org.apache.http.client.ClientProtocolException;
@@ -42,18 +41,22 @@ public class LoginGoogle extends HttpServlet {
         } else {
             System.out.println("Account already exists.");
         }
-        
+
         GoogleAccount acc = ggaccDAO.getAccount(user.getEmail());
         int ID_Account = acc.getID_Account();
         HttpSession session = request.getSession();
         AccountDAO acd= new AccountDAO();
         session.setAttribute("ID_Account", ID_Account);
-        String email= acc.getEmail();
-            
-            Account acc1=new Account();
-            acc1=acd.getAccountById(ID_Account);
-        session.setAttribute("account", acc);
-       response.sendRedirect("home.jsp");
+
+        String email = acc.getEmail();
+        String username = acc.getUsername();
+        Account acc1 = new Account();
+        acc1.setEmail(email);
+        acc1.setUsername(username);
+        session.setAttribute("account", acc1);
+
+        response.sendRedirect("home.jsp");
+
     }
 
     public static String getToken(String code) throws ClientProtocolException, IOException {

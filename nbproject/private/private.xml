@@ -70,6 +70,8 @@
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/homeRooms.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/detailRoom.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/Login.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/dal/GoogleAccountDAO.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/model/GoogleAccount.java</file>
         </group>
     </open-files>
 </project-private>
