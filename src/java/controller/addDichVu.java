@@ -79,6 +79,7 @@ public class addDichVu extends HttpServlet {
         DichVu dichVu = new DichVu();
         dichVu.setTenDichVu(tenDichVu);
         dichVu.setDon_gia(donGia);
+        dichVu.setIsActive(true);
         dichVu.setDon_vi(donVi);
         dichVu.setMo_ta(moTa);
 

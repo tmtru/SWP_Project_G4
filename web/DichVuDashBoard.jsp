@@ -20,12 +20,15 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <!----======== CSS ======== -->
         <link rel="stylesheet" href="css/styleRoom.css">
-
+        <link rel="stylesheet" href="css/modelDelete.css">
+        <script src="https://kit.fontawesome.com/aab0c35bef.js" crossorigin="anonymous"></script>
 
 
         <!----===== Boxicons CSS ===== -->
         <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
         <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+        <!--jquery-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
 
     </head>
@@ -185,8 +188,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="ghichu">Ghi chú:</label>
-                                            <textarea id="ghichu" name="mota" rows="4" cols="55">
-                                            </textarea>
+                                            <textarea id="ghichu" name="mota" rows="4" cols="55"></textarea>
                                         </div>
 
 
@@ -211,6 +213,7 @@
                                     <th scope="col">Đơn giá</th>
                                     <th scope="col">Đơn vị</th>
                                     <th scope="col">Ghi chú</th>
+                                    <th scope="col">Kích hoạt</th>
                                     <th scope="col">Hành động</th>
                                 </tr>
                             </thead>
@@ -223,7 +226,40 @@
                                         <td>/${dv.don_vi}</td>
                                         <td>${dv.mo_ta}</td>
                                         <td>
-                                            <button class="btn btn-primary" data-toggle="modal" data-target="#EditModal${dv.ID_DichVu}">Chỉnh sửa</button>
+                                            <label class="switch">
+                                                <input type="checkbox" ${dv.isActive ? "checked onclick='this.checked=true;'" : "onclick='updateIsActive(this)'"} data-id="${dv.ID_DichVu}">
+                                                <span class="slider" 
+                                                      <c:if test="${dv.isActive}"> data-bs-toggle="modal" data-bs-target="#myModal${dv.ID_DichVu}"</c:if>></span>
+                                                </label>
+
+                                                <!-- Modal HTML -->
+                                                <div id="myModal${dv.ID_DichVu}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-confirm">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header flex-column">
+                                                            <div class="icon-box">
+                                                                <i class="material-icons"><i class="fa-solid fa-circle-xmark"></i></i>
+                                                            </div>
+                                                            <h5 class="modal-title w-100">Bạn có chắc chắn bạn muốn tắt dịch vụ <br/> <span style="color: #5932ea">"${dv.tenDichVu}"</span> ?</h5>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p style="color: red">Lưu ý: Tắt dịch vụ khiến dịch vụ ko còn được tính trong hợp đồng khi thanh toán </p>
+
+                                                        </div>
+                                                        <div class="modal-footer justify-content-center">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                                            <button type="button" class="btn btn-danger">
+                                                                <a href="action?action=dele&id=${dv.ID_DichVu}" class="edit-film" style="color: white !important;">Tắt dịch vụ</a>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </td>
+
+                                        <td>
+                                            <button class="btn edit" data-toggle="modal" data-target="#EditModal${dv.ID_DichVu}">Chỉnh sửa</button>
                                             <div class="modal fade" id="EditModal${dv.ID_DichVu}" tabindex="-1" role="dialog" aria-labelledby="addRoomModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
@@ -251,18 +287,15 @@
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label for="ghichu">Ghi chú:</label>
-                                                                    <textarea id="ghichu" name="mota" rows="4" cols="55" >${dv.mo_ta}
-                                                                    </textarea>
+                                                                    <textarea id="ghichu" name="mota" rows="4" cols="55" >${dv.mo_ta}</textarea>
                                                                 </div>
-
-
                                                                 <button type="submit" class="btn btn-primary">Lưu chỉnh sửa</button>
                                                             </form>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <button href="#" class="edit-film btn btn-danger" onclick="confirmDelete(${dv.ID_DichVu},'${dv.tenDichVu}')" return false;> Xóa</button><br/><br/>
+
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -288,7 +321,7 @@
 
             //delete sẻvice confirm
             function confirmDelete(idDichvu, tenDichVu) {
-                if (confirm('Bạn có muốn xóa dịch vụ '+tenDichVu +' ?')) {
+                if (confirm('Bạn có muốn xóa dịch vụ ' + tenDichVu + ' ?')) {
                     window.location.href = 'action?action=dele&id=' + idDichvu;
                 }
             }
@@ -322,6 +355,29 @@
                 }
             });
         </script>
+
+        <script>
+            function updateIsActive(checkbox) {
+                const idDichVu = $(checkbox).data("id"); // Lấy ID dịch vụ từ data-id
+                const isActive = checkbox.checked; // Trạng thái mới của checkbox
+
+                // Gọi AJAX để cập nhật trạng thái isActive
+                $.ajax({
+                    url: 'action?action=update',
+                    type: 'POST',
+                    data: {id: idDichVu, isActive: true}, // Gửi ID và trạng thái isActive
+                    success: function (response) {
+                        console.log('Cập nhật thành công:', response);
+                        location.reload(); // Tải lại trang
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Có lỗi xảy ra:', error);
+                    }
+                });
+            }
+        </script>
+
+
 
 
     </body>
