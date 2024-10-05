@@ -2,6 +2,7 @@ package controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import dal.AccountDAO;
 import dal.GoogleAccountDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -9,6 +10,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.io.PrintWriter;
+import model.Account;
 import model.GoogleAccount;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Form;
@@ -43,9 +46,14 @@ public class LoginGoogle extends HttpServlet {
         GoogleAccount acc = ggaccDAO.getAccount(user.getEmail());
         int ID_Account = acc.getID_Account();
         HttpSession session = request.getSession();
+        AccountDAO acd= new AccountDAO();
         session.setAttribute("ID_Account", ID_Account);
-
-        response.sendRedirect("home.jsp");
+        String email= acc.getEmail();
+            
+            Account acc1=new Account();
+            acc1=acd.getAccountById(ID_Account);
+        session.setAttribute("account", acc);
+       response.sendRedirect("home.jsp");
     }
 
     public static String getToken(String code) throws ClientProtocolException, IOException {

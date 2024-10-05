@@ -59,6 +59,7 @@ public class Login extends HttpServlet {
             Account acc1=new Account();
             acc1.setEmail(email);
             acc1.setUsername(username);
+            acc1 = userdao.getAccountById(ID_Account);
             session.setAttribute("account", acc1);
                     
 
