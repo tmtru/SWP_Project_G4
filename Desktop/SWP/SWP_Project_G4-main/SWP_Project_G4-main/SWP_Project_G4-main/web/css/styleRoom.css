@@ -1,0 +1,566 @@
+/* Google Font Import - Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Playfair+Display:ital,wght@0,500;1,500&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', Playfair Display;
+}
+
+:root{
+    /* ===== Colors ===== */
+    --body-color: #E4E9F7;
+    --sidebar-color: #FFF;
+    --primary-color: #695CFE;
+    --primary-color-light: #F6F5FF;
+    --toggle-color: #DDD;
+    --text-color: #707070;
+
+    /* ====== Transition ====== */
+    --tran-03: all 0.2s ease;
+    --tran-03: all 0.3s ease;
+    --tran-04: all 0.3s ease;
+    --tran-05: all 0.3s ease;
+}
+
+body{
+    min-height: 100vh;
+    background-color: var(--body-color);
+    transition: var(--tran-05);
+}
+
+::selection{
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+body.dark{
+    --body-color: #18191a;
+    --sidebar-color: #242526;
+    --primary-color: #3a3b3c;
+    --primary-color-light: #3a3b3c;
+    --toggle-color: #fff;
+    --text-color: #ccc;
+}
+
+/* ===== Sidebar ===== */
+ .sidebar{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 250px;
+    padding: 10px 14px;
+    background: var(--sidebar-color);
+    transition: var(--tran-05);
+    z-index: 100;  
+}
+.sidebar.close{
+    width: 88px;
+}
+
+/* ===== Reusable code - Here ===== */
+.sidebar li{
+    height: 50px;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.sidebar header .image,
+.sidebar .icon{
+    min-width: 60px;
+    border-radius: 6px;
+}
+
+.sidebar .icon{
+    min-width: 60px;
+    border-radius: 6px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.sidebar .text,
+.sidebar .icon{
+    color: var(--text-color);
+    transition: var(--tran-03);
+}
+
+.sidebar .text{
+    font-size: 17px;
+    font-weight: 500;
+    white-space: nowrap;
+    opacity: 1;
+}
+.sidebar.close .text{
+    opacity: 0;
+}
+/* =========================== */
+
+.sidebar header{
+    position: relative;
+}
+
+.sidebar header .image-text{
+    display: flex;
+    align-items: center;
+}
+.sidebar header .logo-text{
+    display: flex;
+    flex-direction: column;
+}
+header .image-text .name {
+    margin-top: 2px;
+    font-size: 30px;
+    font-weight: 1000;
+}
+
+header .image-text .profession{
+    font-size: 16px;
+    margin-top: -2px;
+    display: block;
+}
+
+.sidebar header .image{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar header .image img{
+    width: 50px;
+    border-radius: 50px;
+}
+
+.sidebar header .toggle{
+    position: absolute;
+    top: 50%;
+    right: -25px;
+    transform: translateY(-50%) rotate(180deg);
+    height: 25px;
+    width: 25px;
+    background-color: var(--primary-color);
+    color: var(--sidebar-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    cursor: pointer;
+    transition: var(--tran-05);
+}
+
+body.dark .sidebar header .toggle{
+    color: var(--text-color);
+}
+
+.sidebar.close .toggle{
+    transform: translateY(-50%) rotate(0deg);
+}
+
+
+.sidebar li.search-box{
+    border-radius: 6px;
+    background-color: var(--primary-color-light);
+    cursor: pointer;
+    transition: var(--tran-05);
+}
+/*css cho thanh search*/
+.search-container {
+        position: absolute;
+        top: 137px;
+        right: 10px;
+    }
+
+    .search-container form {
+        display: flex;
+        align-items: center;
+    }
+
+    .search-container input[type="text"] {
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 7px 0 0 7px;
+        outline: none;
+        width: 200px;
+        transition: all 0.3s ease;
+    }
+
+    .search-container input[type="text"]:focus {
+        width: 250px;
+        border-color: #4CAF50;
+    }
+
+    .search-container button {
+        padding: 8px 15px;
+        background-color: #5a67d8;
+        color: white;
+        border: none;
+        border-radius: 0 10px 10px 0;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .search-container button:hover {
+        background-color: #45a049;
+    }
+
+    .search-container i {
+        font-size: 18px;
+    }
+.sidebar li.search-box input{
+    height: 100%;
+    width: 100%;
+    outline: none;
+    border: none;
+    background-color: var(--primary-color-light);
+    color: var(--text-color);
+    border-radius: 6px;
+    font-size: 17px;
+    font-weight: 500;
+    transition: var(--tran-05);
+}
+.sidebar li a{
+    list-style: none;
+    height: 100%;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: var(--tran-03);
+}
+
+.sidebar li a:hover,
+.sidebar li a.active{
+    background-color: var(--primary-color);
+}
+.sidebar li a:hover .icon,
+.sidebar li a:hover .text,
+.sidebar li a.active .text,
+.sidebar li a.active .icon{
+    color: var(--sidebar-color);
+}
+body.dark .sidebar li a:hover .icon,
+body.dark .sidebar li a:hover .text,
+body.dark .sidebar li a.active .icon,
+body.dark .sidebar li a.active .text{
+    color: var(--text-color);
+}
+
+.sidebar .menu-bar{
+    height: calc(100% - 55px);
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    overflow-y: scroll;
+}
+.menu-bar::-webkit-scrollbar{
+    display: none;
+}
+.sidebar .menu-bar .mode{
+    border-radius: 6px;
+    background-color: var(--primary-color-light);
+    position: relative;
+    transition: var(--tran-05);
+}
+
+.menu-bar .mode .sun-moon{
+    height: 50px;
+    width: 60px;
+}
+
+.mode .sun-moon i{
+    position: absolute;
+}
+.mode .sun-moon i.sun{
+    opacity: 0;
+}
+body.dark .mode .sun-moon i.sun{
+    opacity: 1;
+}
+body.dark .mode .sun-moon i.moon{
+    opacity: 0;
+}
+
+.menu-bar .bottom-content .toggle-switch{
+    position: absolute;
+    right: 0;
+    height: 100%;
+    min-width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.toggle-switch .switch{
+    position: relative;
+    height: 22px;
+    width: 40px;
+    border-radius: 25px;
+    background-color: var(--toggle-color);
+    transition: var(--tran-05);
+}
+
+.switch::before{
+    content: '';
+    position: absolute;
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    top: 50%;
+    left: 5px;
+    transform: translateY(-50%);
+    background-color: var(--sidebar-color);
+    transition: var(--tran-04);
+}
+
+body.dark .switch::before{
+    left: 20px;
+}
+
+.home{
+    position: absolute;
+    top: 0;
+    top: 0;
+    left: 250px;
+    height: 100vh;
+    width: calc(100% - 250px);
+    background-color: var(--body-color);
+    transition: var(--tran-05);
+}
+.home .text{
+    font-size: 30px;
+    font-weight: 500;
+    color: var(--text-color);
+    padding: 12px 60px;
+}
+
+.sidebar.close ~ .home{
+    left: 78px;
+    height: 100vh;
+    width: calc(100% - 78px);
+}
+body.dark .home .text{
+    color: var(--text-color);
+}
+/* === css cho home */
+.property-management {
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h3 {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.property-selector {
+    margin-top: 10px; /* Adds space between the h2 and the select */
+}
+
+.property-selector select {
+    width: 100%; /* Makes the select dropdown take up the full width (optional) */
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 4px; /* Rounded corners */
+    border: 1px solid #ccc; /* Light gray border */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+    transition: box-shadow 0.3s ease; /* Smooth transition for shadow effect */
+}
+
+.property-selector select:hover {
+    box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
+}
+
+
+
+
+.action-buttons, .room-actions {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+}
+
+.room-actions {
+    margin-bottom: 15px;
+}
+
+
+.filters {
+    display: flex;
+    gap: 10px;
+    }
+
+.filters select, .filters input {
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 7px;
+}
+
+body .btn {
+    padding: 10px 15px;
+    font-size: 13px;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    color: #ffffff;
+}
+
+.btn.add-property {
+    background-color: #6C48C5;
+}
+
+.btn.edit-property {
+    background-color: #0B2F9F;
+}
+
+.btn.delete-property {
+    background-color: #B8001F;
+}
+
+.btn.add-room {
+    background-color: #5a67d8;
+}
+
+.btn.quick-add-room {
+    background-color: #7A1CAC;
+}
+
+
+
+
+/* darkmode for home*/
+/* General Dark Mode Styles */
+body.dark {
+    background-color: #121212; /* Dark background */
+    color: #ffffff; /* Light text */
+}
+
+body.dark .property-management .header,
+body.dark .property-management .filters select,
+body.dark .property-management .action-buttons button {
+    background-color: #333333; /* Darker backgrounds for cards or input fields */
+    color: #ffffff; /* Light text */
+    border: 1px solid #555555; /* Border for distinction */
+}
+
+/* Adjust dropdown and input styles */
+body.dark select,
+body.dark input[type="text"] {
+    background-color: #333333; /* Darker background for inputs */
+    color: #ffffff; /* Light text */
+    border: 1px solid #555555; /* Border color */
+}
+
+/* Buttons Dark Mode */
+body.dark .btn {
+    background-color: #444444; /* Darker button background */
+    color: #ffffff; /* Light text */
+    border: 1px solid #555555; /* Button border */
+}
+
+body.dark .btn:hover {
+    background-color: #555555; /* Slightly lighter on hover */
+}
+/*css phan trang */
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+.prev-next {
+    text-decoration: none;
+    color: #000; /* Màu chữ */
+    padding: 4px 11px;
+    border: 1px  #5a67d8; /* Viền */
+    margin: 0 5px; /* Khoảng cách giữa các nút */
+    border-radius: 5px; /* Bo góc */
+    background-color: #5a67d8; /* Nền màu sáng */
+}
+
+.page-number {
+    text-decoration: none;
+    color: #5a67d8; /* Màu chữ */
+    padding: 4px 11px;
+    margin: 0 5px; /* Khoảng cách giữa các số trang */
+    border-radius: 5px; /* Bo góc */
+}
+
+.page-number:hover {
+    border: 1px solid #5a67d8; /* Viền tím nhạt khi hover */
+    background-color: #89bced; /* Nền khi hover */
+}
+
+.current-page {
+    padding: 4px 11px;
+    color: #000; /* Màu chữ */
+    margin: 0 5px; /* Khoảng cách giữa các số trang */
+    border: 1px solid ; /* Viền màu tím nhạt */
+    border-radius: 5px; /* Bo góc */
+    background-color: #5a67d8; /* Nền màu tím nhạt */
+    color: white; /* Màu chữ cho trang hiện tại */
+}
+.prev-next {
+    text-decoration: none;
+    color: white; /* Màu chữ */
+    padding: 8px 12px;
+    border: 1px solid #ccc; /* Viền */
+    margin: 0 5px; /* Khoảng cách giữa các nút */
+    border-radius: 5px; /* Bo góc */
+    background-color: #5a67d8; /* Nền màu sáng */
+    display: flex; /* Để căn giữa biểu tượng */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    justify-content: center; /* Căn giữa theo chiều ngang */
+}
+
+.prev-next i {
+    font-size: 0.8em; /* Kích thước biểu tượng */
+    
+}
+.btn.export-to-excel {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 10px 15px !important;
+    font-size: 13px !important;
+    border: none !important;
+    border-radius: 7px !important;
+    cursor: pointer !important;
+    background-color: #4CAF50 !important;
+    color: #ffffff !important;
+}
+
+.btn.export-to-excel:hover {
+    background-color: #45a049 !important;
+}
+
+.btn.export-to-excel i {
+    margin-right: 5px !important;
+}
+
+.room-actions {
+    display: flex !important;
+    gap: 10px !important;
+    align-items: center !important;
+}
+
+.room-actions .btn,
+.room-actions form {
+    flex: 0 0 auto !important;
+}
