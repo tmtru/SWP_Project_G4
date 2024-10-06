@@ -23,6 +23,7 @@
             <file>file:/E:/PRJCode/NhaTroTQAT/web/css/css-account-management.css</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/adminUserManagement/account-management.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/model/Phong.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/dal/GoogleAccountDAO.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/model/Account.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/css/styleRegister.css</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/NhaTroServlet.java</file>
@@ -44,6 +45,7 @@
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/dal/AnhNhaTroDAO.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/editNhaTro.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/loadDichVu.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/actionDichvu.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/adminUserManagement/add-account.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/nbproject/build-impl.xml~</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/dal/LoaiPhongDAO.java</file>
@@ -51,6 +53,7 @@
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/model/Roles.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/ResetPassword.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/dal/DBContext.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/web/css/modelDelete.css</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/addNhaTro.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/adminUserManagement/sidebar.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/js/utils.js</file>
@@ -64,14 +67,16 @@
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/dal/NhaTroDAO.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/register.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/login.jsp</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/model/DichVu.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/category.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/css/style.css</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/loadRoomsHome.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/homeRooms.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/Verification.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/dal/DichVuDAO.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/detailRoom.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/Login.java</file>
-            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/dal/GoogleAccountDAO.java</file>
-            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/model/GoogleAccount.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/addDichVu.java</file>
         </group>
     </open-files>
 </project-private>
