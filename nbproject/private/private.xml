@@ -77,6 +77,21 @@
             <file>file:/E:/PRJCode/NhaTroTQAT/web/detailRoom.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/Login.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/addDichVu.java</file>
+
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/Constants.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/dal/RolesDAO.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/AddRoomServlet.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/web/detailNhaTro.jsp</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/model/ChuTro.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/filter/LoginFilter.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/RoomServlet.java</file>
+      
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/EditRoomServlet.java</file>
+ 
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/SendEmail.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/dal/ChuTroDAO.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/detailRoomServlet.java</file>
+
         </group>
     </open-files>
 </project-private>
