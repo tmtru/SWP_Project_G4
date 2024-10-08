@@ -53,6 +53,18 @@
         <servlet-name>addRoomExcel</servlet-name>
         <servlet-class>controller.addRoomExcel</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>LoadNhaTroByManager</servlet-name>
+        <servlet-class>controller.LoadNhaTroByManager</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LoadDashboardByRole</servlet-name>
+        <servlet-class>controller.LoadDashboardByRole</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>loadHoaDonNhaTro</servlet-name>
+        <servlet-class>controller.loadHoaDonNhaTro</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>homeRooms</servlet-name>
         <url-pattern>/homer</url-pattern>
@@ -186,5 +198,17 @@
     <servlet-mapping>
         <servlet-name>addRoomExcel</servlet-name>
         <url-pattern>/addRoomExcel</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoadNhaTroByManager</servlet-name>
+        <url-pattern>/loadnhatrobymanager</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoadDashboardByRole</servlet-name>
+        <url-pattern>/loaddashboardbyrole</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>loadHoaDonNhaTro</servlet-name>
+        <url-pattern>/hoadon</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -19,8 +19,9 @@
 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <!----======== CSS ======== -->
+        <link rel="stylesheet" href="css/styleDichVu.css">
         <link rel="stylesheet" href="css/styleRoom.css">
-        <link rel="stylesheet" href="css/modelDelete.css">
+              <link rel="stylesheet" href="css/modelDelete.css">
         <script src="https://kit.fontawesome.com/aab0c35bef.js" crossorigin="anonymous"></script>
 
 
@@ -203,112 +204,112 @@
             </section>
             <section class="ftco-section">
 
-                <div class="container">
-                    <div class="row mt-4">        
-                        <table class="table">
-                            <thead class="thead-dark">
+
+                <div class="mx-5">
+                    <table class="table mt-3">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Tên Dịch vụ</th>
+                                <th scope="col">Đơn giá</th>
+                                <th scope="col">Đơn vị</th>
+                                <th scope="col">Ghi chú</th>
+                                <th scope="col">Kích hoạt</th>
+                                <th scope="col">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach items="${dichVuList}" var="dv">
                                 <tr>
-                                    <th scope="col">ID</th>
-                                    <th scope="col">Tên Dịch vụ</th>
-                                    <th scope="col">Đơn giá</th>
-                                    <th scope="col">Đơn vị</th>
-                                    <th scope="col">Ghi chú</th>
-                                    <th scope="col">Kích hoạt</th>
-                                    <th scope="col">Hành động</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <c:forEach items="${dichVuList}" var="dv">
-                                    <tr>
-                                        <th scope="row">${dv.ID_DichVu}</th>
-                                        <td>${dv.tenDichVu}</td>
-                                        <td>${dv.don_gia}</td>
-                                        <td>/${dv.don_vi}</td>
-                                        <td>${dv.mo_ta}</td>
-                                        <td>
-                                            <label class="switch">
-                                                <input type="checkbox" ${dv.isActive ? "checked onclick='this.checked=true;'" : "onclick='updateIsActive(this)'"} data-id="${dv.ID_DichVu}">
-                                                <span class="slider" 
-                                                      <c:if test="${dv.isActive}"> data-bs-toggle="modal" data-bs-target="#myModal${dv.ID_DichVu}"</c:if>></span>
-                                                </label>
+                                    <th scope="row">${dv.ID_DichVu}</th>
+                                    <td>${dv.tenDichVu}</td>
+                                    <td>${dv.don_gia}</td>
+                                    <td>/${dv.don_vi}</td>
+                                    <td>${dv.mo_ta}</td>
+                                    <td>
+                                        <label class="switch">
+                                            <input type="checkbox" ${dv.isActive ? "checked onclick='this.checked=true;'" : "onclick='updateIsActive(this)'"} data-id="${dv.ID_DichVu}">
+                                            <span class="slider" 
+                                                  <c:if test="${dv.isActive}"> data-bs-toggle="modal" data-bs-target="#myModal${dv.ID_DichVu}"</c:if>></span>
+                                            </label>
 
-                                                <!-- Modal HTML -->
-                                                <div id="myModal${dv.ID_DichVu}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-confirm">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header flex-column">
-                                                            <div class="icon-box">
-                                                                <i class="material-icons"><i class="fa-solid fa-circle-xmark"></i></i>
+                                            <!-- Modal HTML -->
+                                            <div id="myModal${dv.ID_DichVu}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-confirm">
+                                                <div class="modal-content">
+                                                    <div class="modal-header flex-column">
+                                                        <div class="icon-box">
+                                                            <i class="material-icons"><i class="fa-solid fa-circle-xmark"></i></i>
+                                                        </div>
+                                                        <h5 class="modal-title w-100">Bạn có chắc chắn bạn muốn tắt dịch vụ <br/> <span style="color: #5932ea">"${dv.tenDichVu}"</span> ?</h5>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p style="color: red">Lưu ý: Tắt dịch vụ khiến dịch vụ ko còn được tính trong hợp đồng khi thanh toán </p>
+
+                                                    </div>
+                                                    <div class="modal-footer justify-content-center">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                                        <button type="button" class="btn btn-danger">
+                                                            <a href="action?action=dele&id=${dv.ID_DichVu}" class="edit-film" style="color: white !important;">Tắt dịch vụ</a>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </td>
+
+                                    <td>
+                                        <button class="btn edit" data-toggle="modal" data-target="#EditModal${dv.ID_DichVu}">Chỉnh sửa</button>
+                                        <div class="modal fade" id="EditModal${dv.ID_DichVu}" tabindex="-1" role="dialog" aria-labelledby="addRoomModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="addRoomModalLabel">Chỉnh sửa</h5>
+                                                        <button type="button " class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form action="action?action=edit&id=${dv.ID_DichVu}" method="post">
+
+                                                            <div class="form-group">
+                                                                <label for="tendichvu">Tên Dịch vụ:</label>
+                                                                <input type="text" class="form-control" id="tendichvu" name="tendichvu" value="${dv.tenDichVu}"required>
                                                             </div>
-                                                            <h5 class="modal-title w-100">Bạn có chắc chắn bạn muốn tắt dịch vụ <br/> <span style="color: #5932ea">"${dv.tenDichVu}"</span> ?</h5>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <p style="color: red">Lưu ý: Tắt dịch vụ khiến dịch vụ ko còn được tính trong hợp đồng khi thanh toán </p>
+                                                            <div class="form-group">
+                                                                <label for="donGia">Đơn giá(VNĐ):</label>
+                                                                <input type="text" class="form-control" id="donGia" name="donGia" value="${dv.don_gia}" required>
+                                                            </div>
 
-                                                        </div>
-                                                        <div class="modal-footer justify-content-center">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                                                            <button type="button" class="btn btn-danger">
-                                                                <a href="action?action=dele&id=${dv.ID_DichVu}" class="edit-film" style="color: white !important;">Tắt dịch vụ</a>
-                                                            </button>
-                                                        </div>
+                                                            <div class="form-group">
+                                                                <label for="donvi">Đơn vị:</label>
+                                                                <input type="text" class="form-control"id="donvi" name="donvi" value="${dv.don_vi}" required>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="ghichu">Ghi chú:</label>
+                                                                <textarea id="ghichu" name="mota" rows="4" cols="55" >${dv.mo_ta}</textarea>
+                                                            </div>
+                                                            <button type="submit" class="btn btn-primary">Lưu chỉnh sửa</button>
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
 
-                                        </td>
+                                    </td>
+                                </tr>
+                            </c:forEach>
 
-                                        <td>
-                                            <button class="btn edit" data-toggle="modal" data-target="#EditModal${dv.ID_DichVu}">Chỉnh sửa</button>
-                                            <div class="modal fade" id="EditModal${dv.ID_DichVu}" tabindex="-1" role="dialog" aria-labelledby="addRoomModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="addRoomModalLabel">Chỉnh sửa</h5>
-                                                            <button type="button " class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <form action="action?action=edit&id=${dv.ID_DichVu}" method="post">
-
-                                                                <div class="form-group">
-                                                                    <label for="tendichvu">Tên Dịch vụ:</label>
-                                                                    <input type="text" class="form-control" id="tendichvu" name="tendichvu" value="${dv.tenDichVu}"required>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label for="donGia">Đơn giá(VNĐ):</label>
-                                                                    <input type="text" class="form-control" id="donGia" name="donGia" value="${dv.don_gia}" required>
-                                                                </div>
-
-                                                                <div class="form-group">
-                                                                    <label for="donvi">Đơn vị:</label>
-                                                                    <input type="text" class="form-control"id="donvi" name="donvi" value="${dv.don_vi}" required>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label for="ghichu">Ghi chú:</label>
-                                                                    <textarea id="ghichu" name="mota" rows="4" cols="55" >${dv.mo_ta}</textarea>
-                                                                </div>
-                                                                <button type="submit" class="btn btn-primary">Lưu chỉnh sửa</button>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </td>
-                                    </tr>
-                                </c:forEach>
-
-                            </tbody>
-                        </table>
-
-
-                    </div>
-
-                    <!-- Pagination -->
-
+                        </tbody>
+                    </table>
                 </div>
+
+
+
+                <!-- Pagination -->
+
+
             </section>
         </section>
 

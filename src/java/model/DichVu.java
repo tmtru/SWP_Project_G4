@@ -79,4 +79,44 @@ public class DichVu {
                 ", isActive=" + isActive + // Thêm isActive vào phương thức toString
                 '}';
     }
+    
+    // Thêm các thuộc tính chi tiết
+    private int ID_HoaDon;
+    private int ChiSoCu;
+    private int ChiSoMoi;
+    private int DauNguoi;
+
+    public int getID_HoaDon() {
+        return ID_HoaDon;
+    }
+
+    public void setID_HoaDon(int ID_HoaDon) {
+        this.ID_HoaDon = ID_HoaDon;
+    }
+
+    
+    public int getChiSoCu() {
+        return ChiSoCu;
+    }
+
+    public void setChiSoCu(int ChiSoCu) {
+        this.ChiSoCu = ChiSoCu;
+    }
+
+    public int getChiSoMoi() {
+        return ChiSoMoi;
+    }
+
+    public void setChiSoMoi(int ChiSoMoi) {
+        this.ChiSoMoi = ChiSoMoi;
+    }
+
+    public int getDauNguoi() {
+        return DauNguoi;
+    }
+
+    public void setDauNguoi(int DauNguoi) {
+        this.DauNguoi = DauNguoi;
+    }
+    
 }

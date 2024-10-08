@@ -14,7 +14,7 @@
     <body>
         <div class="container">
             <jsp:include page="sidebar.jsp"></jsp:include>
-                <section class="home mx-5">
+                <section class="home mx-3">
                     <div class="main-content">
                         <h2>
                             Quản lý tài khoản

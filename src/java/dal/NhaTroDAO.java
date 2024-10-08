@@ -469,6 +469,7 @@ public class NhaTroDAO extends DBContext {
         }
         return false;
     }
+    
 
     public void deleteAnhNhaTro(int nhaTroId) throws SQLException {
         String query = "DELETE FROM anh_nha_tro WHERE ID_NhaTro = ?";

@@ -119,7 +119,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         </li>
 
                         <li class="">
-                            <a href="#">
+                            <a href="hoadon">
                                 <i class='bx bx-wallet icon' ></i>
                                 <span class="text nav-text">Hóa đơn</span>
                             </a>
