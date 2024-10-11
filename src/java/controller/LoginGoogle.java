@@ -11,29 +11,94 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.Account;
 import model.GoogleAccount;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Form;
 import org.apache.http.client.fluent.Request;
 
 public class LoginGoogle extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Handles the HTTP <code>GET</code> method.
      *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processLogin(request, response);
+    }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processLogin(request, response);
+    }
+
+    private void processLogin(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String code = request.getParameter("code");
-        String accessToken = getToken(code);
-        GoogleAccount user = getUserInfo(accessToken);
-        System.out.println(user);
-        GoogleAccountDAO ggaccDAO = new GoogleAccountDAO();
-        boolean isAdded = ggaccDAO.addGoogleAccount(user.getEmail());
+        if (code == null || code.isEmpty()) {
+            redirectToLoginWithError(request, response, "Authorization code is missing.");
+            return;
+        }
+
+        try {
+            String accessToken = getToken(code);
+            GoogleAccount user = getUserInfo(accessToken);
+            handleGoogleAccount(user, request, response);
+        } catch (Exception e) {
+            redirectToLoginWithError(request, response, "Failed to authenticate with Google.");
+        }
+    }
+
+    /**
+     * Get credential from Google method
+     *
+     * @param code
+     * @return
+     * @throws IOException
+     */
+    private String getToken(String code) throws IOException {
+        String response = Request.Post(Constants.GOOGLE_LINK_GET_TOKEN)
+                .bodyForm(Form.form()
+                        .add("client_id", Constants.GOOGLE_CLIENT_ID)
+                        .add("client_secret", Constants.GOOGLE_CLIENT_SECRET)
+                        .add("redirect_uri", Constants.GOOGLE_REDIRECT_URI)
+                        .add("code", code)
+                        .add("grant_type", Constants.GOOGLE_GRANT_TYPE).build())
+                .execute().returnContent().asString();
+
+        JsonObject jsonObject = new Gson().fromJson(response, JsonObject.class);
+        return jsonObject.get("access_token").getAsString();
+    }
+
+    /**
+     * Get user information from Google method
+     *
+     * @param accessToken
+     * @return
+     * @throws IOException
+     */
+    private GoogleAccount getUserInfo(String accessToken) throws IOException {
+        String userInfoUrl = Constants.GOOGLE_LINK_GET_USER_INFO + accessToken;
+        String response = Request.Get(userInfoUrl).execute().returnContent().asString();
+        return new Gson().fromJson(response, GoogleAccount.class);
+    }
+
+    private void handleGoogleAccount(GoogleAccount user, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        GoogleAccountDAO googleAccountDAO = new GoogleAccountDAO();
+        boolean isAdded = googleAccountDAO.addGoogleAccount(user.getEmail());
 
         if (isAdded) {
             System.out.println("Account added successfully.");
@@ -41,70 +106,49 @@ public class LoginGoogle extends HttpServlet {
             System.out.println("Account already exists.");
         }
 
-        GoogleAccount acc = ggaccDAO.getAccount(user.getEmail());
-        int ID_Account = acc.getID_Account();
-        HttpSession session = request.getSession();
-        session.setAttribute("ID_Account", ID_Account);
-        String email = acc.getEmail();
-        String username = acc.getUsername();
-        Account acc1 = new Account();
-        acc1.setEmail(email);
-        acc1.setUsername(username);
-        session.setAttribute("account", acc1);
+        GoogleAccount account = googleAccountDAO.getAccount(user.getEmail());
+        if (account == null) {
+            redirectToLoginWithError(request, response, "Account not found.");
+            return;
+        }
 
+        createSessionAndRedirect(request, response, account);
+    }
+
+    /**
+     * Initialize session and redirect user to home page method.
+     *
+     * @param request
+     * @param response
+     * @param account
+     * @throws IOException
+     */
+    private void createSessionAndRedirect(HttpServletRequest request, HttpServletResponse response, GoogleAccount account)
+            throws IOException {
+        HttpSession session = request.getSession();
+        Account userAccount = new Account();
+        userAccount.setID_Account(account.getID_Account());
+        userAccount.setEmail(account.getEmail());
+        userAccount.setUsername(account.getUsername());
+
+        session.setAttribute("account", userAccount);
+        session.setAttribute("ID_Account", account.getID_Account());
         response.sendRedirect("home.jsp");
     }
 
-    public static String getToken(String code) throws ClientProtocolException, IOException {
-        // call api to get token
-        String response = Request.Post(Constants.GOOGLE_LINK_GET_TOKEN)
-                .bodyForm(Form.form().add("client_id", Constants.GOOGLE_CLIENT_ID)
-                        .add("client_secret", Constants.GOOGLE_CLIENT_SECRET)
-                        .add("redirect_uri", Constants.GOOGLE_REDIRECT_URI).add("code", code)
-                        .add("grant_type", Constants.GOOGLE_GRANT_TYPE).build())
-                .execute().returnContent().asString();
-
-        JsonObject jobj = new Gson().fromJson(response, JsonObject.class);
-        String accessToken = jobj.get("access_token").toString().replaceAll("\"", "");
-        return accessToken;
-    }
-
-    public static GoogleAccount getUserInfo(final String accessToken) throws ClientProtocolException, IOException {
-        String link = Constants.GOOGLE_LINK_GET_USER_INFO + accessToken;
-        String response = Request.Get(link).execute().returnContent().asString();
-
-        GoogleAccount googlePojo = new Gson().fromJson(response, GoogleAccount.class);
-
-        return googlePojo;
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * Redirect to login and display error method
+     * 
+     * @param request
+     * @param response
+     * @param errorMessage
+     * @throws ServletException
+     * @throws IOException 
      */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    private void redirectToLoginWithError(HttpServletRequest request, HttpServletResponse response, String errorMessage)
             throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+        request.setAttribute("errorMessage", errorMessage);
+        request.getRequestDispatcher("login.jsp").forward(request, response);
     }
 
     /**
@@ -114,7 +158,6 @@ public class LoginGoogle extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
+        return "Google Login Controller Servlet";
+    }
 }

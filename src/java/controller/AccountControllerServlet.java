@@ -13,7 +13,7 @@ import model.Account;
 
 public class AccountControllerServlet extends HttpServlet {
 
-    private static final int ACCOUNTS_PER_PAGE = 10; // Sá»‘ tÃ i khoáº£n trÃªn má»—i trang
+    private static final int ACCOUNTS_PER_PAGE = 10; 
     private final AccountDAO accountDAO = new AccountDAO();
 
     @Override
@@ -50,6 +50,7 @@ public class AccountControllerServlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
+    //Encrypt here
     private void addAccount(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String username = request.getParameter("username");
@@ -58,7 +59,10 @@ public class AccountControllerServlet extends HttpServlet {
         String role = request.getParameter("role");
         boolean isActive = Boolean.parseBoolean(request.getParameter("isActive"));
 
-        Account newAccount = new Account(0, email, username, password, role, isActive);
+        EncryptPassword ep = new EncryptPassword();
+        String encryptedPassword = ep.encryptPassword(password);
+        
+        Account newAccount = new Account(0, email, username, encryptedPassword, role, isActive);
         accountDAO.addAccount(newAccount);
 
         response.sendRedirect("accountController");

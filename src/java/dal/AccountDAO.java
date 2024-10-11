@@ -224,7 +224,7 @@ public class AccountDAO extends DBContext {
         return false;
     }
     public boolean isOwner(String username, String password) {
-        String sql = "SELECT COUNT(*) FROM CHU_TRO WHERE Username = ? AND Password = ? AND Role = 'Chu Tro'";
+        String sql = "SELECT COUNT(*) FROM CHU_TRO WHERE Username = ? AND Password = ? AND Role = 'Chủ Trọ'";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, username);
@@ -246,7 +246,7 @@ public class AccountDAO extends DBContext {
      * @return
      */
     public boolean isManager(String username, String password) {
-        String sql = "SELECT COUNT(*) FROM QUAN_LY WHERE Username = ? AND Password = ? AND Role = 'Quan Ly'";
+        String sql = "SELECT COUNT(*) FROM QUAN_LY WHERE Username = ? AND Password = ? AND Role = 'Quản Lý'";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, username);
@@ -269,7 +269,7 @@ public class AccountDAO extends DBContext {
      * @return
      */
     public boolean addAccount(String email, String username, String password) {
-        String sql = "INSERT INTO ACCOUNT (Email, Username, Password, Role) VALUES (?, ?, ?, 'Quản lý')";
+        String sql = "INSERT INTO ACCOUNT (Email, Username, Password, Role) VALUES (?, ?, ?, 'NULL')";
 
         try {
             PreparedStatement st = connection.prepareStatement(sql);
@@ -325,11 +325,8 @@ public class AccountDAO extends DBContext {
 
     public static void main(String[] args) {
         AccountDAO dao = new AccountDAO();
-        dao.getAllAccounts().stream().forEach(item -> {
-            System.out.println(item);
-        });
-        Account a=dao.getAccount("trungtm", "123");
-        System.out.println(a);
+        boolean checkAdd = dao.addAccount("tranhuytoan161104@gmail.com", "toanaz", "tranhuytoan24");
+        System.out.println(checkAdd);
     }
 
 }

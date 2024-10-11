@@ -3,10 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/khong/SWP_Project_G4_2/SWP_Project_G4/src/java/controller/Login.java</file>
-            <file>file:/C:/Users/khong/SWP_Project_G4_2/SWP_Project_G4/src/java/controller/LoginGoogle.java</file>
-            <file>file:/C:/Users/khong/SWP_Project_G4_2/SWP_Project_G4/src/java/dal/GoogleAccountDAO.java</file>
-            <file>file:/C:/Users/khong/SWP_Project_G4_2/SWP_Project_G4/src/java/model/GoogleAccount.java</file>
+            <file>file:/C:/Users/khong/SWP_Project_G4_2/SWP_Project_G4/web/verification.jsp</file>
+            <file>file:/C:/Users/khong/SWP_Project_G4_2/SWP_Project_G4/src/java/controller/EmailProperty.java</file>
+            <file>file:/C:/Users/khong/SWP_Project_G4_2/SWP_Project_G4/src/java/controller/EmailService.java</file>
+            <file>file:/C:/Users/khong/SWP_Project_G4_2/SWP_Project_G4/src/java/controller/IJavaMail.java</file>
+            <file>file:/C:/Users/khong/SWP_Project_G4_2/SWP_Project_G4/web/confirmverification.jsp</file>
+            <file>file:/C:/Users/khong/SWP_Project_G4_2/SWP_Project_G4/src/java/controller/Verification.java</file>
+            <file>file:/C:/Users/khong/SWP_Project_G4_2/SWP_Project_G4/src/java/controller/SendEmail.java</file>
+            <file>file:/C:/Users/khong/SWP_Project_G4_2/SWP_Project_G4/src/java/controller/Register.java</file>
+            <file>file:/C:/Users/khong/SWP_Project_G4_2/SWP_Project_G4/web/register.jsp</file>
         </group>
     </open-files>
 </project-private>
