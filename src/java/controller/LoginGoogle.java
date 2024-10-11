@@ -2,7 +2,6 @@ package controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import dal.AccountDAO;
 import dal.GoogleAccountDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -112,7 +111,7 @@ public class LoginGoogle extends HttpServlet {
             redirectToLoginWithError(request, response, "Account not found.");
             return;
         }
-        
+
         createSessionAndRedirect(request, response, account);
     }
 
@@ -135,7 +134,6 @@ public class LoginGoogle extends HttpServlet {
         session.setAttribute("account", userAccount);
         session.setAttribute("ID_Account", account.getID_Account());
         response.sendRedirect("home.jsp");
-
     }
 
     /**
