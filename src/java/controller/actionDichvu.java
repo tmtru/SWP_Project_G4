@@ -37,16 +37,14 @@ public class actionDichvu extends HttpServlet {
         DichVuDAO dvDao = new DichVuDAO();
         switch (action) {
             case "dele":
-                dvDao.deleteDichVu(idDichVu);
+                dvDao.deactivateDichVu(idDichVu);
                 break;
             case "edit":
                 String tenDichVu = request.getParameter("tendichvu");
                 int donGia = Integer.parseInt(request.getParameter("donGia"));
                 String donVi = request.getParameter("donvi");
                 String moTa = request.getParameter("mota");
-
-                // Tạo đối tượng DichVu
-                DichVu dichVu = new DichVu();
+                DichVu dichVu=dvDao.getDichVuById(idDichVu);
                 dichVu.setTenDichVu(tenDichVu);
                 dichVu.setDon_gia(donGia);
                 dichVu.setDon_vi(donVi);
@@ -54,6 +52,14 @@ public class actionDichvu extends HttpServlet {
                 dichVu.setID_DichVu(idDichVu);
                 dvDao.updateDichVu(dichVu);
                 break;
+            case "update":
+                 String isActive = request.getParameter("isActive");
+                if ("true".equals(isActive)) { // Kiểm tra nếu isActive là "1"
+                    dvDao.activateDichVu(idDichVu); // Kích hoạt dịch vụ
+                } else {
+                    dvDao.deactivateDichVu(idDichVu); // Tắt dịch vụ
+                }
+
             default:
                 break;
         }

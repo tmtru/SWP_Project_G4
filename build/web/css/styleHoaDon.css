@@ -1,0 +1,96 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Oct 6, 2024, 4:18:21 PM
+    Author     : Admin
+*/
+
+.card .card-header {
+    padding: 1.5rem;
+}
+.card-header:first-child {
+    border-radius: var(--bs-card-inner-border-radius) var(--bs-card-inner-border-radius) 0 0;
+}
+.bg-gray-100 {
+    background-color: #f8f9fa !important;
+}
+.p-4 {
+    padding: 1.5rem !important;
+}
+.mb-2 {
+    margin-bottom: 0.5rem !important;
+}
+.ms-auto {
+    margin-left: auto !important;
+}
+.fa-trash, .fa-pen {
+    padding: 5px;
+}
+.text-xs {
+    font-size: 0.75rem !important;
+}
+.warpper {
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+
+}
+
+.tab {
+    cursor: pointer;
+    padding: 10px 20px;
+    margin: 0px 2px;
+    background: #999999;
+    display: inline-block;
+    color: #fff;
+    border-radius: 3px 3px 0px 0px;
+}
+
+.panel-title {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.radio {
+    display: none;
+}
+
+.tab.active  {
+    background: #fff;
+    color: #000;
+    border-top: 3px solid #6E00FF;
+    border-left: 1px solid #cccccc;
+    border-right: 1px solid #cccccc;
+}
+
+.tab.active a {
+    color: black;
+}
+.property-management{
+    padding-bottom: 0;
+}
+.warpper a  {
+    display: flex;
+    align-items: flex-end;
+}
+.tab a{
+    color: white;
+    text-decoration: none;
+}
+.warpper a:hover {
+    background-color: transparent; /* Loại bỏ màu nền khi hover */
+    text-decoration: none; /* Loại bỏ gạch chân khi hover */
+}
+
+.header-invoice{
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.header-invoice span{
+    min-width: 70px;
+}
+.list-group-item.list-hoadon{
+    border-left: 2px solid #000;
+}

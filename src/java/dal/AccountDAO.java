@@ -51,6 +51,28 @@ public class AccountDAO extends DBContext {
         }
         return null;
     }
+     public Account getAccountById2(int id) {
+        String sql = "SELECT * FROM account WHERE ID_Account = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Account account = new Account();
+                    account.setID_Account(rs.getInt("ID_Account"));
+                    account.setEmail(rs.getString("Email"));
+                    account.setUsername(rs.getString("Username"));
+                    account.setPassword(rs.getString("Password"));
+                    account.setRole(rs.getString("Role"));
+                    return account;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    
 
     public List<Account> getAccountsPaginated(int start, int accountsPerPage) {
         List<Account> accounts = new ArrayList<>();

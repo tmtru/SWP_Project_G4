@@ -67,7 +67,7 @@
                                 <a href="contact.html" class="nav-item nav-link">Contact</a>
                                 <c:if test="${a!=null}">
 
-                                    <a href="room" class="nav-item nav-link" style="color: red">Trang quản lí</a>
+                                    <a href="loaddashboardbyrole" class="nav-item nav-link" style="color: red">Trang quản lí</a>
 
                                 </c:if>
                             </div>
