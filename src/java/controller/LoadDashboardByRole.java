@@ -41,7 +41,7 @@ public class LoadDashboardByRole extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet LoadDashboardByRole</title>");            
+            out.println("<title>Servlet LoadDashboardByRole</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet LoadDashboardByRole at " + request.getContextPath() + "</h1>");
@@ -70,28 +70,35 @@ public class LoadDashboardByRole extends HttpServlet {
         //list nha tro ma account duoc quyen truy cap
         List<NhaTro> houses = null;
         if (acc != null) {
-            if (acc.getRole().equals("landlord")) {
-                houses = housesDao.getAll();
-            } else if (acc.getRole().equals("manager")) {
-                QuanLiDAO qlDao = new QuanLiDAO();
-                QuanLi ql= qlDao.getQuanLiByIDAccount(acc.getID_Account());
-                houses = qlDao.getNhaTroByManagerId(ql.getID_QuanLy());
-            }
-            if (houses == null) {
-                boolean erroMess = true;
-                session.setAttribute("errorMessByRole", erroMess);
-                
+            String role = acc.getRole(); // Lưu giá trị role vào biến
+            if (role != null) { // Kiểm tra xem role có phải là null không
+                if (role.equals("landlord")) {
+                    houses = housesDao.getAll();
+                } else if (role.equals("manager")) {
+                    QuanLiDAO qlDao = new QuanLiDAO();
+                    QuanLi ql = qlDao.getQuanLiByIDAccount(acc.getID_Account());
+                    if (ql != null) { // Kiểm tra ql có phải là null không
+                        houses = qlDao.getNhaTroByManagerId(ql.getID_QuanLy());
+                    }
+                }
             } else {
-                //Nha tro ma dc phep truy cap bang role
+                // Xử lý trường hợp role là null
+                session.setAttribute("errorMessByRole", true);
+            }
+
+            if (houses == null) {
+                session.setAttribute("errorMessByRole", true);
+            } else {
+                // Nha tro ma dc phep truy cap bang role
                 session.setAttribute("housesByRole", houses);
             }
-            //role cua tai khoan dg truy cap
-            session.setAttribute("role", acc.getRole());
+            // Role cua tai khoan dg truy cap
+            session.setAttribute("role", role); // Sử dụng biến role đã lưu
             response.sendRedirect("room");
         } else {
             response.sendRedirect("home.jsp");
         }
-        
+
     }
 
     /**

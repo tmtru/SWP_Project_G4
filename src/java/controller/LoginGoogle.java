@@ -137,7 +137,7 @@ public class LoginGoogle extends HttpServlet {
     }
 
     /**
-     * Redirect to login and display error method
+     * Redirect To Login With Error
      * 
      * @param request
      * @param response

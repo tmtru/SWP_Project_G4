@@ -207,6 +207,7 @@ public class AccountDAO extends DBContext {
                 account.setUsername(retrievedUsername);
                 account.setPassword(retrievedPassword);
                 account.setEmail(email);
+                account.setRole(rs.getString("Role"));
                 return account;
             }
         } catch (SQLException e) {
@@ -347,8 +348,8 @@ public class AccountDAO extends DBContext {
 
     public static void main(String[] args) {
         AccountDAO dao = new AccountDAO();
-        boolean checkAdd = dao.addAccount("tranhuytoan161104@gmail.com", "toanaz", "tranhuytoan24");
-        System.out.println(checkAdd);
+        
+        System.out.println(dao.getAccount("minhanh", "123"));
     }
 
 }

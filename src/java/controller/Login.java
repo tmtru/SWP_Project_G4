@@ -3,12 +3,12 @@ package controller;
 import dal.AccountDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.Account;
+
 
 public class Login extends HttpServlet {
 
@@ -23,30 +23,7 @@ public class Login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Lấy cookies từ request
-        Cookie[] cookies = request.getCookies();
-        String savedUsername = null;
-        String savedPassword = null;
-
-        // Duyệt qua cookies để lấy username và password
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("username".equals(cookie.getName())) {
-                    savedUsername = cookie.getValue();
-                }
-                if ("password".equals(cookie.getName())) {
-                    savedPassword = cookie.getValue();
-                }
-            }
-        }
-
-        // Nếu cookies tồn tại, set chúng vào request để hiển thị trên form
-        if (savedUsername != null && savedPassword != null) {
-            request.setAttribute("savedUsername", savedUsername);
-            request.setAttribute("savedPassword", savedPassword);
-        }
-
-        request.getRequestDispatcher("login.jsp").forward(request, response);
+        response.sendRedirect("login.jsp");
     }
 
     /**
@@ -72,7 +49,7 @@ public class Login extends HttpServlet {
 
     /**
      * Check if user input is valid method.
-     *
+     * 
      * @param username
      * @param password
      * @return
@@ -83,13 +60,13 @@ public class Login extends HttpServlet {
 
     /**
      * Handling login operation logic method
-     *
+     * 
      * @param request
      * @param response
      * @param username
      * @param password
      * @throws IOException
-     * @throws ServletException
+     * @throws ServletException 
      */
     private void handleLogin(HttpServletRequest request, HttpServletResponse response, String username, String password)
             throws IOException, ServletException {
@@ -107,11 +84,11 @@ public class Login extends HttpServlet {
 
     /**
      * Initialize session and redirect user to home page method.
-     *
+     * 
      * @param request
      * @param response
      * @param account
-     * @throws IOException
+     * @throws IOException 
      */
     private void createSessionAndRedirect(HttpServletRequest request, HttpServletResponse response, Account account)
             throws IOException {
@@ -123,12 +100,12 @@ public class Login extends HttpServlet {
 
     /**
      * Send error message if account not exists method.
-     *
+     * 
      * @param request
      * @param response
      * @param message
      * @throws ServletException
-     * @throws IOException
+     * @throws IOException 
      */
     private void sendErrorMessage(HttpServletRequest request, HttpServletResponse response, String message)
             throws ServletException, IOException {
