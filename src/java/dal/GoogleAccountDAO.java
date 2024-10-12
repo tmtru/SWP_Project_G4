@@ -8,21 +8,19 @@ import model.GoogleAccount;
 public class GoogleAccountDAO extends DBContext {
 
     /**
-     * Add Google Account to the ACCOUNT table
+     * Add Google Account to the ACCOUNT table method.
      *
      * @param email
      * @return boolean
      */
     public boolean addGoogleAccount(String email) {
-        // Tạo username từ email
         String username = email.split("@")[0];
 
-        // Kiểm tra xem email đã tồn tại chưa
         if (isEmailExist(email)) {
-            return false; // Email đã tồn tại
+            return false; 
         }
 
-        String sql = "INSERT INTO ACCOUNT (Email, Username, Password, Role) VALUES (?, ?, NULL, 'Khach Thue')";
+        String sql = "INSERT INTO ACCOUNT (Email, Username, Password, Role) VALUES (?, ?, NULL, NULL)";
 
         try {
             PreparedStatement st = connection.prepareStatement(sql);
@@ -37,6 +35,12 @@ public class GoogleAccountDAO extends DBContext {
         }
     }
 
+    /**
+     * Check if email exists method.
+     * 
+     * @param email
+     * @return 
+     */
     public boolean isEmailExist(String email) {
         String sql = "SELECT * FROM ACCOUNT WHERE Email = ?";
         try {
@@ -50,6 +54,12 @@ public class GoogleAccountDAO extends DBContext {
         }
     }
     
+    /**
+     * Get account from ACCOUNT table method.
+     * 
+     * @param email
+     * @return 
+     */
     public GoogleAccount getAccount(String email) {
         String sql = "SELECT * FROM ACCOUNT WHERE Email = ?";
         try {
@@ -58,17 +68,18 @@ public class GoogleAccountDAO extends DBContext {
             ResultSet rs = st.executeQuery();
 
             if (rs.next()) {
-                int idAccount = rs.getInt("ID_Account");
+                int idAccount = rs.getInt("ID_Account");;
                 String retrievedUsername = rs.getString("Username");
 
                 GoogleAccount account = new GoogleAccount();
                 account.setID_Account(idAccount);
+                account.setEmail(email);
                 account.setUsername(retrievedUsername);
                 return account; 
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null; // Trả về null nếu không tìm thấy tài khoản
+        return null;
     }
 }

@@ -22,5 +22,20 @@
                 </c:if>
             </div>
         </div>
+        <script>
+            function validateEmail(email) {
+                const regex = /^[^\s@]+@gmail\.com$/;
+                return regex.test(email);
+            }
+
+            const emailInput = document.querySelector('input[type="email"]');
+            emailInput.addEventListener('input', function () {
+                if (!validateEmail(emailInput.value)) {
+                    emailInput.setCustomValidity("Email không hợp lệ!");
+                } else {
+                    emailInput.setCustomValidity("");
+                }
+            });
+        </script>
     </body>
 </html>
