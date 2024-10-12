@@ -105,7 +105,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         </li>
 
                         <li class="s">
-                            <a href="loaddichvu">
+                            <a href="loaddichvu" >
                                 <i class='bx bx-bell icon'></i>
                                 <span class="text nav-text">Dịch vụ</span>
                             </a>
@@ -126,7 +126,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         </li>
 
                         <li class="">
-                            <a href="#">
+                            <a href="loadThietBi">
                                 <i class='bx bx-devices icon' ></i>
                                 <span class="text nav-text">Thiết bị</span>
                             </a>
@@ -192,12 +192,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
 
 
                 <!-- hien thi export -->
-                <c:if test="${mess != null}">
-                    ${mess}
-                </c:if>
+  
                 <div class="room-actions">
                     <button class="btn add-room" data-toggle="modal" data-target="#addRoomModal">+ Thêm phòng trọ</button>
                     <button class="btn quick-add-room">+ Thêm phòng trọ nhanh</button>
+                   
                     <form action="/NhaTroTQAT/addRoomExcel" method="get" style="display: inline; background-color: green; border-radius: 5px">
                         <button type="submit" class="btn export-to-excel">
                             <i class="bx bxs-file-export"></i>
