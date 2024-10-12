@@ -348,51 +348,47 @@ public class PhongDAO extends DBContext {
     }
 
     //insert room
-    public boolean insertRoom(Phong room) {
-        String sql = "INSERT INTO phong_tro (ID_NhaTro, ID_LoaiPhong, TenPhongTro, Tang, Dien_Tich, Gia, Trang_thai) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+    public int insertRoom(Phong room) {
+    String sql = "INSERT INTO phong_tro (ID_NhaTro, ID_LoaiPhong, TenPhongTro, Tang, Dien_Tich, Gia, Trang_thai) "
+            + "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        try {
-            try (PreparedStatement st = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-                st.setInt(1, room.getID_NhaTro());
-                st.setInt(2, room.getID_LoaiPhong());
-                st.setString(3, room.getTenPhongTro());
-                st.setInt(4, room.getTang());
-                st.setFloat(5, room.getDien_tich());
-                st.setInt(6, room.getGia());
-                st.setString(7, room.getTrang_thai());
+    try {
+        try (PreparedStatement st = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            st.setInt(1, room.getID_NhaTro());
+            st.setInt(2, room.getID_LoaiPhong());
+            st.setString(3, room.getTenPhongTro());
+            st.setInt(4, room.getTang());
+            st.setFloat(5, room.getDien_tich());
+            st.setInt(6, room.getGia());
+            st.setString(7, room.getTrang_thai());
 
-                int affectedRows = st.executeUpdate();
+            int affectedRows = st.executeUpdate();
 
-                // Kiá»ƒm tra náº¿u khÃ´ng cÃ³ dÃ²ng nÃ o bá»‹ áº£nh hÆ°á»Ÿng
-                if (affectedRows == 0) {
-                    throw new SQLException("Creating room failed, no rows affected.");
-                }
-
-                // Láº¥y ID sinh tá»± Ä‘á»™ng náº¿u cÃ³
-                try (ResultSet generatedKeys = st.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        int roomId = generatedKeys.getInt(1);
-
-                        // ChÃ¨n cÃ¡c hÃ¬nh áº£nh náº¿u cÃ³
-                        if (room.getImages() != null && !room.getImages().isEmpty()) {
-                            for (String image : room.getImages()) {
-                                insertRoomImage(roomId, image);
-                            }
-                        }
-
-                    } else {
-                        throw new SQLException("Creating room failed, no ID obtained.");
-                    }
-                }
-
-                return true;
+            if (affectedRows == 0) {
+                throw new SQLException("Creating room failed, no rows affected.");
             }
-        } catch (SQLException e) {
-            System.out.println("Error in PhongDAO.insertRoom: " + e.getMessage());
-            return false;
+
+            try (ResultSet generatedKeys = st.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    int roomId = generatedKeys.getInt(1);
+
+                    if (room.getImages() != null && !room.getImages().isEmpty()) {
+                        for (String image : room.getImages()) {
+                            insertRoomImage(roomId, image);
+                        }
+                    }
+
+                    return roomId; // Return the new room ID
+                } else {
+                    throw new SQLException("Creating room failed, no ID obtained.");
+                }
+            }
         }
+    } catch (SQLException e) {
+        System.out.println("Error in PhongDAO.insertRoom: " + e.getMessage());
+        return -1; // Return -1 or throw an exception to indicate failure
     }
+}
 
     public void insertRoomImage(int roomId, String imageUrl) throws SQLException {
         String sql = "INSERT INTO anh_phong_tro (ID_Phong, URL_AnhPhongTro) VALUES (?, ?)";

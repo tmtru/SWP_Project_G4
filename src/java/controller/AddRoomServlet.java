@@ -138,14 +138,22 @@ public class AddRoomServlet extends HttpServlet {
                     tenPhongTro, Integer.parseInt(nhaTroId),
                     Integer.parseInt(tang),
                     "T",
-                    Float.parseFloat(dienTich), 
-                    Integer.parseInt(gia), 
+                    Float.parseFloat(dienTich),
+                    Integer.parseInt(gia),
                     imageFiles);
             PhongDAO pdao = new PhongDAO();
-            pdao.insertRoom(room);
-            response.sendRedirect("room");
+            int newRoomId = pdao.insertRoom(room);
+
+            if (newRoomId > 0) {
+                response.sendRedirect("detailRoom?id=" + newRoomId);
+            } else {
+                // Handle the error case, maybe redirect to an error page
+                response.sendRedirect("errorPage");
+            }
         } catch (Exception e) {
             e.printStackTrace();
+            // Handle the exception, maybe redirect to an error page
+            response.sendRedirect("errorPage");
         }
     }
 

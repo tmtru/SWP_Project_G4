@@ -350,7 +350,7 @@ public class AccountDAO extends DBContext {
         dao.getAllAccounts().stream().forEach(item -> {
             System.out.println(item);
         });
-        Account a=dao.getAccount("trungtm", "123");
+        Account a=dao.getAccountById(1);
         System.out.println(a);
     }
 

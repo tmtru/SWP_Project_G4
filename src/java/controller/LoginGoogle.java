@@ -51,7 +51,7 @@ public class LoginGoogle extends HttpServlet {
         String email = acc.getEmail();
         String username = acc.getUsername();
         
-        Account acc1 = acd.getAccountById(ID_Account);;
+        Account acc1 = acd.getAccountById(ID_Account);
         session.setAttribute("account", acc1);
 
         response.sendRedirect("home.jsp");
