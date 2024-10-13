@@ -303,8 +303,9 @@
     <servlet-mapping>
         <servlet-name>actionTransaction</servlet-name>
         <url-pattern>/actionTransaction</url-pattern>
-    </servlet-mapping>    
-    <servlet-mapping>    
+    </servlet-mapping>
+    <servlet-mapping>
+
         <servlet-name>loadThietBi</servlet-name>
         <url-pattern>/loadThietBi</url-pattern>
     </servlet-mapping>
