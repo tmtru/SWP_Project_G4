@@ -76,6 +76,42 @@ public class ThietBiDAO extends DBContext{
         }
     }
     
-    
+    public boolean checkAndUpdateQuantity(int idThietBi, int requestedQuantity) throws SQLException {
+        String checkSql = "SELECT So_luong FROM thiet_bi WHERE ID_ThietBi = ?";
+        String updateSql = "UPDATE thiet_bi SET So_luong = So_luong - ? WHERE ID_ThietBi = ?";
+        
+        connection.setAutoCommit(false);
+        try {
+            // Check current quantity
+            try (PreparedStatement checkPs = connection.prepareStatement(checkSql)) {
+                checkPs.setInt(1, idThietBi);
+                try (ResultSet rs = checkPs.executeQuery()) {
+                    if (rs.next()) {
+                        int currentQuantity = Integer.parseInt(rs.getString("So_luong"));
+                        if (currentQuantity < requestedQuantity) {
+                            return false; // Not enough quantity
+                        }
+                    } else {
+                        return false; // ThietBi not found
+                    }
+                }
+            }
+            
+            // Update quantity
+            try (PreparedStatement updatePs = connection.prepareStatement(updateSql)) {
+                updatePs.setInt(1, requestedQuantity);
+                updatePs.setInt(2, idThietBi);
+                updatePs.executeUpdate();
+            }
+            
+            connection.commit();
+            return true;
+        } catch (SQLException e) {
+            connection.rollback();
+            throw e;
+        } finally {
+            connection.setAutoCommit(true);
+        }
+    }
     
 }

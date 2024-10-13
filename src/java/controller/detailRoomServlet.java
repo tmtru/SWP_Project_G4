@@ -13,6 +13,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.Phong;
 import model.ThietBi;
@@ -78,6 +79,30 @@ public class detailRoomServlet extends HttpServlet {
                     request.setAttribute("room", room);
                     request.setAttribute("allThietBi", allThietBi);
                     request.setAttribute("thietBiList", thietBiList);
+
+                    HttpSession session = request.getSession();
+
+                    // Xử lý thông báo lỗi từ session
+                    String errorMessage = (String) session.getAttribute("errorMessage");
+                    if (errorMessage != null) {
+                        request.setAttribute("errorMessage", errorMessage);
+                        session.removeAttribute("errorMessage");
+                    }
+
+                    // Xử lý thông báo lỗi cập nhật từ session
+                    String updateErrorMessage = (String) session.getAttribute("updateErrorMessage");
+                    if (updateErrorMessage != null) {
+                        request.setAttribute("updateErrorMessage", updateErrorMessage);
+                        session.removeAttribute("updateErrorMessage");
+                    }
+
+                    // Xử lý thông báo thành công từ session
+                    String successMessage = (String) session.getAttribute("successMessage");
+                    if (successMessage != null) {
+                        request.setAttribute("successMessage", successMessage);
+                        session.removeAttribute("successMessage");
+                    }
+
                     request.getRequestDispatcher("detailRoom.jsp").forward(request, response);
                 } else {
                     response.sendRedirect("room.jsp");

@@ -12,6 +12,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -30,23 +33,6 @@ public class deleteThietBiFromRoom extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        try {
-            // Get the equipment ID and room ID from the request
-            int idThietBiPhong = Integer.parseInt(request.getParameter("idThietBiPhong"));
-            int idPhong = Integer.parseInt(request.getParameter("idPhong")); // for redirecting back
-            
-            // Create DAO instance and delete the equipment
-            ThietBiPhongDAO thietBiPhongDAO = new ThietBiPhongDAO();
-            thietBiPhongDAO.deleteThietBiFromPhong(idThietBiPhong);
-            
-            // Redirect back to the room detail page
-            response.sendRedirect("detailRoom?id=" + idPhong);
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            // Handle any errors here
-            response.sendRedirect("error.jsp"); // Create an error page if you haven't already
-        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -59,9 +45,24 @@ public class deleteThietBiFromRoom extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        processRequest(request, response);
-    } 
+            throws ServletException, IOException {
+        int idThietBiPhong = Integer.parseInt(request.getParameter("idThietBiPhong"));
+        int idPhong = Integer.parseInt(request.getParameter("idPhong"));
+        
+        ThietBiPhongDAO dao = new ThietBiPhongDAO();
+        try {
+            boolean success = dao.deleteThietBiFromPhong(idThietBiPhong);
+            if (success) {
+                response.sendRedirect("detailRoom?id=" + idPhong);
+            } else {
+                request.setAttribute("errorMessage", "Không thể xóa thiết bị khỏi phòng.");
+                request.getRequestDispatcher("detailRoom?id=" + idPhong).forward(request, response);
+            }
+        } catch (SQLException e) {
+            request.setAttribute("errorMessage", "Lỗi khi xóa thiết bị: " + e.getMessage());
+            request.getRequestDispatcher("detailRoom?id=" + idPhong).forward(request, response);
+        }
+    }
 
     /** 
      * Handles the HTTP <code>POST</code> method.

@@ -235,6 +235,8 @@
                                 </table>
                             </div>
                         </div>
+
+
                         <!-- Add this right after the existing equipment table in detailRoom.jsp -->
                         <div class="row mt-4">
                             <div class="col-12">
@@ -275,9 +277,9 @@
                                             <div class="form-group">
                                                 <label for="trangThai">Trạng thái:</label>
                                                 <select class="form-control" id="trangThai" name="trangThai" required>
-                                                    <option value="T" class="text-success">Tốt</option>
-                                                    <option value="BT" class="text-warning">Bình thường</option>
-                                                    <option value="CSC" class="text-danger">Cần sửa chữa</option>
+                                                    <option value="T" >Tốt</option>
+                                                    <option value="BT" >Bình thường</option>
+                                                    <option value="CSC" >Cần sửa chữa</option>
                                                 </select>
                                             </div>
 
@@ -323,9 +325,9 @@
                                             <div class="form-group">
                                                 <label for="editTrangThai">Trạng thái:</label>
                                                 <select class="form-control" id="editTrangThai" name="trangThai" required>
-                                                    <option value="T" class="text-success">Tốt</option>
-                                                    <option value="BT" class="text-warning">Bình thường</option>
-                                                    <option value="CSC" class="text-danger">Cần sửa chữa</option>
+                                                    <option value="T" >Tốt</option>
+                                                    <option value="BT" >Bình thường</option>
+                                                    <option value="CSC" >Cần sửa chữa</option>
                                                 </select>
                                             </div>
 
@@ -343,6 +345,19 @@
                             </div>
                         </div>
 
+                        <!-- Existing error message for adding equipment -->
+                        <c:if test="${not empty errorMessage}">
+                            <div class="alert alert-danger" role="alert">
+                                ${errorMessage}
+                            </div>
+                        </c:if>
+
+                        <!-- New error message for updating equipment -->
+                        <c:if test="${not empty updateErrorMessage}">
+                            <div class="alert alert-warning" role="alert">
+                                ${updateErrorMessage}
+                            </div>
+                        </c:if>
 
                     </div> 
                     <div class="card-footer">
