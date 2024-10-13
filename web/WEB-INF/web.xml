@@ -65,6 +65,14 @@
         <servlet-name>loadHoaDonNhaTro</servlet-name>
         <servlet-class>controller.loadHoaDonNhaTro</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>profileServlet</servlet-name>
+        <servlet-class>controller.profileServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ChangePassword</servlet-name>
+        <servlet-class>controller.ChangePassword</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>homeRooms</servlet-name>
         <url-pattern>/homer</url-pattern>
@@ -210,5 +218,13 @@
     <servlet-mapping>
         <servlet-name>loadHoaDonNhaTro</servlet-name>
         <url-pattern>/hoadon</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>profileServlet</servlet-name>
+        <url-pattern>/profileServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangePassword</servlet-name>
+        <url-pattern>/changepassword</url-pattern>
     </servlet-mapping>
 </web-app>

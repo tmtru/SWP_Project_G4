@@ -20,7 +20,7 @@ public class GoogleAccountDAO extends DBContext {
             return false; 
         }
 
-        String sql = "INSERT INTO ACCOUNT (Email, Username, Password, Role) VALUES (?, ?, NULL, NULL)";
+        String sql = "INSERT INTO ACCOUNT (Email, Username, Password, Role) VALUES (?, ?, NULL, 'guest')";
 
         try {
             PreparedStatement st = connection.prepareStatement(sql);
@@ -81,5 +81,23 @@ public class GoogleAccountDAO extends DBContext {
             e.printStackTrace();
         }
         return null;
+    }
+    
+    public static void main(String[] args) {
+        // Tạo một instance của GoogleAccountDAO
+        GoogleAccountDAO googleAccountDAO = new GoogleAccountDAO();
+        
+        // Email bạn muốn kiểm tra và thêm
+        String emailToAdd = "toanthhe181060@fpt.edu.vn";
+        
+        // Gọi hàm addGoogleAccount để thêm email
+        boolean result = googleAccountDAO.addGoogleAccount(emailToAdd);
+        
+        // Kiểm tra kết quả trả về
+        if (result) {
+            System.out.println("Account added successfully for email: " + emailToAdd);
+        } else {
+            System.out.println("Account already exists or failed to add: " + emailToAdd);
+        }
     }
 }

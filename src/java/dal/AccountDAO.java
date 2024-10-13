@@ -232,7 +232,7 @@ public class AccountDAO extends DBContext {
         return false;
     }
     public boolean isGuess(String username, String password) {
-        String sql = "SELECT COUNT(*) FROM ACCOUNT WHERE Username = ? AND Password = ? AND Role = 'Khach Thue'";
+        String sql = "SELECT COUNT(*) FROM ACCOUNT WHERE Username = ? AND Password = ? AND Role = 'tenant'";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, username);
@@ -247,7 +247,7 @@ public class AccountDAO extends DBContext {
         return false;
     }
     public boolean isOwner(String username, String password) {
-        String sql = "SELECT COUNT(*) FROM CHU_TRO WHERE Username = ? AND Password = ? AND Role = 'Chủ Trọ'";
+        String sql = "SELECT COUNT(*) FROM CHU_TRO WHERE Username = ? AND Password = ? AND Role = 'landlord'";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, username);
@@ -269,7 +269,7 @@ public class AccountDAO extends DBContext {
      * @return
      */
     public boolean isManager(String username, String password) {
-        String sql = "SELECT COUNT(*) FROM QUAN_LY WHERE Username = ? AND Password = ? AND Role = 'Quản Lý'";
+        String sql = "SELECT COUNT(*) FROM QUAN_LY WHERE Username = ? AND Password = ? AND Role = 'manager'";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, username);
@@ -292,7 +292,7 @@ public class AccountDAO extends DBContext {
      * @return
      */
     public boolean addAccount(String email, String username, String password) {
-        String sql = "INSERT INTO ACCOUNT (Email, Username, Password, Role) VALUES (?, ?, ?, 'NULL')";
+        String sql = "INSERT INTO ACCOUNT (Email, Username, Password, Role) VALUES (?, ?, ?, 'guest')";
 
         try {
             PreparedStatement st = connection.prepareStatement(sql);
