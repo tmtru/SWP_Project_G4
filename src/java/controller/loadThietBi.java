@@ -54,20 +54,12 @@ public class loadThietBi extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ThietBiDAO thietBiDAO = new ThietBiDAO();
-        
-        // Lấy danh sách dịch vụ từ DAO
-        List<ThietBi> thietBiList = thietBiDAO.getAllThietBi();
-        
+        List<ThietBi> thietBiList = thietBiDAO.getAllThietBiWithDetails();
         request.setAttribute("thietBiList", thietBiList);
         request.getRequestDispatcher("equipment.jsp").forward(request, response);
-
-    } 
-
+    }
     /** 
      * Handles the HTTP <code>POST</code> method.
      * @param request servlet request

@@ -206,7 +206,9 @@
                                 <th scope="col">Tên Thiết Bị</th>
                                 <th scope="col">Giá tiền</th>
                                 <th scope="col">Mô tả</th>
-                                <th scope="col">Số lượng</th>
+                                <th scope="col">Tổng số lượng</th>
+                                <th scope="col">Số lượng còn lại</th>
+                                <th scope="col">Số lượng đã thêm vào phòng</th>
                                 <th scope="col">Hành động</th>
                             </tr>
                         </thead>
@@ -218,6 +220,8 @@
                                     <td>${tb.gia_tien}</td>
                                     <td>${tb.mo_ta}</td>
                                     <td>${tb.so_luong}</td>
+                                    <td>${tb.so_luong_con_lai}</td>
+                                    <td>${tb.so_luong_da_them}</td>
                                     <td>
                                         <button class="btn edit" data-toggle="modal" data-target="#EditModal${tb.ID_ThietBi}">Chỉnh sửa</button>
                                         <div class="modal fade" id="EditModal${tb.ID_ThietBi}" tabindex="-1" role="dialog" aria-labelledby="editModalLabel${tb.ID_ThietBi}" aria-hidden="true">

@@ -9,11 +9,14 @@ package model;
  * @author hihihihaha
  */
 public class ThietBi {
+
     private int ID_ThietBi;
     private String TenThietBi;
     private int Gia_tien;
     private String Mo_ta;
     private String So_luong;
+    private int so_luong_con_lai;
+    private int so_luong_da_them;
 
     public ThietBi() {
     }
@@ -66,10 +69,25 @@ public class ThietBi {
         this.So_luong = So_luong;
     }
 
+    public int getSo_luong_con_lai() {
+        return so_luong_con_lai;
+    }
+
+    public void setSo_luong_con_lai(int so_luong_con_lai) {
+        this.so_luong_con_lai = so_luong_con_lai;
+    }
+
+    public int getSo_luong_da_them() {
+        return so_luong_da_them;
+    }
+
+    public void setSo_luong_da_them(int so_luong_da_them) {
+        this.so_luong_da_them = so_luong_da_them;
+    }
+
     @Override
     public String toString() {
         return "ThietBi{" + "ID_ThietBi=" + ID_ThietBi + ", TenThietBi=" + TenThietBi + ", Gia_tien=" + Gia_tien + ", Mo_ta=" + Mo_ta + ", So_luong=" + So_luong + '}';
     }
-    
-    
+
 }
