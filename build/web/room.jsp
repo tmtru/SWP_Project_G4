@@ -112,7 +112,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         </li>
 
                         <li class="">
-                            <a href="#">
+                            <a href="hop-dong">
                                 <i class='bx bx-id-card icon' ></i>
                                 <span class="text nav-text">Hợp đồng</span>
                             </a>
