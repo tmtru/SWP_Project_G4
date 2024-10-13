@@ -96,7 +96,6 @@
     <servlet>
         <servlet-name>actionTransaction</servlet-name>
         <servlet-class>controller.actionTransaction</servlet-class>
-
     </servlet>    
     <servlet>    
         <servlet-name>loadThietBi</servlet-name>
@@ -304,9 +303,8 @@
     <servlet-mapping>
         <servlet-name>actionTransaction</servlet-name>
         <url-pattern>/actionTransaction</url-pattern>
-
-    </servlet-mapping>    
-    <servlet-mapping>    
+    </servlet-mapping>
+    <servlet-mapping>
 
         <servlet-name>loadThietBi</servlet-name>
         <url-pattern>/loadThietBi</url-pattern>
