@@ -8,32 +8,32 @@ import java.sql.Date;
 
 /**
  *
- * @author Admin
+ * @author ADMIN
  */
-public class KhachThue {
+public class QuanLy {
+
     private int id;
     private String name;
-    private String cccd;
     private Date dob;
     private String phone;
-    private String hk_thuong_tru;
+    private String cccd;
     private Account account;
-    private String roomName;
-    private String job;
-
-    public KhachThue() {
+    private int id_nhaTro;
+    public QuanLy() {
     }
 
-    public KhachThue(int id, String name, String cccd, Date dob, String phone, String hk_thuong_tru, Account account, String roomName,  String job) {
+    @Override
+    public String toString() {
+        return "ChuTro{" + "id=" + id + ", name=" + name + ", dob=" + dob + ", phone=" + phone + ", cccd=" + cccd + ", account=" + account + '}';
+    }
+
+    public QuanLy(int id, String name, Date dob, String phone, String cccd, Account account) {
         this.id = id;
         this.name = name;
-        this.cccd = cccd;
         this.dob = dob;
         this.phone = phone;
-        this.hk_thuong_tru = hk_thuong_tru;
+        this.cccd = cccd;
         this.account = account;
-        this.roomName = roomName;
-        this.job = job;
     }
 
     public int getId() {
@@ -52,14 +52,6 @@ public class KhachThue {
         this.name = name;
     }
 
-    public String getCccd() {
-        return cccd;
-    }
-
-    public void setCccd(String cccd) {
-        this.cccd = cccd;
-    }
-
     public Date getDob() {
         return dob;
     }
@@ -76,12 +68,12 @@ public class KhachThue {
         this.phone = phone;
     }
 
-    public String getHk_thuong_tru() {
-        return hk_thuong_tru;
+    public String getCccd() {
+        return cccd;
     }
 
-    public void setHk_thuong_tru(String hk_thuong_tru) {
-        this.hk_thuong_tru = hk_thuong_tru;
+    public void setCccd(String cccd) {
+        this.cccd = cccd;
     }
 
     public Account getAccount() {
@@ -92,21 +84,23 @@ public class KhachThue {
         this.account = account;
     }
 
-    public String getRoomName() {
-        return roomName;
+    public QuanLy(int id, String name, Date dob, String phone, String cccd, Account account, int id_nhaTro) {
+        this.id = id;
+        this.name = name;
+        this.dob = dob;
+        this.phone = phone;
+        this.cccd = cccd;
+        this.account = account;
+        this.id_nhaTro = id_nhaTro;
     }
 
-    public void setRoomName(String roomName) {
-        this.roomName = roomName;
+    public int getId_nhaTro() {
+        return id_nhaTro;
     }
 
-    public String getJob() {
-        return job;
-    }
-
-    public void setJob(String job) {
-        this.job = job;
+    public void setId_nhaTro(int id_nhaTro) {
+        this.id_nhaTro = id_nhaTro;
     }
     
-    
+
 }

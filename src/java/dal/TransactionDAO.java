@@ -24,7 +24,7 @@ import model.Transaction;
  */
 public class TransactionDAO extends DBContext {
 
-    // Method to get all transactions by ID_HoaDon
+    // Method to get all transactions by ID_HoaDon abcd
     public List<Transaction> getTransactionsByIdHoaDon(int idHoaDon) {
         List<Transaction> transactions = new ArrayList<>();
         String query = "SELECT * FROM `transaction` WHERE ID_HoaDon = ? AND isActive=1 ORDER BY ID_Transaction DESC";

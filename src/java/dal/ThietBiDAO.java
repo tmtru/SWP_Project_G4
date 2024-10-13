@@ -113,5 +113,31 @@ public class ThietBiDAO extends DBContext{
             connection.setAutoCommit(true);
         }
     }
-    
+    public List<ThietBi> getAllThietBiWithDetails() {
+        List<ThietBi> list = new ArrayList<>();
+        String sql = "SELECT tb.*, " +
+                     "COALESCE(SUM(tbp.So_luong), 0) as so_luong_da_them, " +
+                     "tb.So_luong - COALESCE(SUM(tbp.So_luong), 0) as so_luong_con_lai " +
+                     "FROM thiet_bi tb " +
+                     "LEFT JOIN thiet_bi_phong tbp ON tb.ID_ThietBi = tbp.ID_ThietBi " +
+                     "GROUP BY tb.ID_ThietBi, tb.TenThietBi, tb.Gia_tien, tb.Mo_ta, tb.So_luong";
+        try (PreparedStatement ps = connection.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                ThietBi tb = new ThietBi();
+                tb.setID_ThietBi(rs.getInt("ID_ThietBi"));
+                tb.setTenThietBi(rs.getString("TenThietBi"));
+                tb.setGia_tien(rs.getInt("Gia_tien"));
+                tb.setMo_ta(rs.getString("Mo_ta"));
+                tb.setSo_luong(rs.getString("So_luong"));
+                tb.setSo_luong_da_them(rs.getInt("so_luong_da_them"));
+                tb.setSo_luong_con_lai(rs.getInt("so_luong_con_lai"));
+                list.add(tb);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
 }
