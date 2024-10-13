@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dal;
 
 import java.util.List;
@@ -9,13 +5,33 @@ import java.sql.*;
 import java.util.ArrayList;
 import model.Account;
 import model.KhachThue;
-import model.NhaTro;
 
-/**
- *
- * @author ADMIN
- */
 public class KhachThueDAO extends DBContext {
+
+    public KhachThue getKhachThueByAccountId(int id) {
+        KhachThue khachThue = null;
+        AccountDAO accountDAO = new AccountDAO();
+        String sql = "select * from khach_thue where ID_Account = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql);) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                khachThue = new KhachThue();
+                khachThue.setId(rs.getInt("ID_KhachThue"));
+                //khachThue.setName(rs.getNString("TenKhachThue"));
+                khachThue.setDob(rs.getDate("Ngay_sinh"));
+                khachThue.setPhone(rs.getNString("SDT"));
+                khachThue.setCccd(rs.getNString("CCCD"));
+                khachThue.setJob(rs.getNString("Nghe_nghiep"));
+                khachThue.setHk_thuong_tru(rs.getNString("Hk_thuong_tru"));
+                Account account = accountDAO.getAccountById2(rs.getInt("ID_Account"));
+                khachThue.setAccount(account);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return khachThue;
+    }
 
     public List<KhachThue> getKhachThueByNhaTro(int id) {
         KhachThue khachThue = null;
@@ -69,12 +85,11 @@ public class KhachThueDAO extends DBContext {
 
         return khachThues.subList(fromIndex, toIndex);
     }
+
     public static void main(String[] args) {
-        
-       KhachThueDAO khachThueDAO = new KhachThueDAO();
-       List<KhachThue> list = khachThueDAO.getKhachThueByNhaTro(1);
-        for (KhachThue khachThue : list) {
-            System.out.println(khachThue);
-        }
+
+        KhachThueDAO khachThueDAO = new KhachThueDAO();
+        KhachThue list = khachThueDAO.getKhachThueByAccountId(24);
+        System.out.println(list);
     }
 }

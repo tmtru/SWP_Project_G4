@@ -98,14 +98,19 @@ public class LoginGoogle extends HttpServlet {
     private void handleGoogleAccount(GoogleAccount user, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         GoogleAccountDAO googleAccountDAO = new GoogleAccountDAO();
-        boolean isAdded = googleAccountDAO.addGoogleAccount(user.getEmail());
 
-        if (isAdded) {
-            System.out.println("Account added successfully.");
-        } else {
-            System.out.println("Account already exists.");
+        // Kiểm tra và thêm tài khoản nếu không tồn tại
+        if (!googleAccountDAO.isEmailExist(user.getEmail())) {
+            boolean isAdded = googleAccountDAO.addGoogleAccount(user.getEmail());
+            if (isAdded) {
+                System.out.println("Account added successfully.");
+            } else {
+                redirectToLoginWithError(request, response, "Failed to add account.");
+                return;
+            }
         }
 
+        // Sau khi thêm tài khoản (hoặc nếu đã tồn tại), lấy thông tin tài khoản
         GoogleAccount account = googleAccountDAO.getAccount(user.getEmail());
         if (account == null) {
             redirectToLoginWithError(request, response, "Account not found.");
@@ -138,12 +143,12 @@ public class LoginGoogle extends HttpServlet {
 
     /**
      * Redirect To Login With Error
-     * 
+     *
      * @param request
      * @param response
      * @param errorMessage
      * @throws ServletException
-     * @throws IOException 
+     * @throws IOException
      */
     private void redirectToLoginWithError(HttpServletRequest request, HttpServletResponse response, String errorMessage)
             throws ServletException, IOException {
