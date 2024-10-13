@@ -5,7 +5,10 @@
 package controller;
 
 import static controller.AddRoomServlet.extractFileName;
+import dal.ActionHistoryDAO;
+import dal.NhaTroDAO;
 import dal.PhongDAO;
+import dal.QuanLyDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,6 +17,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.File;
 import java.io.InputStream;
@@ -23,7 +27,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import model.Account;
+import model.ActionHistory;
+import model.NhaTro;
 import model.Phong;
+import model.QuanLy;
 
 /**
  *
@@ -53,7 +61,6 @@ public class EditRoomServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try {
             PhongDAO pdao = new PhongDAO();
-            //get value from form edit
             String nhaTroId = request.getParameter("tenNhaTro");
             String loaiPhongId = request.getParameter("tenLoaiPhong");
             String tenPhongTro = request.getParameter("tenPhongTro");
@@ -63,63 +70,126 @@ public class EditRoomServlet extends HttpServlet {
             String id = request.getParameter("phongId");
             String trangThai = request.getParameter("trangThai");
 
-            // Xử lý upload nhiều file image
+            // Fetch the old room details before updating
+            Phong oldRoom = pdao.getDetailRoom(Integer.parseInt(id));
+
+            // Handling image uploads
             List<String> imageFiles = new ArrayList<>();
-            Collection<Part> fileParts = request.getParts(); // Lấy tất cả các file được gửi
+            Collection<Part> fileParts = request.getParts();
 
             String applicationPath = getServletContext().getRealPath("");
             String uploadFilePath = applicationPath + File.separator + UPLOAD_IMAGES_DIR;
 
-            // Tạo thư mục nếu chưa tồn tại
             File uploadDir = new File(uploadFilePath);
             if (!uploadDir.exists()) {
                 uploadDir.mkdir();
             }
 
             for (Part filePart : fileParts) {
-                // Kiểm tra nếu là một file (vì request.getParts() có thể trả về cả các part không phải file)
                 if (filePart.getName().equals("urlPhongTro") && filePart.getSize() > 0) {
                     String fileName = extractFileName(filePart);
-
-                    // Lưu file hình ảnh
                     String imageFilePath = uploadFilePath + File.separator + fileName;
                     try (InputStream fileContent = filePart.getInputStream()) {
-                        // Nếu file chưa tồn tại thì lưu ảnh
                         Path destinationPath = Paths.get(imageFilePath);
                         if (!Files.exists(destinationPath)) {
                             Files.copy(fileContent, new File(imageFilePath).toPath());
                         }
                     }
-                    // Thêm đường dẫn file vào danh sách
-                    String imageFile = UPLOAD_IMAGES_DIR + File.separator + fileName;
-                    imageFiles.add(imageFile);
+                    imageFiles.add(UPLOAD_IMAGES_DIR + File.separator + fileName);
                 }
             }
 
-            if(imageFiles.size() > 0){
-                //delete all image of room and then insert again
+            if (imageFiles.size() > 0) {
+                // Delete old images and add new ones
                 pdao.deleteImageByPhong(Integer.parseInt(id));
                 for (String image : imageFiles) {
                     pdao.insertRoomImage(Integer.parseInt(id), image);
                 }
             }
-            
-            //edit room
-            Phong room = new Phong(Integer.parseInt(id),Integer.parseInt(loaiPhongId),
+
+            // Update room
+            Phong updatedRoom = new Phong(Integer.parseInt(id), Integer.parseInt(loaiPhongId),
                     tenPhongTro, Integer.parseInt(nhaTroId),
                     Integer.parseInt(tang),
                     trangThai,
                     Float.parseFloat(dienTich),
                     Integer.parseInt(gia));
-            
-            pdao.updateRoom(room);
+
+            pdao.updateRoom(updatedRoom);
+
+            // Log the changes
+            StringBuilder changesLog = new StringBuilder("Cập nhật chi tiết nhà trọ: \n");
+
+            if (!oldRoom.getTenPhongTro().equals(tenPhongTro)) {
+                changesLog.append("Tên phòng trọ đổi từ '")
+                        .append(oldRoom.getTenPhongTro())
+                        .append("' thành '")
+                        .append(tenPhongTro)
+                        .append("'.\n");
+            }
+            if (oldRoom.getTang() != Integer.parseInt(tang)) {
+                changesLog.append("Tầng đổi từ '")
+                        .append(oldRoom.getTang())
+                        .append("' thành '")
+                        .append(tang)
+                        .append("'.\n");
+            }
+            if (oldRoom.getID_LoaiPhong() != Integer.parseInt(loaiPhongId)) {
+                changesLog.append("Đã thay đổi kiểu phòng.\n");
+            }
+            if (oldRoom.getDien_tich() != Float.parseFloat(dienTich)) {
+                changesLog.append("Diện tích đã đổi từ '")
+                        .append(oldRoom.getDien_tich())
+                        .append(" m²' thành '")
+                        .append(dienTich)
+                        .append(" m²'.\n");
+            }
+            if (oldRoom.getGia() != Integer.parseInt(gia)) {
+                changesLog.append("Giá đã đổi từ '")
+                        .append(oldRoom.getGia())
+                        .append("' thành '")
+                        .append(gia)
+                        .append("'.\n");
+            }
+            if (!oldRoom.getTrang_thai().equals(trangThai)) {
+                changesLog.append("Trạng thái phòng đã đổi từ '")
+                        .append(oldRoom.getTrang_thai())
+                        .append("' thành '")
+                        .append(trangThai)
+                        .append("'.\n");
+            }
+
+            if (imageFiles.size() > 0) {
+                changesLog.append("Ảnh phòng đã cập nhật.\n");
+            }
+
+            // Log the action if the user is a manager
+            HttpSession session = request.getSession();
+            Account account = (Account) session.getAttribute("account");
+            if (account.getRole().equals("Quản lý")) {
+                ActionHistoryDAO ahdao = new ActionHistoryDAO();
+                ActionHistory history = new ActionHistory();
+
+                NhaTroDAO ntdao = new NhaTroDAO();
+                NhaTro nhaTro = ntdao.getNhaTroByPhongTroId(updatedRoom.getID_Phong());
+
+                history.setNhaTro(nhaTro);
+
+                QuanLyDAO qldao = new QuanLyDAO();
+                QuanLy quanLy = qldao.getChuTroByAccountId(account.getID_Account());
+                history.setQuanLy(quanLy);
+                history.setTitle("Room Update");
+                history.setContent(changesLog.toString());
+
+                ahdao.insertActionHistory(history);
+            }
+
             response.sendRedirect("room");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

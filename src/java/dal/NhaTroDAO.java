@@ -478,7 +478,31 @@ public class NhaTroDAO extends DBContext {
             ps.executeUpdate();
         }
     }
+ public NhaTro getNhaTroByPhongTroId(int phongTroId) {
+        NhaTro nhaTro = null;
+        String sql = "SELECT nt.* FROM nha_tro nt "
+                + "JOIN phong_tro pt ON nt.ID_NhaTro = pt.ID_NhaTro "
+                + "WHERE pt.ID_Phong = ?";
 
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, phongTroId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                nhaTro = new NhaTro();
+                nhaTro.setID_NhaTro(rs.getInt("ID_NhaTro"));
+                nhaTro.setTenNhaTro(rs.getNString("TenNhaTro"));
+                nhaTro.setID_ChuTro(rs.getInt("ID_ChuTro"));
+                nhaTro.setDia_chi(rs.getNString("Dia_Chi"));
+                nhaTro.setMo_ta(rs.getNString("Mo_ta"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return nhaTro;
+    }
+    
     public static void main(String[] args) {
         NhaTroDAO dAO = new NhaTroDAO();
         List<String> list = dAO.getImagesForNhaTro(2);
