@@ -4,7 +4,10 @@
  */
 package controller;
 
+import dal.ActionHistoryDAO;
+import dal.NhaTroDAO;
 import dal.PhongDAO;
+import dal.QuanLyDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,6 +16,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.File;
 import java.io.InputStream;
@@ -22,8 +26,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import model.Account;
+import model.ActionHistory;
 import model.AnhPhongTro;
+import model.NhaTro;
 import model.Phong;
+import model.QuanLy;
 
 /**
  *
@@ -64,7 +72,6 @@ public class AddRoomServlet extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -138,11 +145,29 @@ public class AddRoomServlet extends HttpServlet {
                     tenPhongTro, Integer.parseInt(nhaTroId),
                     Integer.parseInt(tang),
                     "T",
-                    Float.parseFloat(dienTich), 
-                    Integer.parseInt(gia), 
+                    Float.parseFloat(dienTich),
+                    Integer.parseInt(gia),
                     imageFiles);
             PhongDAO pdao = new PhongDAO();
             pdao.insertRoom(room);
+            NhaTroDAO ntdao = new NhaTroDAO();
+            Phong phong = pdao.getLatestPhong();
+            NhaTro nhaTro = ntdao.getNhaTroByPhongTroId(phong.getID_Phong());
+            HttpSession session = request.getSession();
+            Account account = (Account) session.getAttribute("account");
+            if (account.getRole().equals("Quản lý")) {
+                ActionHistoryDAO ahdao = new ActionHistoryDAO();
+                ActionHistory history = new ActionHistory();
+
+                history.setNhaTro(nhaTro);
+
+                QuanLyDAO qldao = new QuanLyDAO();
+                QuanLy quanLy = qldao.getChuTroByAccountId(account.getID_Account());
+                history.setQuanLy(quanLy);
+                history.setTitle("Thêm phòng mới");
+                history.setContent("Thêm phòng " + phong.getTenPhongTro() + " của " + nhaTro.getTenNhaTro());
+                ahdao.insertActionHistory(history);
+            }
             response.sendRedirect("room");
         } catch (Exception e) {
             e.printStackTrace();

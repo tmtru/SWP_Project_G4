@@ -25,11 +25,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 .ms-auto {
     margin-left: auto !important;
 }
-.fa-trash, .fa-pen {
+.fa-trash, .fa-circle-info,.fa-solid, .fa-plus{
     padding: 5px;
 }
+.fa-circle-info{
+    color: #007BFF;
+}
 .text-xs {
-    font-size: 0.75rem !important;
+    font-size: 0.80rem !important;
 }
 .warpper {
     display: flex;
@@ -93,4 +96,82 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 }
 .list-group-item.list-hoadon{
     border-left: 2px solid #000;
+}
+/*Filter*/
+.filter {
+    display: flex;
+    background-color: #6972e9;
+    margin: 10px 5px;
+    border-radius: 5px;
+    padding: 25px 10px;
+}
+#reportrange {
+    background: #fff;
+    cursor: pointer;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    width: 100%;
+    max-width: 350px;
+    align-items: center;
+    text-align: center;
+    border-radius: 5px;
+    font-size: 13px;
+
+}
+.date-detail{
+    border-right: 5px solid #ffffff;
+}
+@media (max-width: 1199.98px) { 
+    
+.date-detail{
+    border-right: none;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #ffffff;
+    margin-bottom: 10px;
+}
+}
+
+/*transaction*/
+.transaction .icon-transaction i{
+    font-size: 30px;
+    color: green;
+}
+.transaction .icon-transaction {
+    display: flex;
+    width: 50px;
+    align-items: center;
+}
+.transaction button {
+    border:none;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right:5px;
+}
+button:hover {
+    border:none;
+}
+.detail-transaction{
+    margin-top: 0;
+    border-left: 2px solid #6E00FF
+}
+/*invoice*/
+.invoice .invoice-header .media .media-body {
+  font-size: 0.9em;
+  margin: 0;
+}
+.invoice .invoice-body {
+  border-radius: 10px;
+  padding: 25px;
+  background: #FFF;
+}
+.header-service {
+    font-weight: bold;
+    font-size: 18px;
+}
+.submit-part{
+    padding-top:15px;
+    border-top: 1px solid #6E00FF;
+    justify-content: flex-end;
 }

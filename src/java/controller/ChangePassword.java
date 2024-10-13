@@ -8,8 +8,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.Account;
 import dal.AccountDAO;
+import jakarta.servlet.annotation.WebServlet;
 
-//@WebServlet(name = "ChangePassword", urlPatterns = {"/changePassword"})
+@WebServlet(name = "ChangePassword", urlPatterns = {"/changepassword"})
 public class ChangePassword extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)

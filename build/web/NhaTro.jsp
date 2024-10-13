@@ -158,9 +158,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         <section class="home">
 
             <section class="property-management">
+                <h2>Danh sách nhà trọ</h2>
 
                 <div class="action-buttons" style="margin-bottom: 20px">
                     <button class="btn add-property" data-toggle="modal" data-target="#addRoomModal">+ Thêm nhà trọ</button>
+
                     <form action="nhatro" method="get" class="filters">
                         <input type="text" name="search" value="${param.search}" placeholder="Search..">
                         <button type="submit"><i class='bx bx-search icon'></i></button>
@@ -253,21 +255,22 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                     <div class="card-footer bg-transparent">
                                         <div class="d-flex justify-content-between">
                                             <a href="nhatro-detail?id=${s.ID_NhaTro}" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;">
-                                                <i class="bx bx-info-circle"></i> Details
+                                                <i class="bx bx-info-circle"></i> 
                                             </a>
+
                                             <c:if test="${isOwwer == true}">
                                                 <div class="d-flex justify-content-between">
                                                     <button class="btn btn-outline-secondary btn-sm custom-btn" 
                                                             data-toggle="modal" data-target="#editRoomModal-${s.getID_NhaTro()}"
                                                             style="color: black;">
-                                                        <i class="bx bx-edit"></i> Edit
+                                                        <i class="bx bx-edit"></i> 
                                                     </button>
                                                 </div>
                                                 <div class="d-flex justify-content-between">
                                                     <!-- Existing buttons like "Edit" -->
                                                     <a href="#" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;" 
                                                        onclick="confirmDelete(${s.getID_NhaTro()}); return false;">
-                                                        <i class="bx bx-minus-circle"></i> Delete
+                                                        <i class="bx bx-minus-circle"></i> 
                                                     </a>
                                                     <form id="deleteForm" action="nhatro" method="post" style="display:none;">
                                                         <input type="hidden" name="action" value="delete">
@@ -275,8 +278,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                                     </form>
 
                                                 </div>
+                                                <a href="add-all-room?id=${s.ID_NhaTro}" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;">
+                                                    <i class="bx bx-plus"></i>
+                                                </a>
+                                                
                                             </c:if>
-
+                                            <a href="quanly-account-nha-tro?id=${s.ID_NhaTro}" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;">
+                                                <i class="bx bx-user-plus"></i> 
+                                            </a>
                                         </div>
                                     </div>
                                 </div>

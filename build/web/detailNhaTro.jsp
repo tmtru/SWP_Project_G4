@@ -156,8 +156,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         </nav>
 
         <section class="home">
+            <section class="property-management">
+                <h2>Chi tiết ${s.getTenNhaTro()}</h2>
+            </section>
             <div class="container mt-5">
-                <h2>NhaTro Details</h2>
+                 
                 <c:if test="${not empty sessionScope.notification}">
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         ${sessionScope.notification}

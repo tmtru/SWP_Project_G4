@@ -22,8 +22,8 @@ public class GoogleAccountDAO extends DBContext {
 
         String sql = "INSERT INTO ACCOUNT (Email, Username, Password, Role) VALUES (?, ?, NULL, 'guest')";
 
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
+        try (PreparedStatement st = connection.prepareStatement(sql)){
+            
             st.setString(1, email);
             st.setString(2, username);
 
@@ -43,8 +43,8 @@ public class GoogleAccountDAO extends DBContext {
      */
     public boolean isEmailExist(String email) {
         String sql = "SELECT * FROM ACCOUNT WHERE Email = ?";
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
+        try (PreparedStatement st = connection.prepareStatement(sql)){
+            
             st.setString(1, email);
             ResultSet rs = st.executeQuery();
             return rs.next();
@@ -62,8 +62,8 @@ public class GoogleAccountDAO extends DBContext {
      */
     public GoogleAccount getAccount(String email) {
         String sql = "SELECT * FROM ACCOUNT WHERE Email = ?";
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
+        try (PreparedStatement st = connection.prepareStatement(sql);){
+            
             st.setString(1, email);
             ResultSet rs = st.executeQuery();
 

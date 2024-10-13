@@ -190,7 +190,7 @@
                     </div> 
                     <div> 
                         <label>Hộ khẩu thường trú:</label> 
-                        <span><%= (khachThue != null) ? khachThue.getAddress() : "Chưa có thông tin" %></span> 
+                        <span><%= (khachThue != null) ? khachThue.getHk_thuong_tru() : "Chưa có thông tin" %></span> 
                     </div> 
                 </div>
                 <div class="stats">

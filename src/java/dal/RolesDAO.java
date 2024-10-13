@@ -13,8 +13,8 @@ public class RolesDAO extends DBContext {
      public List<Roles> getAllRoles(){
         List<Roles> ls = new ArrayList<>();
         String sql = "SELECT * FROM Roles";
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
+        try (PreparedStatement ps = connection.prepareStatement(sql);){
+            
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
                 Roles r = new Roles(rs.getInt("id"), rs.getString("name"));
@@ -28,8 +28,8 @@ public class RolesDAO extends DBContext {
     
     public String getNameById(int id){
         String sql = "SELECT * FROM Roles WHERE id = ?";
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
+        try (PreparedStatement ps = connection.prepareStatement(sql);){
+            
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if(rs.next()){

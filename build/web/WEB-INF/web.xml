@@ -73,6 +73,58 @@
         <servlet-name>ChangePassword</servlet-name>
         <servlet-class>controller.ChangePassword</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>actionHoaDon</servlet-name>
+        <servlet-class>controller.actionHoaDon</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LoadHoaDonByDate</servlet-name>
+        <servlet-class>controller.LoadHoaDonByDate</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>loadHoaDonByRoom</servlet-name>
+        <servlet-class>controller.loadHoaDonByRoom</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>loadHoaDonForm</servlet-name>
+        <servlet-class>controller.loadHoaDonForm</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>loadTransaction</servlet-name>
+        <servlet-class>controller.loadTransaction</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>actionTransaction</servlet-name>
+        <servlet-class>controller.actionTransaction</servlet-class>
+    </servlet>    
+    <servlet>    
+        <servlet-name>loadThietBi</servlet-name>
+        <servlet-class>controller.loadThietBi</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>addThietBi</servlet-name>
+        <servlet-class>controller.addThietBi</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>editThietBi</servlet-name>
+        <servlet-class>controller.editThietBi</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>importRoomExcel</servlet-name>
+        <servlet-class>controller.importRoomExcel</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>addThietBiToRoom</servlet-name>
+        <servlet-class>controller.addThietBiToRoom</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>deleteThietBiFromRoom</servlet-name>
+        <servlet-class>controller.deleteThietBiFromRoom</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>updateThietBiInRoom</servlet-name>
+        <servlet-class>controller.updateThietBiInRoom</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>homeRooms</servlet-name>
         <url-pattern>/homer</url-pattern>
@@ -223,8 +275,61 @@
         <servlet-name>profileServlet</servlet-name>
         <url-pattern>/profileServlet</url-pattern>
     </servlet-mapping>
-    <servlet-mapping>
+    <servlet>
         <servlet-name>ChangePassword</servlet-name>
-        <url-pattern>/changepassword</url-pattern>
+        <servlet-class>controller.ChangePassword</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>actionHoaDon</servlet-name>
+        <servlet-class>controller.actionHoaDon</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>LoadHoaDonByDate</servlet-name>
+        <url-pattern>/hoadontheongay</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>loadHoaDonByRoom</servlet-name>
+        <url-pattern>/hoadonroom</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>loadHoaDonForm</servlet-name>
+        <url-pattern>/loadHoaDonForm</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>loadTransaction</servlet-name>
+        <url-pattern>/loadTransaction</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>actionTransaction</servlet-name>
+        <url-pattern>/actionTransaction</url-pattern>
+    </servlet-mapping>    
+    <servlet-mapping>    
+        <servlet-name>loadThietBi</servlet-name>
+        <url-pattern>/loadThietBi</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>addThietBi</servlet-name>
+        <url-pattern>/addThietBi</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>editThietBi</servlet-name>
+        <url-pattern>/editThietBi</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>importRoomExcel</servlet-name>
+        <url-pattern>/importRoomExcel</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>addThietBiToRoom</servlet-name>
+        <url-pattern>/addThietBiToRoom</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>deleteThietBiFromRoom</servlet-name>
+        <url-pattern>/deleteThietBiFromRoom</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>updateThietBiInRoom</servlet-name>
+        <url-pattern>/updateThietBiInRoom</url-pattern>
     </servlet-mapping>
 </web-app>

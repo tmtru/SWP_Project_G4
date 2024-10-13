@@ -29,8 +29,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.io.File;
 import java.io.InputStream;
+import java.time.LocalDate;
+import java.sql.Date;
 import model.AnhPhongTro;
-
 
 public class PhongDAO extends DBContext {
 
@@ -166,7 +167,7 @@ public class PhongDAO extends DBContext {
         return rooms;
     }
 
-     public List<Phong> getRoomsByNhaTroAndTang(int idNhaTro, int tang) {
+    public List<Phong> getRoomsByNhaTroAndTang(int idNhaTro, int tang) {
         List<Phong> rooms = new ArrayList<>();
         String sql = "SELECT p.ID_Phong, n.TenNhaTro, p.TenPhongTro, p.ID_LoaiPhong, p.Tang, p.Dien_Tich, "
                 + "l.TenLoaiPhong, p.Gia, l.Mo_ta, p.Trang_thai, p.ID_NhaTro "
@@ -260,11 +261,8 @@ public class PhongDAO extends DBContext {
     }
 
     public static void main(String[] args) {
-        PhongDAO dao = new PhongDAO();
-        List<Phong> list = dao.getAllRooms();
-        for (Phong r : list) {
-            System.out.println(r);
-        }
+
+        
     }
 //check xem room co trang thai dang thue-> false
 
@@ -348,51 +346,47 @@ public class PhongDAO extends DBContext {
     }
 
     //insert room
-    public boolean insertRoom(Phong room) {
-        String sql = "INSERT INTO phong_tro (ID_NhaTro, ID_LoaiPhong, TenPhongTro, Tang, Dien_Tich, Gia, Trang_thai) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+    public int insertRoom(Phong room) {
+    String sql = "INSERT INTO phong_tro (ID_NhaTro, ID_LoaiPhong, TenPhongTro, Tang, Dien_Tich, Gia, Trang_thai) "
+            + "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        try {
-            try (PreparedStatement st = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-                st.setInt(1, room.getID_NhaTro());
-                st.setInt(2, room.getID_LoaiPhong());
-                st.setString(3, room.getTenPhongTro());
-                st.setInt(4, room.getTang());
-                st.setFloat(5, room.getDien_tich());
-                st.setInt(6, room.getGia());
-                st.setString(7, room.getTrang_thai());
+    try {
+        try (PreparedStatement st = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            st.setInt(1, room.getID_NhaTro());
+            st.setInt(2, room.getID_LoaiPhong());
+            st.setString(3, room.getTenPhongTro());
+            st.setInt(4, room.getTang());
+            st.setFloat(5, room.getDien_tich());
+            st.setInt(6, room.getGia());
+            st.setString(7, room.getTrang_thai());
 
-                int affectedRows = st.executeUpdate();
+            int affectedRows = st.executeUpdate();
 
-                // Kiá»ƒm tra náº¿u khÃ´ng cÃ³ dÃ²ng nÃ o bá»‹ áº£nh hÆ°á»Ÿng
-                if (affectedRows == 0) {
-                    throw new SQLException("Creating room failed, no rows affected.");
-                }
-
-                // Láº¥y ID sinh tá»± Ä‘á»™ng náº¿u cÃ³
-                try (ResultSet generatedKeys = st.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        int roomId = generatedKeys.getInt(1);
-
-                        // ChÃ¨n cÃ¡c hÃ¬nh áº£nh náº¿u cÃ³
-                        if (room.getImages() != null && !room.getImages().isEmpty()) {
-                            for (String image : room.getImages()) {
-                                insertRoomImage(roomId, image);
-                            }
-                        }
-
-                    } else {
-                        throw new SQLException("Creating room failed, no ID obtained.");
-                    }
-                }
-
-                return true;
+            if (affectedRows == 0) {
+                throw new SQLException("Creating room failed, no rows affected.");
             }
-        } catch (SQLException e) {
-            System.out.println("Error in PhongDAO.insertRoom: " + e.getMessage());
-            return false;
+
+            try (ResultSet generatedKeys = st.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    int roomId = generatedKeys.getInt(1);
+
+                    if (room.getImages() != null && !room.getImages().isEmpty()) {
+                        for (String image : room.getImages()) {
+                            insertRoomImage(roomId, image);
+                        }
+                    }
+
+                    return roomId; // Return the new room ID
+                } else {
+                    throw new SQLException("Creating room failed, no ID obtained.");
+                }
+            }
         }
+    } catch (SQLException e) {
+        System.out.println("Error in PhongDAO.insertRoom: " + e.getMessage());
+        return -1; // Return -1 or throw an exception to indicate failure
     }
+}
 
     public void insertRoomImage(int roomId, String imageUrl) throws SQLException {
         String sql = "INSERT INTO anh_phong_tro (ID_Phong, URL_AnhPhongTro) VALUES (?, ?)";
@@ -519,8 +513,7 @@ public class PhongDAO extends DBContext {
 
     public int getTotalRooms() {
         String sql = "SELECT COUNT(*) FROM phong_tro";
-        try (PreparedStatement st = connection.prepareStatement(sql);
-             ResultSet rs = st.executeQuery()) {
+        try (PreparedStatement st = connection.prepareStatement(sql); ResultSet rs = st.executeQuery()) {
             if (rs.next()) {
                 return rs.getInt(1);
             }
@@ -532,22 +525,158 @@ public class PhongDAO extends DBContext {
 
 //get tat ca trang thai dang co
     public List<String> getAvailableStatuses() {
-    List<String> statusList = new ArrayList<>();
-    String sql = "SELECT DISTINCT Trang_thai FROM phong_tro ORDER BY Trang_thai";
+        List<String> statusList = new ArrayList<>();
+        String sql = "SELECT DISTINCT Trang_thai FROM phong_tro ORDER BY Trang_thai";
 
-    try (PreparedStatement st = connection.prepareStatement(sql);
-         ResultSet rs = st.executeQuery()) {
+        try (PreparedStatement st = connection.prepareStatement(sql); ResultSet rs = st.executeQuery()) {
 
-        while (rs.next()) {
-            String status = rs.getString("Trang_thai");
-            if (status != null && !status.trim().isEmpty()) {
-                statusList.add(status);
+            while (rs.next()) {
+                String status = rs.getString("Trang_thai");
+                if (status != null && !status.trim().isEmpty()) {
+                    statusList.add(status);
+                }
             }
+        } catch (SQLException e) {
+            System.out.println("Error in PhongDAO.getAvailableStatuses: " + e.getMessage());
         }
-    } catch (SQLException e) {
-        System.out.println("Error in PhongDAO.getAvailableStatuses: " + e.getMessage());
+
+        return statusList;
     }
 
-    return statusList;
-}
+    public boolean isRentedRoom(int idRoom) {
+        LocalDate today = LocalDate.now(); // Lấy ngày hiện tại
+
+        String sql = "SELECT 1 " // Chỉ cần kiểm tra xem có kết quả hay không
+                + "FROM phong_tro p "
+                + "JOIN nha_tro n ON p.ID_NhaTro = n.ID_NhaTro "
+                + "JOIN loai_phong l ON p.ID_LoaiPhong = l.ID_LoaiPhong "
+                + "JOIN hop_dong h ON p.ID_Phong = h.ID_PhongTro "
+                + "WHERE h.Ngay_gia_tri <= ? AND h.Ngay_het_han >= ? AND p.ID_Phong = ?";
+
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setDate(1, Date.valueOf(today)); // Ngày hiện tại cho Ngay_gia_tri
+            st.setDate(2, Date.valueOf(today)); // Ngày hiện tại cho Ngay_het_han
+            st.setInt(3, idRoom); // ID của phòng
+
+            try (ResultSet rs = st.executeQuery()) {
+                // Nếu có kết quả trả về, nghĩa là phòng đang được thuê
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in PhongDAO.isRentedRoom: " + e.getMessage());
+        }
+
+        return false; // Mặc định trả về false nếu có lỗi hoặc không có kết quả
+    }
+     public int insertRooms(Phong phong) {
+        String insertRoomSQL = "INSERT INTO phong_tro (TenPhongTro, Tang, ID_LoaiPhong, ID_NhaTro, Dien_Tich, Gia, Trang_thai) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement st = connection.prepareStatement(insertRoomSQL, Statement.RETURN_GENERATED_KEYS)) {
+            st.setString(1, phong.getTenPhongTro());
+            st.setInt(2, phong.getTang());
+            st.setInt(3, phong.getID_LoaiPhong());
+            st.setInt(4, phong.getID_NhaTro());
+            st.setFloat(5, phong.getDien_tich());
+            st.setInt(6, phong.getGia());
+            st.setString(7, phong.getTrang_thai());
+
+            st.executeUpdate();
+
+            try (ResultSet generatedKeys = st.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1); // Return the generated room ID (ID_Phong)
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return -1;  // Return -1 if the insertion failed
+    }
+
+    public boolean insertThietBiPhong(int roomId, int thietBiId, String trangThai, String moTa, int soLuong) {
+        String insertThietBiPhongSQL = "INSERT INTO thiet_bi_phong (ID_Phong, ID_ThietBi, Trang_thai, Mo_ta, So_luong) VALUES (?, ?, ?, ?, ?)";
+
+        try (PreparedStatement st = connection.prepareStatement(insertThietBiPhongSQL)) {
+            st.setInt(1, roomId);
+            st.setInt(2, thietBiId);
+            st.setString(3, trangThai);
+            st.setString(4, moTa);
+            st.setInt(5, soLuong);
+
+            st.executeUpdate();  // Execute the SQL statement
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public int getThietBiID(String name) {
+        String sql = "SELECT * FROM thiet_bi WHERE TenThietBi = ? LIMIT 1";
+
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, name);  // Set the parameter value before executing the query
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("ID_ThietBi");  // Return the ID if a result is found
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in PhongDAO.getThietBiID: " + e.getMessage());
+        }
+
+        return -1;  // Return -1 if no result is found or an error occurs
+    }
+
+    public boolean roomNameExists(String roomName, int nhaTroId) {
+        String sql = "SELECT COUNT(*) FROM phong_tro WHERE TenPhongTro = ? AND ID_NhaTro = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, roomName);
+            st.setInt(2, nhaTroId);
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;  // Returns true if the room name already exists
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;  // Default to false if there is no matching room
+    }
+      public Phong getLatestPhong() {
+        Phong room = null;
+        String sql = "SELECT p.ID_Phong, n.TenNhaTro, p.TenPhongTro, p.ID_LoaiPhong, p.Tang, p.Dien_Tich, "
+                + "l.TenLoaiPhong, p.Gia, l.Mo_ta, p.Trang_thai "
+                + "FROM phong_tro p "
+                + "JOIN nha_tro n ON p.ID_NhaTro = n.ID_NhaTro "
+                + "JOIN loai_phong l ON p.ID_LoaiPhong = l.ID_LoaiPhong "
+                + "ORDER BY p.ID_Phong DESC";
+
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    room = new Phong();
+                    room.setID_Phong(rs.getInt("ID_Phong"));
+                    room.setTenNhaTro(rs.getString("TenNhaTro"));
+                    room.setTenPhongTro(rs.getString("TenPhongTro"));
+                    room.setID_LoaiPhong(rs.getInt("ID_LoaiPhong"));
+                    room.setTang(rs.getInt("Tang"));
+                    room.setDien_tich(rs.getFloat("Dien_Tich"));
+                    room.setTenLoaiPhong(rs.getString("TenLoaiPhong"));
+                    room.setGia(rs.getInt("Gia"));
+                    room.setMo_ta(rs.getString("Mo_ta"));
+                    room.setTrang_thai(rs.getString("Trang_thai"));
+
+                    // Fetch images separately
+//                    List<String> images = getImagesByPhongId(roomId);
+//                    room.setImages(images);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in PhongDAO.getDetailRoom: " + e.getMessage());
+        }
+        return room;
+    }
+
 }

@@ -7,7 +7,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
-<%@page import="java.util.List, java.util.ArrayList,java.text.DecimalFormat, model.DichVu, model.Phong, dal.DichVuDAO, dal.PhongDAO, dal.HoaDonDAO, model.HoaDon"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ page import="java.util.List, java.util.Map" %>
+<%@ page import="java.util.HashMap" %>
+<%@page import="java.util.List, java.util.ArrayList,java.text.DecimalFormat, model.DichVu, model.Phong, dal.DichVuDAO, dal.PhongDAO, dal.HoaDonDAO, model.HoaDon, model.DichVu, model.Transaction, dal.TransactionDAO"%>
 <!DOCTYPE html>
 
 <html lang="en">
@@ -22,6 +25,10 @@
         <link rel="stylesheet" href="css/styleRoom.css">
         <link rel="stylesheet" href="css/modelDelete.css">
         <script src="https://kit.fontawesome.com/aab0c35bef.js" crossorigin="anonymous"></script>
+
+        <!--Date Range Picker-->
+
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
 
         <!----===== Boxicons CSS ===== -->
@@ -38,117 +45,14 @@
 
         <!--jquery-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <!--datepicker boostrap-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
 
 
     </head>
     <body>
-        <nav class="sidebar">
-            <header>
-                <div class="image-text">
-                    <a href="home.jsp">
-                        <span class="image">
-                            <img src="assets/img/Logo_nhatro.png" alt="alt" style="margin-top: 15px; width: 100%; margin-left:10px"/>
-                            <!--<img src="logo.png" alt="">-->
-                        </span>
-                    </a>
-                </div>
-
-                <i class='bx bx-chevron-right toggle'></i>
-            </header>
-
-            <div class="menu-bar">
-                <div class="menu">
-                    <!-- 
-                    <li class="search-box">
-                        <i class='bx bx-search icon'></i>
-                        <input type="text" placeholder="Search...">
-                    </li>
-                    -->
-
-                    <ul class="menu-links">
-                        <li class="">
-                            <a href="#">
-                                <i class='bx bx-home-alt icon' ></i>
-                                <span class="text nav-text">Trang chủ</span>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a href="nhatro" >
-                                <i class='bx bxs-home icon' ></i>
-                                <span class="text nav-text">Nhà trọ</span>
-                            </a>
-                        </li>
-
-                        <li class="">
-                            <a href="room">
-                                <i class='bx bx-bar-chart-alt-2 icon' ></i>
-                                <span class="text nav-text">Phòng trọ</span>
-                            </a>
-                        </li>
-
-                        <li class="">
-                            <a href="accountController">
-                                <i class='bx bx-face icon' ></i>
-                                <span class="text nav-text">Nhân viên</span>
-                            </a>
-                        </li>
-
-                        <li class="s">
-                            <a href="loaddichvu" >
-                                <i class='bx bx-bell icon'></i>
-                                <span class="text nav-text active">Dịch vụ</span>
-                            </a>
-                        </li>
-
-                        <li class="">
-                            <a href="#">
-                                <i class='bx bx-id-card icon' ></i>
-                                <span class="text nav-text">Hợp đồng</span>
-                            </a>
-                        </li>
-
-                        <li class="">
-                            <a href="#" class="active">
-                                <i class='bx bx-wallet icon' ></i>
-                                <span class="text nav-text">Hóa đơn</span>
-                            </a>
-                        </li>
-
-                        <li class="">
-                            <a href="#">
-                                <i class='bx bx-devices icon' ></i>
-                                <span class="text nav-text">Thiết bị</span>
-                            </a>
-                        </li>
-
-
-                    </ul>
-                </div>
-
-                <div class="bottom-content">
-                    <li class="">
-                        <a href="#">
-                            <i class='bx bx-log-out icon' ></i>
-                            <span class="text nav-text">Logout</span>
-                        </a>
-                    </li>
-
-                    <li class="mode">
-                        <div class="sun-moon">
-                            <i class='bx bx-moon icon moon'></i>
-                            <i class='bx bx-sun icon sun'></i>
-                        </div>
-                        <span class="mode-text text">Dark mode</span>
-
-                        <div class="toggle-switch">
-                            <span class="switch"></span>
-                        </div>
-                    </li>
-
-                </div>
-            </div>
-
-        </nav>
+        <jsp:include page="sidebarHoaDonManagement.jsp"></jsp:include>
         <section class="home">
             <section class="property-management">
                 <div class="header">
@@ -175,68 +79,214 @@
             </section>
 
             <section class="ftco-section">
+
                 <div class="row m-0">
                     <div class="col-lg-7 mt-4 ml-2">
+                        <div class="row filter">
+                            <div class="col-xl-4 date-detail  part-filter">
+                                <h6 class="" style="color: #ffffff">Chọn ngày: </h6>
+                                <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                                    <i class="fa fa-calendar"></i>&nbsp;
+
+                                    <c:if test="${not empty startDate}">
+                                        <c:if test="${not empty endDate}">
+                                            <span>${startDate} - ${endDate}</span>
+                                        </c:if>
+                                        <c:if test="${empty endDate}">
+                                            <span>${startDate} - Select an end date</span>
+                                        </c:if>
+                                    </c:if>
+
+                                    <c:if test="${empty startDate}">
+                                        <span>Select a date range</span>
+                                    </c:if>
+
+                                    <i class="fa fa-caret-down"></i>
+                                </div>
+                            </div>
+                            <form id="dateRangeForm" action="hoadontheongay" method="get">
+                                <input type="hidden" name="startDate" id="startDate">
+                                <input type="hidden" name="endDate" id="endDate">
+                            </form>
+
+
+                        </div>
                         <div class="card">
                             <div class="card-header pb-0 p-3">
                                 <h6 class="mb-0">Thông tin hóa đơn</h6>
+                                <c:if test="${not empty notification}">
+                                    <div class="alert alert-success" role="alert">
+                                        ${notification}
+                                    </div>
+                                </c:if>
+                                <a href="TransactionHistory.jsp" class="btn btn-primary mt-2">Lịch sử thanh toán</a>
                             </div>
+
                             <div class="card-body pt-4 p-3">
                                 <ul class="list-group">
-                                    <c:forEach var="hd" items="${sessionScope.invoices}">
-                                        <li class="list-group-item list-hoadon d-flex p-4 mb-2 bg-gray-100 border-radius-lg"
-                                            style="border-left: 5px solid ${hd.trang_thai == 1 ? 'green' : 'red'}">
-                                            <div class="d-flex flex-column">
-                                                <% 
-                                                    // Lấy ID hóa đơn từ đối tượng hd bằng cách sử dụng EL
-                                                    int idHoadon = (Integer) ((HoaDon)  pageContext.getAttribute("hd")).getID_HoaDon();
-                
-                                                    // Gọi phương thức để lấy thông tin phòng
-                                                    HoaDonDAO hdd = new HoaDonDAO();
-                                                    Phong room = hdd.getRoomOfHoaDon(idHoadon);
-                
-                                                    // Kiểm tra null trước khi lưu trữ vào request
-                                                    if (room != null) {
-                                                        request.setAttribute("room", room);
-                                                    }
-                                                %>
-                                                <div class="d-flex header-invoice">
-                                                    <h6 class="mb-3 text-sm">Phòng: 
-                                                        <c:if test="${room != null}">
-                                                            ${room.tenPhongTro}
-                                                        </c:if>
-                                                        <c:if test="${room == null}">
-                                                            Không có thông tin phòng
-                                                        </c:if>
-                                                    </h6>
-                                                    <span class="badge ml-5
-                                                          ${hd.trang_thai == 1 ? 'badge-success' : 'badge-danger'}" 
-                                                          >
-                                                        ${hd.trang_thai == 1 ? 'Đã thanh toán' : 'Chưa thanh toán'}
-                                                    </span>
-                                                </div>
-                                                    <span class="mb-2 text-xs">Tổng tiền: <span class="text-dark ms-sm-2 font-weight-bold">${hd.tong_gia_tien}</span></span>
-                                                    <span class="text-xs">Tiền đã thanh toán: <span class="text-dark ms-sm-2 font-weight-bold">${hd.tienDaThanhToan}</span></span>
-                                                        <c:if test="${hd.trang_thai==1}">
-                                                        <span class="text-xs">Mã giao dịch: <span class="text-dark font-weight-bold ms-sm-2">${hd.maGiaoDich}</span></span>
-                                                        <span class="text-xs">Ngày thanh toán: <span class="text-dark ms-sm-2 font-weight-bold">${hd.ngayThanhToan}</span></span>
-                                                        </c:if>
+                                    <% HoaDonDAO hdd= new HoaDonDAO();
+                                    %>
+                                    <% 
+                   // Retrieve existing query parameters
+                   String queryString = request.getQueryString();
+                   if (queryString == null) {
+                       queryString = "";
+                   } else {
+                       // Remove any existing page parameter from the query string
+                       queryString = queryString.replaceAll("&?page=\\d*", "");
+                       if (!queryString.isEmpty() && !queryString.endsWith("&")) {
+                           queryString += "&";
+                       }
+                   }
+                   request.setAttribute("queryString",queryString );
+                                    %>
 
-                                            </div>
-                                            <div class="ms-auto text-end">
-                                                <div class="text-right">
-                                                    <span class="mb-2 text-xs">Ngày tạo: <span class="text-dark font-weight-bold ms-sm-2">${hd.ngay}</span></span>
+
+                                    <c:set var="page" value="${param.page != null ? param.page : 0}" />
+                                    <c:set var="items" value="0" />
+                                    <c:set var="limitItems" value="10" />
+                                    <c:set var="startItem" value="${page * limitItems}" />
+                                    <c:set var="endItem" value="${startItem + limitItems}" />
+                                    <c:set var="numOfPages" value="${(invoices.size() + limitItems - 1) / limitItems}" />
+
+                                    <c:forEach var="hd" items="${invoices}" varStatus="status">
+                                        <c:if test="${status.index >= startItem && status.index < endItem}">
+                                            <li class="list-group-item list-hoadon d-flex p-4 mb-2 bg-gray-100 border-radius-lg"
+                                                style="border-left: 5px solid ${hd.trang_thai == 1 ? 'green' : 'red'}">
+                                                <div class="d-flex flex-column">
+                                                    <% 
+                                                        // Lấy ID hóa đơn từ đối tượng hd bằng cách sử dụng EL
+                                                        int idHoadon = (Integer) ((HoaDon)  pageContext.getAttribute("hd")).getID_HoaDon();
+                
+                                                        // Gọi phương thức để lấy thông tin phòng
+                                                   
+                                                        Phong room = hdd.getRoomOfHoaDon(idHoadon);
+                
+                                                        // Kiểm tra null trước khi lưu trữ vào request
+                                                        if (room != null) {
+                                                            request.setAttribute("room", room);
+                                                        }
+                                                        TransactionDAO tdao= new TransactionDAO();
+                                                        float totalAmount=tdao.getTotalMoneyByIdHoaDon(idHoadon);
+                                                        request.setAttribute("Paid", totalAmount);
+                                                    %>
+                                                    <div class="d-flex header-invoice">
+                                                        <h6 class="mb-3 text-sm">Phòng: 
+                                                            <c:if test="${room != null}">
+                                                                ${room.tenPhongTro}
+                                                            </c:if>
+                                                            <c:if test="${room == null}">
+                                                                Không có thông tin phòng
+                                                            </c:if>
+                                                        </h6>
+                                                        <span class="badge ml-5
+                                                              ${hd.trang_thai == 1 ? 'badge-success' : 'badge-danger'}" 
+                                                              >
+                                                            ${hd.trang_thai == 1 ? 'Đã thanh toán' : 'Chưa thanh toán'}
+                                                        </span>
+                                                    </div>
+                                                    <span class="mb-2 text-xs">Tổng tiền: 
+                                                        <span class="text-dark ms-sm-2 font-weight-bold">
+                                                            <fmt:formatNumber value="${hd.tong_gia_tien}" type="number" groupingUsed="true"/> VND
+                                                        </span>
+                                                    </span>
+                                                    <span class="text-xs">Người tạo: <span class="text-dark ms-sm-2 font-weight-bold">${hd.nguoiTao}</span></span>
+
+                                                    <span class="text-xs">Đã thanh toán: 
+                                                        <span class="text-dark ms-sm-2 font-weight-bold">
+                                                            <fmt:formatNumber value="${Paid}" type="number" groupingUsed="true"/> VND
+                                                        </span>
+                                                    </span>
+                                                    <span class="text-xs">Mo tả: <span class="text-dark ms-sm-2 font-weight-bold">${hd.moTa}</span></span>
+
+
                                                 </div>
-                                                <div class="mt-2">
-                                                    <a class="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;"><i class="fa-solid fa-trash"></i>Delete</a>
-                                                    <a class="btn btn-link text-dark px-3 mb-0" href="javascript:;"><i class="fa-solid fa-pen"></i>Edit</a>
+                                                <div class=" pl-5 dich-vu-invoice">
+                                                    <h6>Dịch vụ sử dụng: </h6>
+                                                    <div class="ml-3">
+                                                        <c:forEach var="dichVu" items="${hd.dichVus}">
+                                                            <div class="service-item text-xs mr-2 mb-2">
+                                                                <span class="text-primary ms-sm-2 font-weight-bold">Tên dịch vụ: ${dichVu.tenDichVu}</span> <br/>
+
+                                                                <c:choose>
+                                                                    <c:when test="${dichVu.tenDichVu == 'Điện' || dichVu.tenDichVu == 'Nước'}">
+                                                                        <span class="text-dark ms-sm-2">
+                                                                            <span class="text-dark ms-sm-2 font-weight-bold">Chỉ số:</span> 
+                                                                            ${dichVu.chiSoCu} - ${dichVu.chiSoMoi}
+                                                                        </span>
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        <span class="text-dark ms-sm-2">
+                                                                            <span class="text-dark ms-sm-2 font-weight-bold">Đầu người:</span> 
+                                                                            ${dichVu.dauNguoi}
+                                                                        </span>
+                                                                    </c:otherwise>
+                                                                </c:choose>
+
+                                                            </div>
+
+                                                        </c:forEach>
+                                                    </div>
+
                                                 </div>
-                                            </div>
-                                        </li>
+                                                <div class="ms-auto text-end">
+                                                    <div class="text-right">
+                                                        <span class="mb-2 text-xs">Ngày tạo: <span class="text-dark font-weight-bold ms-sm-2">${hd.ngay}</span></span>
+                                                    </div>
+                                                    <div class="mt-2">
+                                                        <!--                                                    <a class="btn btn-link text-primary px-3 mb-0" href="javascript:;"><i class="fa-solid fa-circle-info"></i>Chi tiết</a>-->
+<a class="btn btn-link text-success px-3 mb-0" href="TransactionForm.jsp?id=${hd.ID_HoaDon}"><i class="fa-solid fa-plus"></i>Thêm giao dịch</a>
+                                                        <button type="button" class="btn btn-link text-danger text-gradient px-3 mb-0" data-toggle="modal" data-target="#myModalDelete${hd.ID_HoaDon}">
+                                                            <i class="fa-solid fa-trash"></i>Delete
+                                                        </button>
+                                                        <div id="myModalDelete${hd.ID_HoaDon}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                            <div class="modal-dialog modal-confirm">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header flex-column">
+                                                                        <div class="icon-box">
+                                                                            <i class="material-icons"><i class="fa-solid fa-circle-xmark"></i></i>
+                                                                        </div>
+                                                                        <h5 class="modal-title w-100">Bạn có chắc chắn bạn muốn xóa hóa đơn ?<br/> <span style="color: #5932ea"></span></h5>
+                                                                    </div>
+                                                                    <div class="modal-footer justify-content-center">
+                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                                                                        <button type="button" class="btn btn-danger">
+                                                                            <a href="actionhoadon?action=dele&id=${hd.ID_HoaDon}&exit=home" class="edit-film" style="color: white !important;">Xóa hóa đơn</a>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </c:if>
                                     </c:forEach>
 
 
                                 </ul>
+                                <div class="pagination-bar">
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination justify-content-center">
+                                            <c:if test="${page > 0}">
+                                                <li class="page-item">
+                                                    <a class="page-link" href="?${queryString}page=${page - 1}">Previous</a>
+                                                </li>
+                                            </c:if>
+                                            <c:forEach begin="0" end="${numOfPages - 1}" var="i">
+                                                <li class="page-item ${page == i ? 'active' : ''}">
+                                                    <a class="page-link" href="?${queryString}page=${i}">${i + 1}</a>
+                                                </li>
+                                            </c:forEach>
+                                            <c:if test="${page < numOfPages - 2}">
+                                                <li class="page-item">
+                                                    <a class="page-link" href="?${queryString}page=${page + 1}">Next</a>
+                                                </li>
+                                            </c:if>
+                                        </ul>
+                                    </nav>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -247,7 +297,7 @@
                                     <div class="card-header pb-0 p-3">
                                         <div class="row">
                                             <div class="col-6 d-flex align-items-center">
-                                                <h6 class="mb-0">Invoices</h6>
+                                                <h6 class="mb-0">Thông tin hóa đơn từng phòng</h6>
                                             </div>
                                             <div class="col-6 text-end">
                                                 <button class="btn btn-outline-primary btn-sm mb-0">View All</button>
@@ -256,153 +306,63 @@
                                     </div>
                                     <div class="card-body p-3 pb-0">
                                         <ul class="list-group">
-                                            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                                                <div class="d-flex flex-column">
-                                                    <h6 class="mb-1 text-dark font-weight-bold text-sm">March, 01, 2020</h6>
-                                                    <span class="text-xs">#MS-415646</span>
-                                                </div>
-                                                <div class="d-flex align-items-center text-sm">
-                                                    $180
-                                                    <button class="btn btn-link text-dark text-sm mb-0 px-0 ms-4"><i class="material-icons text-lg position-relative me-1">picture_as_pdf</i> PDF</button>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                                                <div class="d-flex flex-column">
-                                                    <h6 class="text-dark mb-1 font-weight-bold text-sm">February, 10, 2021</h6>
-                                                    <span class="text-xs">#RV-126749</span>
-                                                </div>
-                                                <div class="d-flex align-items-center text-sm">
-                                                    $250
-                                                    <button class="btn btn-link text-dark text-sm mb-0 px-0 ms-4"><i class="material-icons text-lg position-relative me-1">picture_as_pdf</i> PDF</button>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                                                <div class="d-flex flex-column">
-                                                    <h6 class="text-dark mb-1 font-weight-bold text-sm">April, 05, 2020</h6>
-                                                    <span class="text-xs">#FB-212562</span>
-                                                </div>
-                                                <div class="d-flex align-items-center text-sm">
-                                                    $560
-                                                    <button class="btn btn-link text-dark text-sm mb-0 px-0 ms-4"><i class="material-icons text-lg position-relative me-1">picture_as_pdf</i> PDF</button>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                                                <div class="d-flex flex-column">
-                                                    <h6 class="text-dark mb-1 font-weight-bold text-sm">June, 25, 2019</h6>
-                                                    <span class="text-xs">#QW-103578</span>
-                                                </div>
-                                                <div class="d-flex align-items-center text-sm">
-                                                    $120
-                                                    <button class="btn btn-link text-dark text-sm mb-0 px-0 ms-4"><i class="material-icons text-lg position-relative me-1">picture_as_pdf</i> PDF</button>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item border-0 d-flex justify-content-between ps-0 border-radius-lg">
-                                                <div class="d-flex flex-column">
-                                                    <h6 class="text-dark mb-1 font-weight-bold text-sm">March, 01, 2019</h6>
-                                                    <span class="text-xs">#AR-803481</span>
-                                                </div>
-                                                <div class="d-flex align-items-center text-sm">
-                                                    $300
-                                                    <button class="btn btn-link text-dark text-sm mb-0 px-0 ms-4"><i class="material-icons text-lg position-relative me-1">picture_as_pdf</i> PDF</button>
-                                                </div>
-                                            </li>
+                                            <% HoaDonDAO hdd1= new HoaDonDAO();
+                                            %>
+                                            <c:forEach var="rr" items="${sessionScope.Rooms}">
+                                                <% 
+                                                   // Lấy ID hóa đơn từ đối tượng rr bằng cách sử dụng EL
+                                                   int idRoom = (Integer) ((Phong)  pageContext.getAttribute("rr")).getID_Phong();
+                
+                                                   // Gọi phương thức để lấy thông tin phòng
+      
+                                                   List<Integer> listContractByRoom = hdd1.getHopDongOfRentedRoom(idRoom);
+                                                   int countPaid = 0;
+                                                   int countUnpaid = 0;
+
+                                                   // Duyệt qua từng hợp đồng để lấy hóa đơn
+                                                   for (Integer contractId : listContractByRoom) {
+                                                       List<HoaDon> listHDByContract = hdd1.getHoaDonByHopDong(contractId);
+
+                                                       // Đếm số hóa đơn đã trả và chưa trả
+                                                       for (HoaDon hd : listHDByContract) {
+                                                           if (hd.getTrang_thai() == 1) { // Giả sử 1 là đã trả
+                                                               countPaid++;
+                                                           } else {
+                                                               countUnpaid++;
+                                                           }
+                                                       }
+                                                   }
+                                                   PhongDAO pd= new PhongDAO();
+                                                   boolean isRented = pd.isRentedRoom(idRoom);
+                                                   request.setAttribute("isRented", isRented);
+                                                   request.setAttribute("countPaid", countPaid);
+                                                   request.setAttribute("countUnpaid", countUnpaid);
+                
+
+                                                %>
+                                                <li class="list-group-item  d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                                                    <div class="d-flex flex-column">
+                                                        <h6 class="mb-1 text-dark font-weight-bold text-sm">Phòng ${rr.tenPhongTro}</h6>
+                                                        <span class="text-xs">Hóa đơn đã tạo: ${countPaid+countUnpaid}</span>
+                                                        <span class="text-xs" style="color: #009933">Đã thanh toán: ${countPaid} | <span class="text-xs" style="color: red">Chưa thanh toán: ${countUnpaid}</span></span> 
+
+
+                                                    </div>
+                                                    <div class="d-flex align-items-center text-sm">
+                                                        <a class="btn btn-link text-primary px-3 mb-0" href="hoadonroom?roomId=${rr.ID_Phong}"><i class="fa-solid fa-circle-info"></i>Chi tiết</a>
+                                                        <c:if test="${isRented==true}">
+                                                            <a class="btn btn-link text-success text-gradient px-3 mb-0" href="loadHoaDonForm?roomId=${rr.ID_Phong}"><i class="fa-solid fa-plus"></i>Thêm hóa đơn</a>
+                                                        </c:if>
+                                                        <c:if test="${isRented==false || isRented==null}">
+                                                            <span class="badge ml-4 mr-2 badge-danger">
+                                                                <i class="fa-solid fa-triangle-exclamation"></i> Phòng trống
+                                                            </span>
+                                                        </c:if>
+                                                    </div>
+                                                </li>
+                                            </c:forEach>
                                         </ul>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="transactions mt-3">
-                            <div class="card h-100 mb-4">
-                                <div class="card-header pb-0 p-3">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <h6 class="mb-0">Your Transaction's</h6>
-                                        </div>
-                                        <div class="col-md-6 d-flex justify-content-start justify-content-md-end align-items-center">
-                                            <i class="material-icons me-2 text-lg">date_range</i>
-                                            <small>23 - 30 March 2020</small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-body pt-4 p-3">
-                                    <h6 class="text-uppercase text-body text-xs font-weight-bolder mb-3">Newest</h6>
-                                    <ul class="list-group">
-                                        <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                                            <div class="d-flex align-items-center">
-                                                <button class="btn btn-icon-only btn-rounded btn-outline-danger mb-0 me-3 p-3 btn-sm d-flex align-items-center justify-content-center"><i class="material-icons text-lg">expand_more</i></button>
-                                                <div class="d-flex flex-column">
-                                                    <h6 class="mb-1 text-dark text-sm">Netflix</h6>
-                                                    <span class="text-xs">27 March 2020, at 12:30 PM</span>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex align-items-center text-danger text-gradient text-sm font-weight-bold">
-                                                - $ 2,500
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                                            <div class="d-flex align-items-center">
-                                                <button class="btn btn-icon-only btn-rounded btn-outline-success mb-0 me-3 p-3 btn-sm d-flex align-items-center justify-content-center"><i class="material-icons text-lg">expand_less</i></button>
-                                                <div class="d-flex flex-column">
-                                                    <h6 class="mb-1 text-dark text-sm">Apple</h6>
-                                                    <span class="text-xs">27 March 2020, at 04:30 AM</span>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex align-items-center text-success text-gradient text-sm font-weight-bold">
-                                                + $ 2,000
-                                            </div>
-                                        </li>
-                                    </ul>
-                                    <h6 class="text-uppercase text-body text-xs font-weight-bolder my-3">Yesterday</h6>
-                                    <ul class="list-group">
-                                        <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                                            <div class="d-flex align-items-center">
-                                                <button class="btn btn-icon-only btn-rounded btn-outline-success mb-0 me-3 p-3 btn-sm d-flex align-items-center justify-content-center"><i class="material-icons text-lg">expand_less</i></button>
-                                                <div class="d-flex flex-column">
-                                                    <h6 class="mb-1 text-dark text-sm">Stripe</h6>
-                                                    <span class="text-xs">26 March 2020, at 13:45 PM</span>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex align-items-center text-success text-gradient text-sm font-weight-bold">
-                                                + $ 750
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                                            <div class="d-flex align-items-center">
-                                                <button class="btn btn-icon-only btn-rounded btn-outline-success mb-0 me-3 p-3 btn-sm d-flex align-items-center justify-content-center"><i class="material-icons text-lg">expand_less</i></button>
-                                                <div class="d-flex flex-column">
-                                                    <h6 class="mb-1 text-dark text-sm">HubSpot</h6>
-                                                    <span class="text-xs">26 March 2020, at 12:30 PM</span>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex align-items-center text-success text-gradient text-sm font-weight-bold">
-                                                + $ 1,000
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                                            <div class="d-flex align-items-center">
-                                                <button class="btn btn-icon-only btn-rounded btn-outline-success mb-0 me-3 p-3 btn-sm d-flex align-items-center justify-content-center"><i class="material-icons text-lg">expand_less</i></button>
-                                                <div class="d-flex flex-column">
-                                                    <h6 class="mb-1 text-dark text-sm">Creative Tim</h6>
-                                                    <span class="text-xs">26 March 2020, at 08:30 AM</span>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex align-items-center text-success text-gradient text-sm font-weight-bold">
-                                                + $ 2,500
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                                            <div class="d-flex align-items-center">
-                                                <button class="btn btn-icon-only btn-rounded btn-outline-dark mb-0 me-3 p-3 btn-sm d-flex align-items-center justify-content-center"><i class="material-icons text-lg">priority_high</i></button>
-                                                <div class="d-flex flex-column">
-                                                    <h6 class="mb-1 text-dark text-sm">Webflow</h6>
-                                                    <span class="text-xs">26 March 2020, at 05:00 AM</span>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex align-items-center text-dark text-sm font-weight-bold">
-                                                Pending
-                                            </div>
-                                        </li>
-                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -417,14 +377,18 @@
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        <script>
+        <!--Date Range Picker-->
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
-            //delete sẻvice confirm
-            function confirmDelete(idDichvu, tenDichVu) {
-                if (confirm('Bạn có muốn xóa dịch vụ ' + tenDichVu + ' ?')) {
-                    window.location.href = 'action?action=dele&id=' + idDichvu;
-                }
-            }
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+        <script>
+            $("#dpMonths").datepicker({
+                format: "mm-yyyy",
+                viewMode: "months",
+                minViewMode: "months"
+            });
         </script>
         <script>
             const body = document.querySelector('body'),
@@ -476,5 +440,41 @@
                 });
             }
         </script>
+        <script type="text/javascript">
+            $(function () {
+                // Lấy giá trị từ JSP và khởi tạo moment
+                var startDate = '<%= request.getAttribute("startDate") %>';
+                var endDate = '<%= request.getAttribute("endDate") %>';
+
+                // Sử dụng moment để khởi tạo các biến start và end
+                var start = moment(startDate);
+                var end = moment(endDate);
+
+                function cb(start, end) {
+                    $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                    $('#startDate').val(start.format('YYYY-MM-DD'));
+                    $('#endDate').val(end.format('YYYY-MM-DD'));
+                }
+
+                $('#reportrange').daterangepicker({
+                    startDate: start,
+                    endDate: end,
+                    ranges: {
+                        'Hôm nay': [moment(), moment()],
+                        'Hôm qua': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                        '7 Ngày trước': [moment().subtract(6, 'days'), moment()],
+                        '30 Ngày trước': [moment().subtract(29, 'days'), moment()],
+                        'Tháng này': [moment().startOf('month'), moment().endOf('month')],
+                        'Tháng trước': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                    }
+                }, cb);
+
+                cb(start, end);
+                $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
+                    $('#dateRangeForm').submit(); // Gửi form đến servlet
+                });
+            });
+        </script>
+
     </body>
 </html>

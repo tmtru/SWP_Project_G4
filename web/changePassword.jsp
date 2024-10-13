@@ -163,7 +163,7 @@
                 
                 <a href="profile.jsp" class="menu-item">Thông tin <%= account.getRole() %></a>
                 <a href="changePassword.jsp" class="menu-item">Đổi mật khẩu</a>
-                <div class="menu-item">Xem hợp đồng</div>
+                <a href="profileServlet?action=viewContracts" class="menu-item" style="color: white; text-decoration: none;">Xem hợp đồng</a>
                 <div class="menu-item">Xem hóa đơn</div>
                 <div class="menu-item">Yêu cầu bảo trì</div>
                 <a href="home.jsp" class="menu-item" style="color: white; text-decoration: none;">Về trang chủ</a>
