@@ -4,16 +4,25 @@
  */
 package controller;
 
+import dal.ActionHistoryDAO;
+import dal.NhaTroDAO;
 import dal.PhongDAO;
+import dal.QuanLyDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Account;
+import model.ActionHistory;
+import model.NhaTro;
+import model.Phong;
+import model.QuanLy;
 
 /**
  *
@@ -47,7 +56,6 @@ public class deleteRoomServlet extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -66,19 +74,39 @@ public class deleteRoomServlet extends HttpServlet {
                 PhongDAO dao = new PhongDAO();
 
                 if (dao.isRoomDeletable(roomId)) {
+
+                    Phong phong = dao.getDetailRoom(roomId);
+                    NhaTroDAO ntdao = new NhaTroDAO();
+                    NhaTro nhaTro = ntdao.getNhaTroByPhongTroId(roomId);
                     boolean success = dao.deleteRoomById(roomId);
-                    if(success) {
+                    if (success) {
+                        HttpSession session = request.getSession();
+                        Account account = (Account) session.getAttribute("account");
+                        if (account.getRole().equals("Quản lý")) {
+                            ActionHistoryDAO ahdao = new ActionHistoryDAO();
+                            ActionHistory history = new ActionHistory();
+
+                            history.setNhaTro(nhaTro);
+                            System.out.println(phong);
+
+                            QuanLyDAO qldao = new QuanLyDAO();
+                            QuanLy quanLy = qldao.getChuTroByAccountId(account.getID_Account());
+                            history.setQuanLy(quanLy);
+                            history.setTitle("Xóa phòng");
+                            history.setContent("Đã xóa phòng " + phong.getTenPhongTro() + " của " + nhaTro.getTenNhaTro());
+                            ahdao.insertActionHistory(history);
+                        }
                         response.sendRedirect("room?deleteSuccess=true");
-                    }else {
+                    } else {
                         response.sendRedirect("room?deleteError=true");
                     }
-                }else {
+                } else {
                     response.sendRedirect("room?deleteError=true");
                 }
             } catch (NumberFormatException | SQLException e) {
                 response.sendRedirect("room?deleteError=true");
             }
-        }else {
+        } else {
             response.sendRedirect("room?deleteError=true");
         }
     }
