@@ -1,39 +1,46 @@
 <%-- 
-    Document   : detailRoom
-    Created on : Sep 22, 2024, 10:01:51 PM
-    Author     : hihihihaha
+    Document   : UserDashBoard
+    Created on : Sep 22, 2024, 11:36:15 PM
+    Author     : Admin
 --%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
+<%@page import="java.util.List, java.util.ArrayList,java.text.DecimalFormat, model.DichVu, model.Phong, dal.DichVuDAO, dal.PhongDAO"%>
 <!DOCTYPE html>
+
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Room Details</title>
         <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css">
-        <!-- Custom CSS -->
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styleRoom.css">
-        <!-- Boxicons CSS -->
-        <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
-        <!-- Them font awesome -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-        <!-- Bootstrap JS and dependencies -->
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <!----======== CSS ======== -->
+        <link rel="stylesheet" href="css/styleRoom.css">
+
+
+
+        <!----===== Boxicons CSS ===== -->
+        <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+        <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+
+
     </head>
+    <style>
+        textarea {
+            resize: none;
+        }
+    </style>
     <body>
         <nav class="sidebar">
             <header>
                 <div class="image-text">
                     <a href="home.jsp">
                     <span class="image">
-                        <img src="${pageContext.request.contextPath}/assets/img/Logo_nhatro.png" alt="alt" style="margin-top: 15px; width: 100%; margin-left:10px"/>
+                        <img src="assets/img/Logo_nhatro.png" alt="alt" style="margin-top: 15px; width: 100%; margin-left:10px"/>
                         <!--<img src="logo.png" alt="">-->
                     </span>
                     </a>
@@ -66,14 +73,14 @@
                         </li>
 
                         <li class="">
-                            <a href="room">
+                            <a href="room" >
                                 <i class='bx bx-bar-chart-alt-2 icon active' ></i>
                                 <span class="text nav-text">Phòng trọ</span>
                             </a>
                         </li>
 
                         <li class="">
-                            <a href="accountController"  class="active">
+                            <a href="accountController">
                                 <i class='bx bx-face icon' ></i>
                                 <span class="text nav-text">Người dùng</span>
                             </a>
@@ -94,7 +101,7 @@
                         </li>
 
                         <li class="">
-                            <a href="hoadon">
+                            <a href="hoadon"  class="active">
                                 <i class='bx bx-wallet icon' ></i>
                                 <span class="text nav-text">Hóa đơn</span>
                             </a>
@@ -136,7 +143,15 @@
 
         </nav>
 
-        
+       
+
+        <!-- Bootstrap JS and dependencies -->
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
 
         <script>
             const body = document.querySelector('body'),
@@ -166,25 +181,8 @@
                     localStorage.setItem("darkMode", "disabled");
                 }
             });
-            //filter room by floor ko can submit
-            function filterRoomsByFloor(select) {
-                var selectedFloor = select.value;
-                window.location.href = 'room?tang=' + selectedFloor;
-            }
-            function filterRoomsByNhaTro(select) {
-                var selectedNhaTro = select.value;
-                window.location.href = 'room?nhaTro=' + selectedNhaTro; // Chú ý sử dụng 'nhaTro'
-            }
-
-
-            //delete room confirm
-            function confirmDelete(roomId) {
-                if (confirm('Are you sure you want to delete this room?')) {
-                    window.location.href = 'deleteRoom?id=' + roomId;
-                }
-            }
         </script>
-        
+
 
     </body>
 </html>

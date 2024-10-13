@@ -64,22 +64,23 @@
                                 <span class="text nav-text">Nhà trọ</span>
                             </a>
                         </li>
+
                         <li class="">
                             <a href="room">
-                                <i class='bx bx-bar-chart-alt-2 icon' ></i>
+                                <i class='bx bx-bar-chart-alt-2 icon active' ></i>
                                 <span class="text nav-text">Phòng trọ</span>
                             </a>
                         </li>
 
                         <li class="">
-                            <a href="accountController" class="active">
+                            <a href="accountController"  class="active">
                                 <i class='bx bx-face icon' ></i>
                                 <span class="text nav-text">Người dùng</span>
                             </a>
                         </li>
 
-                        <li class="">
-                            <a href="loaddichvu">
+                        <li class="s">
+                            <a href="loaddichvu" >
                                 <i class='bx bx-bell icon'></i>
                                 <span class="text nav-text">Dịch vụ</span>
                             </a>
@@ -93,14 +94,14 @@
                         </li>
 
                         <li class="">
-                            <a href="#">
+                            <a href="hoadon">
                                 <i class='bx bx-wallet icon' ></i>
                                 <span class="text nav-text">Hóa đơn</span>
                             </a>
                         </li>
 
                         <li class="">
-                            <a href="#">
+                            <a href="loadThietBi">
                                 <i class='bx bx-devices icon' ></i>
                                 <span class="text nav-text">Thiết bị</span>
                             </a>

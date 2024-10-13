@@ -3,33 +3,6 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-
-            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/model/ThietBi.java</file>
-            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/importRoomExcel.java</file>
-            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/model/NhaTro.java</file>
-            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/addDichVu.java</file>
-            <file>file:/E:/PRJCode/NhaTroTQAT/web/error.jsp</file>
-            <file>file:/E:/PRJCode/NhaTroTQAT/web/room.jsp</file>
-            
-           
-            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/dal/ThietBiPhongDAO.java</file>
-            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/dal/ThietBiDAO.java</file>
-            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/detailRoomServlet.java</file>
-            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/EditRoomServlet.java</file>
-            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/model/ThietBiPhong.java</file>
-            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/addThietBi.java</file>
-            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/editThietBi.java</file>
-            
-        
-            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/loadThietBi.java</file>
-            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/addThietBiToRoom.java</file>
-            <file>file:/E:/PRJCode/NhaTroTQAT/web/equipment.jsp</file>
-
-
-            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/SendEmail.java</file>
-
-
-
             <file>file:/E:/PRJCode/NhaTroTQAT/web/js/main.js</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/css/styleProfile.css</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/DichVuDashBoard.jsp</file>
@@ -69,6 +42,7 @@
             <file>file:/E:/PRJCode/NhaTroTQAT/web/addNhaTro.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/model/QuanLi.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/header.jsp</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/web/equipment.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/EmailProperty.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/login.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/model/DichVu.java</file>
@@ -76,6 +50,7 @@
             <file>file:/E:/PRJCode/NhaTroTQAT/web/css/style.css</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/dal/DichVuDAO.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/addDichVu.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/web/sidebarHoaDonManagement.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/css/styleRoom.css</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/verification.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/EmailService.java</file>
@@ -93,6 +68,7 @@
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/dal/HoaDonDAO.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/index.html</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/detailHouseHome.jsp</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/web/error.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/css/styleHomeCatagory.css</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/model/GoogleAccount.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/Register.java</file>
@@ -137,7 +113,6 @@
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/RoomServlet.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/Login.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/loadHoaDonNhaTro.java</file>
-
         </group>
     </open-files>
 </project-private>

@@ -66,7 +66,6 @@
         <servlet-class>controller.loadHoaDonNhaTro</servlet-class>
     </servlet>
     <servlet>
-<<<<<<< HEAD
         <servlet-name>actionHoaDon</servlet-name>
         <servlet-class>controller.actionHoaDon</servlet-class>
     </servlet>
@@ -89,7 +88,6 @@
     <servlet>
         <servlet-name>actionTransaction</servlet-name>
         <servlet-class>controller.actionTransaction</servlet-class>
-=======
         <servlet-name>loadThietBi</servlet-name>
         <servlet-class>controller.loadThietBi</servlet-class>
     </servlet>
@@ -116,7 +114,6 @@
     <servlet>
         <servlet-name>updateThietBiInRoom</servlet-name>
         <servlet-class>controller.updateThietBiInRoom</servlet-class>
->>>>>>> 09e4566d40c312c5675024a05797dca006eace81
     </servlet>
     <servlet-mapping>
         <servlet-name>homeRooms</servlet-name>
@@ -265,7 +262,6 @@
         <url-pattern>/hoadon</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-<<<<<<< HEAD
         <servlet-name>actionHoaDon</servlet-name>
         <url-pattern>/actionhoadon</url-pattern>
     </servlet-mapping>
@@ -288,7 +284,6 @@
     <servlet-mapping>
         <servlet-name>actionTransaction</servlet-name>
         <url-pattern>/actionTransaction</url-pattern>
-=======
         <servlet-name>loadThietBi</servlet-name>
         <url-pattern>/loadThietBi</url-pattern>
     </servlet-mapping>
@@ -315,6 +310,5 @@
     <servlet-mapping>
         <servlet-name>updateThietBiInRoom</servlet-name>
         <url-pattern>/updateThietBiInRoom</url-pattern>
->>>>>>> 09e4566d40c312c5675024a05797dca006eace81
     </servlet-mapping>
 </web-app>

@@ -70,6 +70,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
 
             <div class="menu-bar">
                 <div class="menu">
+                    <!-- 
+                    <li class="search-box">
+                        <i class='bx bx-search icon'></i>
+                        <input type="text" placeholder="Search...">
+                    </li>
+                    -->
+
                     <ul class="menu-links">
                         <li class="">
                             <a href="#">
@@ -79,14 +86,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         </li>
                         <li class="">
                             <a href="nhatro" class="active">
-                                <i class='bx bxs-home icon active' ></i>
+                                <i class='bx bxs-home icon' ></i>
                                 <span class="text nav-text">Nhà trọ</span>
                             </a>
                         </li>
 
                         <li class="">
-                            <a href="room">
-                                <i class='bx bx-bar-chart-alt-2 icon ' ></i>
+                            <a href="room" >
+                                <i class='bx bx-bar-chart-alt-2 icon active' ></i>
                                 <span class="text nav-text">Phòng trọ</span>
                             </a>
                         </li>
@@ -99,7 +106,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         </li>
 
                         <li class="s">
-                            <a href="loaddichvu">
+                            <a href="loaddichvu" >
                                 <i class='bx bx-bell icon'></i>
                                 <span class="text nav-text">Dịch vụ</span>
                             </a>
@@ -113,14 +120,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         </li>
 
                         <li class="">
-                            <a href="#">
+                            <a href="hoadon">
                                 <i class='bx bx-wallet icon' ></i>
                                 <span class="text nav-text">Hóa đơn</span>
                             </a>
                         </li>
 
                         <li class="">
-                            <a href="#">
+                            <a href="loadThietBi">
                                 <i class='bx bx-devices icon' ></i>
                                 <span class="text nav-text">Thiết bị</span>
                             </a>
