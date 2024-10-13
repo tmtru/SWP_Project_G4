@@ -1,20 +1,15 @@
 package controller;
 
 import dal.AccountDAO;
-import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.Base64;
-import javax.crypto.Cipher;
-import javax.crypto.spec.SecretKeySpec;
+
+import java.io.IOException;
 
 public class ResetPassword extends HttpServlet {
-    
-    private static final String SECRET_KEY = "1234567890123456"; // 16 bytes key for AES
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -28,18 +23,7 @@ public class ResetPassword extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet resetpassword</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet resetpassword at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+        request.getRequestDispatcher("resetpassword.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -68,50 +52,59 @@ public class ResetPassword extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        handlePasswordReset(request, response);
+    }
+
+    /**
+     * Handles password reset logic.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    private void handlePasswordReset(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         String newPassword = request.getParameter("newPassword");
         String confirmPassword = request.getParameter("confirmPassword");
-        
         HttpSession session = request.getSession();
         String email = (String) session.getAttribute("email");
 
-        // Kiểm tra xem hai mật khẩu có khớp nhau không
         if (!newPassword.equals(confirmPassword)) {
-            request.setAttribute("errorMessage", "Passwords do not match. Please try again.");
-            request.getRequestDispatcher("resetpassword.jsp").forward(request, response);
+            forwardWithError(request, response, "Passwords do not match. Please try again.");
             return;
         }
 
-        String encryptedPassword = encryptPassword(newPassword);
+        AccountDAO userDao = new AccountDAO();
+        if (!userDao.isEmailExist(email)) {
+            forwardWithError(request, response, "Email not found. Please check your email address.");
+            return;
+        }
 
-        AccountDAO userdao = new AccountDAO();
-        boolean isUpdated = false;
+        EncryptPassword ep = new EncryptPassword();
+        String encryptedPassword = ep.encryptPassword(newPassword);
 
-        if (userdao.isEmailExist(email)) {
-            isUpdated = userdao.updatePassword(email, encryptedPassword);
-            if (isUpdated) {
-                response.sendRedirect("login.jsp");
-            } else {
-                request.setAttribute("errorMessage", "Failed to reset the password. Please try again.");
-                request.getRequestDispatcher("resetpassword.jsp").forward(request, response);
-            }
+        boolean isUpdated = userDao.updatePassword(email, encryptedPassword);
+        if (isUpdated) {
+            response.sendRedirect("login.jsp");
         } else {
-            request.setAttribute("errorMessage", "Email not found. Please check your email address.");
-            request.getRequestDispatcher("resetpassword.jsp").forward(request, response);
+            forwardWithError(request, response, "Failed to reset the password. Please try again.");
         }
     }
-    
-    private String encryptPassword(String password) {
-        try {
-            SecretKeySpec secretKey = new SecretKeySpec(SECRET_KEY.getBytes(), "AES");
-            Cipher cipher = Cipher.getInstance("AES");
-            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-            byte[] encryptedData = cipher.doFinal(password.getBytes());
 
-            return Base64.getEncoder().encodeToString(encryptedData);
-        } catch (Exception e) {
-            e.printStackTrace(); // Log error
-            return null; // Trả về null nếu có lỗi
-        }
+    /**
+     * Forwards the request with an error message.
+     *
+     * @param request the HTTP request
+     * @param response the HTTP response
+     * @param errorMessage the error message to display
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    private void forwardWithError(HttpServletRequest request, HttpServletResponse response, String errorMessage)
+            throws ServletException, IOException {
+        request.setAttribute("errorMessage", errorMessage);
+        request.getRequestDispatcher("resetpassword.jsp").forward(request, response);
     }
 
     /**
@@ -122,6 +115,6 @@ public class ResetPassword extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
-
+    }
+    // </editor-fold>
 }

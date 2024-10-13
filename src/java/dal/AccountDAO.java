@@ -207,6 +207,7 @@ public class AccountDAO extends DBContext {
                 account.setUsername(retrievedUsername);
                 account.setPassword(retrievedPassword);
                 account.setEmail(email);
+                account.setRole(rs.getString("Role"));
                 return account;
             }
         } catch (SQLException e) {
@@ -291,7 +292,7 @@ public class AccountDAO extends DBContext {
      * @return
      */
     public boolean addAccount(String email, String username, String password) {
-        String sql = "INSERT INTO ACCOUNT (Email, Username, Password, Role) VALUES (?, ?, ?, 'Quản lý')";
+        String sql = "INSERT INTO ACCOUNT (Email, Username, Password, Role) VALUES (?, ?, ?, 'NULL')";
 
         try (PreparedStatement st = connection.prepareStatement(sql)){
             
@@ -347,11 +348,8 @@ public class AccountDAO extends DBContext {
 
     public static void main(String[] args) {
         AccountDAO dao = new AccountDAO();
-        dao.getAllAccounts().stream().forEach(item -> {
-            System.out.println(item);
-        });
-        Account a=dao.getAccount("trungtm", "123");
-        System.out.println(a);
+        
+        System.out.println(dao.getAccount("minhanh", "123"));
     }
 
 }

@@ -140,8 +140,8 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <!-- Image Carousel -->
-                                <div id="roomImageCarousel" class="carousel slide" data-ride="carousel">
-                                    <div class="carousel-inner">
+                                <div id="roomImageCarousel" class="carousel slide " data-ride="carousel">
+                                    <div class="carousel-inner img-detailRoom">
                                         <c:forEach items="${room.images}" var="image" varStatus="status">
                                             <div class="carousel-item ${status.index == 0 ? 'active' : ''}">
                                                 <img src="${image}" class="d-block w-100" alt="${room.tenPhongTro}">
@@ -165,7 +165,7 @@
                                 <p><strong>Tầng:</strong> ${room.tang}</p>
                                 <p><strong>Diện tích:</strong> ${room.dien_tich} m²</p>
                                 <p><strong>Giá tiền:</strong> <fmt:formatNumber value="${room.gia}" type="currency" currencyCode="VND"/></p>
-                                
+
                                 <p><strong>Trạng thái:</strong> 
                                     <span class="badge ${room.trang_thai == 'T' ? 'badge-success' : 'badge-danger'}">
                                         ${room.trang_thai == 'T' ? 'Trống' : 'Đang thuê'}
@@ -174,14 +174,178 @@
                                 <p><strong>Mô tả:</strong> ${room.mo_ta}</p>
                             </div>
                         </div>
-                    </div>
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <h4>Danh sách thiết bị trong phòng</h4>
+
+
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Tên thiết bị</th>
+                                            <th>Số lượng</th>
+                                            <th>Trạng thái</th>
+                                            <th>Mô tả</th>
+                                            <th>Hành động</th> <!-- New column -->
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach items="${thietBiList}" var="thietBi">
+                                            <tr>
+                                                <td>${thietBi.ID_ThietBiPhong}</td>
+                                                <td>${thietBi.tenThietBi}</td>
+                                                <td>${thietBi.so_luong}</td>
+                                                <td>
+                                                    <c:choose>
+                                                        <c:when test="${thietBi.trang_thai == 'T'}">
+                                                            <span class="badge badge-success">Tốt</span>
+                                                        </c:when>
+                                                        <c:when test="${thietBi.trang_thai == 'BT'}">
+                                                            <span class="badge badge-warning">Bình thường</span>
+                                                        </c:when>
+                                                        <c:when test="${thietBi.trang_thai == 'CSC'}">
+                                                            <span class="badge badge-danger">Cần sửa chữa</span>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span class="badge badge-secondary">${thietBi.trang_thai}</span>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </td>
+                                                <td>${thietBi.mo_ta}</td>
+                                                <td>
+                                                    <button class="btn btn-danger btn-sm" 
+                                                            onclick="confirmDeleteEquipment(${thietBi.ID_ThietBiPhong}, ${room.ID_Phong})">
+                                                        Xóa
+                                                    </button>
+                                                    <button class="btn btn-primary btn-sm" 
+                                                            onclick="openEditEquipmentModal(${thietBi.ID_ThietBiPhong}, '${thietBi.so_luong}', '${thietBi.trang_thai}', '${thietBi.mo_ta}', ${room.ID_Phong}, '${thietBi.tenThietBi}')">
+                                                        Sửa
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- Add this right after the existing equipment table in detailRoom.jsp -->
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#addEquipmentModal">
+                                    Thêm thiết bị mới
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Add Equipment Modal -->
+                        <div class="modal fade" id="addEquipmentModal" tabindex="-1" role="dialog" aria-labelledby="addEquipmentModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="addEquipmentModalLabel">Thêm thiết bị vào phòng</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form action="addThietBiToRoom" method="POST">
+                                        <div class="modal-body">
+                                            <input type="hidden" name="idPhong" value="${room.ID_Phong}">
+
+                                            <div class="form-group">
+                                                <label for="idThietBi">Chọn thiết bị:</label>
+                                                <select class="form-control" id="idThietBi" name="idThietBi" required>
+                                                    <c:forEach items="${allThietBi}" var="tb">
+                                                        <option value="${tb.ID_ThietBi}">${tb.tenThietBi}</option>
+                                                    </c:forEach>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="soLuong">Số lượng:</label>
+                                                <input type="number" class="form-control" id="soLuong" name="soLuong" required>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="trangThai">Trạng thái:</label>
+                                                <select class="form-control" id="trangThai" name="trangThai" required>
+                                                    <option value="T" class="text-success">Tốt</option>
+                                                    <option value="BT" class="text-warning">Bình thường</option>
+                                                    <option value="CSC" class="text-danger">Cần sửa chữa</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="moTa">Mô tả:</label>
+                                                <textarea class="form-control" id="moTa" name="moTa" rows="3"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                            <button type="submit" class="btn btn-primary">Thêm thiết bị</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Thêm Modal để cập nhật thiết bị -->
+                        <div class="modal fade" id="editEquipmentModal" tabindex="-1" role="dialog" aria-labelledby="editEquipmentModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editEquipmentModalLabel">Cập nhật thiết bị trong phòng</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form action="updateThietBiInRoom" method="POST">
+                                        <div class="modal-body">
+                                            <input type="hidden" id="editIdThietBiPhong" name="idThietBiPhong">
+                                            <input type="hidden" id="editIdPhong" name="idPhong">
+
+                                            <div class="form-group">
+                                                <label for="editTenThietBi">Tên thiết bị:</label>
+                                                <input type="text" class="form-control" id="editTenThietBi" readonly>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="editSoLuong">Số lượng:</label>
+                                                <input type="number" class="form-control" id="editSoLuong" name="soLuong" required>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="editTrangThai">Trạng thái:</label>
+                                                <select class="form-control" id="editTrangThai" name="trangThai" required>
+                                                    <option value="T" class="text-success">Tốt</option>
+                                                    <option value="BT" class="text-warning">Bình thường</option>
+                                                    <option value="CSC" class="text-danger">Cần sửa chữa</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="editMoTa">Mô tả:</label>
+                                                <textarea class="form-control" id="editMoTa" name="moTa" rows="3"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div> 
                     <div class="card-footer">
-                        
+
                         <a href="room" class="btn btn-secondary">Quay lại danh sách phòng</a>
                     </div>
                 </div>
             </div>
-                 
+
         </section>
 
         <script>
@@ -282,7 +446,7 @@
                 // Mở modal
                 $('#editRoomModal').modal('show'); // Sử dụng jQuery để mở modal
             }
-           function previewImageOnEditModal(input) {
+            function previewImageOnEditModal(input) {
                 var previewContainer = document.getElementById('modalImageContainer');
                 previewContainer.innerHTML = ''; // Xóa nội dung cũ khi chọn ảnh mới
 
@@ -300,6 +464,22 @@
                         reader.readAsDataURL(file);
                     });
                 }
+            }
+            function confirmDeleteEquipment(idThietBiPhong, idPhong) {
+                if (confirm('Bạn có chắc chắn muốn xóa thiết bị này khỏi phòng không?')) {
+                    window.location.href = 'deleteThietBiFromRoom?idThietBiPhong=' + idThietBiPhong + '&idPhong=' + idPhong;
+                }
+            }
+
+            function openEditEquipmentModal(idThietBiPhong, soLuong, trangThai, moTa, idPhong, tenThietBi) {
+                document.getElementById('editIdThietBiPhong').value = idThietBiPhong;
+                document.getElementById('editIdPhong').value = idPhong;
+                document.getElementById('editTenThietBi').value = tenThietBi;
+                document.getElementById('editSoLuong').value = soLuong;
+                document.getElementById('editTrangThai').value = trangThai;
+                document.getElementById('editMoTa').value = moTa;
+
+                $('#editEquipmentModal').modal('show');
             }
         </script>
 

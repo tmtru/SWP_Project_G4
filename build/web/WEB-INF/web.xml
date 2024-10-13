@@ -66,6 +66,7 @@
         <servlet-class>controller.loadHoaDonNhaTro</servlet-class>
     </servlet>
     <servlet>
+<<<<<<< HEAD
         <servlet-name>actionHoaDon</servlet-name>
         <servlet-class>controller.actionHoaDon</servlet-class>
     </servlet>
@@ -88,6 +89,34 @@
     <servlet>
         <servlet-name>actionTransaction</servlet-name>
         <servlet-class>controller.actionTransaction</servlet-class>
+=======
+        <servlet-name>loadThietBi</servlet-name>
+        <servlet-class>controller.loadThietBi</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>addThietBi</servlet-name>
+        <servlet-class>controller.addThietBi</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>editThietBi</servlet-name>
+        <servlet-class>controller.editThietBi</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>importRoomExcel</servlet-name>
+        <servlet-class>controller.importRoomExcel</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>addThietBiToRoom</servlet-name>
+        <servlet-class>controller.addThietBiToRoom</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>deleteThietBiFromRoom</servlet-name>
+        <servlet-class>controller.deleteThietBiFromRoom</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>updateThietBiInRoom</servlet-name>
+        <servlet-class>controller.updateThietBiInRoom</servlet-class>
+>>>>>>> 09e4566d40c312c5675024a05797dca006eace81
     </servlet>
     <servlet-mapping>
         <servlet-name>homeRooms</servlet-name>
@@ -236,6 +265,7 @@
         <url-pattern>/hoadon</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+<<<<<<< HEAD
         <servlet-name>actionHoaDon</servlet-name>
         <url-pattern>/actionhoadon</url-pattern>
     </servlet-mapping>
@@ -258,5 +288,33 @@
     <servlet-mapping>
         <servlet-name>actionTransaction</servlet-name>
         <url-pattern>/actionTransaction</url-pattern>
+=======
+        <servlet-name>loadThietBi</servlet-name>
+        <url-pattern>/loadThietBi</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>addThietBi</servlet-name>
+        <url-pattern>/addThietBi</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>editThietBi</servlet-name>
+        <url-pattern>/editThietBi</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>importRoomExcel</servlet-name>
+        <url-pattern>/importRoomExcel</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>addThietBiToRoom</servlet-name>
+        <url-pattern>/addThietBiToRoom</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>deleteThietBiFromRoom</servlet-name>
+        <url-pattern>/deleteThietBiFromRoom</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>updateThietBiInRoom</servlet-name>
+        <url-pattern>/updateThietBiInRoom</url-pattern>
+>>>>>>> 09e4566d40c312c5675024a05797dca006eace81
     </servlet-mapping>
 </web-app>

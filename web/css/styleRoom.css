@@ -136,6 +136,7 @@ header .image-text .profession{
     border-radius: 50px;
 }
 
+
 .sidebar header .toggle{
     position: absolute;
     top: 50%;
@@ -274,6 +275,7 @@ body.dark .sidebar li a.active .text{
 .menu-bar .mode .sun-moon{
     height: 50px;
     width: 60px;
+    
 }
 
 .mode .sun-moon i{
@@ -606,3 +608,57 @@ input:checked + .slider:before {
 .edit {
     background-color: #5a67d8;
 }
+.warpper {
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+
+}
+.img-detailRoom{
+   aspect-ratio:16/9;
+}
+.tab.active  {
+    background: #fff;
+    color: #000;
+    border-top: 3px solid #6E00FF;
+    border-left: 1px solid #cccccc;
+    border-right: 1px solid #cccccc;
+}
+
+.tab.active a {
+    color: black;
+}
+.warpper a  {
+    display: flex;
+    align-items: flex-end;
+}
+.tab a{
+    color: white;
+    text-decoration: none;
+}
+.warpper a:hover {
+    background-color: transparent; /* Loại bỏ màu nền khi hover */
+    text-decoration: none; /* Loại bỏ gạch chân khi hover */
+}
+ select option[value="T"] {
+        background-color: #28a745;
+        color: white;
+    }
+    select option[value="BT"] {
+        background-color: #ffc107;
+        color: black;
+    }
+    select option[value="CSC"] {
+        background-color: #dc3545;
+        color: white;
+    }
+    .badge-success {
+        background-color: #28a745;
+    }
+    .badge-warning {
+        background-color: #ffc107;
+        color: black; /* Để chữ dễ đọc trên nền vàng */
+    }
+    .badge-danger {
+        background-color: #dc3545;
+    }

@@ -95,91 +95,96 @@
                                 </li>
                             </ul>
                         </div>
-                        
-                             <c:set var="acc" value="${sessionScope.account}"/>
 
-                            <div class="card-body tab-content">
-                                <div class="tab-pane active" id="profile">
-                                    <h4 style="color: #6E00FF">Thông tin tài khoản</h4>
-                                    <hr>
-                                    <form>
-                                        <div class="form-group">
-                                            <label for="fullName">Tên tài khoản</label>
-                                            <input type="text" class="form-control" id="fullName" aria-describedby="fullNameHelp" placeholder="" value="${acc.username}">
+                        <c:set var="acc" value="${sessionScope.account}"/>
 
-                                        </div>
+                        <div class="card-body tab-content">
+                            <div class="tab-pane active" id="profile">
+                                <h4 style="color: #6E00FF">Thông tin tài khoản</h4>
+                                <hr>
+                                <form>
+                                    <div class="form-group">
+                                        <label for="fullName">ID</label>
+                                        <input type="text" class="form-control" id="id" aria-describedby="idHelp" placeholder="" value="${acc.ID_Account}">
 
-                                        <div class="form-group">
-                                            <label for="email">Email</label>
-                                            <input type="text" class="form-control" id="email" placeholder="" value="${acc.email}">
-                                        </div>
-<!--                                        <div class="form-group">
-                                            <label for="location">Vai trò</label>
-                                            <input type="text" class="form-control" id="location" placeholder="" value="">
-                                        </div>-->
-                                        <!--                                    <div class="form-group small text-muted">
-                                                                                All of the fields on this page are optional and can be deleted at any time, and by filling them out, you're giving us consent to share this data wherever your user profile appears.
-                                                                            </div>
-                                                                            <button type="button" class="btn btn-primary">Update Profile</button>
-                                                                            <button type="reset" class="btn btn-light">Reset Changes</button>-->
-                                    </form>
-                                </div>
-                                <div class="tab-pane" id="account">
-                                    <h6>ACCOUNT SETTINGS</h6>
-                                    <hr>
-                                    <form>
-                                        <div class="form-group">
-                                            <label for="username">Username</label>
-                                            <input type="text" class="form-control" id="username" aria-describedby="usernameHelp" placeholder="Enter your username" value="kennethvaldez">
-                                            <small id="usernameHelp" class="form-text text-muted">After changing your username, your old username becomes available for anyone else to claim.</small>
-                                        </div>
-                                        <hr>
-                                        <div class="form-group">
-                                            <label class="d-block text-danger">Delete Account</label>
-                                            <p class="text-muted font-size-sm">Once you delete your account, there is no going back. Please be certain.</p>
-                                        </div>
-                                        <button class="btn btn-danger" type="button">Delete Account</button>
-                                    </form>
-                                </div>
-                                <div class="tab-pane" id="security">
-                                    <h6>SECURITY SETTINGS</h6>
-                                    <hr>
-                                    <form>
-                                        <div class="form-group">
-                                            <label class="d-block">Change Password</label>
-                                            <input type="text" class="form-control" placeholder="Enter your old password">
-                                            <input type="text" class="form-control mt-1" placeholder="New password">
-                                            <input type="text" class="form-control mt-1" placeholder="Confirm new password">
-                                        </div>
-                                    </form>
-                                    <hr>
-                                    <form>
-                                        <div class="form-group">
-                                            <label class="d-block">Two Factor Authentication</label>
-                                            <button class="btn btn-info" type="button">Enable two-factor authentication</button>
-                                            <p class="small text-muted mt-2">Two-factor authentication adds an additional layer of security to your account by requiring more than just a password to log in.</p>
-                                        </div>
-                                    </form>
-                                    <hr>
-                                    <form>
-                                        <div class="form-group mb-0">
-                                            <label class="d-block">Sessions</label>
-                                            <p class="font-size-sm text-secondary">This is a list of devices that have logged into your account. Revoke any sessions that you do not recognize.</p>
-                                            <ul class="list-group list-group-sm">
-                                                <li class="list-group-item has-icon">
-                                                    <div>
-                                                        <h6 class="mb-0">San Francisco City 190.24.335.55</h6>
-                                                        <small class="text-muted">Your current session seen in United States</small>
-                                                    </div>
-                                                    <button class="btn btn-light btn-sm ml-auto" type="button">More info</button>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </form>
-                                </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="fullName">Tên tài khoản</label>
+                                        <input type="text" class="form-control" id="fullName" aria-describedby="fullNameHelp" placeholder="" value="${acc.username}">
 
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="email">Email</label>
+                                        <input type="text" class="form-control" id="email" placeholder="" value="${acc.email}">
+                                    </div>
+                                    <!--                                        <div class="form-group">
+                                                                                <label for="location">Vai trò</label>
+                                                                                <input type="text" class="form-control" id="location" placeholder="" value="">
+                                                                            </div>-->
+                                    <!--                                    <div class="form-group small text-muted">
+                                                                            All of the fields on this page are optional and can be deleted at any time, and by filling them out, you're giving us consent to share this data wherever your user profile appears.
+                                                                        </div>
+                                                                        <button type="button" class="btn btn-primary">Update Profile</button>
+                                                                        <button type="reset" class="btn btn-light">Reset Changes</button>-->
+                                </form>
                             </div>
-                 
+                            <div class="tab-pane" id="account">
+                                <h6>ACCOUNT SETTINGS</h6>
+                                <hr>
+                                <form>
+                                    <div class="form-group">
+                                        <label for="username">Username</label>
+                                        <input type="text" class="form-control" id="username" aria-describedby="usernameHelp" placeholder="Enter your username" value="kennethvaldez">
+                                        <small id="usernameHelp" class="form-text text-muted">After changing your username, your old username becomes available for anyone else to claim.</small>
+                                    </div>
+                                    <hr>
+                                    <div class="form-group">
+                                        <label class="d-block text-danger">Delete Account</label>
+                                        <p class="text-muted font-size-sm">Once you delete your account, there is no going back. Please be certain.</p>
+                                    </div>
+                                    <button class="btn btn-danger" type="button">Delete Account</button>
+                                </form>
+                            </div>
+                            <div class="tab-pane" id="security">
+                                <h6>SECURITY SETTINGS</h6>
+                                <hr>
+                                <form>
+                                    <div class="form-group">
+                                        <label class="d-block">Change Password</label>
+                                        <input type="text" class="form-control" placeholder="Enter your old password">
+                                        <input type="text" class="form-control mt-1" placeholder="New password">
+                                        <input type="text" class="form-control mt-1" placeholder="Confirm new password">
+                                    </div>
+                                </form>
+                                <hr>
+                                <form>
+                                    <div class="form-group">
+                                        <label class="d-block">Two Factor Authentication</label>
+                                        <button class="btn btn-info" type="button">Enable two-factor authentication</button>
+                                        <p class="small text-muted mt-2">Two-factor authentication adds an additional layer of security to your account by requiring more than just a password to log in.</p>
+                                    </div>
+                                </form>
+                                <hr>
+                                <form>
+                                    <div class="form-group mb-0">
+                                        <label class="d-block">Sessions</label>
+                                        <p class="font-size-sm text-secondary">This is a list of devices that have logged into your account. Revoke any sessions that you do not recognize.</p>
+                                        <ul class="list-group list-group-sm">
+                                            <li class="list-group-item has-icon">
+                                                <div>
+                                                    <h6 class="mb-0">San Francisco City 190.24.335.55</h6>
+                                                    <small class="text-muted">Your current session seen in United States</small>
+                                                </div>
+                                                <button class="btn btn-light btn-sm ml-auto" type="button">More info</button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -230,6 +235,6 @@
 
         </div>
         <!-- Footer End -->
-        
+
     </body>
 </html>
