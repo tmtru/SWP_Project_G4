@@ -29,8 +29,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.io.File;
 import java.io.InputStream;
+import java.time.LocalDate;
+import java.sql.Date;
 import model.AnhPhongTro;
-
 
 public class PhongDAO extends DBContext {
 
@@ -166,7 +167,7 @@ public class PhongDAO extends DBContext {
         return rooms;
     }
 
-     public List<Phong> getRoomsByNhaTroAndTang(int idNhaTro, int tang) {
+    public List<Phong> getRoomsByNhaTroAndTang(int idNhaTro, int tang) {
         List<Phong> rooms = new ArrayList<>();
         String sql = "SELECT p.ID_Phong, n.TenNhaTro, p.TenPhongTro, p.ID_LoaiPhong, p.Tang, p.Dien_Tich, "
                 + "l.TenLoaiPhong, p.Gia, l.Mo_ta, p.Trang_thai, p.ID_NhaTro "
@@ -260,11 +261,8 @@ public class PhongDAO extends DBContext {
     }
 
     public static void main(String[] args) {
-        PhongDAO dao = new PhongDAO();
-        List<Phong> list = dao.getAllRooms();
-        for (Phong r : list) {
-            System.out.println(r);
-        }
+
+        
     }
 //check xem room co trang thai dang thue-> false
 
@@ -519,8 +517,7 @@ public class PhongDAO extends DBContext {
 
     public int getTotalRooms() {
         String sql = "SELECT COUNT(*) FROM phong_tro";
-        try (PreparedStatement st = connection.prepareStatement(sql);
-             ResultSet rs = st.executeQuery()) {
+        try (PreparedStatement st = connection.prepareStatement(sql); ResultSet rs = st.executeQuery()) {
             if (rs.next()) {
                 return rs.getInt(1);
             }
@@ -532,22 +529,47 @@ public class PhongDAO extends DBContext {
 
 //get tat ca trang thai dang co
     public List<String> getAvailableStatuses() {
-    List<String> statusList = new ArrayList<>();
-    String sql = "SELECT DISTINCT Trang_thai FROM phong_tro ORDER BY Trang_thai";
+        List<String> statusList = new ArrayList<>();
+        String sql = "SELECT DISTINCT Trang_thai FROM phong_tro ORDER BY Trang_thai";
 
-    try (PreparedStatement st = connection.prepareStatement(sql);
-         ResultSet rs = st.executeQuery()) {
+        try (PreparedStatement st = connection.prepareStatement(sql); ResultSet rs = st.executeQuery()) {
 
-        while (rs.next()) {
-            String status = rs.getString("Trang_thai");
-            if (status != null && !status.trim().isEmpty()) {
-                statusList.add(status);
+            while (rs.next()) {
+                String status = rs.getString("Trang_thai");
+                if (status != null && !status.trim().isEmpty()) {
+                    statusList.add(status);
+                }
             }
+        } catch (SQLException e) {
+            System.out.println("Error in PhongDAO.getAvailableStatuses: " + e.getMessage());
         }
-    } catch (SQLException e) {
-        System.out.println("Error in PhongDAO.getAvailableStatuses: " + e.getMessage());
+
+        return statusList;
     }
 
-    return statusList;
-}
+    public boolean isRentedRoom(int idRoom) {
+        LocalDate today = LocalDate.now(); // Lấy ngày hiện tại
+
+        String sql = "SELECT 1 " // Chỉ cần kiểm tra xem có kết quả hay không
+                + "FROM phong_tro p "
+                + "JOIN nha_tro n ON p.ID_NhaTro = n.ID_NhaTro "
+                + "JOIN loai_phong l ON p.ID_LoaiPhong = l.ID_LoaiPhong "
+                + "JOIN hop_dong h ON p.ID_Phong = h.ID_PhongTro "
+                + "WHERE h.Ngay_gia_tri <= ? AND h.Ngay_het_han >= ? AND p.ID_Phong = ?";
+
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setDate(1, Date.valueOf(today)); // Ngày hiện tại cho Ngay_gia_tri
+            st.setDate(2, Date.valueOf(today)); // Ngày hiện tại cho Ngay_het_han
+            st.setInt(3, idRoom); // ID của phòng
+
+            try (ResultSet rs = st.executeQuery()) {
+                // Nếu có kết quả trả về, nghĩa là phòng đang được thuê
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in PhongDAO.isRentedRoom: " + e.getMessage());
+        }
+
+        return false; // Mặc định trả về false nếu có lỗi hoặc không có kết quả
+    }
 }

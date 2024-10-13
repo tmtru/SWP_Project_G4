@@ -65,6 +65,30 @@
         <servlet-name>loadHoaDonNhaTro</servlet-name>
         <servlet-class>controller.loadHoaDonNhaTro</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>actionHoaDon</servlet-name>
+        <servlet-class>controller.actionHoaDon</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LoadHoaDonByDate</servlet-name>
+        <servlet-class>controller.LoadHoaDonByDate</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>loadHoaDonByRoom</servlet-name>
+        <servlet-class>controller.loadHoaDonByRoom</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>loadHoaDonForm</servlet-name>
+        <servlet-class>controller.loadHoaDonForm</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>loadTransaction</servlet-name>
+        <servlet-class>controller.loadTransaction</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>actionTransaction</servlet-name>
+        <servlet-class>controller.actionTransaction</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>homeRooms</servlet-name>
         <url-pattern>/homer</url-pattern>
@@ -210,5 +234,29 @@
     <servlet-mapping>
         <servlet-name>loadHoaDonNhaTro</servlet-name>
         <url-pattern>/hoadon</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>actionHoaDon</servlet-name>
+        <url-pattern>/actionhoadon</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoadHoaDonByDate</servlet-name>
+        <url-pattern>/hoadontheongay</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>loadHoaDonByRoom</servlet-name>
+        <url-pattern>/hoadonroom</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>loadHoaDonForm</servlet-name>
+        <url-pattern>/loadHoaDonForm</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>loadTransaction</servlet-name>
+        <url-pattern>/loadTransaction</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>actionTransaction</servlet-name>
+        <url-pattern>/actionTransaction</url-pattern>
     </servlet-mapping>
 </web-app>

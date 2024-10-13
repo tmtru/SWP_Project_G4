@@ -17,25 +17,25 @@ public class HoaDon {
     private Date Ngay, NgayThanhToan;
     private int Trang_thai;
     private int Tong_gia_tien;
-    private String HinhThucChuyenKhoan, MaGiaoDich, NguoiTao;
-    private int TienDaThanhToan;
+    private String NguoiTao;
     private List<DichVu> DichVus;
+    private boolean isActive;
+    private String MoTa;
 
     public HoaDon() {
+        
     }
 
-    public HoaDon(int ID_HoaDon, int ID_HopDong, Date Ngay, Date NgayThanhToan, int Trang_thai, int Tong_gia_tien, String HinhThucChuyenKhoan, String MaGiaoDich, String NguoiTao, int TienDaThanhToan, List<DichVu> DichVus) {
+    public HoaDon(int ID_HoaDon, int ID_HopDong, Date Ngay, Date NgayThanhToan, int Trang_thai, int Tong_gia_tien, String NguoiTao, List<DichVu> DichVus, boolean isActive) {
         this.ID_HoaDon = ID_HoaDon;
         this.ID_HopDong = ID_HopDong;
         this.Ngay = Ngay;
         this.NgayThanhToan = NgayThanhToan;
         this.Trang_thai = Trang_thai;
         this.Tong_gia_tien = Tong_gia_tien;
-        this.HinhThucChuyenKhoan = HinhThucChuyenKhoan;
-        this.MaGiaoDich = MaGiaoDich;
         this.NguoiTao = NguoiTao;
-        this.TienDaThanhToan = TienDaThanhToan;
         this.DichVus = DichVus;
+        this.isActive = isActive;
     }
 
     public int getID_HoaDon() {
@@ -86,36 +86,12 @@ public class HoaDon {
         this.Tong_gia_tien = Tong_gia_tien;
     }
 
-    public String getHinhThucChuyenKhoan() {
-        return HinhThucChuyenKhoan;
-    }
-
-    public void setHinhThucChuyenKhoan(String HinhThucChuyenKhoan) {
-        this.HinhThucChuyenKhoan = HinhThucChuyenKhoan;
-    }
-
-    public String getMaGiaoDich() {
-        return MaGiaoDich;
-    }
-
-    public void setMaGiaoDich(String MaGiaoDich) {
-        this.MaGiaoDich = MaGiaoDich;
-    }
-
     public String getNguoiTao() {
         return NguoiTao;
     }
 
     public void setNguoiTao(String NguoiTao) {
         this.NguoiTao = NguoiTao;
-    }
-
-    public int getTienDaThanhToan() {
-        return TienDaThanhToan;
-    }
-
-    public void setTienDaThanhToan(int TienDaThanhToan) {
-        this.TienDaThanhToan = TienDaThanhToan;
     }
 
     public List<DichVu> getDichVus() {
@@ -125,5 +101,25 @@ public class HoaDon {
     public void setDichVus(List<DichVu> DichVus) {
         this.DichVus = DichVus;
     }
+
+    public boolean isIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public String getMoTa() {
+        return MoTa;
+    }
+
+    public void setMoTa(String MoTa) {
+        this.MoTa = MoTa;
+    }
+    
+
+    
+    
     
 }

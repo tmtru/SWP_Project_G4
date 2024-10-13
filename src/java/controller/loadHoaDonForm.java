@@ -4,7 +4,7 @@
  */
 package controller;
 
-import dal.HoaDonDAO;
+import dal.DichVuDAO;
 import dal.PhongDAO;
 import dal.TransactionDAO;
 import java.io.IOException;
@@ -14,18 +14,17 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.time.LocalDate;
+import java.util.AbstractList;
+import java.util.ArrayList;
 import java.util.List;
-import model.HoaDon;
-import model.NhaTro;
+import model.DichVu;
 import model.Phong;
-import model.Transaction;
 
 /**
  *
  * @author Admin
  */
-public class loadHoaDonNhaTro extends HttpServlet {
+public class loadHoaDonForm extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,10 +43,10 @@ public class loadHoaDonNhaTro extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet loadHoaDonNhaTro</title>");
+            out.println("<title>Servlet loadHoaDonForm</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet loadHoaDonNhaTro at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet loadHoaDonForm at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -62,57 +61,64 @@ public class loadHoaDonNhaTro extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-   
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession();
-        PhongDAO pdao = new PhongDAO();
-       TransactionDAO trdao= new TransactionDAO();
+        String roomIdParam = request.getParameter("roomId");
+        PhongDAO pd = new PhongDAO();
+        List<Phong> pList = pd.getAllRooms();
+        List<Phong> rentedPList = new ArrayList<>();
 
-        List<NhaTro> houses = (List<NhaTro>) session.getAttribute("housesByRole");
-        int choseHouse = -1;
-        if (request.getParameter("id") != null) {
-            choseHouse = Integer.parseInt(request.getParameter("id"));
-        };
-         HoaDonDAO hddao = new HoaDonDAO();
-        List<HoaDon> listhd = null;
-        List<Phong> rentedRooms = null;
-        LocalDate today = LocalDate.now(); // Ngày hiện tại
-        LocalDate startDate = today.withDayOfMonth(1); // Ngày đầu tiên trong tháng hiện tại
-        LocalDate endDate = today.withDayOfMonth(today.lengthOfMonth()); // Ngày cuối cùng trong tháng hiện tại
-        List<Transaction> transactionHistory= null;
-        if (houses != null && !houses.isEmpty()) {
-            //neu chua duoc chon bat ki nha tro nào sẽ tự động lấy nahf trọ đầu tiên
-            if (choseHouse == -1) {
-                choseHouse = houses.get(0).getID_NhaTro();
-                session.setAttribute("currentHouse", choseHouse);
-
-            } else {
-                session.setAttribute("currentHouse", choseHouse);
-
+        for (Phong p : pList) { 
+            if (pd.isRentedRoom(p.getID_Phong())) { 
+                rentedPList.add(p); 
             }
-            System.out.println("Start Date: " + startDate);
-            System.out.println("End Date: " + endDate);
+        }
+        int roomId = -1;  // Giá trị mặc định nếu không chuyển đổi được
 
-            listhd = hddao.getHoaDonByDateRange(startDate, endDate, choseHouse);
-            //load danh sach phong voi thong tin ve hoa don
-            rentedRooms = pdao.getRoomsByNhaTro(choseHouse);
-            //load transaction mới nhất của nahf trọ
-            transactionHistory= trdao.getAllTransactionsByNhaTroId(choseHouse);
-
+        if (roomIdParam != null) {
+            try {
+                roomId = Integer.parseInt(roomIdParam); // Chuyển đổi chuỗi thành int
+            } catch (NumberFormatException e) {
+                // Xử lý lỗi nếu roomId không phải là số
+                request.setAttribute("errorMessage", "ID phòng không hợp lệ.");
+            }
         }
 
-        request.setAttribute("startDate", startDate);
-        request.setAttribute("endDate", endDate);
-        request.setAttribute("invoices", listhd);
+        if (roomId > -1) {
+            // Tạo đối tượng PhongDAO
+            PhongDAO pdao = new PhongDAO();
 
-        session.setAttribute("Rooms", rentedRooms);
-       session.setAttribute("transactions", transactionHistory);
-        request.getRequestDispatcher("hoaDonManagement.jsp").forward(request, response);
+            // Tìm kiếm thông tin phòng
+            Phong room = pdao.getDetailRoom(roomId); // Phương thức cần được định nghĩa trong PhongDAO
+
+            if (room != null) {
+                // Lấy giá của phòng
+                int amount = room.getGia(); // Phương thức để lấy giá phòng
+
+                // Lưu thông tin phòng và số tiền vào request
+                request.setAttribute("room", room);
+                request.setAttribute("amount", amount);
+            } else {
+                // Xử lý trường hợp không tìm thấy phòng
+                request.setAttribute("errorMessage", "Không tìm thấy thông tin phòng.");
+            }
+        } else {
+            // Xử lý trường hợp ID phòng không hợp lệ
+            request.setAttribute("errorMessage", "ID phòng không hợp lệ.");
+        }
+        //load all dich vu
+        DichVuDAO dvdao = new DichVuDAO();
+        List<DichVu> dvlist = dvdao.getAll();
+        request.setAttribute("dvList", dvlist);
+        request.setAttribute("rentedrooms", rentedPList);
+
+        //load all rooms of nha tro (session Rooms)
+        // Chuyển tiếp đến trang hiển thị hóa đơn
+        request.getRequestDispatcher("hoaDonForm.jsp").forward(request, response);
     }
 
     /**

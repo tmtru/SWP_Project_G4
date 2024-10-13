@@ -8,8 +8,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@ page import="java.util.List, java.util.Map" %>
-<%@ page import="java.util.HashMap" %>
+
 <%@page import="java.util.List, java.util.ArrayList,java.text.DecimalFormat, model.DichVu, model.Phong, dal.DichVuDAO, dal.PhongDAO, dal.HoaDonDAO, model.HoaDon, model.DichVu, model.Transaction, dal.TransactionDAO"%>
 <!DOCTYPE html>
 
@@ -187,111 +186,48 @@
             <section class="ftco-section">
 
                 <div class="row m-0">
-                    <div class="col-lg-7 mt-4 ml-2">
-                        <div class="row filter">
-                            <div class="col-xl-4 date-detail  part-filter">
-                                <h6 class="" style="color: #ffffff">Chọn ngày: </h6>
-                                <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
-                                    <i class="fa fa-calendar"></i>&nbsp;
-
-                                    <c:if test="${not empty startDate}">
-                                        <c:if test="${not empty endDate}">
-                                            <span>${startDate} - ${endDate}</span>
-                                        </c:if>
-                                        <c:if test="${empty endDate}">
-                                            <span>${startDate} - Select an end date</span>
-                                        </c:if>
-                                    </c:if>
-
-                                    <c:if test="${empty startDate}">
-                                        <span>Select a date range</span>
-                                    </c:if>
-
-                                    <i class="fa fa-caret-down"></i>
-                                </div>
-                            </div>
-                            <form id="dateRangeForm" action="hoadontheongay" method="get">
-                                <input type="hidden" name="startDate" id="startDate">
-                                <input type="hidden" name="endDate" id="endDate">
-                            </form>
-
-
-                        </div>
+                    <div class="my-4 ml-4 ">
+                        <h4 class="">Thông tin hóa đơn phòng ${currentRoomOfHoaDon.tenPhongTro}</h4>
+                        <a class="btn btn-success" href="loadHoaDonForm?roomId=${currentRoomOfHoaDon.ID_Phong}" >+ Thêm hóa đơn tiền phòng</a>
+                        
+                    </div>
+                    <div class="col-lg-10 mt-1 ml-2">
+                        <!--                        <div class="row filter">
+                        
+                        
+                        
+                                                </div>-->
                         <div class="card">
                             <div class="card-header pb-0 p-3">
                                 <h6 class="mb-0">Thông tin hóa đơn</h6>
-                                <c:if test="${not empty notification}">
-                                    <div class="alert alert-success" role="alert">
-                                        ${notification}
-                                    </div>
-                                </c:if>
-                                <a href="TransactionHistory.jsp" class="btn btn-primary mt-2">Lịch sử thanh toán</a>
-                            </div>
 
+                            </div>
                             <div class="card-body pt-4 p-3">
                                 <ul class="list-group">
-                                    <% HoaDonDAO hdd= new HoaDonDAO();
-                                    %>
-                                    <% 
-                   // Retrieve existing query parameters
-                   String queryString = request.getQueryString();
-                   if (queryString == null) {
-                       queryString = "";
-                   } else {
-                       // Remove any existing page parameter from the query string
-                       queryString = queryString.replaceAll("&?page=\\d*", "");
-                       if (!queryString.isEmpty() && !queryString.endsWith("&")) {
-                           queryString += "&";
-                       }
-                   }
-                   request.setAttribute("queryString",queryString );
-                                    %>
-
-
-                                    <c:set var="page" value="${param.page != null ? param.page : 0}" />
-                                    <c:set var="items" value="0" />
-                                    <c:set var="limitItems" value="10" />
-                                    <c:set var="startItem" value="${page * limitItems}" />
-                                    <c:set var="endItem" value="${startItem + limitItems}" />
-                                    <c:set var="numOfPages" value="${(invoices.size() + limitItems - 1) / limitItems}" />
-
-                                    <c:forEach var="hd" items="${invoices}" varStatus="status">
-                                        <c:if test="${status.index >= startItem && status.index < endItem}">
-                                            <li class="list-group-item list-hoadon d-flex p-4 mb-2 bg-gray-100 border-radius-lg"
+                                    <c:forEach var="hd" items="${invoices}">
+                                        <div class="mb-3">
+                                            <li class="list-group-item list-hoadon d-flex p-4 bg-gray-100 border-radius-lg"
                                                 style="border-left: 5px solid ${hd.trang_thai == 1 ? 'green' : 'red'}">
+
                                                 <div class="d-flex flex-column">
                                                     <% 
                                                         // Lấy ID hóa đơn từ đối tượng hd bằng cách sử dụng EL
                                                         int idHoadon = (Integer) ((HoaDon)  pageContext.getAttribute("hd")).getID_HoaDon();
-                
-                                                        // Gọi phương thức để lấy thông tin phòng
-                                                   
-                                                        Phong room = hdd.getRoomOfHoaDon(idHoadon);
-                
-                                                        // Kiểm tra null trước khi lưu trữ vào request
-                                                        if (room != null) {
-                                                            request.setAttribute("room", room);
-                                                        }
                                                         TransactionDAO tdao= new TransactionDAO();
                                                         float totalAmount=tdao.getTotalMoneyByIdHoaDon(idHoadon);
                                                         request.setAttribute("Paid", totalAmount);
+                                                        // Lấy danh sách giao dịch cho hóa đơn hiện tại
+                                                        List<Transaction> transactions = tdao.getTransactionsByIdHoaDon(idHoadon);
+                                                        request.setAttribute("transactions", transactions);
                                                     %>
                                                     <div class="d-flex header-invoice">
-                                                        <h6 class="mb-3 text-sm">Phòng: 
-                                                            <c:if test="${room != null}">
-                                                                ${room.tenPhongTro}
-                                                            </c:if>
-                                                            <c:if test="${room == null}">
-                                                                Không có thông tin phòng
-                                                            </c:if>
-                                                        </h6>
-                                                        <span class="badge ml-5
+                                                        <span class="badge
                                                               ${hd.trang_thai == 1 ? 'badge-success' : 'badge-danger'}" 
                                                               >
                                                             ${hd.trang_thai == 1 ? 'Đã thanh toán' : 'Chưa thanh toán'}
                                                         </span>
                                                     </div>
-                                                    <span class="mb-2 text-xs">Tổng tiền: 
+                                                    <span class="mb-2">Tổng tiền: 
                                                         <span class="text-dark ms-sm-2 font-weight-bold">
                                                             <fmt:formatNumber value="${hd.tong_gia_tien}" type="number" groupingUsed="true"/> VND
                                                         </span>
@@ -303,7 +239,9 @@
                                                             <fmt:formatNumber value="${Paid}" type="number" groupingUsed="true"/> VND
                                                         </span>
                                                     </span>
-                                                    <span class="text-xs">Mo tả: <span class="text-dark ms-sm-2 font-weight-bold">${hd.moTa}</span></span>
+                                                    <button class="icon-transaction border-0 border-radius-lg btn-info mt-2" type="button" data-toggle="collapse" data-target="#collapsehd${hd.ID_HoaDon}" aria-expanded="false" aria-controls="collapseOne">
+                                                        <i class="fa-solid fa-circle-arrow-down"></i> <span class="text-xs"> Danh sách chuyển tiền</span>
+                                                    </button>
 
 
                                                 </div>
@@ -340,8 +278,8 @@
                                                         <span class="mb-2 text-xs">Ngày tạo: <span class="text-dark font-weight-bold ms-sm-2">${hd.ngay}</span></span>
                                                     </div>
                                                     <div class="mt-2">
-                                                        <!--                                                    <a class="btn btn-link text-primary px-3 mb-0" href="javascript:;"><i class="fa-solid fa-circle-info"></i>Chi tiết</a>-->
-<a class="btn btn-link text-success px-3 mb-0" href="TransactionForm.jsp?id=${hd.ID_HoaDon}"><i class="fa-solid fa-plus"></i>Thêm giao dịch</a>
+                                                        <a class="btn btn-link text-success px-3 mb-0" href="TransactionForm.jsp?id=${hd.ID_HoaDon}"><i class="fa-solid fa-plus"></i>Thêm giao dịch</a>
+                                                        
                                                         <button type="button" class="btn btn-link text-danger text-gradient px-3 mb-0" data-toggle="modal" data-target="#myModalDelete${hd.ID_HoaDon}">
                                                             <i class="fa-solid fa-trash"></i>Delete
                                                         </button>
@@ -357,119 +295,74 @@
                                                                     <div class="modal-footer justify-content-center">
                                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
                                                                         <button type="button" class="btn btn-danger">
-                                                                            <a href="actionhoadon?action=dele&id=${hd.ID_HoaDon}&exit=home" class="edit-film" style="color: white !important;">Xóa hóa đơn</a>
+                                                                            <a href="actionhoadon?action=dele&id=${hd.ID_HoaDon}&exit=" class="edit-film" style="color: white !important;">Xóa hóa đơn</a>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <br/>
+
+                                            </li>
+                                            <div id="collapsehd${hd.ID_HoaDon}" class="collapse" >
+                                                <ul class="list-group transaction">
+                                                    <c:forEach var="tr" items="${transactions}">
+
+                                                        <li class="list-group-item d-flex justify-content-between ps-0 border-radius-lg">
+                                                            <div class="d-flex align-items-center">
+                                                                <div class="icon-transaction" >
+                                                                    <i class="fa-solid fa-circle-arrow-down"></i>
+                                                                </div>
+                                                                <div class="d-flex flex-column">
+                                                                    <div class="d-flex align-items-center text-success text-gradient text-sm font-weight-bold">
+                                                                        + <fmt:formatNumber value="${tr.amount}" type="number" groupingUsed="true"/> VND
+                                                                    </div>
+                                                                    <span class="text-xs">${tr.transaction}</span>
+                                                                    <span class="mb-2 text-xs">Phương thức thanh toán: ${tr.paymentMethod}</span>
+                                                                    <span class="mb-2 text-xs">Mã giao dịch: ${tr.maGiaoDich}</span>
+                                                                    <span class="mb-2 text-xs">Mô tả: ${tr.moTa}</span>
+                                                                </div>
+                                                                
+                                                            </div>
+                                                                <div class="ms-auto text-end">
+                                                            <button type="button" class="col-4 btn btn-link text-danger text-gradient px-3 mb-0" data-toggle="modal" data-target="#myModalDelete${tr.ID_Transaction}">
+                                                                <i class="fa-solid fa-trash"></i>Delete
+
+                                                            </button>
+                                                        </div>
+                                                        <div id="myModalDelete${tr.ID_Transaction}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                            <div class="modal-dialog modal-confirm">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header flex-column">
+                                                                        <div class="icon-box">
+                                                                            <i class="material-icons"><i class="fa-solid fa-circle-xmark"></i></i>
+                                                                        </div>
+                                                                        <h5 class="modal-title w-100">Bạn có chắc chắn bạn muốn xóa giao dịch ?<br/> <span style="color: #5932ea"></span></h5>
+                                                                    </div>
+                                                                    <div class="modal-footer justify-content-end">
+                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                                                                        <button type="button" class="btn btn-danger">
+                                                                            <a href="actionTransaction?action=dele&id=${tr.ID_Transaction}&exit=" class="edit-film" style="color: white !important;">Xóa giao dịch</a>
                                                                         </button>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
 
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </c:if>
+
+
+                                                        </li>
+
+                                                    </c:forEach>
+                                                </ul>
+                                            </div>
+                                        </div>
                                     </c:forEach>
 
 
                                 </ul>
-                                <div class="pagination-bar">
-                                    <nav aria-label="Page navigation example">
-                                        <ul class="pagination justify-content-center">
-                                            <c:if test="${page > 0}">
-                                                <li class="page-item">
-                                                    <a class="page-link" href="?${queryString}page=${page - 1}">Previous</a>
-                                                </li>
-                                            </c:if>
-                                            <c:forEach begin="0" end="${numOfPages - 1}" var="i">
-                                                <li class="page-item ${page == i ? 'active' : ''}">
-                                                    <a class="page-link" href="?${queryString}page=${i}">${i + 1}</a>
-                                                </li>
-                                            </c:forEach>
-                                            <c:if test="${page < numOfPages - 2}">
-                                                <li class="page-item">
-                                                    <a class="page-link" href="?${queryString}page=${page + 1}">Next</a>
-                                                </li>
-                                            </c:if>
-                                        </ul>
-                                    </nav>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 mt-4">
-                        <div class="room-list">
-                            <div class="">
-                                <div class="card h-100">
-                                    <div class="card-header pb-0 p-3">
-                                        <div class="row">
-                                            <div class="col-6 d-flex align-items-center">
-                                                <h6 class="mb-0">Thông tin hóa đơn từng phòng</h6>
-                                            </div>
-                                            <div class="col-6 text-end">
-                                                <button class="btn btn-outline-primary btn-sm mb-0">View All</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-body p-3 pb-0">
-                                        <ul class="list-group">
-                                            <% HoaDonDAO hdd1= new HoaDonDAO();
-                                            %>
-                                            <c:forEach var="rr" items="${sessionScope.Rooms}">
-                                                <% 
-                                                   // Lấy ID hóa đơn từ đối tượng rr bằng cách sử dụng EL
-                                                   int idRoom = (Integer) ((Phong)  pageContext.getAttribute("rr")).getID_Phong();
-                
-                                                   // Gọi phương thức để lấy thông tin phòng
-      
-                                                   List<Integer> listContractByRoom = hdd1.getHopDongOfRentedRoom(idRoom);
-                                                   int countPaid = 0;
-                                                   int countUnpaid = 0;
-
-                                                   // Duyệt qua từng hợp đồng để lấy hóa đơn
-                                                   for (Integer contractId : listContractByRoom) {
-                                                       List<HoaDon> listHDByContract = hdd1.getHoaDonByHopDong(contractId);
-
-                                                       // Đếm số hóa đơn đã trả và chưa trả
-                                                       for (HoaDon hd : listHDByContract) {
-                                                           if (hd.getTrang_thai() == 1) { // Giả sử 1 là đã trả
-                                                               countPaid++;
-                                                           } else {
-                                                               countUnpaid++;
-                                                           }
-                                                       }
-                                                   }
-                                                   PhongDAO pd= new PhongDAO();
-                                                   boolean isRented = pd.isRentedRoom(idRoom);
-                                                   request.setAttribute("isRented", isRented);
-                                                   request.setAttribute("countPaid", countPaid);
-                                                   request.setAttribute("countUnpaid", countUnpaid);
-                
-
-                                                %>
-                                                <li class="list-group-item  d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                                                    <div class="d-flex flex-column">
-                                                        <h6 class="mb-1 text-dark font-weight-bold text-sm">Phòng ${rr.tenPhongTro}</h6>
-                                                        <span class="text-xs">Hóa đơn đã tạo: ${countPaid+countUnpaid}</span>
-                                                        <span class="text-xs" style="color: #009933">Đã thanh toán: ${countPaid} | <span class="text-xs" style="color: red">Chưa thanh toán: ${countUnpaid}</span></span> 
-
-
-                                                    </div>
-                                                    <div class="d-flex align-items-center text-sm">
-                                                        <a class="btn btn-link text-primary px-3 mb-0" href="hoadonroom?roomId=${rr.ID_Phong}"><i class="fa-solid fa-circle-info"></i>Chi tiết</a>
-                                                        <c:if test="${isRented==true}">
-                                                            <a class="btn btn-link text-success text-gradient px-3 mb-0" href="loadHoaDonForm?roomId=${rr.ID_Phong}"><i class="fa-solid fa-plus"></i>Thêm hóa đơn</a>
-                                                        </c:if>
-                                                        <c:if test="${isRented==false || isRented==null}">
-                                                            <span class="badge ml-4 mr-2 badge-danger">
-                                                                <i class="fa-solid fa-triangle-exclamation"></i> Phòng trống
-                                                            </span>
-                                                        </c:if>
-                                                    </div>
-                                                </li>
-                                            </c:forEach>
-                                        </ul>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -548,13 +441,28 @@
         </script>
         <script type="text/javascript">
             $(function () {
-                // Lấy giá trị từ JSP và khởi tạo moment
+                // Lấy giá trị từ JSP
                 var startDate = '<%= request.getAttribute("startDate") %>';
                 var endDate = '<%= request.getAttribute("endDate") %>';
 
-                // Sử dụng moment để khởi tạo các biến start và end
-                var start = moment(startDate);
-                var end = moment(endDate);
+                // Khởi tạo biến start và end với giá trị mặc định
+                var start = moment();
+                var end = moment();
+
+                // Kiểm tra và khởi tạo moment chỉ khi giá trị hợp lệ
+                if (startDate && startDate !== 'null' && startDate.trim() !== '') {
+                    start = moment(startDate, 'YYYY-MM-DD'); // Định dạng mà bạn đã sử dụng
+                } else {
+                    // Nếu không có startDate, đặt start về ngày hiện tại
+                    start = moment();
+                }
+
+                if (endDate && endDate !== 'null' && endDate.trim() !== '') {
+                    end = moment(endDate, 'YYYY-MM-DD'); // Định dạng mà bạn đã sử dụng
+                } else {
+                    // Nếu không có endDate, đặt end về ngày hiện tại
+                    end = moment();
+                }
 
                 function cb(start, end) {
                     $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
@@ -575,12 +483,16 @@
                     }
                 }, cb);
 
+                // Gọi hàm callback với giá trị khởi tạo
                 cb(start, end);
+
                 $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
                     $('#dateRangeForm').submit(); // Gửi form đến servlet
                 });
             });
         </script>
 
+
     </body>
 </html>
+

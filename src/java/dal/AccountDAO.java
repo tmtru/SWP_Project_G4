@@ -190,8 +190,8 @@ public class AccountDAO extends DBContext {
 
     public Account getAccount(String username, String password) {
         String sql = "SELECT * FROM ACCOUNT WHERE Username = ? AND Password = ?";
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
+        try (PreparedStatement st = connection.prepareStatement(sql)){
+            
             st.setString(1, username);
             st.setString(2, password);
             ResultSet rs = st.executeQuery();
@@ -217,8 +217,8 @@ public class AccountDAO extends DBContext {
     
     public boolean isExist(String username, String password) {
         String sql = "SELECT COUNT(*) FROM ACCOUNT WHERE Username = ? AND Password = ?";
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
+        try ( PreparedStatement st = connection.prepareStatement(sql);) {
+           
             st.setString(1, username);
             st.setString(2, password);
             ResultSet rs = st.executeQuery();
@@ -232,8 +232,8 @@ public class AccountDAO extends DBContext {
     }
     public boolean isGuess(String username, String password) {
         String sql = "SELECT COUNT(*) FROM ACCOUNT WHERE Username = ? AND Password = ? AND Role = 'Khach Thue'";
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
+        try (PreparedStatement st = connection.prepareStatement(sql);) {
+            
             st.setString(1, username);
             st.setString(2, password);
             ResultSet rs = st.executeQuery();
@@ -247,8 +247,8 @@ public class AccountDAO extends DBContext {
     }
     public boolean isOwner(String username, String password) {
         String sql = "SELECT COUNT(*) FROM CHU_TRO WHERE Username = ? AND Password = ? AND Role = 'Chu Tro'";
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
+        try ( PreparedStatement st = connection.prepareStatement(sql)){
+           
             st.setString(1, username);
             st.setString(2, password);
             ResultSet rs = st.executeQuery();
@@ -269,8 +269,8 @@ public class AccountDAO extends DBContext {
      */
     public boolean isManager(String username, String password) {
         String sql = "SELECT COUNT(*) FROM QUAN_LY WHERE Username = ? AND Password = ? AND Role = 'Quan Ly'";
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
+        try (PreparedStatement st = connection.prepareStatement(sql);){
+            
             st.setString(1, username);
             st.setString(2, password);
             ResultSet rs = st.executeQuery();
@@ -293,8 +293,8 @@ public class AccountDAO extends DBContext {
     public boolean addAccount(String email, String username, String password) {
         String sql = "INSERT INTO ACCOUNT (Email, Username, Password, Role) VALUES (?, ?, ?, 'Quản lý')";
 
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
+        try (PreparedStatement st = connection.prepareStatement(sql)){
+            
             st.setString(1, email);
             st.setString(2, username);
             st.setString(3, password);
@@ -314,8 +314,8 @@ public class AccountDAO extends DBContext {
      */
     public boolean isEmailExist(String email) {
         String sql = "SELECT * FROM ACCOUNT WHERE Email = ?";
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
+        try (PreparedStatement st = connection.prepareStatement(sql)){
+            
             st.setString(1, email);
             ResultSet rs = st.executeQuery();
             return rs.next();
@@ -333,8 +333,8 @@ public class AccountDAO extends DBContext {
      */
     public boolean updatePassword(String email, String newPassword) {
         String sql = "UPDATE ACCOUNT SET Password = ? WHERE Email = ?";
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
+        try (PreparedStatement st = connection.prepareStatement(sql)){
+            
             st.setString(1, newPassword);
             st.setString(2, email);
             int rowsAffected = st.executeUpdate();
