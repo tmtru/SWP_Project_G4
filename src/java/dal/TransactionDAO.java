@@ -161,7 +161,7 @@ public class TransactionDAO extends DBContext {
                 float requiredAmount = getRequiredAmountByIdHoaDon(transaction.getID_HoaDon());
 
                 // Kiểm tra nếu tổng tiền bằng với số tiền phải thanh toán
-                if (totalMoney == requiredAmount) {
+                if (totalMoney >= requiredAmount) {
                     try (PreparedStatement updatePs = connection.prepareStatement(updateBillQuery)) {
                         updatePs.setInt(1, 1); // Giả sử trạng thái 1 là "Đã thanh toán"
                         updatePs.setInt(2, transaction.getID_HoaDon());

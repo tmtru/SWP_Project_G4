@@ -19,6 +19,33 @@ import model.ChuTro;
  */
 public class ChuTroDAO extends DBContext {
 
+    public List<ChuTro> getAllChuTro() {
+        List<ChuTro> chuTroList = new ArrayList<>();
+        AccountDAO accountDAO = new AccountDAO();
+        String sql = "SELECT * FROM chu_tro";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql);) {
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                ChuTro chuTro = new ChuTro();
+                chuTro.setId(rs.getInt("ID_ChuTro"));
+                chuTro.setName(rs.getNString("TenChuTro"));
+                chuTro.setDob(rs.getDate("Ngay_sinh"));
+                chuTro.setPhone(rs.getNString("SDT"));
+                chuTro.setCccd(rs.getNString("CCCD"));
+                Account account = accountDAO.getAccountById2(rs.getInt("ID_Account"));
+                chuTro.setAccount(account);
+
+                chuTroList.add(chuTro);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return chuTroList;
+    }
+
     public ChuTro getChuTroById(int id) {
         ChuTro chuTro = null;
         AccountDAO accountDAO = new AccountDAO();
@@ -41,6 +68,7 @@ public class ChuTroDAO extends DBContext {
         }
         return chuTro;
     }
+
     public ChuTro getChuTroByAccountId(int id) {
         ChuTro chuTro = null;
         AccountDAO accountDAO = new AccountDAO();

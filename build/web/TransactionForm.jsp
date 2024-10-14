@@ -307,6 +307,7 @@
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
         <!-- JavaScript để định dạng số tiền và kiểm tra hợp lệ -->
+        <!-- JavaScript để định dạng số tiền và kiểm tra hợp lệ -->
         <script>
             document.getElementById('amount').addEventListener('input', function (e) {
                 var value = e.target.value;
