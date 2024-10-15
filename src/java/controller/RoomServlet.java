@@ -20,6 +20,7 @@ public class RoomServlet extends HttpServlet {
     static {
         STATUS_DESCRIPTIONS.put("D", "Đang thuê");
         STATUS_DESCRIPTIONS.put("T", "Trống");
+        STATUS_DESCRIPTIONS.put("DS","Đang sửa");
     }
 
     @Override

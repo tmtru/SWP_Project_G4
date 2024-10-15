@@ -9,24 +9,28 @@
             <file>file:/E:/SWP_Project_G4/web/TransactionHistory.jsp</file>
             <file>file:/E:/SWP_Project_G4/src/java/controller/profileServlet.java</file>
             <file>file:/E:/SWP_Project_G4/src/java/dal/DBContext.java</file>
-            <file>file:/E:/SWP_Project_G4/web/manager-action.jsp</file>
-            <file>file:/E:/SWP_Project_G4/src/java/dal/HopDongDAO.java</file>
-            <file>file:/E:/SWP_Project_G4/src/java/controller/ManagerActionHistoryController.java</file>
             <file>file:/E:/SWP_Project_G4/src/java/model/HopDong.java</file>
             <file>file:/E:/SWP_Project_G4/src/java/model/LoaiPhong.java</file>
             <file>file:/E:/SWP_Project_G4/web/TransactionForm.jsp</file>
-            <file>file:/E:/SWP_Project_G4/web/room.jsp</file>
             <file>file:/E:/SWP_Project_G4/web/hopDongDashboard.jsp</file>
-            <file>file:/E:/SWP_Project_G4/web/WEB-INF/web.xml</file>
+            <file>file:/E:/SWP_Project_G4/web/hoaDonForm.jsp</file>
             <file>file:/E:/SWP_Project_G4/web/quanly-account-nha-tro.jsp</file>
             <file>file:/E:/SWP_Project_G4/web/sidebarHoaDonManagement.jsp</file>
-            <file>file:/E:/SWP_Project_G4/src/java/dal/HoaDonDAO.java</file>
+            <file>file:/E:/SWP_Project_G4/src/java/controller/detailRoomServlet.java</file>
             <file>file:/E:/SWP_Project_G4/web/profile.jsp</file>
-            <file>file:/E:/SWP_Project_G4/src/java/controller/EmailService.java</file>
             <file>file:/E:/SWP_Project_G4/web/verification.jsp</file>
             <file>file:/E:/SWP_Project_G4/src/java/controller/QuanLyAccountNhaTroController.java</file>
-            <file>file:/E:/SWP_Project_G4/src/java/controller/HopDongServlet.java</file>
             <file>file:/E:/SWP_Project_G4/web/NhaTro.jsp</file>
+            <file>file:/E:/SWP_Project_G4/web/manager-action.jsp</file>
+            <file>file:/E:/SWP_Project_G4/src/java/dal/HopDongDAO.java</file>
+            <file>file:/E:/SWP_Project_G4/src/java/controller/ManagerActionHistoryController.java</file>
+            <file>file:/E:/SWP_Project_G4/web/room.jsp</file>
+            <file>file:/E:/SWP_Project_G4/src/java/dal/PhongDAO.java</file>
+            <file>file:/E:/SWP_Project_G4/web/WEB-INF/web.xml</file>
+            <file>file:/E:/SWP_Project_G4/web/hoaDonManagement.jsp</file>
+            <file>file:/E:/SWP_Project_G4/src/java/dal/HoaDonDAO.java</file>
+            <file>file:/E:/SWP_Project_G4/src/java/controller/EmailService.java</file>
+            <file>file:/E:/SWP_Project_G4/src/java/controller/deleteRoomServlet.java</file>
         </group>
     </open-files>
 </project-private>
