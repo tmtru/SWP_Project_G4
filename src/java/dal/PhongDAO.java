@@ -262,17 +262,17 @@ public class PhongDAO extends DBContext {
 
     public static void main(String[] args) {
 
-        
     }
 //check xem room co trang thai dang thue-> false
 
     public boolean isRoomDeletable(int roomId) throws SQLException {
         String sql = "SELECT trang_thai FROM phong_tro WHERE ID_Phong = ?";
-        try (PreparedStatement st1 = connection.prepareStatement(sql)) {
-            st1.setInt(1, roomId);
-            try (ResultSet rs = st1.executeQuery()) {
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, roomId);
+            try (ResultSet rs = st.executeQuery()) {
                 if (rs.next()) {
                     String status = rs.getString("trang_thai");
+                    // Allow deletion if the room is "Trống" (Available)
                     return "T".equals(status);
                 }
             }
@@ -280,31 +280,46 @@ public class PhongDAO extends DBContext {
         return false; // Room not found or error occurred
     }
 
-    //delete room by id
     public boolean deleteRoomById(int roomId) throws SQLException {
         if (!isRoomDeletable(roomId)) {
             return false; // Room is not deletable
         }
 
-        // delete relate in the ANH_PHONG_TRO table
-        String deleteImagesSql = "DELETE FROM anh_phong_tro WHERE ID_Phong = ?";
-        try (PreparedStatement st1 = connection.prepareStatement(deleteImagesSql)) {
-            st1.setInt(1, roomId);
-            st1.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("Error in PhongDAO.deleteRoomById (delete images): " + e.getMessage());
-            return false; // or handle as needed
-        }
+        connection.setAutoCommit(false);
+        try {
+            // Delete related records in the THIET_BI_PHONG table
+            String deleteThietBiPhongSql = "DELETE FROM thiet_bi_phong WHERE ID_Phong = ?";
+            try (PreparedStatement st = connection.prepareStatement(deleteThietBiPhongSql)) {
+                st.setInt(1, roomId);
+                st.executeUpdate();
+            }
 
-        // delete the room
-        String deleteRoomSql = "DELETE FROM phong_tro WHERE ID_Phong = ?";
-        try (PreparedStatement st2 = connection.prepareStatement(deleteRoomSql)) {
-            st2.setInt(1, roomId);
-            int rowsAffected = st2.executeUpdate();
-            return rowsAffected > 0;
+            // Delete related records in the ANH_PHONG_TRO table
+            String deleteImagesSql = "DELETE FROM anh_phong_tro WHERE ID_Phong = ?";
+            try (PreparedStatement st = connection.prepareStatement(deleteImagesSql)) {
+                st.setInt(1, roomId);
+                st.executeUpdate();
+            }
+
+            // Delete the room
+            String deleteRoomSql = "DELETE FROM phong_tro WHERE ID_Phong = ?";
+            try (PreparedStatement st = connection.prepareStatement(deleteRoomSql)) {
+                st.setInt(1, roomId);
+                int rowsAffected = st.executeUpdate();
+                if (rowsAffected > 0) {
+                    connection.commit();
+                    return true;
+                } else {
+                    connection.rollback();
+                    return false;
+                }
+            }
         } catch (SQLException e) {
-            System.out.println("Error in PhongDAO.deleteRoomById (delete room): " + e.getMessage());
+            connection.rollback();
+            System.out.println("Error in PhongDAO.deleteRoomById: " + e.getMessage());
             return false;
+        } finally {
+            connection.setAutoCommit(true);
         }
     }
 
@@ -347,46 +362,46 @@ public class PhongDAO extends DBContext {
 
     //insert room
     public int insertRoom(Phong room) {
-    String sql = "INSERT INTO phong_tro (ID_NhaTro, ID_LoaiPhong, TenPhongTro, Tang, Dien_Tich, Gia, Trang_thai) "
-            + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO phong_tro (ID_NhaTro, ID_LoaiPhong, TenPhongTro, Tang, Dien_Tich, Gia, Trang_thai) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-    try {
-        try (PreparedStatement st = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            st.setInt(1, room.getID_NhaTro());
-            st.setInt(2, room.getID_LoaiPhong());
-            st.setString(3, room.getTenPhongTro());
-            st.setInt(4, room.getTang());
-            st.setFloat(5, room.getDien_tich());
-            st.setInt(6, room.getGia());
-            st.setString(7, room.getTrang_thai());
+        try {
+            try (PreparedStatement st = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                st.setInt(1, room.getID_NhaTro());
+                st.setInt(2, room.getID_LoaiPhong());
+                st.setString(3, room.getTenPhongTro());
+                st.setInt(4, room.getTang());
+                st.setFloat(5, room.getDien_tich());
+                st.setInt(6, room.getGia());
+                st.setString(7, room.getTrang_thai());
 
-            int affectedRows = st.executeUpdate();
+                int affectedRows = st.executeUpdate();
 
-            if (affectedRows == 0) {
-                throw new SQLException("Creating room failed, no rows affected.");
-            }
+                if (affectedRows == 0) {
+                    throw new SQLException("Creating room failed, no rows affected.");
+                }
 
-            try (ResultSet generatedKeys = st.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    int roomId = generatedKeys.getInt(1);
+                try (ResultSet generatedKeys = st.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        int roomId = generatedKeys.getInt(1);
 
-                    if (room.getImages() != null && !room.getImages().isEmpty()) {
-                        for (String image : room.getImages()) {
-                            insertRoomImage(roomId, image);
+                        if (room.getImages() != null && !room.getImages().isEmpty()) {
+                            for (String image : room.getImages()) {
+                                insertRoomImage(roomId, image);
+                            }
                         }
-                    }
 
-                    return roomId; // Return the new room ID
-                } else {
-                    throw new SQLException("Creating room failed, no ID obtained.");
+                        return roomId; // Return the new room ID
+                    } else {
+                        throw new SQLException("Creating room failed, no ID obtained.");
+                    }
                 }
             }
+        } catch (SQLException e) {
+            System.out.println("Error in PhongDAO.insertRoom: " + e.getMessage());
+            return -1; // Return -1 or throw an exception to indicate failure
         }
-    } catch (SQLException e) {
-        System.out.println("Error in PhongDAO.insertRoom: " + e.getMessage());
-        return -1; // Return -1 or throw an exception to indicate failure
     }
-}
 
     public void insertRoomImage(int roomId, String imageUrl) throws SQLException {
         String sql = "INSERT INTO anh_phong_tro (ID_Phong, URL_AnhPhongTro) VALUES (?, ?)";
@@ -568,7 +583,8 @@ public class PhongDAO extends DBContext {
 
         return false; // Mặc định trả về false nếu có lỗi hoặc không có kết quả
     }
-     public int insertRooms(Phong phong) {
+
+    public int insertRooms(Phong phong) {
         String insertRoomSQL = "INSERT INTO phong_tro (TenPhongTro, Tang, ID_LoaiPhong, ID_NhaTro, Dien_Tich, Gia, Trang_thai) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement st = connection.prepareStatement(insertRoomSQL, Statement.RETURN_GENERATED_KEYS)) {
@@ -644,7 +660,8 @@ public class PhongDAO extends DBContext {
         }
         return false;  // Default to false if there is no matching room
     }
-      public Phong getLatestPhong() {
+
+    public Phong getLatestPhong() {
         Phong room = null;
         String sql = "SELECT p.ID_Phong, n.TenNhaTro, p.TenPhongTro, p.ID_LoaiPhong, p.Tang, p.Dien_Tich, "
                 + "l.TenLoaiPhong, p.Gia, l.Mo_ta, p.Trang_thai "

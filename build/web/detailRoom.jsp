@@ -173,9 +173,11 @@
                                 <p><strong>Giá tiền:</strong> <fmt:formatNumber value="${room.gia}" type="currency" currencyCode="VND"/></p>
 
                                 <p><strong>Trạng thái:</strong> 
-                                    <span class="badge ${room.trang_thai == 'T' ? 'badge-success' : 'badge-danger'}">
-                                        ${room.trang_thai == 'T' ? 'Trống' : 'Đang thuê'}
+                                    <span class="badge
+                                          ${room.trang_thai == 'T' ? 'badge-success' : room.trang_thai == 'D' ? 'badge-danger' : 'badge-warning'}">
+                                        ${room.trang_thai == 'T' ? 'Trống' : room.trang_thai == 'D' ? 'Đang thuê' : 'Đang sửa'}
                                     </span>
+
                                 </p>
                                 <p><strong>Mô tả:</strong> ${room.mo_ta}</p>
                             </div>
@@ -220,8 +222,7 @@
                                                 </td>
                                                 <td>${thietBi.mo_ta}</td>
                                                 <td>
-                                                    <button class="btn btn-danger btn-sm" 
-                                                            onclick="confirmDeleteEquipment(${thietBi.ID_ThietBiPhong}, ${room.ID_Phong})">
+                                                    <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteEquipmentModal${thietBi.ID_ThietBiPhong}">
                                                         Xóa
                                                     </button>
                                                     <button class="btn btn-primary btn-sm" 
@@ -236,7 +237,28 @@
                             </div>
                         </div>
 
-
+                        <c:forEach items="${thietBiList}" var="thietBi">
+                            <div id="deleteEquipmentModal${thietBi.ID_ThietBiPhong}" class="modal fade" tabindex="-1" aria-labelledby="deleteEquipmentModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-confirm">
+                                    <div class="modal-content">
+                                        <div class="modal-header flex-column">
+                                            <div class="icon-box">
+                                                <i class="fa-solid fa-circle-xmark"></i>
+                                            </div>
+                                            <h5 class="modal-title w-100">Bạn có chắc chắn muốn xóa thiết bị này?</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Thiết bị: ${thietBi.tenThietBi}</p>
+                                            <p>Số lượng: ${thietBi.so_luong}</p>
+                                        </div>
+                                        <div class="modal-footer justify-content-center">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                                            <a href="deleteThietBiFromRoom?idThietBiPhong=${thietBi.ID_ThietBiPhong}&idPhong=${room.ID_Phong}" class="btn btn-danger" style="color: white">Xóa thiết bị</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:forEach>
                         <!-- Add this right after the existing equipment table in detailRoom.jsp -->
                         <div class="row mt-4">
                             <div class="col-12">

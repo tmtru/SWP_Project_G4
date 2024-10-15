@@ -96,8 +96,8 @@
     <servlet>
         <servlet-name>actionTransaction</servlet-name>
         <servlet-class>controller.actionTransaction</servlet-class>
-    </servlet>    
-    <servlet>    
+    </servlet>
+    <servlet>
         <servlet-name>loadThietBi</servlet-name>
         <servlet-class>controller.loadThietBi</servlet-class>
     </servlet>
@@ -279,7 +279,6 @@
         <servlet-name>ChangePassword</servlet-name>
         <servlet-class>controller.ChangePassword</servlet-class>
     </servlet>
-    
     <servlet-mapping>
         <servlet-name>actionHoaDon</servlet-name>
         <url-pattern>/actionhoadon</url-pattern>
@@ -305,7 +304,6 @@
         <url-pattern>/actionTransaction</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-
         <servlet-name>loadThietBi</servlet-name>
         <url-pattern>/loadThietBi</url-pattern>
     </servlet-mapping>
