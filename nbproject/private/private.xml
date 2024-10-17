@@ -117,6 +117,17 @@
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/RoomServlet.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/Login.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/loadHoaDonNhaTro.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/web/add-all-room.jsp</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/profileServlet.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/model/HopDong.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/web/hopDongDashboard.jsp</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/web/quanly-account-nha-tro.jsp</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/detailRoomServlet.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/web/manager-action.jsp</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/dal/HopDongDAO.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/ManagerActionHistoryController.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/deleteRoomServlet.java</file>
+
         </group>
     </open-files>
 </project-private>

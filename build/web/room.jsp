@@ -112,7 +112,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         </li>
 
                         <li class="">
-                            <a href="#">
+                            <a href="hop-dong">
                                 <i class='bx bx-id-card icon' ></i>
                                 <span class="text nav-text">Hợp đồng</span>
                             </a>
@@ -192,11 +192,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
 
 
                 <!-- hien thi export -->
-  
+
                 <div class="room-actions">
                     <button class="btn add-room" data-toggle="modal" data-target="#addRoomModal">+ Thêm phòng trọ</button>
                     <button class="btn quick-add-room">+ Thêm phòng trọ nhanh</button>
-                   
+
                     <form action="/NhaTroTQAT/addRoomExcel" method="get" style="display: inline; background-color: green; border-radius: 5px">
                         <button type="submit" class="btn export-to-excel">
                             <i class="bx bxs-file-export"></i>
@@ -382,9 +382,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                             <strong>Giá tiền:</strong> <fmt:formatNumber value="${room.gia}" type="currency" currencyCode="VND"/><br>
                                             <strong>Trạng thái:</strong> 
                                             <span class="badge
-                                                  ${room.trang_thai == 'T' ? 'badge-success' : 'badge-danger'}">
-                                                ${room.trang_thai == 'T' ? 'Trống' : 'Đang thuê'}
+                                                  ${room.trang_thai == 'T' ? 'badge-success' : room.trang_thai == 'D' ? 'badge-danger' : 'badge-warning'}">
+                                                ${room.trang_thai == 'T' ? 'Trống' : room.trang_thai == 'D' ? 'Đang thuê' : 'Đang sửa'}
                                             </span>
+
 
                                         </p>
                                     </div>
@@ -411,11 +412,28 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                                        return false;'>
                                                 <i class="bx bx-edit"></i> Chỉnh sửa
                                             </a>
-                                            <a href="#" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;" 
-                                               onclick="confirmDelete(${room.ID_Phong});
-                                                       return false;">
-                                                <i class="bx bx-minus-circle"></i> Xóa
+                                            <a href="#" class="btn btn-link text-danger text-gradient px-3 mb-0" data-toggle="modal" data-target="#myModalDelete${room.ID_Phong}">
+                                                <i class="fa-solid fa-trash"></i>Xóa
                                             </a>
+                                            <div id="myModalDelete${room.ID_Phong}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-confirm">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header flex-column">
+                                                            <div class="icon-box">
+                                                                <i class="fa-solid fa-circle-xmark"></i>
+                                                            </div>
+                                                            <h5 class="modal-title w-100">Bạn có chắc chắn bạn muốn xóa phòng này?</h5>
+                                                        </div>
+                                                        <div class="modal-footer justify-content-center">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                                                            <button type="button" class="btn btn-danger">
+                                                                <a href="deleteRoom?id=${room.ID_Phong}" class="edit-film" style="color: white !important;">Xóa phòng</a>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </div>
 

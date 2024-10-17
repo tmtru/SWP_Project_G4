@@ -26,5 +26,20 @@
                 </c:if>
             </div>
         </div>
+        <script>
+            function validatePassword(password) {
+                const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+                return regex.test(password);
+            }
+
+            const passwordInput = document.querySelector('input[type="password"]');
+            passwordInput.addEventListener('input', function () {
+                if (!validatePassword(passwordInput.value)) {
+                    passwordInput.setCustomValidity("Mật khẩu phải có ít nhất 8 ký tự và chứa cả chữ cái và số!");
+                } else {
+                    passwordInput.setCustomValidity("");
+                }
+            });
+        </script>
     </body>
 </html>

@@ -53,25 +53,23 @@
     </head>
     <body>
         <jsp:include page="sidebarHoaDonManagement.jsp"></jsp:include>
-        <section class="home">
-            <section class="property-management">
-                <div class="header">
-                    <h2>Danh sách hóa đơn nhà trọ</h2>
+            <section class="home">
+                <section class="property-management">
+                    <div class="header">
+                        <h2>Danh sách hóa đơn nhà trọ</h2>
 
-                </div>
+                    </div>
 
-                <nav>
-                    <div class="warpper">
+
+                    <nav>
+                        <div class="warpper">
                         <c:forEach var="nt" items="${sessionScope.housesByRole}">
-                            <a href="hoadon?id=${nt.ID_NhaTro}">
-                                <div class="tab <c:if test="${nt.ID_NhaTro == sessionScope.currentHouse}">active</c:if>" id="tab-${nt.ID_NhaTro}" >
-
-                                    ${nt.tenNhaTro}
-
-                                </div>
-                            </a>
+                            <div class="tab <c:if test="${nt.ID_NhaTro == sessionScope.currentHouse}">active</c:if>" 
+                                 id="tab-${nt.ID_NhaTro}" onclick="filterRoomsByNhaTro('${nt.ID_NhaTro}')">
+                                ${nt.tenNhaTro}
+                            </div>
                         </c:forEach>
-                        <c:if test="${sessionScope.housesByRole==null}">
+                        <c:if test="${empty sessionScope.housesByRole}">
                             <div>Bạn không được quyền truy cập vào bất cứ nhà trọ nào</div>
                         </c:if>
                     </div>
@@ -235,9 +233,9 @@
                                                     </div>
                                                     <div class="mt-2">
                                                         <!--                                                    <a class="btn btn-link text-primary px-3 mb-0" href="javascript:;"><i class="fa-solid fa-circle-info"></i>Chi tiết</a>-->
-<a class="btn btn-link text-success px-3 mb-0" href="TransactionForm.jsp?id=${hd.ID_HoaDon}"><i class="fa-solid fa-plus"></i>Thêm giao dịch</a>
+                                                        <a class="btn btn-link text-success px-3 mb-0" href="TransactionForm.jsp?id=${hd.ID_HoaDon}"><i class="fa-solid fa-plus"></i>Thêm giao dịch</a>
                                                         <button type="button" class="btn btn-link text-danger text-gradient px-3 mb-0" data-toggle="modal" data-target="#myModalDelete${hd.ID_HoaDon}">
-                                                            <i class="fa-solid fa-trash"></i>Delete
+                                                            <i class="fa-solid fa-trash"></i>Xóa
                                                         </button>
                                                         <div id="myModalDelete${hd.ID_HoaDon}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                             <div class="modal-dialog modal-confirm">
@@ -384,11 +382,11 @@
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
         <script>
-            $("#dpMonths").datepicker({
-                format: "mm-yyyy",
-                viewMode: "months",
-                minViewMode: "months"
-            });
+                             $("#dpMonths").datepicker({
+                                 format: "mm-yyyy",
+                                 viewMode: "months",
+                                 minViewMode: "months"
+                             });
         </script>
         <script>
             const body = document.querySelector('body'),
