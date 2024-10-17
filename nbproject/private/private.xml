@@ -2,7 +2,7 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-    <group>
+        <group>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/js/main.js</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/css/styleProfile.css</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/DichVuDashBoard.jsp</file>
@@ -27,6 +27,7 @@
             <file>file:/E:/PRJCode/NhaTroTQAT/web/NhaTro.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/detailNhaTro.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/dal/TransactionDAO.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/dal/KhachThueDAO.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/Logout.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/css/styleKhuTroManagement.css</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/model/ChuTro.java</file>
@@ -47,6 +48,7 @@
             <file>file:/E:/PRJCode/NhaTroTQAT/web/login.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/model/DichVu.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/model/HoaDon.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/dal/ActionHistoryDAO.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/css/style.css</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/dal/DichVuDAO.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/addDichVu.java</file>
@@ -57,6 +59,7 @@
             <file>file:/E:/PRJCode/NhaTroTQAT/web/css/styleLogin.css</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/profile.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/TransactionForm.jsp</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/nbproject/build-impl.xml</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/room.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/dal/AccountDAO.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/AddRoomServlet.java</file>
@@ -106,6 +109,7 @@
             <file>file:/E:/PRJCode/NhaTroTQAT/web/register.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/category.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/loadRoomsHome.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/QuanLyAccountNhaTroController.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/homeRooms.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/Verification.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/HoaDonEachRoom.jsp</file>
@@ -113,13 +117,6 @@
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/RoomServlet.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/Login.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/loadHoaDonNhaTro.java</file>
-            
-            
-            
-            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/QuanLyAccountNhaTroController.java</file>
-            <file>file:/E:/PRJCode/NhaTroTQAT/web/add-all-room.jsp</file>
-           
-            
-    <group/>
+        </group>
     </open-files>
 </project-private>

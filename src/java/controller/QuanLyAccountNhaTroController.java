@@ -41,7 +41,7 @@ public class QuanLyAccountNhaTroController extends HttpServlet {
         Account account = (Account) session.getAttribute("account");
         if (account != null) {
             boolean isOwner;
-            if (account.getRole().equals("Chủ trọ")) {
+            if (account.getRole().equals("landlord")) {
                 isOwner = true;
                 String pageParam = request.getParameter("page");
                 int page = 1; // Default to the first page
