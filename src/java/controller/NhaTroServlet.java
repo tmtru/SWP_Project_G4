@@ -3,6 +3,7 @@ package controller;
 import dal.AccountDAO;
 import dal.ChuTroDAO;
 import dal.NhaTroDAO;
+import dal.QuanLyDAO;
 import model.NhaTro;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import model.Account;
 import model.ChuTro;
+import model.QuanLy;
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
         maxFileSize = 1024 * 1024 * 10, // 10 MB
@@ -38,7 +40,7 @@ public class NhaTroServlet extends HttpServlet {
             Account currentAccount = accountDAO.getAccountById2(account.getID_Account());
             boolean isOwwer = false;
 
-            isOwwer = currentAccount != null && currentAccount.getRole().equals("Chủ trọ");
+            isOwwer = currentAccount != null && currentAccount.getRole().equals("landlord");
 
             String pageParam = request.getParameter("page");
             String searchParam = request.getParameter("search");
@@ -52,7 +54,9 @@ public class NhaTroServlet extends HttpServlet {
                 ChuTro chuTro = chuTroDAO.getChuTroByAccountId(currentAccount.getID_Account());
                 listNhaTro = nhaTroDAO.getAllNhaTroWithParam(searchParam, chuTro.getId());
             }else{
-                 listNhaTro = nhaTroDAO.getAllNhaTroWithParam(searchParam, null);
+                QuanLyDAO qldao = new QuanLyDAO();
+                QuanLy quanLy = qldao.getChuTroByAccountId(currentAccount.getID_Account());
+                 listNhaTro = nhaTroDAO.getAllNhaTroForManager(quanLy.getId());
             }
             List<NhaTro> pagingNhaTro = nhaTroDAO.Paging(listNhaTro, page, pageSize);
 

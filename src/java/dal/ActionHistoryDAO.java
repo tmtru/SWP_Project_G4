@@ -11,10 +11,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import model.Account;
 import model.ActionHistory;
-import model.ChuTro;
-import model.KhachThue;
 import model.NhaTro;
 import model.QuanLy;
 
@@ -44,11 +41,11 @@ public class ActionHistoryDAO extends DBContext {
                 list.add(id_nhatro);
             }
             if (id_quanLy != null) {
-                query.append(" AND manager_id = ? ");
+                query.append(" AND ID_QuanLy = ? ");
                 list.add(id_quanLy);
             }
 
-            query.append("ORDER BY create_date DESC");
+            query.append("ORDER BY TransactionDate DESC");
 
             PreparedStatement preparedStatement = connection.prepareStatement(query.toString());
             mapParams(preparedStatement, list);
@@ -57,13 +54,13 @@ public class ActionHistoryDAO extends DBContext {
                 while (rs.next()) {
                     ActionHistory actionHistory = new ActionHistory();
                     actionHistory.setId(rs.getInt("id"));
-                    QuanLy quanLy = quanLyDAO.getQuanLyId(rs.getInt("manager_id"));
+                    QuanLy quanLy = quanLyDAO.getQuanLyId(rs.getInt("ID_QuanLy"));
                     actionHistory.setQuanLy(quanLy);
                     NhaTro nhaTro = ntdao.getNhaTroById(rs.getInt("ID_nhaTro"));
                     actionHistory.setTitle(rs.getString("title"));
                     actionHistory.setContent(rs.getString("content"));
                     actionHistory.setNhaTro(nhaTro);
-                    actionHistory.setCreatedDate(rs.getTimestamp("create_date"));
+                    actionHistory.setCreatedDate(rs.getTimestamp("TransactionDate"));
 
                     listAction.add(actionHistory);
                 }
@@ -75,7 +72,7 @@ public class ActionHistoryDAO extends DBContext {
     }
 
     public boolean insertActionHistory(ActionHistory actionHistory) {
-        String sql = "INSERT INTO action_history (manager_id, Id_nhaTro, title, content) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO action_history (ID_QuanLy, Id_nhaTro, title, content) VALUES (?, ?, ?, ?)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             // Set the values for the SQL insert statement
             ps.setInt(1, actionHistory.getQuanLy().getId());  // Manager ID

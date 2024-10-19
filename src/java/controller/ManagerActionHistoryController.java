@@ -40,7 +40,7 @@ public class ManagerActionHistoryController extends HttpServlet {
         Account account = (Account) session.getAttribute("account");
         if (account != null) {
             boolean isOwner;
-            if (account.getRole().equals("Chủ trọ")) {
+            if (account.getRole().equals("landlord")) {
                 isOwner = true;
                 String pageParam = request.getParameter("page");
                 String searchParam = request.getParameter("search");
@@ -59,9 +59,8 @@ public class ManagerActionHistoryController extends HttpServlet {
                 request.setAttribute("totalPages", listActionHistory.size() % pageSize == 0 ? (listActionHistory.size() / pageSize) : (listActionHistory.size() / pageSize + 1));
                 request.setAttribute("currentPage", page);
                 request.setAttribute("id", idNhaTro);
-                System.out.println("Total Action Histories fetched: " + listActionHistory.size());
                 request.getRequestDispatcher("manager-action.jsp").forward(request, response);
-            } else if (account.getRole().equals("Quản lý")) {
+            } else if (account.getRole().equals("manager")) {
                 isOwner = false;
                 String pageParam = request.getParameter("page");
                 String searchParam = request.getParameter("search");
@@ -82,7 +81,6 @@ public class ManagerActionHistoryController extends HttpServlet {
                 request.setAttribute("totalPages", listActionHistory.size() % pageSize == 0 ? (listActionHistory.size() / pageSize) : (listActionHistory.size() / pageSize + 1));
                 request.setAttribute("currentPage", page);
                 request.setAttribute("id", idNhaTro);
-                System.out.println("Total Action Histories fetched: " + listActionHistory.size());
                 request.getRequestDispatcher("manager-action.jsp").forward(request, response);
             }
         } else {
