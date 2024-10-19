@@ -68,25 +68,31 @@ public class actionHoaDon extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
-        if ("dele".equals(action)) {
-            int idHoaDon = Integer.parseInt(request.getParameter("id"));
-            HoaDonDAO hddao = new HoaDonDAO();
-            TransactionDAO transactionDao = new TransactionDAO();
-            List<Transaction> transactions = transactionDao.getTransactionsByIdHoaDon(idHoaDon);
+        HttpSession session = request.getSession();
+        String role = session.getAttribute("role").toString();
+        if (role.equals("landlord")) {
+            if ("dele".equals(action)) {
+                int idHoaDon = Integer.parseInt(request.getParameter("id"));
+                HoaDonDAO hddao = new HoaDonDAO();
+                TransactionDAO transactionDao = new TransactionDAO();
+                List<Transaction> transactions = transactionDao.getTransactionsByIdHoaDon(idHoaDon);
 
-            if (transactions.isEmpty()) {
-                hddao.deActiveHoaDon(idHoaDon);
-                request.setAttribute("notification", "Hóa đơn đã được xóa thành công.");
-            } else {
-                request.setAttribute("errorMessage", "Không thể vô hiệu hóa hóa đơn có giao dịch.");
-            }
-            
-            if (request.getParameter("exit").equals("home")) {
-                request.getRequestDispatcher("hoadon").forward(request, response);
-            } else {
+                if (transactions.isEmpty()) {
+                    hddao.deActiveHoaDon(idHoaDon);
+                    request.setAttribute("notification", "Hóa đơn đã được xóa thành công.");
+                } else {
+                    request.setAttribute("errorMessage", "Không thể vô hiệu hóa hóa đơn có giao dịch.");
+                }
 
-                request.getRequestDispatcher("hoadonroom").forward(request, response);
+                if (request.getParameter("exit").equals("home")) {
+                    request.getRequestDispatcher("hoadon").forward(request, response);
+                } else {
+
+                    request.getRequestDispatcher("hoadonroom").forward(request, response);
+                }
             }
+        } else {
+            response.sendRedirect("hoadon");
         }
     }
 

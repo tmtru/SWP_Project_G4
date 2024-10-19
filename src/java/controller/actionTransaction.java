@@ -66,23 +66,29 @@ public class actionTransaction extends HttpServlet {
             throws ServletException, IOException {
         String action = request.getParameter("action");
         HttpSession session = request.getSession();
+        String role = session.getAttribute("role").toString();
         int id;
-        if ("dele".equals(action)) {
-            int idTransaction = Integer.parseInt(request.getParameter("id"));
-            TransactionDAO tdao = new TransactionDAO();
-            tdao.deactivateTransaction(idTransaction);
-            request.setAttribute("notification", "Giao dịch được xóa thành công.");
-            if (session.getAttribute("currentHouse") != null) {
-                id = (int) session.getAttribute("currentHouse");
-                session.setAttribute("transactions", tdao.getAllTransactionsByNhaTroId(id));
-            }
-            if (request.getParameter("exit").equals("home")) {
+        if (role.equals("landlord")) {
+            if ("dele".equals(action)) {
+                int idTransaction = Integer.parseInt(request.getParameter("id"));
+                TransactionDAO tdao = new TransactionDAO();
+                tdao.deactivateTransaction(idTransaction);
+                request.setAttribute("notification", "Giao dịch được xóa thành công.");
+                if (session.getAttribute("currentHouse") != null) {
+                    id = (int) session.getAttribute("currentHouse");
+                    session.setAttribute("transactions", tdao.getAllTransactionsByNhaTroId(id));
+                }
+                if (request.getParameter("exit").equals("home")) {
 
-                request.getRequestDispatcher("TransactionHistory.jsp").forward(request, response);
-            } else {
-                response.sendRedirect("hoadonroom");
+                    request.getRequestDispatcher("TransactionHistory.jsp").forward(request, response);
+                } else {
+                    response.sendRedirect("hoadonroom");
+                }
             }
+        } else {
+            response.sendRedirect("hoadon");
         }
+
     }
 
     /**
@@ -98,6 +104,7 @@ public class actionTransaction extends HttpServlet {
             throws ServletException, IOException {
         TransactionDAO transactionDao = new TransactionDAO();
         String action = request.getParameter("action");
+        HttpSession session = request.getSession();
 
         if ("add".equals(action)) {
             String maGiaoDich = request.getParameter("maGiaoDich");

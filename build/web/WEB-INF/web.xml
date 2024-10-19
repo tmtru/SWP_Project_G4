@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
     <!--For home page-->
+    <filter>
+        <filter-name>RoleFilterTQAT</filter-name>
+        <filter-class>filter.RoleFilterTQAT</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>RoleFilterTQAT</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
     <servlet>
         <servlet-name>homeRooms</servlet-name>
         <servlet-class>controller.homeRooms</servlet-class>
@@ -124,10 +132,6 @@
     <servlet>
         <servlet-name>updateThietBiInRoom</servlet-name>
         <servlet-class>controller.updateThietBiInRoom</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>NewServlet</servlet-name>
-        <servlet-class>controller.NewServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>homeRooms</servlet-name>
@@ -279,10 +283,6 @@
         <servlet-name>profileServlet</servlet-name>
         <url-pattern>/profileServlet</url-pattern>
     </servlet-mapping>
-    <servlet>
-        <servlet-name>ChangePassword</servlet-name>
-        <servlet-class>controller.ChangePassword</servlet-class>
-    </servlet>
     <servlet-mapping>
         <servlet-name>actionHoaDon</servlet-name>
         <url-pattern>/actionhoadon</url-pattern>
@@ -334,9 +334,5 @@
     <servlet-mapping>
         <servlet-name>updateThietBiInRoom</servlet-name>
         <url-pattern>/updateThietBiInRoom</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>NewServlet</servlet-name>
-        <url-pattern>/NewServlet</url-pattern>
     </servlet-mapping>
 </web-app>

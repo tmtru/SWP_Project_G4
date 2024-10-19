@@ -2,6 +2,7 @@ package controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import dal.AccountDAO;
 import dal.GoogleAccountDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -132,12 +133,15 @@ public class LoginGoogle extends HttpServlet {
             throws IOException {
         HttpSession session = request.getSession();
         Account userAccount = new Account();
+        AccountDAO adao= new AccountDAO();
         userAccount.setID_Account(account.getID_Account());
         userAccount.setEmail(account.getEmail());
         userAccount.setUsername(account.getUsername());
+        userAccount = adao.getAccountById2(account.getID_Account());
 
         session.setAttribute("account", userAccount);
         session.setAttribute("ID_Account", account.getID_Account());
+        session.setAttribute("role", userAccount.getRole());
         response.sendRedirect("home.jsp");
     }
 
