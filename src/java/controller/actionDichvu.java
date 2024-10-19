@@ -11,6 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.DichVu;
 
 /**
@@ -32,36 +33,41 @@ public class actionDichvu extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
+        HttpSession session = request.getSession();
+        String role = session.getAttribute("role").toString();
         String action = request.getParameter("action");
         int idDichVu = Integer.parseInt(request.getParameter("id"));
         DichVuDAO dvDao = new DichVuDAO();
-        switch (action) {
-            case "dele":
-                dvDao.deactivateDichVu(idDichVu);
-                break;
-            case "edit":
-                String tenDichVu = request.getParameter("tendichvu");
-                int donGia = Integer.parseInt(request.getParameter("donGia"));
-                String donVi = request.getParameter("donvi");
-                String moTa = request.getParameter("mota");
-                DichVu dichVu=dvDao.getDichVuById(idDichVu);
-                dichVu.setTenDichVu(tenDichVu);
-                dichVu.setDon_gia(donGia);
-                dichVu.setDon_vi(donVi);
-                dichVu.setMo_ta(moTa);
-                dichVu.setID_DichVu(idDichVu);
-                dvDao.updateDichVu(dichVu);
-                break;
-            case "update":
-                 String isActive = request.getParameter("isActive");
-                if ("true".equals(isActive)) { // Kiểm tra nếu isActive là "1"
-                    dvDao.activateDichVu(idDichVu); // Kích hoạt dịch vụ
-                } else {
-                    dvDao.deactivateDichVu(idDichVu); // Tắt dịch vụ
-                }
+        if (role.equals("landlord")) {
 
-            default:
-                break;
+            switch (action) {
+                case "dele":
+                    dvDao.deactivateDichVu(idDichVu);
+                    break;
+                case "edit":
+                    String tenDichVu = request.getParameter("tendichvu");
+                    int donGia = Integer.parseInt(request.getParameter("donGia"));
+                    String donVi = request.getParameter("donvi");
+                    String moTa = request.getParameter("mota");
+                    DichVu dichVu = dvDao.getDichVuById(idDichVu);
+                    dichVu.setTenDichVu(tenDichVu);
+                    dichVu.setDon_gia(donGia);
+                    dichVu.setDon_vi(donVi);
+                    dichVu.setMo_ta(moTa);
+                    dichVu.setID_DichVu(idDichVu);
+                    dvDao.updateDichVu(dichVu);
+                    break;
+                case "update":
+                    String isActive = request.getParameter("isActive");
+                    if ("true".equals(isActive)) { // Kiểm tra nếu isActive là "1"
+                        dvDao.activateDichVu(idDichVu); // Kích hoạt dịch vụ
+                    } else {
+                        dvDao.deactivateDichVu(idDichVu); // Tắt dịch vụ
+                    }
+
+                default:
+                    break;
+            }
         }
         response.sendRedirect("loaddichvu");
     }

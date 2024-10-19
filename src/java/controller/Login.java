@@ -60,6 +60,7 @@ public class Login extends HttpServlet {
 //            acc1.setEmail(email);
 //            acc1.setUsername(username);
             session.setAttribute("account", acc);
+            session.setAttribute("role", acc.getRole());
                     
 
             session.setAttribute("ID_Account", ID_Account);

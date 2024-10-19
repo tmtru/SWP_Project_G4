@@ -24,6 +24,29 @@ import model.Transaction;
  */
 public class TransactionDAO extends DBContext {
 
+    public List<Transaction> getAllTransactions() {
+        List<Transaction> transactions = new ArrayList<>();
+        String query = "SELECT * FROM `transaction` WHERE isActive=1 ORDER BY ID_Transaction DESC";
+
+        try (PreparedStatement ps = connection.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Transaction transaction = new Transaction();
+                transaction.setID_Transaction(rs.getInt("ID_Transaction"));
+                transaction.setMaGiaoDich(rs.getString("MaGiaoDich"));
+                transaction.setTransaction(rs.getTimestamp("TransactionDate"));
+                transaction.setAmount(rs.getFloat("Amount"));
+                transaction.setPaymentMethod(rs.getString("PaymentMethod"));
+                transaction.setID_HoaDon(rs.getInt("ID_HoaDon"));
+                transaction.setMoTa(rs.getNString("MoTa"));
+                transactions.add(transaction);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return transactions;
+    }
+
     // Method to get all transactions by ID_HoaDon abcd
     public List<Transaction> getTransactionsByIdHoaDon(int idHoaDon) {
         List<Transaction> transactions = new ArrayList<>();
@@ -161,7 +184,7 @@ public class TransactionDAO extends DBContext {
                 float requiredAmount = getRequiredAmountByIdHoaDon(transaction.getID_HoaDon());
 
                 // Kiểm tra nếu tổng tiền bằng với số tiền phải thanh toán
-                if (totalMoney == requiredAmount) {
+                if (totalMoney >= requiredAmount) {
                     try (PreparedStatement updatePs = connection.prepareStatement(updateBillQuery)) {
                         updatePs.setInt(1, 1); // Giả sử trạng thái 1 là "Đã thanh toán"
                         updatePs.setInt(2, transaction.getID_HoaDon());
@@ -176,8 +199,8 @@ public class TransactionDAO extends DBContext {
         return false; // Trả về false nếu có lỗi xảy ra
     }
 
-// Phương thức để lấy số tiền phải thanh toán của hóa đơn
-    private float getRequiredAmountByIdHoaDon(int idHoaDon) {
+// lấy số tiền phải thanh toán của hóa đơn
+    public float getRequiredAmountByIdHoaDon(int idHoaDon) {
         float requiredAmount = 0;
         String query = "SELECT Tong_gia_tien FROM hoa_don WHERE ID_HoaDon = ?"; // Sử dụng cột Tong_gia_tien
         try (PreparedStatement ps = connection.prepareStatement(query)) {
@@ -200,8 +223,6 @@ public class TransactionDAO extends DBContext {
         // Lấy số tiền cần phải thanh toán
         float requiredAmount = getRequiredAmountByIdHoaDon(idHoaDon);
 
-       
-
         boolean isDeactivated = false;
 
         // Hủy giao dịch
@@ -213,25 +234,25 @@ public class TransactionDAO extends DBContext {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-         // Lấy tổng tiền đã thanh toán
+        // Lấy tổng tiền đã thanh toán
         float totalMoney = getTotalMoneyByIdHoaDon(idHoaDon);
-System.out.println("Required Amount: " + requiredAmount);
-System.out.println("Total Money: " + totalMoney);
+        System.out.println("Required Amount: " + requiredAmount);
+        System.out.println("Total Money: " + totalMoney);
         // Kiểm tra điều kiện để cập nhật trạng thái hóa đơn
         if (isDeactivated && totalMoney < requiredAmount) {
             String updateBillQuery = "UPDATE hoa_don SET Trang_thai = ? WHERE ID_HoaDon = ?";
             try (PreparedStatement ps = connection.prepareStatement(updateBillQuery)) {
                 ps.setInt(1, 0); // Giả sử 0 là trạng thái không còn hiệu lực
                 ps.setInt(2, idHoaDon);
-                int rowsUpdated = ps.executeUpdate(); 
+                int rowsUpdated = ps.executeUpdate();
                 if (rowsUpdated > 0) {
-            System.out.println("Bill status updated successfully.");
-        } else {
-            System.out.println("Failed to update bill status.");
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
+                    System.out.println("Bill status updated successfully.");
+                } else {
+                    System.out.println("Failed to update bill status.");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         return isDeactivated; // Trả về true nếu đã hủy giao dịch thành công
@@ -252,5 +273,24 @@ System.out.println("Total Money: " + totalMoney);
         }
         return idHoaDon; // Trả về ID hóa đơn
     }
+
+    //check có giao dịch trùng hay không
+    public boolean isTransactionDuplicated(String maGiaoDich) {
+        String query = "SELECT COUNT(*) AS count FROM `transaction` WHERE MaGiaoDich = ?  AND isActive = 1";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, maGiaoDich);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int count = rs.getInt("count");
+                    return count > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
 
 }

@@ -465,6 +465,64 @@ public class HoaDonDAO extends DBContext {
 
         return hoaDons;
     }
+//lay hoa dơn theo thnags hiện tại
+    public List<HoaDon> getHoaDonByCurrentMonthAndByIdHopDong(int idHopDong) {
+        List<HoaDon> hoaDons = new ArrayList<>();
+        String sql = "SELECT hd.ID_HoaDon, hd.ID_HopDong, hd.Ngay, hd.Trang_thai, "
+                + "hd.Tong_gia_tien, hd.NgayThanhToan, hd.NguoiTao, hd.MoTa, "
+                + "dv.ID_DichVu, dv.TenDichVu, dv.Don_gia, dv.Don_vi, dv.Mo_ta, "
+                + "hdv.ChiSo_Cu, hdv.ChiSo_Moi, hdv.DauNguoi "
+                + "FROM hoa_don hd "
+                + "LEFT JOIN hoa_don_dich_vu hdv ON hd.ID_HoaDon = hdv.ID_HoaDon "
+                + "LEFT JOIN dich_vu dv ON hdv.ID_DichVu = dv.ID_DichVu "
+                + "WHERE hd.ID_HopDong = ? AND hd.isActive=1 "
+                + "AND MONTH(hd.Ngay) = MONTH(CURRENT_DATE()) "
+                + "AND YEAR(hd.Ngay) = YEAR(CURRENT_DATE()) "
+                + "ORDER BY hd.ID_HoaDon DESC";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, idHopDong); // Đặt ID hợp đồng vào tham số truy vấn
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int idHoaDon = rs.getInt("ID_HoaDon");
+                HoaDon hoaDon = findHoaDonById(hoaDons, idHoaDon);
+
+                if (hoaDon == null) {
+                    hoaDon = new HoaDon();
+                    hoaDon.setID_HoaDon(idHoaDon);
+                    hoaDon.setID_HopDong(rs.getInt("ID_HopDong"));
+                    hoaDon.setNgay(rs.getDate("Ngay"));
+                    hoaDon.setTrang_thai(rs.getInt("Trang_thai"));
+                    hoaDon.setTong_gia_tien(rs.getInt("Tong_gia_tien"));
+                    hoaDon.setNgayThanhToan(rs.getDate("NgayThanhToan"));
+                    hoaDon.setNguoiTao(rs.getString("NguoiTao"));
+                    hoaDon.setMoTa(rs.getNString("MoTa"));
+                    hoaDon.setDichVus(new ArrayList<>()); // Khởi tạo danh sách dịch vụ
+                    hoaDons.add(hoaDon); // Thêm hóa đơn mới vào danh sách
+                }
+
+                // Thêm dịch vụ vào danh sách dịch vụ của hóa đơn
+                int idDichVu = rs.getInt("ID_DichVu");
+                if (idDichVu != 0) { // Nếu có dịch vụ
+                    DichVu dichVu = new DichVu();
+                    dichVu.setID_DichVu(idDichVu);
+                    dichVu.setTenDichVu(rs.getString("TenDichVu"));
+                    dichVu.setDon_gia(rs.getInt("Don_gia"));
+                    dichVu.setDon_vi(rs.getString("Don_vi"));
+                    dichVu.setMo_ta(rs.getString("Mo_ta"));
+                    dichVu.setChiSoCu(rs.getInt("ChiSo_Cu"));
+                    dichVu.setChiSoMoi(rs.getInt("ChiSo_Moi"));
+                    dichVu.setDauNguoi(rs.getInt("DauNguoi"));
+                    hoaDon.getDichVus().add(dichVu); // Thêm dịch vụ vào danh sách
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return hoaDons;
+    }
 
     //method  lấy các ID hợp đồng mà có roomId là idRoom 
     public List<Integer> getHopDongOfRentedRoom(int idRoom) {

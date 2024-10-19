@@ -85,31 +85,30 @@
 
                     <%
                         String idHoaDonParam = request.getParameter("id");
-    Integer idHoaDon2 = (Integer) request.getAttribute("id"); // Ép kiểu về Integer
-    int idHoaDon = 0;
-    HoaDon hoaDon = null;
+                        Integer idHoaDon2 = (Integer) request.getAttribute("id"); 
+                        int idHoaDon = 0;
+                        HoaDon hoaDon = null;
 
-    if (idHoaDonParam != null && !idHoaDonParam.isEmpty()) {
-        try {
-            idHoaDon = Integer.parseInt(idHoaDonParam);
-            // Khởi tạo HoaDonDAO và lấy thông tin hóa đơn
-            HoaDonDAO hoaDonDAO = new HoaDonDAO();
-            hoaDon = hoaDonDAO.getHoaDonById(idHoaDon);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
-    } else if (idHoaDon2 != null) { // Kiểm tra idHoaDon2 không null
-        try {
-            idHoaDon = idHoaDon2; // Sử dụng giá trị từ attribute
-            // Khởi tạo HoaDonDAO và lấy thông tin hóa đơn
-            HoaDonDAO hoaDonDAO = new HoaDonDAO();
-            hoaDon = hoaDonDAO.getHoaDonById(idHoaDon);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+                        if (idHoaDonParam != null && !idHoaDonParam.isEmpty()) {
+                            try {
+                                idHoaDon = Integer.parseInt(idHoaDonParam);
+                                // Khởi tạo HoaDonDAO và lấy thông tin hóa đơn
+                                HoaDonDAO hoaDonDAO = new HoaDonDAO();
+                                hoaDon = hoaDonDAO.getHoaDonById(idHoaDon);
+                            } catch (NumberFormatException e) {
+                                e.printStackTrace();
+                            }
+                        } else if (idHoaDon2 != null) { 
+                            try {
+                                idHoaDon = idHoaDon2; 
+                                HoaDonDAO hoaDonDAO = new HoaDonDAO();
+                                hoaDon = hoaDonDAO.getHoaDonById(idHoaDon);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
 
-    request.setAttribute("hd", hoaDon);
+                        request.setAttribute("hd", hoaDon);
                     %>
                     <div class="container-fluid">
                         <li class="list-group-item list-hoadon d-flex p-4 bg-gray-100 border-radius-lg"
@@ -259,7 +258,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="transactionDate" class="form-label">Ngày Giao Dịch</label>
-                                <input type="datetime-local" class="form-control" id="transactionDate" name="transactionDate" required>
+                                <input type="date" class="form-control" id="transactionDate" name="transactionDate" required readonly>
                             </div>
                             <div class="mb-3">
                                 <label for="amount" class="form-label">Số Tiền</label>
@@ -306,6 +305,7 @@
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+        <!-- JavaScript để định dạng số tiền và kiểm tra hợp lệ -->
         <!-- JavaScript để định dạng số tiền và kiểm tra hợp lệ -->
         <script>
             document.getElementById('amount').addEventListener('input', function (e) {

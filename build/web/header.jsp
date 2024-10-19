@@ -37,7 +37,7 @@
     </head>
     <body>
         <!-- Header Start -->
-        <c:set var="a" value="${sessionScope.ID_Account}"></c:set>
+        <c:set var="a" value="${sessionScope.account}"></c:set>
             <div class="container-fluid bg-light px-0">
                 <div class="row gx-0">
                     <div class="col-lg-5 bg-light d-none d-lg-block">
@@ -66,13 +66,16 @@
                                 <a href="about.html" class="nav-item nav-link">About</a>
                                 <a href="contact.html" class="nav-item nav-link">Contact</a>
                                 <c:if test="${a!=null}">
+                                    <c:if test="${a.role.equals('landlord') || a.role.equals('manager')}">
 
-                                    <a href="loaddashboardbyrole" class="nav-item nav-link" style="color: red">Trang quản lí</a>
+                                        <a href="loaddashboardbyrole" class="nav-item nav-link" style="color: red">Trang quản lí</a>
+                                    </c:if>
 
                                 </c:if>
                             </div>
 
                             <c:if test="${a==null}">
+
                                 <div class="button">
                                     <a href="register.jsp"
                                        class="btn my-3 signup-button mx-3">Sign up</a>
@@ -98,7 +101,7 @@
                                         </ul>
                                     </li>
                                 </ul>
-    
+
                             </c:if>
 
                         </div>

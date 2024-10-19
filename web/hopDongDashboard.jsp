@@ -7,7 +7,6 @@
         <title>
             Contract Management
         </title>
-        <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <!----======== CSS ======== -->
         <link rel="stylesheet" href="css/styleRoom.css">
@@ -68,7 +67,7 @@
                         </li>
 
                         <li class="">
-                            <a href="room">
+                            <a href="room" >
                                 <i class='bx bx-bar-chart-alt-2 icon active' ></i>
                                 <span class="text nav-text">Phòng trọ</span>
                             </a>
@@ -137,7 +136,6 @@
             </div>
 
         </nav>
-
         <div class="container">
             
                 <section class="home mx-3">
@@ -146,69 +144,69 @@
                             Quản lý hợp đồng
                         </h2>
                         <div class="filters">
+                            <!-- Nút để tạo PDF -->
                             <button onclick="window.location.href = 'hop-dong?action=add'">+ Thêm hợp đồng</button>
                             <form action="accountController" method="get" style="display: flex; align-items: center;">
                                 <input name="searchTerm" placeholder="Search by name" type="text" value="${param.searchTerm}"/>
-                            <button type="submit">
-                                Search
-                            </button>
-                        </form>
-                    </div>
-                    <table class="account-table">
-                        <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">ID Khách thuê</th>
-                                <th scope="col">ID Phòng trọ</th>
-                                <th scope="col">Ngày có giá trị</th>
-                                <th scope="col">Ngày hết hạn</th>
-                                <th scope="col">Tiền cọc</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <c:forEach items="${listHopDong}" var="hd">
+                                <button type="submit">Search</button>
+                            </form>
+                        </div>
+                        <table class="account-table">
+                            <thead>
                                 <tr>
-                                    <td>${hd.getID_HopDong()}</td>
-                                    <td>${hd.getID_KhachThue()}</td>
-                                    <td>${hd.getID_Phongtro()}</td>
-                                    <td>${hd.getNgay_gia_tri()}</td>
-                                    <td>${hd.getNgay_het_han()}</td>
-                                    <td>${hd.getTien_Coc()}</td>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">ID Khách thuê</th>
+                                    <th scope="col">ID Phòng trọ</th>
+                                    <th scope="col">Ngày có giá trị</th>
+                                    <th scope="col">Ngày hết hạn</th>
+                                    <th scope="col">Tiền cọc</th>
+                                    <th scope="col">Action</th>
                                 </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach items="${listHopDong}" var="hd">
+                                    <tr>
+                                        <td>${hd.getID_HopDong()}</td>
+                                        <td>${hd.getID_KhachThue()}</td>
+                                        <td>${hd.getID_Phongtro()}</td>
+                                        <td>${hd.getNgay_gia_tri()}</td>
+                                        <td>${hd.getNgay_het_han()}</td>
+                                        <td>${hd.getTien_Coc()}</td>
+                                        <td>                            <button class="btn btn-primary" onclick="window.location.href = 'hop-dong?action=generatePDF&idkhachthue=${hd.getID_KhachThue()}'">Generate PDF</button>
+</td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                        <div class="pagination">
+                            <c:if test="${currentPage > 1}">
+                                <button onclick="changePage(${currentPage - 1})">&laquo; Previous</button>
+                            </c:if>
+
+                            <c:forEach begin="1" end="${noOfPages}" var="i">
+                                <c:choose>
+                                    <c:when test="${currentPage eq i}">
+                                        <button class="active">${i}</button>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <button onclick="changePage(${i})">${i}</button>
+                                    </c:otherwise>
+                                </c:choose>
                             </c:forEach>
 
-                        </tbody>
-                    </table>
-                    <div class="pagination">
-                        <c:if test="${currentPage > 1}">
-                            <button onclick="changePage(${currentPage - 1})">&laquo; Previous</button>
-                        </c:if>
+                            <c:if test="${currentPage < noOfPages}">
+                                <button onclick="changePage(${currentPage + 1})">Next &raquo;</button>
+                            </c:if>
+                        </div>
 
-                        <c:forEach begin="1" end="${noOfPages}" var="i">
-                            <c:choose>
-                                <c:when test="${currentPage eq i}">
-                                    <button class="active">${i}</button>
-                                </c:when>
-                                <c:otherwise>
-                                    <button onclick="changePage(${i})">${i}</button>
-                                </c:otherwise>
-                            </c:choose>
-                        </c:forEach>
-
-                        <c:if test="${currentPage < noOfPages}">
-                            <button onclick="changePage(${currentPage + 1})">Next &raquo;</button>
-                        </c:if>
+                        <script>
+                            function changePage(page) {
+                                window.location.href = 'hop-dong?page=' + page;
+                            }
+                        </script>
                     </div>
-
-                    <script>
-                        function changePage(page) {
-                            window.location.href = 'hop-dong?page=' + page;
-                        }
-                    </script>
-                </div>
-            </section>
+                </section>
         </div>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </body>
-</html>
 </html>
