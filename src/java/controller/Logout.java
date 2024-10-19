@@ -56,6 +56,8 @@ public class Logout extends HttpServlet {
     throws ServletException, IOException {
         HttpSession session = request.getSession();
         session.setAttribute("ID_Account", null);
+        session.setAttribute("account", null);
+        session.setAttribute("ID_Khachthue", null);
         response.sendRedirect("home.jsp");
     } 
 

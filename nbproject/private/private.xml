@@ -51,9 +51,11 @@
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/dal/ActionHistoryDAO.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/css/style.css</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/dal/DichVuDAO.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/dal/ThietBiPhongDAO.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/addDichVu.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/sidebarHoaDonManagement.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/css/styleRoom.css</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/model/HopDong.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/verification.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/EmailService.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/css/styleLogin.css</file>
@@ -66,8 +68,10 @@
             <file>file:/E:/PRJCode/NhaTroTQAT/web/resetpassword.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/dal/QuanLiDAO.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/filterRoomsHome.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/filter/LoginFilter.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/adminUserManagement/account-management.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/TransactionHistory.jsp</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/profileServlet.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/dal/HoaDonDAO.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/index.html</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/detailHouseHome.jsp</file>
@@ -87,6 +91,7 @@
             <file>file:/E:/PRJCode/NhaTroTQAT/web/css/nucleo-icons.css</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/editNhaTro.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/loadDichVu.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/web/add-all-room.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/adminUserManagement/add-account.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/nbproject/build-impl.xml~</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/dal/LoaiPhongDAO.java</file>
@@ -117,17 +122,6 @@
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/RoomServlet.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/Login.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/loadHoaDonNhaTro.java</file>
-            <file>file:/E:/PRJCode/NhaTroTQAT/web/add-all-room.jsp</file>
-            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/profileServlet.java</file>
-            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/model/HopDong.java</file>
-            <file>file:/E:/PRJCode/NhaTroTQAT/web/hopDongDashboard.jsp</file>
-            <file>file:/E:/PRJCode/NhaTroTQAT/web/quanly-account-nha-tro.jsp</file>
-            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/detailRoomServlet.java</file>
-            <file>file:/E:/PRJCode/NhaTroTQAT/web/manager-action.jsp</file>
-            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/dal/HopDongDAO.java</file>
-            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/ManagerActionHistoryController.java</file>
-            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/deleteRoomServlet.java</file>
-
         </group>
     </open-files>
 </project-private>

@@ -20,7 +20,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Bootstrap CSS -->
 
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+       
         <!----======== CSS ======== -->
         <link rel="stylesheet" href="css/styleRoom.css">
         <link rel="stylesheet" href="css/modelDelete.css">
@@ -64,27 +64,31 @@
                     <nav>
                         <div class="warpper">
                         <c:forEach var="nt" items="${sessionScope.housesByRole}">
-                            <div class="tab <c:if test="${nt.ID_NhaTro == sessionScope.currentHouse}">active</c:if>" 
-                                 id="tab-${nt.ID_NhaTro}" onclick="filterRoomsByNhaTro('${nt.ID_NhaTro}')">
-                                ${nt.tenNhaTro}
-                            </div>
+                            <a href="hoadon?idHouse=${nt.ID_NhaTro}">
+                                <div class="tab <c:if test="${nt.ID_NhaTro == sessionScope.currentHouse}">active</c:if>" id="tab-${nt.ID_NhaTro}" >
+
+                                    ${nt.tenNhaTro}
+
+                                </div>
+                            </a>
                         </c:forEach>
-                        <c:if test="${empty sessionScope.housesByRole}">
+                        <c:if test="${sessionScope.housesByRole==null}">
                             <div>Bạn không được quyền truy cập vào bất cứ nhà trọ nào</div>
                         </c:if>
                     </div>
                 </nav>
             </section>
+            <c:set var="a" value="${sessionScope.account}"></c:set>
 
-            <section class="ftco-section">
+                <section class="ftco-section">
 
-                <div class="row m-0">
-                    <div class="col-lg-7 mt-4 ml-2">
-                        <div class="row filter">
-                            <div class="col-xl-4 date-detail  part-filter">
-                                <h6 class="" style="color: #ffffff">Chọn ngày: </h6>
-                                <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
-                                    <i class="fa fa-calendar"></i>&nbsp;
+                    <div class="row m-0">
+                        <div class="col-lg-7 mt-4 ml-2">
+                            <div class="row filter">
+                                <div class="col-xl-4 date-detail  part-filter">
+                                    <h6 class="" style="color: #ffffff">Chọn ngày: </h6>
+                                    <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                                        <i class="fa fa-calendar"></i>&nbsp;
 
                                     <c:if test="${not empty startDate}">
                                         <c:if test="${not empty endDate}">
@@ -115,6 +119,11 @@
                                 <c:if test="${not empty notification}">
                                     <div class="alert alert-success" role="alert">
                                         ${notification}
+                                    </div>
+                                </c:if>
+                                <c:if test="${not empty errorMessage}">
+                                    <div class="alert alert-danger" role="alert">
+                                        ${errorMessage}
                                     </div>
                                 </c:if>
                                 <a href="TransactionHistory.jsp" class="btn btn-primary mt-2">Lịch sử thanh toán</a>
@@ -238,7 +247,7 @@
                                                             <i class="fa-solid fa-trash"></i>Xóa
                                                         </button>
                                                         <div id="myModalDelete${hd.ID_HoaDon}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                            <div class="modal-dialog modal-confirm">
+                                                            <div class="modal-dialog modal-confirm-delete">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header flex-column">
                                                                         <div class="icon-box">
@@ -246,7 +255,7 @@
                                                                         </div>
                                                                         <h5 class="modal-title w-100">Bạn có chắc chắn bạn muốn xóa hóa đơn ?<br/> <span style="color: #5932ea"></span></h5>
                                                                     </div>
-                                                                    <div class="modal-footer justify-content-center">
+                                                                    <div class="modal-footer justify-content-center d-flex">
                                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
                                                                         <button type="button" class="btn btn-danger">
                                                                             <a href="actionhoadon?action=dele&id=${hd.ID_HoaDon}&exit=home" class="edit-film" style="color: white !important;">Xóa hóa đơn</a>
@@ -308,23 +317,25 @@
                                             %>
                                             <c:forEach var="rr" items="${sessionScope.Rooms}">
                                                 <% 
-                                                   // Lấy ID hóa đơn từ đối tượng rr bằng cách sử dụng EL
                                                    int idRoom = (Integer) ((Phong)  pageContext.getAttribute("rr")).getID_Phong();
-                
-                                                   // Gọi phương thức để lấy thông tin phòng
-      
                                                    List<Integer> listContractByRoom = hdd1.getHopDongOfRentedRoom(idRoom);
+                                                   
                                                    int countPaid = 0;
                                                    int countUnpaid = 0;
+                                                   int countCurrentInvoice=0;
 
                                                    // Duyệt qua từng hợp đồng để lấy hóa đơn
                                                    for (Integer contractId : listContractByRoom) {
                                                        List<HoaDon> listHDByContract = hdd1.getHoaDonByHopDong(contractId);
+                                                       List<HoaDon> ts=hdd.getHoaDonByCurrentMonthAndByIdHopDong(contractId);
+                                                               countCurrentInvoice+= ts.size();
 
                                                        // Đếm số hóa đơn đã trả và chưa trả
                                                        for (HoaDon hd : listHDByContract) {
-                                                           if (hd.getTrang_thai() == 1) { // Giả sử 1 là đã trả
+                                                           if (hd.getTrang_thai() == 1) { 
                                                                countPaid++;
+                                                               
+                                                               
                                                            } else {
                                                                countUnpaid++;
                                                            }
@@ -335,13 +346,14 @@
                                                    request.setAttribute("isRented", isRented);
                                                    request.setAttribute("countPaid", countPaid);
                                                    request.setAttribute("countUnpaid", countUnpaid);
+                                                   request.setAttribute("countCurrentInvoice", countCurrentInvoice);
                 
 
                                                 %>
                                                 <li class="list-group-item  d-flex justify-content-between ps-0 mb-2 border-radius-lg">
                                                     <div class="d-flex flex-column">
                                                         <h6 class="mb-1 text-dark font-weight-bold text-sm">Phòng ${rr.tenPhongTro}</h6>
-                                                        <span class="text-xs">Hóa đơn đã tạo: ${countPaid+countUnpaid}</span>
+                                                        <span class="text-xs">Hóa đơn đã tạo trong tháng này: ${countCurrentInvoice}</span>
                                                         <span class="text-xs" style="color: #009933">Đã thanh toán: ${countPaid} | <span class="text-xs" style="color: red">Chưa thanh toán: ${countUnpaid}</span></span> 
 
 
@@ -370,11 +382,6 @@
             </section>
         </section>
 
-        <!-- Bootstrap JS and dependencies -->
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <!--Date Range Picker-->
         <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
@@ -382,11 +389,11 @@
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
         <script>
-                             $("#dpMonths").datepicker({
-                                 format: "mm-yyyy",
-                                 viewMode: "months",
-                                 minViewMode: "months"
-                             });
+            $("#dpMonths").datepicker({
+                format: "mm-yyyy",
+                viewMode: "months",
+                minViewMode: "months"
+            });
         </script>
         <script>
             const body = document.querySelector('body'),

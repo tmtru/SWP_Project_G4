@@ -71,19 +71,22 @@ public class loadHoaDonNhaTro extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession();
         PhongDAO pdao = new PhongDAO();
-       TransactionDAO trdao= new TransactionDAO();
+        TransactionDAO trdao= new TransactionDAO();
 
         List<NhaTro> houses = (List<NhaTro>) session.getAttribute("housesByRole");
         int choseHouse = -1;
-        if (request.getParameter("id") != null) {
+        if (request.getParameter("idHouse") != null && !request.getParameter("idHouse").equals("")) {
             choseHouse = Integer.parseInt(request.getParameter("id"));
-        };
+        } else
+        if (session.getAttribute("currentHouse") != null) {
+            choseHouse = (int) session.getAttribute("currentHouse");
+        }
          HoaDonDAO hddao = new HoaDonDAO();
         List<HoaDon> listhd = null;
         List<Phong> rentedRooms = null;
-        LocalDate today = LocalDate.now(); // Ngày hiện tại
-        LocalDate startDate = today.withDayOfMonth(1); // Ngày đầu tiên trong tháng hiện tại
-        LocalDate endDate = today.withDayOfMonth(today.lengthOfMonth()); // Ngày cuối cùng trong tháng hiện tại
+        LocalDate today = LocalDate.now(); 
+        LocalDate startDate = today.withDayOfMonth(1); 
+        LocalDate endDate = today.withDayOfMonth(today.lengthOfMonth()); 
         List<Transaction> transactionHistory= null;
         if (houses != null && !houses.isEmpty()) {
             //neu chua duoc chon bat ki nha tro nào sẽ tự động lấy nahf trọ đầu tiên
@@ -95,8 +98,6 @@ public class loadHoaDonNhaTro extends HttpServlet {
                 session.setAttribute("currentHouse", choseHouse);
 
             }
-            System.out.println("Start Date: " + startDate);
-            System.out.println("End Date: " + endDate);
 
             listhd = hddao.getHoaDonByDateRange(startDate, endDate, choseHouse);
             //load danh sach phong voi thong tin ve hoa don

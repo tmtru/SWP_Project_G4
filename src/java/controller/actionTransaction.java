@@ -100,14 +100,12 @@ public class actionTransaction extends HttpServlet {
         String action = request.getParameter("action");
 
         if ("add".equals(action)) {
-            // Lấy dữ liệu từ form
             String maGiaoDich = request.getParameter("maGiaoDich");
             float amount = Float.parseFloat(request.getParameter("amount"));
             String paymentMethod = request.getParameter("paymentMethod");
             int idHoaDon = Integer.parseInt(request.getParameter("idHoaDon"));
             String transactionDateStr = request.getParameter("transactionDate");
-
-            // Chuyển đổi chuỗi ngày sang kiểu Date
+            String mota = request.getParameter("moTa");
             Date transactionDate = null;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             try {
@@ -115,28 +113,43 @@ public class actionTransaction extends HttpServlet {
             } catch (ParseException ex) {
                 Logger.getLogger(actionTransaction.class.getName()).log(Level.SEVERE, null, ex);
             }
-            // Tạo đối tượng Transaction
-            Transaction transaction = new Transaction();
-            transaction.setMaGiaoDich(maGiaoDich);
-            transaction.setAmount(amount);
-            transaction.setPaymentMethod(paymentMethod);
-            transaction.setID_HoaDon(idHoaDon);
-            transaction.setTransaction(transactionDate);
 
-            // Thêm giao dịch vào cơ sở dữ liệu
-            boolean isAdded = transactionDao.addTransaction(transaction);
-            if (isAdded) {
-                // Nếu thêm thành công, có thể chuyển hướng về trang danh sách giao dịch hoặc trang khác
+            // Kiểm tra xem giao dịch đã tồn tại chưa
+            if (transactionDao.isTransactionDuplicated(maGiaoDich)) {
                 request.setAttribute("id", idHoaDon);
-                request.setAttribute("succesMessage", "Thêm giao dịch thành công.");
+                request.setAttribute("errorMessage", "Giao dịch đã tồn tại.");
                 request.getRequestDispatcher("TransactionForm.jsp").forward(request, response);
             } else {
-                // Xử lý lỗi nếu thêm không thành công
-                request.setAttribute("id", idHoaDon);
-                request.setAttribute("errorMessage", "Thêm giao dịch không thành công.");
-                request.getRequestDispatcher("TransactionForm.jsp").forward(request, response);
+                float totalCurrentTransactionAmount = transactionDao.getTotalMoneyByIdHoaDon(idHoaDon);
+                float amountDue = transactionDao.getRequiredAmountByIdHoaDon(idHoaDon);
+                // Kiểm tra xem tổng số tiền sau khi thêm giao dịch mới có vượt quá số tiền cần thanh toán không
+                if (totalCurrentTransactionAmount + amount > amountDue) {
+                    request.setAttribute("id", idHoaDon);
+                    request.setAttribute("errorMessage", "Tổng số tiền giao dịch vượt quá số tiền cần thanh toán.");
+                    request.getRequestDispatcher("TransactionForm.jsp").forward(request, response);
+                } else {
+                    Transaction transaction = new Transaction();
+                    transaction.setMaGiaoDich(maGiaoDich);
+                    transaction.setAmount(amount);
+                    transaction.setPaymentMethod(paymentMethod);
+                    transaction.setID_HoaDon(idHoaDon);
+                    transaction.setTransaction(transactionDate);
+                    transaction.setMoTa(mota);
+
+                    boolean isAdded = transactionDao.addTransaction(transaction);
+                    if (isAdded) {
+                        request.setAttribute("id", idHoaDon);
+                        request.setAttribute("successMessage", "Thêm giao dịch thành công.");
+                        request.getRequestDispatcher("TransactionForm.jsp").forward(request, response);
+                    } else {
+                        request.setAttribute("id", idHoaDon);
+                        request.setAttribute("errorMessage", "Thêm giao dịch không thành công.");
+                        request.getRequestDispatcher("TransactionForm.jsp").forward(request, response);
+                    }
+                }
             }
         }
+
     }
 
     /**

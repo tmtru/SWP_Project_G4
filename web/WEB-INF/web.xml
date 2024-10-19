@@ -125,6 +125,10 @@
         <servlet-name>updateThietBiInRoom</servlet-name>
         <servlet-class>controller.updateThietBiInRoom</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>NewServlet</servlet-name>
+        <servlet-class>controller.NewServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>homeRooms</servlet-name>
         <url-pattern>/homer</url-pattern>
@@ -283,7 +287,7 @@
         <servlet-name>actionHoaDon</servlet-name>
         <url-pattern>/actionhoadon</url-pattern>
     </servlet-mapping>
-    <servlet-mapping> 
+    <servlet-mapping>
         <servlet-name>LoadHoaDonByDate</servlet-name>
         <url-pattern>/hoadontheongay</url-pattern>
     </servlet-mapping>
@@ -330,5 +334,9 @@
     <servlet-mapping>
         <servlet-name>updateThietBiInRoom</servlet-name>
         <url-pattern>/updateThietBiInRoom</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NewServlet</servlet-name>
+        <url-pattern>/NewServlet</url-pattern>
     </servlet-mapping>
 </web-app>

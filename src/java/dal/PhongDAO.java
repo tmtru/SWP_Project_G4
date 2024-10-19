@@ -41,7 +41,7 @@ public class PhongDAO extends DBContext {
                 + "l.TenLoaiPhong, p.Gia, l.Mo_ta , p.Trang_thai,p.ID_NhaTro  "
                 + "FROM phong_tro p "
                 + "JOIN nha_tro n ON p.ID_NhaTro = n.ID_NhaTro "
-                + "JOIN loai_phong l ON p.ID_LoaiPhong = l.ID_LoaiPhong ";
+                + "JOIN loai_phong l ON p.ID_LoaiPhong = l.ID_LoaiPhong order by p.ID_Phong;";
 
         try (PreparedStatement st = connection.prepareStatement(sql); ResultSet rs = st.executeQuery()) {
 
@@ -78,7 +78,7 @@ public class PhongDAO extends DBContext {
                 + "JOIN nha_tro n ON p.ID_NhaTro = n.ID_NhaTro "
                 + "JOIN loai_phong l ON p.ID_LoaiPhong = l.ID_LoaiPhong "
                 + "LEFT JOIN anh_phong_tro a ON p.ID_Phong = a.ID_Phong "
-                + "WHERE p.TenPhongTro LIKE ?";
+                + "WHERE p.TenPhongTro LIKE ? ";
 
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setString(1, "%" + tenPhongTro + "%");
@@ -136,7 +136,7 @@ public class PhongDAO extends DBContext {
                 + "FROM phong_tro p "
                 + "JOIN nha_tro n ON p.ID_NhaTro = n.ID_NhaTro "
                 + "JOIN loai_phong l ON p.ID_LoaiPhong = l.ID_LoaiPhong "
-                + "WHERE p.Tang = ?";
+                + "WHERE p.Tang = ? order by p.ID_Phong";
 
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setInt(1, tang);
@@ -174,7 +174,7 @@ public class PhongDAO extends DBContext {
                 + "FROM phong_tro p "
                 + "JOIN nha_tro n ON p.ID_NhaTro = n.ID_NhaTro "
                 + "JOIN loai_phong l ON p.ID_LoaiPhong = l.ID_LoaiPhong "
-                + "WHERE p.ID_NhaTro = ? AND p.Tang = ?";
+                + "WHERE p.ID_NhaTro = ? AND p.Tang = ? order by p.ID_Phong";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setInt(1, idNhaTro);
             st.setInt(2, tang);
@@ -211,7 +211,7 @@ public class PhongDAO extends DBContext {
                 + "FROM phong_tro p "
                 + "JOIN nha_tro n ON p.ID_NhaTro = n.ID_NhaTro "
                 + "JOIN loai_phong l ON p.ID_LoaiPhong = l.ID_LoaiPhong "
-                + "WHERE p.ID_NhaTro = ?";
+                + "WHERE p.ID_NhaTro = ? order by p.ID_Phong";
 
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setInt(1, idNhaTro);

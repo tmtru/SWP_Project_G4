@@ -51,16 +51,16 @@
 
     </head>
     <body>
-         <jsp:include page="sidebarHoaDonManagement.jsp"></jsp:include>
-        <section class="home">
-            <section class="property-management">
-                <div class="header">
-                    <h2>Danh sách hóa đơn nhà trọ</h2>
+        <jsp:include page="sidebarHoaDonManagement.jsp"></jsp:include>
+            <section class="home">
+                <section class="property-management">
+                    <div class="header">
+                        <h2>Danh sách hóa đơn nhà trọ</h2>
 
-                </div>
+                    </div>
 
-                <nav>
-                    <div class="warpper">
+                    <nav>
+                        <div class="warpper">
                         <c:forEach var="nt" items="${sessionScope.housesByRole}">
                             <a href="hoadon?id=${nt.ID_NhaTro}">
                                 <div class="tab <c:if test="${nt.ID_NhaTro == sessionScope.currentHouse}">active</c:if>" id="tab-${nt.ID_NhaTro}" >
@@ -101,6 +101,12 @@
                                                 <div class="form-group mb-5">
 
                                                     <label for="phong" class="header-service">Phòng *</label>
+                                                    <div class="form-group mb-3" id="contractInfo">
+                                                        <strong>Hợp đồng:</strong> <span id="contractInfoText"></span>
+                                                    </div>
+                                                    <div class="form-group mb-3" id="numberOfPeople">
+                                                        <strong>Số người:</strong> <span id="numberOfPeopleText"></span>
+                                                    </div>
 
                                                     <br/>
 
@@ -108,14 +114,11 @@
                                                         <c:if test="${room != null}">
                                                             <option value="${room.ID_Phong}" data-price="${room.gia}">${room.tenPhongTro}</option>
                                                         </c:if>
-                                                        <c:forEach var="listroom" items="${rentedrooms}">
-                                                            <option value="${listroom.ID_Phong}" data-price="${listroom.gia}">${listroom.tenPhongTro}</option>
-                                                        </c:forEach>
                                                     </select>
                                                 </div>
                                                 <div class="form-group mb-3">
                                                     <label for="ngayHoaDon" class="header-service">Ngày hóa đơn *</label>
-                                                    <input type="date" name="ngayHoaDon" id="ngayHoaDon" class="form-control" required>
+                                                    <input type="date" name="ngayHoaDon" id="ngayHoaDon" class="form-control" required readonly>
                                                 </div>
 
                                                 <div class="form-group">
@@ -290,6 +293,27 @@
                     },
                     error: function (xhr, status, error) {
                         console.error('Có lỗi xảy ra:', error);
+                    }
+                });
+            }
+            function updateInvoiceOnRoomChange() {
+                const selectedRoomId = $('#phong').val(); 
+
+                // Gửi yêu cầu AJAX để lấy thông tin hợp đồng và số người
+                $.ajax({
+                    url: '/your-endpoint/getContractInfo',
+                    type: 'GET',
+                    data: {idPhong: selectedRoomId},
+                    dataType: 'json',
+                    success: function (data) {
+                        // Cập nhật thông tin hợp đồng và số người vào giao diện
+                        if (data) {
+                            $('#contractInfoText').text(data.contractId);
+                            $('#numberOfPeopleText').text(data.numberOfPeople);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error fetching contract info:', error);
                     }
                 });
             }

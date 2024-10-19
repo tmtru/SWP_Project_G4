@@ -21,7 +21,7 @@
         <!----======== CSS ======== -->
         <link rel="stylesheet" href="css/styleDichVu.css">
         <link rel="stylesheet" href="css/styleRoom.css">
-              <link rel="stylesheet" href="css/modelDelete.css">
+        <link rel="stylesheet" href="css/modelDelete.css">
         <script src="https://kit.fontawesome.com/aab0c35bef.js" crossorigin="anonymous"></script>
 
 
@@ -39,278 +39,286 @@
         }
     </style>
     <body>
-        <nav class="sidebar">
-            <header>
-                <div class="image-text">
-                    <a href="home.jsp">
-                        <span class="image">
-                            <img src="assets/img/Logo_nhatro.png" alt="alt" style="margin-top: 15px; width: 100%; margin-left:10px"/>
-                            <!--<img src="logo.png" alt="">-->
-                        </span>
-                    </a>
-                </div>
-
-                <i class='bx bx-chevron-right toggle'></i>
-            </header>
-
-            <div class="menu-bar">
-                <div class="menu">
-                    <!-- 
-                    <li class="search-box">
-                        <i class='bx bx-search icon'></i>
-                        <input type="text" placeholder="Search...">
-                    </li>
-                    -->
-
-                    <ul class="menu-links">
-                        <li class="">
-                            <a href="#">
-                                <i class='bx bx-home-alt icon' ></i>
-                                <span class="text nav-text">Trang chủ</span>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a href="nhatro">
-                                <i class='bx bxs-home icon' ></i>
-                                <span class="text nav-text">Nhà trọ</span>
-                            </a>
-                        </li>
-
-                        <li class="">
-                            <a href="room" >
-                                <i class='bx bx-bar-chart-alt-2 icon active' ></i>
-                                <span class="text nav-text">Phòng trọ</span>
-                            </a>
-                        </li>
-
-                        <li class="">
-                            <a href="accountController">
-                                <i class='bx bx-face icon' ></i>
-                                <span class="text nav-text">Người dùng</span>
-                            </a>
-                        </li>
-
-                        <li class="s">
-                            <a href="loaddichvu" class="active">
-                                <i class='bx bx-bell icon'></i>
-                                <span class="text nav-text">Dịch vụ</span>
-                            </a>
-                        </li>
-
-                        <li class="">
-                            <a href="#">
-                                <i class='bx bx-id-card icon' ></i>
-                                <span class="text nav-text">Hợp đồng</span>
-                            </a>
-                        </li>
-
-                        <li class="">
-                            <a href="hoadon">
-                                <i class='bx bx-wallet icon' ></i>
-                                <span class="text nav-text">Hóa đơn</span>
-                            </a>
-                        </li>
-
-                        <li class="">
-                            <a href="loadThietBi">
-                                <i class='bx bx-devices icon' ></i>
-                                <span class="text nav-text">Thiết bị</span>
-                            </a>
-                        </li>
-
-
-                    </ul>
-                </div>
-
-                <div class="bottom-content">
-                    <li class="">
-                        <a href="#">
-                            <i class='bx bx-log-out icon' ></i>
-                            <span class="text nav-text">Logout</span>
+        <c:set var="a" value="${sessionScope.account}"></c:set>
+            <nav class="sidebar">
+                <header>
+                    <div class="image-text">
+                        <a href="home.jsp">
+                            <span class="image">
+                                <img src="assets/img/Logo_nhatro.png" alt="alt" style="margin-top: 15px; width: 100%; margin-left:10px"/>
+                                <!--<img src="logo.png" alt="">-->
+                            </span>
                         </a>
-                    </li>
+                    </div>
 
-                    <li class="mode">
-                        <div class="sun-moon">
-                            <i class='bx bx-moon icon moon'></i>
-                            <i class='bx bx-sun icon sun'></i>
-                        </div>
-                        <span class="mode-text text">Dark mode</span>
+                    <i class='bx bx-chevron-right toggle'></i>
+                </header>
 
-                        <div class="toggle-switch">
-                            <span class="switch"></span>
-                        </div>
-                    </li>
+                <div class="menu-bar">
+                    <div class="menu">
+                        <!-- 
+                        <li class="search-box">
+                            <i class='bx bx-search icon'></i>
+                            <input type="text" placeholder="Search...">
+                        </li>
+                        -->
 
+                        <ul class="menu-links">
+                            <li class="">
+                                <a href="#">
+                                    <i class='bx bx-home-alt icon' ></i>
+                                    <span class="text nav-text">Trang chủ</span>
+                                </a>
+                            </li>
+                            <li class="">
+                                <a href="nhatro">
+                                    <i class='bx bxs-home icon' ></i>
+                                    <span class="text nav-text">Nhà trọ</span>
+                                </a>
+                            </li>
+
+                            <li class="">
+                                <a href="room" >
+                                    <i class='bx bx-bar-chart-alt-2 icon active' ></i>
+                                    <span class="text nav-text">Phòng trọ</span>
+                                </a>
+                            </li>
+
+                            <li class="">
+                                <a href="accountController">
+                                    <i class='bx bx-face icon' ></i>
+                                    <span class="text nav-text">Người dùng</span>
+                                </a>
+                            </li>
+
+                            <li class="s">
+                                <a href="loaddichvu" class="active">
+                                    <i class='bx bx-bell icon'></i>
+                                    <span class="text nav-text">Dịch vụ</span>
+                                </a>
+                            </li>
+
+                            <li class="">
+                                <a href="#">
+                                    <i class='bx bx-id-card icon' ></i>
+                                    <span class="text nav-text">Hợp đồng</span>
+                                </a>
+                            </li>
+
+                            <li class="">
+                                <a href="hoadon">
+                                    <i class='bx bx-wallet icon' ></i>
+                                    <span class="text nav-text">Hóa đơn</span>
+                                </a>
+                            </li>
+
+                            <li class="">
+                                <a href="loadThietBi">
+                                    <i class='bx bx-devices icon' ></i>
+                                    <span class="text nav-text">Thiết bị</span>
+                                </a>
+                            </li>
+
+
+                        </ul>
+                    </div>
+
+                    <div class="bottom-content">
+                        <li class="">
+                            <a href="#">
+                                <i class='bx bx-log-out icon' ></i>
+                                <span class="text nav-text">Logout</span>
+                            </a>
+                        </li>
+
+                        <li class="mode">
+                            <div class="sun-moon">
+                                <i class='bx bx-moon icon moon'></i>
+                                <i class='bx bx-sun icon sun'></i>
+                            </div>
+                            <span class="mode-text text">Dark mode</span>
+
+                            <div class="toggle-switch">
+                                <span class="switch"></span>
+                            </div>
+                        </li>
+
+                    </div>
                 </div>
-            </div>
 
-        </nav>
+            </nav>
 
-        <section class="home">
-            <section class="property-management">
-                <div class="header">
-                    <h2>Danh sách dịch vụ khu trọ</h2>
+            <section class="home">
+                <section class="property-management">
+                    <div class="header">
+                        <h2>Danh sách dịch vụ khu trọ</h2>
 
-                </div>
-                <p>Dịch vụ sẽ phải gán vào hợp đồng để khi thánh toán sẽ được tự động thêm vào hóa đơn</p>
-
+                    </div>
+                    <p>Dịch vụ sẽ phải gán vào hợp đồng để khi thánh toán sẽ được tự động thêm vào hóa đơn</p>
 
 
-                <div class="filters">
-                    <!-- Button trigger modal -->
-                    <button class="btn add-room " data-toggle="modal" data-target="#addRoomModal">+ Thêm dịch vụ</button>
 
-                    <!-- Modal -->
-                    <div class="modal fade" id="addRoomModal" tabindex="-1" role="dialog" aria-labelledby="addRoomModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="addRoomModalLabel">Thêm dịch vụ</h5>
-                                    <button type="button " class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <form action="adddichvu" method="post">
+                    <div class="filters">
+                    <c:if test="${a!=null}">
+                        <c:if test="${a.role.equals('landlord')}">
+                            <button class="btn add-room " data-toggle="modal" data-target="#addRoomModal">+ Thêm dịch vụ</button>
 
-                                        <div class="form-group">
-                                            <label for="tendichvu">Tên Dịch vụ:</label>
-                                            <input type="text" class="form-control" id="tendichvu" name="tendichvu" required>
+                            <!-- Modal -->
+                            <div class="modal fade" id="addRoomModal" tabindex="-1" role="dialog" aria-labelledby="addRoomModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="addRoomModalLabel">Thêm dịch vụ</h5>
+                                            <button type="button " class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="donGia">Đơn giá(VNĐ):</label>
-                                            <input type="text" class="form-control" id="donGia" name="donGia" required>
-                                        </div>
+                                        <div class="modal-body">
+                                            <form action="adddichvu" method="post">
 
-                                        <div class="form-group">
-                                            <label for="donvi">Đơn vị:</label>
-                                            <input type="text" class="form-control"id="donvi" name="donvi" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="ghichu">Ghi chú:</label>
-                                            <textarea id="ghichu" name="mota" rows="4" cols="55"></textarea>
-                                        </div>
+                                                <div class="form-group">
+                                                    <label for="tendichvu">Tên Dịch vụ:</label>
+                                                    <input type="text" class="form-control" id="tendichvu" name="tendichvu" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="donGia">Đơn giá(VNĐ):</label>
+                                                    <input type="text" class="form-control" id="donGia" name="donGia" required>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="donvi">Đơn vị:</label>
+                                                    <input type="text" class="form-control"id="donvi" name="donvi" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="ghichu">Ghi chú:</label>
+                                                    <textarea id="ghichu" name="mota" rows="4" cols="55"></textarea>
+                                                </div>
 
 
-                                        <button type="submit" class="btn btn-primary">Thêm</button>
-                                    </form>
+                                                <button type="submit" class="btn btn-primary">Thêm</button>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </c:if>
+                        <input type="text" placeholder="Search..." />
                     </div>
-                    <input type="text" placeholder="Search..." />
-                </div>
-            </section>
-            <section class="ftco-section">
+                </section>
+                <section class="ftco-section">
 
 
-                <div class="mx-5">
-                    <table class="table mt-3">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Tên Dịch vụ</th>
-                                <th scope="col">Đơn giá</th>
-                                <th scope="col">Đơn vị</th>
-                                <th scope="col">Ghi chú</th>
-                                <th scope="col">Kích hoạt</th>
-                                <th scope="col">Hành động</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <c:forEach items="${dichVuList}" var="dv">
+                    <div class="mx-5">
+                        <table class="table mt-3">
+                            <thead class="thead-dark">
                                 <tr>
-                                    <th scope="row">${dv.ID_DichVu}</th>
-                                    <td>${dv.tenDichVu}</td>
-                                    <td>${dv.don_gia}</td>
-                                    <td>/${dv.don_vi}</td>
-                                    <td>${dv.mo_ta}</td>
-                                    <td>
-                                        <label class="switch">
-                                            <input type="checkbox" ${dv.isActive ? "checked onclick='this.checked=true;'" : "onclick='updateIsActive(this)'"} data-id="${dv.ID_DichVu}">
-                                            <span class="slider" 
-                                                  <c:if test="${dv.isActive}"> data-bs-toggle="modal" data-bs-target="#myModal${dv.ID_DichVu}"</c:if>></span>
-                                            </label>
-
-                                            <!-- Modal HTML -->
-                                            <div id="myModal${dv.ID_DichVu}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-confirm">
-                                                <div class="modal-content">
-                                                    <div class="modal-header flex-column">
-                                                        <div class="icon-box">
-                                                            <i class="material-icons"><i class="fa-solid fa-circle-xmark"></i></i>
-                                                        </div>
-                                                        <h5 class="modal-title w-100">Bạn có chắc chắn bạn muốn tắt dịch vụ <br/> <span style="color: #5932ea">"${dv.tenDichVu}"</span> ?</h5>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <p style="color: red">Lưu ý: Tắt dịch vụ khiến dịch vụ ko còn được tính trong hợp đồng khi thanh toán </p>
-
-                                                    </div>
-                                                    <div class="modal-footer justify-content-center">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                                                        <button type="button" class="btn btn-danger">
-                                                            <a href="action?action=dele&id=${dv.ID_DichVu}" class="edit-film" style="color: white !important;">Tắt dịch vụ</a>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </td>
-
-                                    <td>
-                                        <button class="btn edit" data-toggle="modal" data-target="#EditModal${dv.ID_DichVu}">Chỉnh sửa</button>
-                                        <div class="modal fade" id="EditModal${dv.ID_DichVu}" tabindex="-1" role="dialog" aria-labelledby="addRoomModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="addRoomModalLabel">Chỉnh sửa</h5>
-                                                        <button type="button " class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <form action="action?action=edit&id=${dv.ID_DichVu}" method="post">
-
-                                                            <div class="form-group">
-                                                                <label for="tendichvu">Tên Dịch vụ:</label>
-                                                                <input type="text" class="form-control" id="tendichvu" name="tendichvu" value="${dv.tenDichVu}"required>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="donGia">Đơn giá(VNĐ):</label>
-                                                                <input type="text" class="form-control" id="donGia" name="donGia" value="${dv.don_gia}" required>
-                                                            </div>
-
-                                                            <div class="form-group">
-                                                                <label for="donvi">Đơn vị:</label>
-                                                                <input type="text" class="form-control"id="donvi" name="donvi" value="${dv.don_vi}" required>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="ghichu">Ghi chú:</label>
-                                                                <textarea id="ghichu" name="mota" rows="4" cols="55" >${dv.mo_ta}</textarea>
-                                                            </div>
-                                                            <button type="submit" class="btn btn-primary">Lưu chỉnh sửa</button>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </td>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Tên Dịch vụ</th>
+                                    <th scope="col">Đơn giá</th>
+                                    <th scope="col">Đơn vị</th>
+                                    <th scope="col">Ghi chú</th>
+                                    <c:if test="${a.role.equals('landlord')}">
+                                    <th scope="col">Kích hoạt</th>
+                                    <th scope="col">Hành động</th>
+                                    </c:if>
                                 </tr>
-                            </c:forEach>
+                            </thead>
+                            <tbody>
+                                <c:forEach items="${dichVuList}" var="dv">
+                                    <tr>
+                                        <th scope="row">${dv.ID_DichVu}</th>
+                                        <td>${dv.tenDichVu}</td>
+                                        <td>${dv.don_gia}</td>
+                                        <td>/${dv.don_vi}</td>
+                                        <td>${dv.mo_ta}</td>
+                                        <c:if test="${a.role.equals('landlord')}">
+                                        <td>
+                                            <label class="switch">
+                                                <input type="checkbox" ${dv.isActive ? "checked onclick='this.checked=true;'" : "onclick='updateIsActive(this)'"} data-id="${dv.ID_DichVu}">
+                                                <span class="slider" 
+                                                      <c:if test="${dv.isActive}"> data-bs-toggle="modal" data-bs-target="#myModal${dv.ID_DichVu}"</c:if>></span>
+                                                </label>
 
-                        </tbody>
-                    </table>
-                </div>
+                                                <!-- Modal HTML -->
+                                                <div id="myModal${dv.ID_DichVu}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-confirm">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header flex-column">
+                                                            <div class="icon-box">
+                                                                <i class="material-icons"><i class="fa-solid fa-circle-xmark"></i></i>
+                                                            </div>
+                                                            <h5 class="modal-title w-100">Bạn có chắc chắn bạn muốn tắt dịch vụ <br/> <span style="color: #5932ea">"${dv.tenDichVu}"</span> ?</h5>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p style="color: red">Lưu ý: Tắt dịch vụ khiến dịch vụ ko còn được tính trong hợp đồng khi thanh toán </p>
+
+                                                        </div>
+                                                        <div class="modal-footer justify-content-center">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                                            <button type="button" class="btn btn-danger">
+                                                                <a href="action?action=dele&id=${dv.ID_DichVu}" class="edit-film" style="color: white !important;">Tắt dịch vụ</a>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </td>
+
+                                        <td>
+                                            <button class="btn edit" data-toggle="modal" data-target="#EditModal${dv.ID_DichVu}">Chỉnh sửa</button>
+                                            <div class="modal fade" id="EditModal${dv.ID_DichVu}" tabindex="-1" role="dialog" aria-labelledby="addRoomModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="addRoomModalLabel">Chỉnh sửa</h5>
+                                                            <button type="button " class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form action="action?action=edit&id=${dv.ID_DichVu}" method="post">
+
+                                                                <div class="form-group">
+                                                                    <label for="tendichvu">Tên Dịch vụ:</label>
+                                                                    <input type="text" class="form-control" id="tendichvu" name="tendichvu" value="${dv.tenDichVu}"required>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="donGia">Đơn giá(VNĐ):</label>
+                                                                    <input type="text" class="form-control" id="donGia" name="donGia" value="${dv.don_gia}" required>
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label for="donvi">Đơn vị:</label>
+                                                                    <input type="text" class="form-control"id="donvi" name="donvi" value="${dv.don_vi}" required>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="ghichu">Ghi chú:</label>
+                                                                    <textarea id="ghichu" name="mota" rows="4" cols="55" >${dv.mo_ta}</textarea>
+                                                                </div>
+                                                                <button type="submit" class="btn btn-primary">Lưu chỉnh sửa</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </td>
+                                        </c:if>
+                                    </tr>
+                                </c:forEach>
+
+                            </tbody>
+                        </table>
+                    </div>
 
 
 
-                <!-- Pagination -->
+                    <!-- Pagination -->
 
 
-            </section>
+                </section>
+            </c:if>
         </section>
 
         <!-- Bootstrap JS and dependencies -->

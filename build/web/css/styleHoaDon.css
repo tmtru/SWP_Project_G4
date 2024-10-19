@@ -175,3 +175,13 @@ button:hover {
     border-top: 1px solid #6E00FF;
     justify-content: flex-end;
 }
+.room-list .card-body{
+    max-height: 600px;
+    overflow: auto;
+}
+.list-group.transaction .list-group-item{
+    margin-left: 50px;
+}
+.list-group.transaction.history .list-group-item{
+    margin-left: 0;
+}
