@@ -46,6 +46,105 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 margin-right: 10px;
                 margin-bottom: 10px;
             }
+            /* Style for house selection tabs */
+            .warpper {
+                display: flex;
+                justify-content: flex-start;
+                gap: 10px;
+
+                overflow-x: auto;
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+
+            .warpper::-webkit-scrollbar {
+                display: none;
+            }
+
+            .warpper a {
+                text-decoration: none;
+            }
+
+            .warpper .tab {
+                background: #9ca3af;
+                color: white;
+                padding: 12px 24px;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                font-size: 16px;
+                white-space: nowrap;
+            }
+
+            .warpper .tab:hover {
+                background: #6b7280;
+            }
+
+            .warpper .tab.active {
+                background: #4f46e5;
+            }
+
+            /* Style for filters section */
+            .filters {
+                display: flex;
+                gap: 15px;
+                padding: 20px;
+                background: #f3f4f6;
+                border-radius: 8px;
+                flex-wrap: wrap;
+            }
+
+            .filters select {
+                padding: 8px 16px;
+                border: 1px solid #d1d5db;
+                border-radius: 6px;
+                background: white;
+                min-width: 150px;
+                font-size: 14px;
+            }
+
+            .filters .search-container {
+                display: flex;
+                align-items: center;
+                margin-left: auto;
+            }
+
+            .filters .search-container input {
+                padding: 8px 16px;
+                border: 1px solid #d1d5db;
+                border-radius: 6px 0 0 6px;
+                width: 250px;
+            }
+
+            .filters .search-container button {
+                padding: 8px 16px;
+                background: #4f46e5;
+                border: none;
+                border-radius: 0 6px 6px 0;
+                color: white;
+                cursor: pointer;
+            }
+
+            .filters .search-container button:hover {
+                background: #4338ca;
+            }
+
+            /* Responsive adjustments */
+            @media (max-width: 768px) {
+                .filters {
+                    flex-direction: column;
+                }
+
+                .filters .search-container {
+                    margin-left: 0;
+                    width: 100%;
+                }
+
+                .filters select,
+                .filters .search-container input {
+                    width: 100%;
+                }
+            }
         </style>
     </head>
     <body>
@@ -175,21 +274,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             <section class="property-management">
                 <div class="header">
                     <h2>Danh sách phòng trọ </h2>
-                    <div class="property-selector">
-                        <select name="nhaTro" id="nhaTro" onchange="filterRoomsByNhaTro(this)">
-                            <option value="">Nhà trọ</option> <!-- Placeholder option -->
-                            <c:forEach var="nhaTro" items="${nhaTroList}">
-                                <option value="${nhaTro.ID_NhaTro}" 
-                                        <c:if test="${param.nhaTro != null && param.nhaTro == nhaTro.ID_NhaTro}">selected</c:if>>
-                                    ${nhaTro.tenNhaTro}
-                                </option>
-                            </c:forEach>
-                        </select>
-
+                    <div class="search-container">
+                        <form action="searchRoomByName" method="get">
+                            <input type="text" name="tenPhongTro" placeholder="Tìm kiếm phòng..." required>
+                            <button type="submit"><i class='bx bx-search'></i></button>
+                        </form>
                     </div>
-
                 </div>
-
 
                 <!-- hien thi export -->
 
@@ -339,11 +430,31 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     </div>
                 </div>
 
+                <nav>
+                    <div class="warpper">
+                        <c:forEach var="nt" items="${sessionScope.housesByRole}">
+                            <a href="room?idHouse=${nt.ID_NhaTro}">
+                                <div class="tab <c:if test="${nt.ID_NhaTro == sessionScope.currentHouse}">active</c:if>" id="tab-${nt.ID_NhaTro}">
+                                    ${nt.tenNhaTro}
+                                </div>
+                            </a>
+                        </c:forEach>
+                        <c:if test="${sessionScope.housesByRole==null}">
+                            <div>Bạn không được quyền truy cập vào bất cứ nhà trọ nào</div>
+                        </c:if>
+                    </div>
+                </nav>
+            </section>
+
+            <section class="ftco-section">
+
                 <div class="filters">
                     <select name="tang" id="tang" onchange="filterRoomsByFloor(this)">
-                        <option value="">Tầng</option> <!-- Placeholder option -->
+                        <option value="">Tất cả tầng</option>
                         <c:forEach var="tang" items="${tangList}">
-                            <option value="${tang}" <c:if test="${param.tang == tang}">selected</c:if>>Tầng ${tang}</option>
+                            <option value="${tang}" ${param.tang == tang ? 'selected' : ''}>
+                                Tầng ${tang}
+                            </option>
                         </c:forEach>
                     </select>
                     <select name="status">
@@ -352,19 +463,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                             <option value="${entry.key}" ${entry.key eq selectedStatus ? 'selected' : ''}>${entry.value}</option>
                         </c:forEach>
                     </select>
-                    <select>
-                        <option value="payment-status">Trạng thái trả phí</option>
-                    </select>
 
-                    <div class="search-container">
-                        <form action="searchRoomByName" method="get">
-                            <input type="text" name="tenPhongTro" placeholder="Tìm kiếm phòng..." required>
-                            <button type="submit"><i class='bx bx-search'></i></button>
-                        </form>
-                    </div>
                 </div>
-            </section>
-            <section class="ftco-section">
                 <div class="container">
                     <div class="row mt-4">
 
@@ -499,23 +599,20 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             //filter room by floor ko can submit
             function filterRoomsByFloor(select) {
                 var selectedFloor = select.value;
-                var selectedHouse = document.getElementById("nhaTro").value; // Get the selected house
-                // Build the query string
-                var url = 'room?tang=' + selectedFloor;
-                if (selectedHouse) { // Include the house if it's selected
-                    url += '&nhaTro=' + selectedHouse;
-                }
-                window.location.href = url;
-            }
+                var url = 'room?';
 
-            function filterRoomsByNhaTro(select) {
-                var selectedNhaTro = select.value;
-                var selectedFloor = document.getElementById("tang").value; // Get the selected floor
-                // Build the query string
-                var url = 'room?nhaTro=' + selectedNhaTro;
-                if (selectedFloor) { // Include the floor if it's selected
-                    url += '&tang=' + selectedFloor;
+                // Thêm tham số tầng nếu có
+                if (selectedFloor) {
+                    url += 'tang=' + selectedFloor;
                 }
+
+                // Lấy giá trị nhà trọ hiện tại từ session
+                var currentHouse = '${sessionScope.currentHouse}';
+                if (currentHouse) {
+                    url += (selectedFloor ? '&' : '') + 'idHouse=' + currentHouse;
+                }
+
+                // Chuyển hướng đến URL mới
                 window.location.href = url;
             }
 
