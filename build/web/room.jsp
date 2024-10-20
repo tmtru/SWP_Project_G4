@@ -223,14 +223,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                 <span class="text nav-text">Hóa đơn</span>
                             </a>
                         </li>
-
+                        <c:if test="${sessionScope.account.role == 'landlord'}">
                         <li class="">
                             <a href="loadThietBi">
                                 <i class='bx bx-devices icon' ></i>
                                 <span class="text nav-text">Thiết bị</span>
                             </a>
                         </li>
-
+                        </c:if>
 
                     </ul>
                 </div>
@@ -285,17 +285,17 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 <!-- hien thi export -->
 
                 <div class="room-actions">
-                    <button class="btn add-room" data-toggle="modal" data-target="#addRoomModal">+ Thêm phòng trọ</button>
-                    <button class="btn quick-add-room">+ Thêm phòng trọ nhanh</button>
-
-                    <form action="/NhaTroTQAT/addRoomExcel" method="get" style="display: inline; background-color: green; border-radius: 5px">
-                        <button type="submit" class="btn export-to-excel">
-                            <i class="bx bxs-file-export"></i>
-                            <span>Export to Excel</span>
-                        </button>
-                    </form>
+                    <c:if test="${sessionScope.account.role == 'landlord'}">
+                        <button class="btn add-room" data-toggle="modal" data-target="#addRoomModal">+ Thêm phòng trọ</button>
+                        <button class="btn quick-add-room">+ Thêm phòng trọ nhanh</button>
+                        <form action="/NhaTroTQAT/addRoomExcel" method="get" style="display: inline; background-color: green; border-radius: 5px">
+                            <button type="submit" class="btn export-to-excel">
+                                <i class="bx bxs-file-export"></i>
+                                <span>Export to Excel</span>
+                            </button>
+                        </form>
+                    </c:if>
                 </div>
-
 
 
 
@@ -494,45 +494,50 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                             <a href="detailRoom?id=${room.ID_Phong}" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;">
                                                 <i class="bx bx-info-circle"></i> Chi tiết
                                             </a>
-                                            <a href="#" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;"
-                                               onclick='openEditModal(
-                                                               "${room.ID_Phong}",
-                                                               "${room.tenPhongTro}",
-                                                               "${room.tang}",
-                                                               "${room.dien_tich}",
-                                                               "${room.gia}",
-                                                               "${room.trang_thai}",
-                                                               "${room.ID_NhaTro}",
-                                                               "${room.ID_LoaiPhong}",
-                                                       [<c:forEach var="image" items="${room.images}" varStatus="status">
-                                                       "${fn:replace(image, '\\', '/')}"
-                                                   <c:if test="${!status.last}">,</c:if>
-                                               </c:forEach>]
-                                                               );
-                                                       return false;'>
-                                                <i class="bx bx-edit"></i> Chỉnh sửa
-                                            </a>
-                                            <a href="#" class="btn btn-link text-danger text-gradient px-3 mb-0" data-toggle="modal" data-target="#myModalDelete${room.ID_Phong}">
-                                                <i class="fa-solid fa-trash"></i>Xóa
-                                            </a>
-                                            <div id="myModalDelete${room.ID_Phong}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-confirm">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header flex-column">
-                                                            <div class="icon-box">
-                                                                <i class="fa-solid fa-circle-xmark"></i>
+                                            <c:if test="${sessionScope.account.role == 'landlord'}">
+                                                <a href="#" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;"
+                                                   onclick='openEditModal(
+                                                                   "${room.ID_Phong}",
+                                                                   "${room.tenPhongTro}",
+                                                                   "${room.tang}",
+                                                                   "${room.dien_tich}",
+                                                                   "${room.gia}",
+                                                                   "${room.trang_thai}",
+                                                                   "${room.ID_NhaTro}",
+                                                                   "${room.ID_LoaiPhong}",
+                                                           [<c:forEach var="image" items="${room.images}" varStatus="status">
+                                                           "${fn:replace(image, '\\', '/')}"
+                                                       <c:if test="${!status.last}">,</c:if>
+                                                   </c:forEach>]
+                                                                   );
+                                                           return false;'>
+                                                    <i class="bx bx-edit"></i> Chỉnh sửa
+                                                </a>
+
+                                                <a href="#" class="btn btn-link text-danger text-gradient px-3 mb-0" data-toggle="modal" data-target="#myModalDelete${room.ID_Phong}">
+                                                    <i class="fa-solid fa-trash"></i>Xóa
+                                                </a>
+
+                                                <!-- Modal xóa phòng -->
+                                                <div id="myModalDelete${room.ID_Phong}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-confirm">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header flex-column">
+                                                                <div class="icon-box">
+                                                                    <i class="fa-solid fa-circle-xmark"></i>
+                                                                </div>
+                                                                <h5 class="modal-title w-100">Bạn có chắc chắn bạn muốn xóa phòng này?</h5>
                                                             </div>
-                                                            <h5 class="modal-title w-100">Bạn có chắc chắn bạn muốn xóa phòng này?</h5>
-                                                        </div>
-                                                        <div class="modal-footer justify-content-center">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                                                            <button type="button" class="btn btn-danger">
-                                                                <a href="deleteRoom?id=${room.ID_Phong}" class="edit-film" style="color: white !important;">Xóa phòng</a>
-                                                            </button>
+                                                            <div class="modal-footer justify-content-center">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                                                                <button type="button" class="btn btn-danger">
+                                                                    <a href="deleteRoom?id=${room.ID_Phong}" class="edit-film" style="color: white !important;">Xóa phòng</a>
+                                                                </button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </c:if>
 
                                         </div>
                                     </div>

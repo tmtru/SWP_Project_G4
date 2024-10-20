@@ -19,8 +19,9 @@
 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <!----======== CSS ======== -->
-        <link rel="stylesheet" href="css/styleDichVu.css">
         <link rel="stylesheet" href="css/styleRoom.css">
+        <link rel="stylesheet" href="css/styleDichVu.css">
+        
         <link rel="stylesheet" href="css/modelDelete.css">
         <script src="https://kit.fontawesome.com/aab0c35bef.js" crossorigin="anonymous"></script>
 
@@ -261,10 +262,32 @@
                                     </td>
                                 </tr>
                             </c:forEach>
+                        
                         </tbody>
+
                     </table>
                 </div>
             </section>
+            <div class="pagination">
+                            <c:if test="${currentPage > 1}">
+                                <a href="?page=${currentPage - 1}" class="prev-next"><i class="fas fa-chevron-left"></i></a> <!-- Sử dụng biểu tượng mũi tên trái -->
+                                </c:if>
+
+                            <c:forEach begin="1" end="${totalPages}" var="i">
+                                <c:choose>
+                                    <c:when test="${currentPage eq i}">
+                                        <span class="current-page">${i}</span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <a href="?page=${i}" class="page-number">${i}</a>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
+
+                            <c:if test="${currentPage < totalPages}">
+                                <a href="?page=${currentPage + 1}" class="prev-next"><i class="fas fa-chevron-right"></i></a> <!-- Sử dụng biểu tượng mũi tên phải -->
+                                </c:if>
+                        </div>
         </section>
 
         <!-- Bootstrap JS and dependencies -->
