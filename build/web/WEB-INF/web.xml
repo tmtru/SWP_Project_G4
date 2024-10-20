@@ -335,8 +335,5 @@
         <servlet-name>updateThietBiInRoom</servlet-name>
         <url-pattern>/updateThietBiInRoom</url-pattern>
     </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>actionHoaDon</servlet-name>
-        <url-pattern>/actionhoadon</url-pattern>
-    </servlet-mapping>
+
 </web-app>
