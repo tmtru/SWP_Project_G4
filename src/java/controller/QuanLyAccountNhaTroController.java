@@ -73,7 +73,7 @@ public class QuanLyAccountNhaTroController extends HttpServlet {
                 request.getRequestDispatcher("quanly-account-nha-tro.jsp").forward(request, response);
 
             }
-            if (account.getRole().equals("Quản lý")) {
+            if (account.getRole().equals("manager")) {
                 String pageParam = request.getParameter("page");
                 int page = 1; // Default to the first page
                 int pageSize = 6; // Set the desired page size
@@ -109,7 +109,7 @@ public class QuanLyAccountNhaTroController extends HttpServlet {
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
 
-        if (account != null && account.getRole().equals("Chủ trọ")) {
+        if (account != null && account.getRole().equals("landlord")) {
             String action = request.getParameter("action");
             if (action.equals("add")) {
                 try {
