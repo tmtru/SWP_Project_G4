@@ -72,7 +72,7 @@ public class NhaTroDAO extends DBContext {
                 + "JOIN NHA_TRO n ON p.ID_NhaTro = n.ID_NhaTro "
                 + "JOIN LOAI_PHONG l ON p.ID_LoaiPhong = l.ID_LoaiPhong "
                 + "LEFT JOIN ANH_PHONG_TRO a ON p.ID_Phong = a.ID_Phong "
-                + "WHERE p.ID_NhaTro = ?";
+                + "WHERE p.ID_NhaTro = ? order by p.ID_Phong;";
         try (PreparedStatement ps = connection.prepareStatement(sql);) {
             ps.setInt(1, idNhaTro);
             ResultSet rs = ps.executeQuery();

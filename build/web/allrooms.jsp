@@ -36,6 +36,7 @@
                     </c:if>
 
                     <p class="listing-description">${rs.mo_ta}</p>
+                    
                 </div>
                 <div class="details-button">
                     <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/dca00f6f57a639b42ff911d49af82395b3e490bbba3e80779f4f7169c56fc15a?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"

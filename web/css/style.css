@@ -8,7 +8,8 @@ body {
     font-family: "Plus Jakarta Sans", sans-serif;
     font-optical-sizing: auto;
     font-style: normal;
-    background-image: linear-gradient(to bottom, rgba(224, 222, 247, 1), transparent);;
+    background-image: linear-gradient(to bottom, rgba(224, 222, 247, 1), transparent);
+    ;
 }
 .hightlight {
     color: #7065F0;
@@ -37,7 +38,7 @@ body {
     background-color: #7065F0;
     color: #ffffff;
     outline: none;
-    width: 100px;   
+    width: 100px;
 }
 .navbar-light .navbar-collapse .signup-button {
     background-color: #ffffff;
@@ -50,7 +51,7 @@ body {
 .navbar-light .navbar-nav a i {
     font-size: 16px;
     padding-left: 2px;
-    
+
 }
 a {
     text-decoration: none;
@@ -79,30 +80,30 @@ ul {
 }
 /* Profile Picture */
 .profile-pic{
-   display: inline-block;
-   vertical-align: middle;
+    display: inline-block;
+    vertical-align: middle;
     width: 42px;
     height: 40px;
     overflow: hidden;
-   border-radius: 50%;
+    border-radius: 50%;
 }
 
 .profile-pic img{
-   width: 100%;
-   height: auto;
-   object-fit: cover;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
 }
 .profile-menu .dropdown-menu {
-  right: 15px;
-  left: unset;
+    right: 15px;
+    left: unset;
 }
 .profile-menu .fa-fw {
-  margin-right: 10px;
+    margin-right: 10px;
 }
 
 .toggle-change::after {
-  border-top: 0;
-  border-bottom: 0.3em solid;
+    border-top: 0;
+    border-bottom: 0.3em solid;
 }
 .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
     color: var(--bs-nav-pills-link-active-color);
@@ -118,7 +119,7 @@ ul {
     aspect-ratio: 11/5;
     object-fit: cover;
     max-height: 788px;
-    
+
 }
 
 .carousel-caption {
@@ -147,7 +148,7 @@ ul {
 .carousel-control-prev,
 .carousel-control-next {
     width: 10%;
-    
+
 }
 
 .carousel-control-prev-icon,
@@ -161,9 +162,9 @@ ul {
         position: relative;
         min-height: 450px;
     }
-        .carousel-caption {
-            background: rgba(15, 23, 43, .6);
-        }
+    .carousel-caption {
+        background: rgba(15, 23, 43, .6);
+    }
 
     #header-carousel .carousel-item img {
         position: absolute;
@@ -184,7 +185,7 @@ ul {
 }
 .fast-searching {
     position: relative;
-    margin-top: -100px !important;
+    margin-top: -150px !important;
     z-index: 1;
     max-width: 1200px;
 }
@@ -213,6 +214,7 @@ ul {
 .fast-searching .form-input {
     padding-right: 20px;
     border-right: 1px solid rgb(182, 177, 238);
+    position: relative;
 
 }
 .fast-search-btn button{
@@ -235,11 +237,11 @@ ul {
 
 /****About us ****/
 .about-start{
-    
+
 }
 .about-start .about-img img{
     width: 100%;
-    
+
 }
 .about-start .btn{
     background-color: #7065F0;
@@ -1622,14 +1624,14 @@ ul {
 /*** List of Room ***/
 .listings-container .explore {
     width: 200px;
-    background-color: #7065F0; 
+    background-color: #7065F0;
     color: white;
-    
+
 }
 .slider {
     display: flex;
     gap: 10px;
-   
+
 }
 .slider {
     justify-content: flex-start;
@@ -1677,7 +1679,7 @@ ul {
     overflow: hidden;
     align-items: center;
     justify-content: center;
-    padding: 50px 30px;
+    padding-top: 50px;
     font-family: Plus Jakarta Sans, sans-serif;
 }
 
@@ -1727,7 +1729,6 @@ ul {
 }
 .container-list{
     height: 100%;
-    margin-bottom: 100px;
     flex-wrap: wrap;
     justify-content: space-around;
 }
@@ -1808,7 +1809,7 @@ ul {
     font-weight: 500;
     opacity: 0.5;
     align-self: flex-start;
-  
+
 }
 
 .divider {
@@ -2114,8 +2115,22 @@ ul {
     align-self: stretch;
     gap: 10px;
     margin: auto 0;
-} 
+}
+#suggestions {
 
+    max-height: 150px;
+    overflow-y: auto;
+    position: absolute;
+    background-color: #E0DEF7;
+    width: 95%;
+}
+.suggestion-item {
+    padding: 8px;
+    cursor: pointer;
+}
+.suggestion-item:hover {
+    background-color: #f0f0f0;
+}
 
 
 .contact-address {
@@ -2175,6 +2190,12 @@ ul {
 }
 
 .image-column {
+    display: flex;
+    flex-direction: column;
+    width: 29%;
+    margin-left: 20px;
+}
+#map {
     display: flex;
     flex-direction: column;
     width: 29%;
@@ -2325,7 +2346,7 @@ ul {
     border-right: none;
 }
 nav{
-    
+
     margin-top:10px;
 }
 
@@ -2342,4 +2363,36 @@ nav button {
 }
 .pagination-nav{
     margin-top:25px;
+}
+
+.suggestions ::-webkit-scrollbar {
+  width: 5px;
+}
+
+/*category*/
+.nhatros .featured-listing .featured-card{
+    flex-direction: row;
+}
+.container-list.nhatros {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.nhatros .link-house {
+    width: 40%; 
+    margin-bottom: 20px;
+}
+
+@media (max-width: 1400px) {
+    .nhatros .link-house {
+        width: 100%; 
+    }
+}
+.nhatros .featured-card .featured-details {
+    padding: 38px 24px;
+    background-color: #ffffff;
+    margin-top: 0;
+}
+.nhatros .featured-card {
+    padding-bottom: 0;
 }
