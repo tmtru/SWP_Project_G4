@@ -80,15 +80,17 @@ public class deleteRoomServlet extends HttpServlet {
                     NhaTro nhaTro = ntdao.getNhaTroByPhongTroId(roomId);
                     boolean success = dao.deleteRoomById(roomId);
                     if (success) {
+                        
+                         // for action history
+                         
+                         
                         HttpSession session = request.getSession();
                         Account account = (Account) session.getAttribute("account");
-                        if (account.getRole().equals("Quản lý")) {
+                        if (account.getRole().equals("manager")) {
                             ActionHistoryDAO ahdao = new ActionHistoryDAO();
                             ActionHistory history = new ActionHistory();
 
                             history.setNhaTro(nhaTro);
-                            System.out.println(phong);
-
                             QuanLyDAO qldao = new QuanLyDAO();
                             QuanLy quanLy = qldao.getChuTroByAccountId(account.getID_Account());
                             history.setQuanLy(quanLy);

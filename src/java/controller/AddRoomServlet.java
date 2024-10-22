@@ -150,12 +150,14 @@ public class AddRoomServlet extends HttpServlet {
                     imageFiles);
             PhongDAO pdao = new PhongDAO();
             pdao.insertRoom(room);
+            
+            // for action history
             NhaTroDAO ntdao = new NhaTroDAO();
             Phong phong = pdao.getLatestPhong();
             NhaTro nhaTro = ntdao.getNhaTroByPhongTroId(phong.getID_Phong());
             HttpSession session = request.getSession();
             Account account = (Account) session.getAttribute("account");
-            if (account.getRole().equals("Quản lý")) {
+            if (account.getRole().equals("manager")) {
                 ActionHistoryDAO ahdao = new ActionHistoryDAO();
                 ActionHistory history = new ActionHistory();
 

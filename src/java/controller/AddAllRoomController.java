@@ -39,7 +39,7 @@ public class AddAllRoomController extends HttpServlet {
         Account account = (Account) session.getAttribute("account");
 
         if (account != null) {
-            if (account.getRole().equals("Chủ trọ")) {
+            if (account.getRole().equals("landlord")) {
                 int nhaTroID = Integer.parseInt(request.getParameter("id"));
 
                 List<RoomType> listRoomTypes = roomTypeDAO.getRopmTypes();
@@ -66,7 +66,7 @@ public class AddAllRoomController extends HttpServlet {
         Account account = (Account) session.getAttribute("account");
 
         if (account != null) {
-            if (account.getRole().equals("Chủ trọ")) {
+            if (account.getRole().equals("landlord")) {
 
                 int tuPhong = Integer.parseInt(request.getParameter("tuPhong"));  // Starting room number
                 int denPhong = Integer.parseInt(request.getParameter("denPhong")); // Ending room number
