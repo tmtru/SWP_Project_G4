@@ -101,7 +101,62 @@ public class DichVuDAO extends DBContext {
             e.printStackTrace();
         }
     }
+    
+    public boolean insertSoLuongNguoi(int idHopDong, int soLuong) {
+        String sql = "UPDATE hop_dong SET So_nguoi = ? WHERE ID_HopDong = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, soLuong);
+            ps.setInt(2, idHopDong);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0; 
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
+    public boolean insertDichVuHopDong(int idHopDong, int idDichVu) {
+        String sql = "INSERT INTO dich_vu_hop_dong (ID_DichVu, ID_HopDong, So_luong) VALUES (?, ?, 1)";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, idDichVu);
+            ps.setInt(2, idHopDong);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0; 
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    public List<DichVu> getDichVuByHopDongId(int hopDongId) {
+        List<DichVu> dichVuList = new ArrayList<>();
+        String query = "SELECT dv.ID_DichVu, dv.TenDichVu, dv.Don_gia, dv.Don_vi, dv.Mo_ta, dv.isActive " +
+                       "FROM dich_vu dv " +
+                       "JOIN dich_vu_hop_dong dvhd ON dv.ID_DichVu = dvhd.ID_DichVu " +
+                       "WHERE dvhd.ID_HopDong = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+
+            ps.setInt(1, hopDongId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    DichVu dichVu = new DichVu();
+                    dichVu.setID_DichVu(rs.getInt("ID_DichVu"));
+                    dichVu.setTenDichVu(rs.getString("TenDichVu"));
+                    dichVu.setDon_gia(rs.getInt("Don_gia"));
+                    dichVu.setDon_vi(rs.getString("Don_vi"));
+                    dichVu.setMo_ta(rs.getString("Mo_ta"));
+                    dichVu.setIsActive(rs.getBoolean("isActive"));
+                    dichVuList.add(dichVu);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle exception
+        }
+
+        return dichVuList;
+    }
+    
     public static void main(String[] args) {
         DichVuDAO dao = new DichVuDAO();
         // Lấy tất cả các dịch vụ

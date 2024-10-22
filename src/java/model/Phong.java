@@ -26,6 +26,23 @@ public class Phong {
     private int Gia;
     private String Mo_ta;
     private List<String> images;
+    private String diaChiPhongTro;
+
+    public Phong(String Trang_thai, int Gia, String diaChiPhongTro) {
+        this.Trang_thai = Trang_thai;
+        this.Gia = Gia;
+        this.diaChiPhongTro = diaChiPhongTro;
+    }
+
+    
+
+    public String getDiaChiPhongTro() {
+        return diaChiPhongTro;
+    }
+
+    public void setDiaChiPhongTro(String diaChiPhongTro) {
+        this.diaChiPhongTro = diaChiPhongTro;
+    }
 
     public Phong() {
     }

@@ -555,12 +555,5 @@ public class HoaDonDAO extends DBContext {
         }
     }
 
-    public static void main(String[] args) throws ParseException {
-        HoaDonDAO hoaDonDAO = new HoaDonDAO(); // Truyền kết nối vào DAO
-
-        // Tạo hóa đơn
-        HoaDon hoaDon = new HoaDon();
-        System.out.println(hoaDonDAO.getHoaDonByRoomId(2));
-
-    }
+   
 }
