@@ -137,6 +137,44 @@
         <servlet-name>loadPhongTro</servlet-name>
         <servlet-class>controller.loadPhongTro</servlet-class>
     </servlet>
+
+    
+    <servlet>
+        <servlet-name>AddConTractController</servlet-name>
+        <servlet-class>controller.AddConTractController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DangKyDichVuPhongTroController</servlet-name>
+        <servlet-class>controller.DangKyDichVuPhongTroController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>HopDongThueTroController</servlet-name>
+        <servlet-class>controller.HopDongThueTroController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GuiHopDongChoChuTroController</servlet-name>
+        <servlet-class>controller.GuiHopDongChoChuTroController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DanhSachCacHopDongByAdminController</servlet-name>
+        <servlet-class>controller.DanhSachCacHopDongByAdminController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ChiTietHopDongByAdminController</servlet-name>
+        <servlet-class>controller.ChiTietHopDongByAdminController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DanhSachCacHopDongByManagerController</servlet-name>
+        <servlet-class>controller.DanhSachCacHopDongByManagerController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ChiTietHopDongByManagerController</servlet-name>
+        <servlet-class>controller.ChiTietHopDongByManagerController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GiaHanHopDongByManagerController</servlet-name>
+        <servlet-class>controller.GiaHanHopDongByManagerController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>homeRooms</servlet-name>
         <url-pattern>/homer</url-pattern>
@@ -287,6 +325,7 @@
         <servlet-name>profileServlet</servlet-name>
         <url-pattern>/profileServlet</url-pattern>
     </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>actionHoaDon</servlet-name>
         <url-pattern>/actionhoadon</url-pattern>
@@ -342,5 +381,44 @@
     <servlet-mapping>
         <servlet-name>loadPhongTro</servlet-name>
         <url-pattern>/loadPhongTro</url-pattern>
+    </servlet-mapping>
+
+
+
+    <servlet-mapping>
+        <servlet-name>AddConTractController</servlet-name>
+        <url-pattern>/addContract</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DangKyDichVuPhongTroController</servlet-name>
+        <url-pattern>/DangKyDichVuPhongTro</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HopDongThueTroController</servlet-name>
+        <url-pattern>/HopDongThueTro</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GuiHopDongChoChuTroController</servlet-name>
+        <url-pattern>/GuiHopDongChoChuTro</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DanhSachCacHopDongByAdminController</servlet-name>
+        <url-pattern>/DanhSachCacHopDongByAdmin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChiTietHopDongByAdminController</servlet-name>
+        <url-pattern>/ChiTietHopDongByAdmin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DanhSachCacHopDongByManagerController</servlet-name>
+        <url-pattern>/DanhSachCacHopDongByManager</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChiTietHopDongByManagerController</servlet-name>
+        <url-pattern>/ChiTietHopDongByManager</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GiaHanHopDongByManagerController</servlet-name>
+        <url-pattern>/GiaHanHopDongByManager</url-pattern>
     </servlet-mapping>
 </web-app>
