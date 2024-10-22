@@ -162,7 +162,7 @@ public class KhachThueDAO extends DBContext {
             }
         }
     }
-
+    
     public int getIdAccountByEmail(String email) {
         int idAccount = -1;
         String sql = "SELECT ID_Account FROM account WHERE Email = ?";
@@ -272,24 +272,5 @@ public class KhachThueDAO extends DBContext {
             e.printStackTrace();  // Log lỗi nếu cần
         }
         return khachThue;
-    }
-
-    public static void main(String[] args) {
-        KhachThueDAO khachThueDAO = new KhachThueDAO();
-
-        // Dữ liệu CCCD để test
-        String testCCCD = "6666"; // Bạn có thể thay đổi theo CCCD có sẵn trong DB để kiểm tra
-
-        // Gọi phương thức getKhachThueIdByCCCD
-        int khachThueId = khachThueDAO.getKhachThueIdByCCCD(testCCCD);
-
-        // Kiểm tra kết quả
-        if (khachThueId != -1) {
-            System.out.println("Khách thuê với CCCD " + testCCCD + " có ID là: " + khachThueId);
-        } else {
-            System.out.println("Không tìm thấy khách thuê với CCCD: " + testCCCD);
-        }
-
-        // Đóng kết nối (nếu cần thiết)
     }
 }
