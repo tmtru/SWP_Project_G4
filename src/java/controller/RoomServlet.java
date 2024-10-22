@@ -11,13 +11,13 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.ArrayList;
 import model.LoaiPhong;
 import model.NhaTro;
 import model.Phong;
 
 public class RoomServlet extends HttpServlet {
     private static final Map<String, String> STATUS_DESCRIPTIONS = new HashMap<>();
-    private static final int DEFAULT_HOUSE_ID = 1;
     
     static {
         STATUS_DESCRIPTIONS.put("D", "Đang thuê");
@@ -50,21 +50,24 @@ public class RoomServlet extends HttpServlet {
             }
         }
 
-        // Handle house selection
-        int currentHouseId = DEFAULT_HOUSE_ID;
+        // Get houses by role from session
+        @SuppressWarnings("unchecked")
+        List<NhaTro> housesByRole = (List<NhaTro>) request.getSession().getAttribute("housesByRole");
+        
+        // Handle house selection with automatic selection of first house
+        int currentHouseId = -1;
+        
         if (idHouseStr != null && !idHouseStr.isEmpty()) {
             try {
                 currentHouseId = Integer.parseInt(idHouseStr);
-                request.getSession().setAttribute("currentHouse", currentHouseId);
             } catch (NumberFormatException e) {
-                // Use default house ID
+                // Invalid ID, will fall back to first house
             }
         } else if (nhaTroId != null && !nhaTroId.isEmpty()) {
             try {
                 currentHouseId = Integer.parseInt(nhaTroId);
-                request.getSession().setAttribute("currentHouse", currentHouseId);
             } catch (NumberFormatException e) {
-                // Use default house ID
+                // Invalid ID, will fall back to first house
             }
         } else {
             Object sessionHouse = request.getSession().getAttribute("currentHouse");
@@ -73,18 +76,29 @@ public class RoomServlet extends HttpServlet {
             }
         }
 
+        // If no house is selected and there are available houses, select the first one
+        if (currentHouseId == -1 && housesByRole != null && !housesByRole.isEmpty()) {
+            currentHouseId = housesByRole.get(0).getID_NhaTro();
+        }
+
+        // Store the selected house ID in session
+        request.getSession().setAttribute("currentHouse", currentHouseId);
+
         // Apply filters and get rooms
         List<Phong> filteredRooms;
-        if (tangParam != null && !tangParam.isEmpty()) {
-            try {
-                int tang = Integer.parseInt(tangParam);
-                // Get rooms filtered by both house and floor
-                filteredRooms = roomDAO.getRoomsByNhaTroAndTang(currentHouseId, tang);
-            } catch (NumberFormatException e) {
+        if (currentHouseId != -1) {
+            if (tangParam != null && !tangParam.isEmpty()) {
+                try {
+                    int tang = Integer.parseInt(tangParam);
+                    filteredRooms = roomDAO.getRoomsByNhaTroAndTang(currentHouseId, tang);
+                } catch (NumberFormatException e) {
+                    filteredRooms = roomDAO.getPhongsByNhaTroId(currentHouseId);
+                }
+            } else {
                 filteredRooms = roomDAO.getPhongsByNhaTroId(currentHouseId);
             }
         } else {
-            filteredRooms = roomDAO.getPhongsByNhaTroId(currentHouseId);
+            filteredRooms = new ArrayList<>(); // Empty list if no house is selected
         }
 
         // Apply status filter if present
