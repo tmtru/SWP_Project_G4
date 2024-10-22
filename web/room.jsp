@@ -473,20 +473,41 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         <c:forEach var="room" items="${rooms}">
                             <div class="col-md-3 mb-4">
                                 <div class="card h-100">
-
                                     <div class="card-body">
-                                        <h5 class="card-title">${room.tenPhongTro}</h5>
+                                        <!-- Room Name and Add Contract Button Positioned at the Top -->
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h5 class="card-title">${room.tenPhongTro}</h5>
+                                            <c:if test="${room.trang_thai == 'T' || room.trang_thai == 'DT'}">
+                                                <form action="addContract" method="post" style="display: inline;">
+                                                    <input type="hidden" name="roomId" value="${room.ID_Phong}">
+                                                    <button type="submit" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;">
+                                                        <i class="bx bx-file"></i> Thêm khách
+                                                    </button>
+                                                </form>
+                                            </c:if>
+
+                                        </div>
+
                                         <p class="card-text">
                                             <strong>Tầng:</strong> ${room.tang}<br>
                                             <strong>Diện tích:</strong> ${room.dien_tich} m²<br>
                                             <strong>Giá tiền:</strong> <fmt:formatNumber value="${room.gia}" type="currency" currencyCode="VND"/><br>
+
                                             <strong>Trạng thái:</strong> 
-                                            <span class="badge
-                                                  ${room.trang_thai == 'T' ? 'badge-success' : room.trang_thai == 'D' ? 'badge-danger' : 'badge-warning'}">
-                                                ${room.trang_thai == 'T' ? 'Trống' : room.trang_thai == 'D' ? 'Đang thuê' : 'Đang sửa'}
-                                            </span>
-
-
+                                            <c:choose>
+                                                <c:when test="${room.trang_thai == 'T'}">
+                                                    <span class="badge badge-success">Trống</span>
+                                                </c:when>
+                                                <c:when test="${room.trang_thai == 'D'}">
+                                                    <span class="badge badge-danger">Đang thuê</span>
+                                                </c:when>
+                                                <c:when test="${room.trang_thai == 'DS'}">
+                                                    <span class="badge badge-warning">Đang sửa</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span class="badge badge-secondary">Trống</span>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </p>
                                     </div>
                                     <div class="card-footer bg-transparent">
@@ -495,6 +516,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                                 <i class="bx bx-info-circle"></i> Chi tiết
                                             </a>
                                             <c:if test="${sessionScope.account.role == 'landlord'}">
+
+                                            <!-- Edit and Delete Buttons -->
+                                            <c:if test="${!empty room.trang_thai}">
                                                 <a href="#" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;"
                                                    onclick='openEditModal(
                                                                    "${room.ID_Phong}",
@@ -513,7 +537,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                                            return false;'>
                                                     <i class="bx bx-edit"></i> Chỉnh sửa
                                                 </a>
-
                                                 <a href="#" class="btn btn-link text-danger text-gradient px-3 mb-0" data-toggle="modal" data-target="#myModalDelete${room.ID_Phong}">
                                                     <i class="fa-solid fa-trash"></i>Xóa
                                                 </a>
@@ -539,12 +562,15 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                                 </div>
                                             </c:if>
 
+                                                
+                                            </c:if>
+
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </c:forEach>
+
                     </div>
                     <div class="pagination">
                         <c:if test="${currentPage > 1}">

@@ -13,6 +13,27 @@ public class KhachThue {
     private Account account;
     private String roomName;
     private String job;
+    private String email;
+    private String noi_sinh;
+    private String noi_cap;
+    private String ngay_cap;
+
+    public String getNoi_cap() {
+        return noi_cap;
+    }
+
+    public void setNoi_cap(String noi_cap) {
+        this.noi_cap = noi_cap;
+    }
+
+    public String getNgay_cap() {
+        return ngay_cap;
+    }
+
+    public void setNgay_cap(String ngay_cap) {
+        this.ngay_cap = ngay_cap;
+    }
+    
 
     public KhachThue() {
     }
@@ -109,6 +130,36 @@ public class KhachThue {
 
     public void setJob(String job) {
         this.job = job;
+    }
+
+    public KhachThue(int id, String name, String cccd, Date dob, String phone, String hk_thuong_tru, Account account, String roomName, String job, String email, String noi_sinh) {
+        this.id = id;
+        this.name = name;
+        this.cccd = cccd;
+        this.dob = dob;
+        this.phone = phone;
+        this.hk_thuong_tru = hk_thuong_tru;
+        this.account = account;
+        this.roomName = roomName;
+        this.job = job;
+        this.email = email;
+        this.noi_sinh = noi_sinh;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getNoi_sinh() {
+        return noi_sinh;
+    }
+
+    public void setNoi_sinh(String noi_sinh) {
+        this.noi_sinh = noi_sinh;
     }
 
     @Override

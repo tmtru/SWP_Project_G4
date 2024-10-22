@@ -39,10 +39,10 @@
         <jsp:include page="header.jsp" /> 
         <!-- Header End -->
 
-        <!-- Room Start -->
+        <!-- Room Startx -->
 
         <section class="property-listings">
-            <div class="listings-container">
+            <div class="container listings-container">
                 <header class="headline mb-2" data-aos="fade-down" data-aos-duration="1000">
                     <h2 class="headline-title">Nhà trọ hiện có</h2>
                     <p class="headline-subtitle">Khu trọ của chúng tôi gồm nhiều nhà trọ cho bạn tìm kiếm.</p>
@@ -78,7 +78,7 @@
                                     </div>
                                 </section>-->
                 <c:if test="${not empty sessionScope.nhatros}">
-                    <div class="container-list d-flex f-row nhatros">
+                    <div class=" container-list d-flex f-row nhatros">
                         <c:forEach items="${sessionScope.nhatros}" var="nt">
                             <c:set var="nhatro" value="${nt.ID_NhaTro}" />
 
@@ -131,7 +131,12 @@
                                                          alt="Property icon" class="listing-icon">
                                                 </div>
                                                 <p class="listing-address">${nt.dia_chi}</p>
-                                                <p class="listing-address">${nt.mo_ta}</p>
+                                                <% 
+                                                    NhaTro nt = (NhaTro) pageContext.getAttribute("nt");
+                                                    String moTa = nt.getMo_ta().replaceAll("(\r\n|\n)", "<br />");
+                                                    request.setAttribute("moTa", moTa);
+                                                %>
+                                                <p class="listing-address">${moTa}</p>
                                                 <hr class="divider">
                                                 <div class="facilities">
                                                     <div class="facility">

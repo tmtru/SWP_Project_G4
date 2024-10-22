@@ -72,7 +72,7 @@ public class NhaTroDAO extends DBContext {
                 + "JOIN NHA_TRO n ON p.ID_NhaTro = n.ID_NhaTro "
                 + "JOIN LOAI_PHONG l ON p.ID_LoaiPhong = l.ID_LoaiPhong "
                 + "LEFT JOIN ANH_PHONG_TRO a ON p.ID_Phong = a.ID_Phong "
-                + "WHERE p.ID_NhaTro = ?";
+                + "WHERE p.ID_NhaTro = ? order by p.ID_Phong;";
         try (PreparedStatement ps = connection.prepareStatement(sql);) {
             ps.setInt(1, idNhaTro);
             ResultSet rs = ps.executeQuery();
@@ -545,12 +545,40 @@ public class NhaTroDAO extends DBContext {
         return nhaTro;
     }
     
+ public Phong getRoomDetailsByHopDongId(int idHopDong) {
+    Phong roomDetails = null; // Đối tượng chứa thông tin phòng
+    String sql = "SELECT n.Dia_chi, p.Gia, h.Trang_thai " +
+                 "FROM hop_dong h " +
+                 "JOIN phong_tro p ON h.ID_PhongTro = p.ID_Phong " +
+                 "JOIN nha_tro n ON p.ID_NhaTro = n.ID_NhaTro " +
+                 "WHERE h.ID_HopDong = ?";
+
+    try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        statement.setInt(1, idHopDong);
+        ResultSet resultSet = statement.executeQuery();
+
+        if (resultSet.next()) {
+            String diaChiPhongTro = resultSet.getString("Dia_chi");
+            int Gia = resultSet.getInt("Gia");
+            String Trang_thai = resultSet.getString("Trang_thai");
+
+            roomDetails = new Phong(Trang_thai, Gia, diaChiPhongTro); // Gán đối tượng mới cho biến roomDetails
+        }
+    } catch (SQLException e) {
+        e.printStackTrace(); // Log exception or handle it as needed
+    }
+
+    return roomDetails; // Trả về đối tượng roomDetails
+}
+
+ 
     public static void main(String[] args) {
         NhaTroDAO dAO = new NhaTroDAO();
         List<NhaTro> list = dAO.getAllNhaTroForManager(2);
         for (NhaTro string : list) {
             System.out.println(string);
         }
+
 //        // Kiểm tra phương thức getAll
 //        System.out.println("Danh sách nhà trọ:");
 //        ArrayList<NhaTro> danhSachNhaTro = nhaTroDAO.getAll();

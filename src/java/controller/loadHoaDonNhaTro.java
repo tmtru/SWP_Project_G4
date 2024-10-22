@@ -76,7 +76,7 @@ public class loadHoaDonNhaTro extends HttpServlet {
         List<NhaTro> houses = (List<NhaTro>) session.getAttribute("housesByRole");
         int choseHouse = -1;
         if (request.getParameter("idHouse") != null && !request.getParameter("idHouse").equals("")) {
-            choseHouse = Integer.parseInt(request.getParameter("id"));
+            choseHouse = Integer.parseInt(request.getParameter("idHouse"));
         } else
         if (session.getAttribute("currentHouse") != null) {
             choseHouse = (int) session.getAttribute("currentHouse");

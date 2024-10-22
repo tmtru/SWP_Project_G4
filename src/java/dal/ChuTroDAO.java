@@ -91,4 +91,31 @@ public class ChuTroDAO extends DBContext {
         }
         return chuTro;
     }
+    
+    public ChuTro getChuTroByHopDongId(int hopDongId) {
+        ChuTro chuTro = null;
+        String query = "SELECT ct.ID_ChuTro, ct.TenChuTro, ct.Ngay_sinh, ct.SDT, ct.CCCD "
+                     + "FROM chu_tro ct "
+                     + "JOIN nha_tro nt ON ct.ID_ChuTro = nt.ID_ChuTro "
+                     + "JOIN phong_tro pt ON nt.ID_NhaTro = pt.ID_NhaTro "
+                     + "JOIN hop_dong hd ON pt.ID_Phong = hd.ID_PhongTro "
+                     + "WHERE hd.ID_HopDong = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, hopDongId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                chuTro = new ChuTro();
+                chuTro.setId(rs.getInt("ID_ChuTro"));
+                chuTro.setName(rs.getString("TenChuTro"));
+                chuTro.setDob(rs.getDate("Ngay_sinh"));
+                chuTro.setPhone(rs.getString("SDT"));
+                chuTro.setCccd(rs.getString("CCCD"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return chuTro;
+    }
 }

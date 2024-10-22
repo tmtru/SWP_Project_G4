@@ -86,11 +86,7 @@
                     <p class="property-info">
                         <span class="highlight">Số điện thoại liên lạc:</span> 0231545554
                     </p>
-                    <p class="property-info">
-                        <span class="highlight">Mô tả:</span> ${currenthouse.mo_ta}
-
-
-                    </p>
+                    
                     <div class="facilities">
                         <div class="facility">
                             <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/01d699666662d8bd83b20fc07d97a0db5f5e91bf78cb0ee3e5320f65dcced623?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
@@ -123,6 +119,17 @@
                 </div>
             </div>
         </section>
+                        <p class="property-info">
+                        <% 
+
+                                                        NhaTro nt = (NhaTro) session.getAttribute("currenthouse");
+                                                        String moTa = nt.getMo_ta().replaceAll("(\r\n|\n)", "<br />");
+                                                        request.setAttribute("moTa", moTa);
+                        %>
+                        <span class="highlight">Mô tả:</span> ${moTa}
+
+
+                    </p>
         <!-- Room End -->
 
         <!--List Rooms of House Start-->
@@ -289,7 +296,6 @@
                                             </span>
                                         </c:if>
 
-                                        <p class="listing-description">${rs.mo_ta}</p>
                                     </div>
                                     <div class="details-button">
                                         <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/dca00f6f57a639b42ff911d49af82395b3e490bbba3e80779f4f7169c56fc15a?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
