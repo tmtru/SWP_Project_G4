@@ -1,20 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
 import java.util.List;
 
-/**
- *
- * @author Admin
- */
 public class Phong {
 
     private int ID_Phong;
     private int ID_LoaiPhong;
-
     private String TenPhongTro;
     private int ID_NhaTro;
     private String TenLoaiPhong;
@@ -188,9 +179,14 @@ public class Phong {
         this.images = images;
     }
 
+//    @Override
+//    public String toString() {
+//        return "Room{" + "ID_Phong=" + ID_Phong + ", ID_LoaiPhong=" + ID_LoaiPhong + ", TenPhongTro=" + TenPhongTro + ", ID_NhaTro=" + ID_NhaTro + ", TenLoaiPhong=" + TenLoaiPhong + ", TenNhaTro=" + TenNhaTro + ", Tang=" + Tang + ", Trang_thai=" + Trang_thai + ", Dien_tich=" + Dien_tich + ", URL_AnhPhongTro=" + URL_AnhPhongTro + ", Gia=" + Gia + ", Mo_ta=" + Mo_ta + '}';
+//    }
+
     @Override
     public String toString() {
-        return "Room{" + "ID_Phong=" + ID_Phong + ", ID_LoaiPhong=" + ID_LoaiPhong + ", TenPhongTro=" + TenPhongTro + ", ID_NhaTro=" + ID_NhaTro + ", TenLoaiPhong=" + TenLoaiPhong + ", TenNhaTro=" + TenNhaTro + ", Tang=" + Tang + ", Trang_thai=" + Trang_thai + ", Dien_tich=" + Dien_tich + ", URL_AnhPhongTro=" + URL_AnhPhongTro + ", Gia=" + Gia + ", Mo_ta=" + Mo_ta + '}';
+        return "Phong{" + "ID_Phong=" + ID_Phong + ", ID_LoaiPhong=" + ID_LoaiPhong + ", TenPhongTro=" + TenPhongTro + ", ID_NhaTro=" + ID_NhaTro + ", TenLoaiPhong=" + TenLoaiPhong + ", TenNhaTro=" + TenNhaTro + ", Tang=" + Tang + ", Trang_thai=" + Trang_thai + ", Dien_tich=" + Dien_tich + ", URL_AnhPhongTro=" + URL_AnhPhongTro + ", Gia=" + Gia + ", Mo_ta=" + Mo_ta + ", images=" + images + ", diaChiPhongTro=" + diaChiPhongTro + '}';
     }
 
 }

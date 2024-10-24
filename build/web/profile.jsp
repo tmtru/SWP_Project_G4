@@ -18,9 +18,7 @@
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <style>
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #f4f7f6;
-            background-image: url('assets/img/decor-phong-ngu-9.jpg');
+            background-color: lightgray;
             color: #333;
             margin: 0;
             padding: 0;

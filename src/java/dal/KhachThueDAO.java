@@ -18,12 +18,14 @@ public class KhachThueDAO extends DBContext {
             if (rs.next()) {
                 khachThue = new KhachThue();
                 khachThue.setId(rs.getInt("ID_KhachThue"));
-                //khachThue.setName(rs.getNString("TenKhachThue"));
+                khachThue.setName(rs.getNString("Ten_khach"));
                 khachThue.setDob(rs.getDate("Ngay_sinh"));
                 khachThue.setPhone(rs.getNString("SDT"));
                 khachThue.setCccd(rs.getNString("CCCD"));
                 khachThue.setJob(rs.getNString("Nghe_nghiep"));
                 khachThue.setHk_thuong_tru(rs.getNString("Hk_thuong_tru"));
+                khachThue.setNoi_cap(rs.getNString("Noi_cap"));
+                khachThue.setNgay_cap(rs.getDate("Ngay_cap"));
                 Account account = accountDAO.getAccountById2(rs.getInt("ID_Account"));
                 khachThue.setAccount(account);
             }
@@ -264,7 +266,7 @@ public class KhachThueDAO extends DBContext {
                     khachThue.setPhone(rs.getString("SDT"));
                     khachThue.setHk_thuong_tru(rs.getString("HK_thuong_tru"));
                     khachThue.setNoi_cap(rs.getString("Noi_cap"));
-                    khachThue.setNgay_cap(rs.getString("Ngay_cap"));
+                    khachThue.setNgay_cap(rs.getDate("Ngay_cap"));
                     khachThue.setName(rs.getString("Ten_khach"));
                 }
             }

@@ -33,6 +33,7 @@ import java.time.LocalDate;
 import java.sql.Date;
 import model.Account;
 import model.AnhPhongTro;
+import model.KhachThue;
 
 public class PhongDAO extends DBContext {
 
@@ -188,11 +189,7 @@ public class PhongDAO extends DBContext {
         return rooms;
     }
 
-    public static void main(String[] args) {
-
-    }
 //check xem room co trang thai dang thue-> false
-
     public boolean isRoomDeletable(int roomId) throws SQLException {
         String sql = "SELECT trang_thai FROM phong_tro WHERE ID_Phong = ?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
@@ -798,4 +795,44 @@ public class PhongDAO extends DBContext {
         return floors;
     }
 
+    public List<Phong> getRoomsByKhachThueId(int id) {
+        List<Phong> danhSachPhong = new ArrayList<>(); // Khởi tạo danh sách phòng
+        String sql = "SELECT * "
+                + "FROM phong_tro p "
+                + "JOIN hop_dong h ON p.ID_Phong = h.ID_PhongTro "
+                + "JOIN khach_thue k ON h.ID_KhachThue = k.ID_KhachThue "
+                + "WHERE k.ID_KhachThue = ?";
+
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) { // Sử dụng vòng lặp để lấy tất cả các phòng
+                    Phong phong = new Phong();
+                    phong.setID_Phong(rs.getInt("ID_Phong"));
+                    phong.setTenPhongTro(rs.getString("TenPhongTro"));
+                    phong.setTang(rs.getInt("Tang"));
+                    phong.setDien_tich(rs.getFloat("Dien_Tich"));
+                    phong.setGia(rs.getInt("Gia"));
+                    phong.setTrang_thai(rs.getString("Trang_thai"));
+
+                    danhSachPhong.add(phong); // Thêm phòng vào danh sách
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in PhongDAO.getRoomsByKhachThueId: " + e.getMessage());
+        }
+        return danhSachPhong; // Trả về danh sách phòng hoặc danh sách rỗng nếu không tìm thấy
+    }
+    
+    public static void main(String[] args){
+        PhongDAO pd = new PhongDAO();
+        List<Phong> ds = pd.getRoomsByKhachThueId(1);
+        if(ds.isEmpty()){
+            System.out.println("Ko thấy");
+        } else {
+            for(Phong p: ds){
+                System.out.println(p);
+            }
+        }
+    }
 }
