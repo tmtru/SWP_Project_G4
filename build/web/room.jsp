@@ -224,12 +224,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                             </a>
                         </li>
                         <c:if test="${sessionScope.account.role == 'landlord'}">
-                        <li class="">
-                            <a href="loadThietBi">
-                                <i class='bx bx-devices icon' ></i>
-                                <span class="text nav-text">Thiết bị</span>
-                            </a>
-                        </li>
+                            <li class="">
+                                <a href="loadThietBi">
+                                    <i class='bx bx-devices icon' ></i>
+                                    <span class="text nav-text">Thiết bị</span>
+                                </a>
+                            </li>
                         </c:if>
 
                     </ul>
@@ -275,9 +275,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 <div class="header">
                     <h2>Danh sách phòng trọ </h2>
                     <div class="search-container">
-                        <form action="searchRoomByName" method="get">
-                            <input type="text" name="tenPhongTro" placeholder="Tìm kiếm phòng..." required>
-                            <button type="submit"><i class='bx bx-search'></i></button>
+                        <form action="loadPhongTro" method="GET">
+                            <input type="text" name="search" value="${searchValue}" placeholder="Tìm kiếm phòng...">
+                            <input type="hidden" name="nhaTro" value="${param.nhaTro}">
+                            <button type="submit">Tìm kiếm</button>
                         </form>
                     </div>
                 </div>
@@ -517,10 +518,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                             </a>
                                             <c:if test="${sessionScope.account.role == 'landlord'}">
 
-                                            <!-- Edit and Delete Buttons -->
-                                            <c:if test="${!empty room.trang_thai}">
-                                                <a href="#" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;"
-                                                   onclick='openEditModal(
+                                                <!-- Edit and Delete Buttons -->
+                                                <c:if test="${!empty room.trang_thai}">
+                                                    <a href="#" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;"
+                                                       onclick='openEditModal(
                                                                    "${room.ID_Phong}",
                                                                    "${room.tenPhongTro}",
                                                                    "${room.tang}",
@@ -531,38 +532,38 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                                                    "${room.ID_LoaiPhong}",
                                                            [<c:forEach var="image" items="${room.images}" varStatus="status">
                                                            "${fn:replace(image, '\\', '/')}"
-                                                       <c:if test="${!status.last}">,</c:if>
-                                                   </c:forEach>]
+                                                           <c:if test="${!status.last}">,</c:if>
+                                                       </c:forEach>]
                                                                    );
                                                            return false;'>
-                                                    <i class="bx bx-edit"></i> Chỉnh sửa
-                                                </a>
-                                                <a href="#" class="btn btn-link text-danger text-gradient px-3 mb-0" data-toggle="modal" data-target="#myModalDelete${room.ID_Phong}">
-                                                    <i class="fa-solid fa-trash"></i>Xóa
-                                                </a>
+                                                        <i class="bx bx-edit"></i> Chỉnh sửa
+                                                    </a>
+                                                    <a href="#" class="btn btn-link text-danger text-gradient px-3 mb-0" data-toggle="modal" data-target="#myModalDelete${room.ID_Phong}">
+                                                        <i class="fa-solid fa-trash"></i>Xóa
+                                                    </a>
 
-                                                <!-- Modal xóa phòng -->
-                                                <div id="myModalDelete${room.ID_Phong}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog modal-confirm">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header flex-column">
-                                                                <div class="icon-box">
-                                                                    <i class="fa-solid fa-circle-xmark"></i>
+                                                    <!-- Modal xóa phòng -->
+                                                    <div id="myModalDelete${room.ID_Phong}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog modal-confirm">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header flex-column">
+                                                                    <div class="icon-box">
+                                                                        <i class="fa-solid fa-circle-xmark"></i>
+                                                                    </div>
+                                                                    <h5 class="modal-title w-100">Bạn có chắc chắn bạn muốn xóa phòng này?</h5>
                                                                 </div>
-                                                                <h5 class="modal-title w-100">Bạn có chắc chắn bạn muốn xóa phòng này?</h5>
-                                                            </div>
-                                                            <div class="modal-footer justify-content-center">
-                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                                                                <button type="button" class="btn btn-danger">
-                                                                    <a href="deleteRoom?id=${room.ID_Phong}" class="edit-film" style="color: white !important;">Xóa phòng</a>
-                                                                </button>
+                                                                <div class="modal-footer justify-content-center">
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                                                                    <button type="button" class="btn btn-danger">
+                                                                        <a href="deleteRoom?id=${room.ID_Phong}" class="edit-film" style="color: white !important;">Xóa phòng</a>
+                                                                    </button>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </c:if>
+                                                </c:if>
 
-                                                
+
                                             </c:if>
 
                                         </div>
