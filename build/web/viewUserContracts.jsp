@@ -85,16 +85,17 @@
                 padding: 10px 0;
                 border-bottom: 1px solid rgba(255, 255, 255, 0.5);
                 display: block;
-                text-align: center;
+                text-align: left;
             }
             .container {
                 margin-left: 320px;
+                margin-right: 20px;
                 padding: 30px;
                 background-color: white;
                 border-radius: 10px;
                 min-height: 100vh;
             }
-            h1 {
+            h2 {
                 font-size: 28px;
                 color: #6E00FF;
                 margin-bottom: 30px;
@@ -106,9 +107,26 @@
                 line-height: 1.5;
                 margin-top: 20px;
             }
+            .breadcrumb {
+                background-color: transparent;
+                padding: 0;
+                margin-left: 320px; /* Đặt khoảng cách bên trái để tránh sidebar */
+                font-size: 1.2rem; /* Tăng cỡ chữ cho breadcrumb */
+            }
+
+            .breadcrumb-item a {
+                color: #6E00FF;
+                text-decoration: none;
+            }
         </style>
     </head>
     <body>
+        <nav aria-label="breadcrumb" class="main-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="home.jsp">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Xem hợp đồng</li>
+            </ol>
+        </nav>
         <div class="sidebar">
             <div class="d-flex flex-column align-items-center text-center">
                 <img src="assets/img/Avatar.jpg" alt="Avatar" class="avatar">
@@ -119,16 +137,16 @@
                 <a href="profile.jsp" class="menu-item">Thông tin <%= account.getRole() %></a>
                 <a href="changePassword.jsp" class="menu-item">Đổi mật khẩu</a>
                 <% if ("tenant".equalsIgnoreCase(account.getRole())) { %>
-                <a href="profileServlet?action=viewContracts" class="menu-item">Xem hợp đồng</a>
-                <a href="#" class="menu-item">Xem hóa đơn</a>
-                <a href="#" class="menu-item">Yêu cầu bảo trì</a>
+                <a href="viewUserContracts.jsp" class="menu-item">Xem hợp đồng</a>
+                <a href="viewUserInvoices.jsp" class="menu-item">Xem hóa đơn</a>
+                <a href="maintainanceServlet" class="menu-item">Yêu cầu bảo trì</a>
                 <% } %>
                 <a href="home.jsp" class="menu-item">Về trang chủ</a>
             </nav>
         </div>
 
         <div class="container">
-            <h1>Hợp Đồng Thuê Phòng</h1>
+            <h2>Hợp Đồng Thuê Phòng</h2>
             <div class="contract-content">
                 <p style="text-align: center; font-size: 33px;"><strong>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</strong></p>
                 <p style="text-align: center; font-size: 23px;"><strong>Độc lập - Tự do - Hạnh phúc</strong></p>

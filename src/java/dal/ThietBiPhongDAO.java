@@ -167,4 +167,53 @@ public class ThietBiPhongDAO extends DBContext {
         return false;
     }
 
+    public ThietBiPhong getThietBiPhongById(int id) {
+        ThietBiPhong device = null;
+        String sql = "SELECT tbp.ID_ThietBiPhong, tb.TenThietBi, tbp.Mo_ta, tbp.Trang_thai, tbp.ID_Phong "
+                + "FROM thiet_bi_phong tbp "
+                + "JOIN thiet_bi tb ON tbp.ID_ThietBi = tb.ID_ThietBi "
+                + "WHERE tbp.ID_ThietBiPhong = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                device = new ThietBiPhong();
+                device.setID_ThietBiPhong(rs.getInt("ID_ThietBiPhong"));
+                device.setTenThietBi(rs.getString("TenThietBi")); 
+                device.setMo_ta(rs.getString("Mo_ta"));
+                device.setTrang_thai(rs.getString("Trang_thai"));
+                device.setID_Phong(rs.getInt("ID_Phong"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return device;
+    }
+    
+    public void updateTrangThaiAbnormalByIdThietBiPhong(int ID_ThietBiPhong){
+        String sql ="UPDATE thiet_bi_phong SET Trang_thai = 'Abnormal' WHERE ID_ThietBiPhong = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, ID_ThietBiPhong);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void updateTrangThaiNormalByIdThietBiPhong(int ID_ThietBiPhong){
+        String sql ="UPDATE thiet_bi_phong SET Trang_thai = 'Normal' WHERE ID_ThietBiPhong = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, ID_ThietBiPhong);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        ThietBiPhongDAO tb = new ThietBiPhongDAO();
+        System.out.println(tb.getThietBiPhongById(5));
+    }
 }

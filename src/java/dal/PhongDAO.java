@@ -823,16 +823,34 @@ public class PhongDAO extends DBContext {
         }
         return danhSachPhong; // Trả về danh sách phòng hoặc danh sách rỗng nếu không tìm thấy
     }
-    
-    public static void main(String[] args){
-        PhongDAO pd = new PhongDAO();
-        List<Phong> ds = pd.getRoomsByKhachThueId(1);
-        if(ds.isEmpty()){
-            System.out.println("Ko thấy");
-        } else {
-            for(Phong p: ds){
-                System.out.println(p);
+
+    public Phong getPhongById(int ID_Phong) {
+        String sql = "SELECT * FROM phong_tro WHERE ID_Phong = ?";
+        Phong phong = new Phong();
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            // Set the parameter value before executing the query
+            st.setInt(1, ID_Phong);
+
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    phong.setID_Phong(rs.getInt("ID_Phong"));
+                    phong.setTenPhongTro(rs.getString("TenPhongTro"));
+                    phong.setTang(rs.getInt("Tang"));
+                    phong.setDien_tich(rs.getFloat("Dien_Tich"));
+                    phong.setGia(rs.getInt("Gia"));
+                    phong.setTrang_thai(rs.getString("Trang_thai"));
+                }
             }
+        } catch (SQLException e) {
+            System.out.println("Error here: " + e.getMessage());
+            e.printStackTrace();
         }
+        return phong;
+    }
+
+    public static void main(String[] args) {
+        PhongDAO pd = new PhongDAO();
+        Phong p = pd.getPhongById(2); // No need to instantiate Phong here
+        System.out.println(p);
     }
 }

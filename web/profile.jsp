@@ -52,7 +52,7 @@
             padding: 10px 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.5);
             display: block;
-            text-align: center;
+            text-align: left;
         }
 
         .menu-item:last-child {
@@ -63,15 +63,16 @@
             background-color: white;
             border-radius: 10px;
             padding: 30px;
-            margin-left: 320px; /* Đặt khoảng cách bên trái để tránh sidebar */
-            height: calc(100vh - 80px); /* Đặt chiều cao vừa với màn hình, trừ đi khoảng cách breadcrumb */
+            margin-left: 320px; 
+            margin-right: 20px;
+            height: calc(100vh - 80px); 
             display: flex;
             flex-direction: column;
-            justify-content: space-around; /* Dãn đều khoảng cách giữa các mục */
-            font-size: 1.4rem; /* Tăng cỡ chữ trong profile-info */
+            justify-content: space-around; 
+            font-size: 1.4rem; 
         }
 
-        .info-item h6 {
+        .info-item h4 {
             margin-bottom: 5px;
             font-weight: bold;
             color: #333;
@@ -96,6 +97,13 @@
         .breadcrumb-item.active {
             color: #333;
         }
+        h2 {
+                font-size: 28px;
+                color: #6E00FF;
+                margin-bottom: 30px;
+                border-bottom: 2px solid #A78BFA;
+                padding-bottom: 10px;
+            }
     </style>
 </head>
 <body>
@@ -130,6 +138,8 @@
 
         // Kiểm tra role của người dùng
         boolean isTenant = "tenant".equalsIgnoreCase(account.getRole());
+        
+        boolean isManager = "manager".equalsIgnoreCase(account.getRole());
     %>
 
     <nav aria-label="breadcrumb" class="main-breadcrumb">
@@ -149,11 +159,15 @@
         <nav class="nav flex-column nav-pills nav-gap-y-1">
             <a href="profile.jsp" class="menu-item">Thông tin <%= account.getRole() %></a>
             <a href="changePassword.jsp" class="menu-item">Đổi mật khẩu</a>
-            
+
             <% if (isTenant) { %>
-            <a href="profileServlet?action=viewContracts" class="menu-item">Xem hợp đồng</a>
-            <a href="#" class="menu-item">Xem hóa đơn</a>
-            <a href="#" class="menu-item">Yêu cầu bảo trì</a>
+            <a href="viewUserContracts.jsp" class="menu-item">Xem hợp đồng</a>
+            <a href="viewUserInvoices.jsp" class="menu-item">Xem hóa đơn</a>
+            <a href="maintainanceServlet" class="menu-item">Yêu cầu bảo trì</a>
+            <% } %>
+            
+            <% if (isManager) { %>
+            <a href="adminMaintainanceServlet" class="menu-item">Xem yêu cầu bảo trì</a>
             <% } %>
 
             <a href="home.jsp" class="menu-item">Về trang chủ</a>
@@ -162,29 +176,29 @@
 
     <!-- Main Content -->
     <div class="profile-info">
-        <h4 class="mb-4" style="color: #6E00FF">Thông tin tài khoản</h4>
+        <h2 style="color: #6E00FF">Thông tin tài khoản</h2>
         <div class="info-item">
-            <h6 class="mb-0">Email</h6>
+            <h4 class="mb-0">Email</h4>
             <p class="text-muted"><%= account.getEmail() %></p>
         </div>
         <div class="info-item">
-            <h6 class="mb-0">Ngày sinh</h6>
+            <h4 class="mb-0">Ngày sinh</h4>
             <p class="text-muted"><%= (khachThue != null) ? khachThue.getDob() : "Chưa có thông tin hiển thị" %></p>
         </div>
         <div class="info-item">
-            <h6 class="mb-0">Số CCCD</h6>
+            <h4 class="mb-0">Số CCCD</h4>
             <p class="text-muted"><%= (khachThue != null) ? khachThue.getCccd() : "Chưa có thông tin hiển thị" %></p>
         </div>
         <div class="info-item">
-            <h6 class="mb-0">Nghề nghiệp</h6>
+            <h4 class="mb-0">Nghề nghiệp</h4>
             <p class="text-muted"><%= (khachThue != null) ? khachThue.getJob() : "Chưa có thông tin hiển thị" %></p>
         </div>
         <div class="info-item">
-            <h6 class="mb-0">Số điện thoại</h6>
+            <h4 class="mb-0">Số điện thoại</h4>
             <p class="text-muted"><%= (khachThue != null) ? khachThue.getPhone() : "Chưa có thông tin hiển thị" %></p>
         </div>
         <div class="info-item">
-            <h6 class="mb-0">Địa chỉ thường trú</h6>
+            <h4 class="mb-0">Địa chỉ thường trú</h4>
             <p class="text-muted"><%= (khachThue != null) ? khachThue.getHk_thuong_tru() : "Chưa có thông tin hiển thị" %></p>
         </div>
     </div>

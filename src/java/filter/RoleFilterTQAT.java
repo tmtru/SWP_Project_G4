@@ -119,14 +119,16 @@ public class RoleFilterTQAT implements Filter {
                 || uri.equals("/resetpassword.jsp") || uri.equals("/verification.jsp") || uri.equals("/viewUserContracts.jsp") || uri.equals("/homer")
                 || uri.equals("/category") || uri.equals("/login") || uri.equals("/register") || uri.equals("/resetpassword") || uri.equals("/logingoogle")
                 || uri.equals("/verification") || uri.equals("/sendemail") || uri.equals("/logout") || uri.equals("/profileServlet")
-                || uri.equals("/allrooms") ||  uri.equals("/allrooms.jsp") || uri.equals("/filterrooms");
+                || uri.equals("/allrooms") ||  uri.equals("/allrooms.jsp") || uri.equals("/filterrooms") || uri.equals("/maintainance.jsp") || uri.equals("/maintainanceServlet") 
+                || uri.equals("/viewUserInvoices.jsp") || uri.equals("/requestMaintenance.jsp") || uri.equals("/saveMaintainanceRequest") || uri.equals("/editMaintainanceRequest")
+                || uri.equals("/editMaintainance.jsp") || uri.equals("/cancelMaintainanceRequest");
         boolean isStaticResource = uri.endsWith(".css") || uri.endsWith(".js") || uri.endsWith(".jpg") || uri.endsWith(".png") || uri.endsWith(".gif");
 
         if ( "landlord".equals(role) || "manager".equals(role)) {
             
         } else {
             if (!isAllowedPage && !isStaticResource){
-                httpResponse.sendRedirect("home.jsp");
+                httpResponse.sendRedirect("error.jsp");
             }
         }
 

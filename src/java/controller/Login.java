@@ -55,25 +55,22 @@ public class Login extends HttpServlet {
         HttpSession session = request.getSession();
 
         Account acc = userdao.getAccount(username, encryptedPassword);
-        khachthue = ktdao.getKhachThueByAccountId(acc.getID_Account());
 
-        try {
-            if (acc != null) {
-                int ID_Account = acc.getID_Account();
+        if (acc != null) { // Nếu tài khoản tồn tại
+            int ID_Account = acc.getID_Account();
+            khachthue = ktdao.getKhachThueByAccountId(ID_Account);
 
-                session.setAttribute("account", acc);
-                session.setAttribute("role", acc.getRole());
-                session.setAttribute("ID_Account", ID_Account);
-                if (acc.getRole().equals("tenant")) {
-                    session.setAttribute("ID_KhachThue", khachthue.getId());
-                }
-                response.sendRedirect("home.jsp");
-            } else {
-                request.setAttribute("errorMessage", "Invalid email or password");
-                request.getRequestDispatcher("login.jsp").forward(request, response);
+            session.setAttribute("account", acc);
+            session.setAttribute("role", acc.getRole());
+            session.setAttribute("ID_Account", ID_Account);
+
+            if ("tenant".equals(acc.getRole())) {
+                session.setAttribute("ID_KhachThue", khachthue.getId());
             }
-        } catch (Exception e) {
-
+            response.sendRedirect("home.jsp");
+        } else { // Trường hợp tài khoản không tồn tại hoặc sai thông tin
+            request.setAttribute("errorMessage", "Invalid email or password");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         }
     }
 
