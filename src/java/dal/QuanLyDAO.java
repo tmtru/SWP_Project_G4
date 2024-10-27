@@ -6,10 +6,7 @@ package dal;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import model.Account;
 import model.ChuTro;
@@ -114,24 +111,6 @@ public class QuanLyDAO extends DBContext {
         }
     }
 
-    public boolean insertQuanLy(int ID_Account, String TenQuanLy, Date Ngay_sinh, String SDT, String CCCD, int Id_NhaTro) {
-        String sql = "INSERT INTO quan_ly (TenQuanLy, Ngay_sinh, SDT, CCCD, ID_Account, ID_NhaTro, isActive) VALUES (?, ?, ?, ?, ?, ?, 1)";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            // Set the values for the SQL insert statement
-            ps.setInt(5, ID_Account);  // Account ID
-            ps.setNString(1, TenQuanLy);                 // Manager Name
-            ps.setDate(2, new java.sql.Date(Ngay_sinh.getTime()));  // Date of Birth (convert java.util.Date to java.sql.Date)
-            ps.setNString(3, SDT);                // Phone Number
-            ps.setNString(4, CCCD);                 // CCCD (ID)
-            ps.setInt(6, Id_NhaTro);
-            // Execute the insert query
-            return ps.executeUpdate() > 0;  // Returns true if at least one row is affected
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;  // Return false if there is an error
-        }
-    }
-
     public boolean updateQuanLy(QuanLy quanLy) {
         String sql = "update quan_ly set id_nhatro = ? where ID_QuanLy = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -159,14 +138,11 @@ public class QuanLyDAO extends DBContext {
 
     public static void main(String[] args) {
         QuanLyDAO quanLyDAO = new QuanLyDAO();
-        String dobStr = "2004-10-10";
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date dob = null;
-        try {
-            dob = dateFormat.parse(dobStr);
-        } catch (ParseException e) {
-            e.printStackTrace();
+        List<QuanLy> list = quanLyDAO.getQuanLyByNhaTro(1);
+
+        for (QuanLy quanLy : list) {
+            System.out.println(quanLy);
         }
-        quanLyDAO.insertQuanLy(24, "hi", dob, "0320482323", "2342343243", 2);
     }
+
 }

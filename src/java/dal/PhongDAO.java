@@ -33,7 +33,6 @@ import java.time.LocalDate;
 import java.sql.Date;
 import model.Account;
 import model.AnhPhongTro;
-import model.KhachThue;
 
 public class PhongDAO extends DBContext {
 
@@ -189,7 +188,11 @@ public class PhongDAO extends DBContext {
         return rooms;
     }
 
+    public static void main(String[] args) {
+
+    }
 //check xem room co trang thai dang thue-> false
+
     public boolean isRoomDeletable(int roomId) throws SQLException {
         String sql = "SELECT trang_thai FROM phong_tro WHERE ID_Phong = ?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
@@ -795,98 +798,79 @@ public class PhongDAO extends DBContext {
         return floors;
     }
 
-    public List<Phong> getRoomsByKhachThueId(int id) {
-        List<Phong> danhSachPhong = new ArrayList<>(); // Khởi tạo danh sách phòng
-        String sql = "SELECT * "
-                + "FROM phong_tro p "
-                + "JOIN hop_dong h ON p.ID_Phong = h.ID_PhongTro "
-                + "JOIN khach_thue k ON h.ID_KhachThue = k.ID_KhachThue "
-                + "WHERE k.ID_KhachThue = ?";
+    public List<Integer> getStatisticRoomByApartment(int nhaTroId) {
+        List<Integer> data = new ArrayList<>();
+        String sql = "    SELECT \n"
+                + "    status.Trang_thai,\n"
+                + "    COALESCE(p.SoLuong, 0) AS SoLuong\n"
+                + "FROM \n"
+                + "    (SELECT \"T\" AS Trang_thai\n"
+                + "     UNION ALL\n"
+                + "     SELECT \"D\" AS Trang_thai) AS status\n"
+                + "LEFT JOIN \n"
+                + "    (SELECT Trang_thai, COUNT(*) AS SoLuong\n"
+                + "     FROM phong_tro\n"
+                + "     WHERE ID_NhaTro = ?\n"
+                + "     GROUP BY Trang_thai) AS p\n"
+                + "ON status.Trang_thai = p.Trang_thai\n"
+                + "ORDER BY \n"
+                + "    status.Trang_thai DESC;";
 
         try (PreparedStatement st = connection.prepareStatement(sql)) {
-            st.setInt(1, id);
-            try (ResultSet rs = st.executeQuery()) {
-                while (rs.next()) { // Sử dụng vòng lặp để lấy tất cả các phòng
-                    Phong phong = new Phong();
-                    phong.setID_Phong(rs.getInt("ID_Phong"));
-                    phong.setTenPhongTro(rs.getString("TenPhongTro"));
-                    phong.setTang(rs.getInt("Tang"));
-                    phong.setDien_tich(rs.getFloat("Dien_Tich"));
-                    phong.setGia(rs.getInt("Gia"));
-                    phong.setTrang_thai(rs.getString("Trang_thai"));
-
-                    danhSachPhong.add(phong); // Thêm phòng vào danh sách
-                }
-            }
-        } catch (SQLException e) {
-            System.out.println("Error in PhongDAO.getRoomsByKhachThueId: " + e.getMessage());
-        }
-        return danhSachPhong; // Trả về danh sách phòng hoặc danh sách rỗng nếu không tìm thấy
-    }
-
-    public Phong getPhongById(int ID_Phong) {
-        String sql = "SELECT * FROM phong_tro WHERE ID_Phong = ?";
-        Phong phong = new Phong();
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
-            // Set the parameter value before executing the query
-            st.setInt(1, ID_Phong);
+            st.setInt(1, nhaTroId);
 
             try (ResultSet rs = st.executeQuery()) {
                 while (rs.next()) {
-                    phong.setID_Phong(rs.getInt("ID_Phong"));
-                    phong.setTenPhongTro(rs.getString("TenPhongTro"));
-                    phong.setTang(rs.getInt("Tang"));
-                    phong.setDien_tich(rs.getFloat("Dien_Tich"));
-                    phong.setGia(rs.getInt("Gia"));
-                    phong.setTrang_thai(rs.getString("Trang_thai"));
+
+                    data.add(rs.getInt("SoLuong"));
+
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Error here: " + e.getMessage());
-            e.printStackTrace();
+            System.out.println("Error in PhongDAO.getStatisticRoomByApartment: " + e.getMessage());
         }
-        return phong;
+        return data;
     }
 
-    public static void main(String[] args) {
-        PhongDAO pd = new PhongDAO();
-        Phong p = pd.getPhongById(2); // No need to instantiate Phong here
-        System.out.println(p);
-    }
-    public List<Phong> searchRooms(String searchText, int idNhaTro) {
-    List<Phong> rooms = new ArrayList<>();
-    String sql = "SELECT p.ID_Phong, n.TenNhaTro, p.TenPhongTro, p.ID_LoaiPhong, p.Tang, p.Dien_Tich, "
-            + "l.TenLoaiPhong, p.Gia, l.Mo_ta, p.Trang_thai, p.ID_NhaTro "
-            + "FROM phong_tro p "
-            + "JOIN nha_tro n ON p.ID_NhaTro = n.ID_NhaTro "
-            + "JOIN loai_phong l ON p.ID_LoaiPhong = l.ID_LoaiPhong "
-            + "WHERE p.ID_NhaTro = ? AND p.TenPhongTro LIKE ? "
-            + "ORDER BY p.ID_Phong";
-    try (PreparedStatement st = connection.prepareStatement(sql)) {
-        st.setInt(1, idNhaTro);
-        st.setString(2, "%" + searchText + "%");
-        try (ResultSet rs = st.executeQuery()) {
-            while (rs.next()) {
-                Phong r = new Phong();
-                r.setID_Phong(rs.getInt("ID_Phong"));
-                r.setTenNhaTro(rs.getString("TenNhaTro"));
-                r.setTenPhongTro(rs.getString("TenPhongTro"));
-                r.setID_LoaiPhong(rs.getInt("ID_LoaiPhong"));
-                r.setTang(rs.getInt("Tang"));
-                r.setDien_tich(rs.getFloat("Dien_Tich"));
-                r.setTenLoaiPhong(rs.getString("TenLoaiPhong"));
-                r.setGia(rs.getInt("Gia"));
-                r.setMo_ta(rs.getString("Mo_ta"));
-                r.setTrang_thai(rs.getString("Trang_thai"));
-                r.setID_NhaTro(rs.getInt("ID_NhaTro"));
-                List<String> images = getImagesByPhongId(rs.getInt("ID_Phong"));
-                r.setImages(images);
-                rooms.add(r);
+    public List<Integer> getStatisticRevenueByApartment(int nhaTroId) {
+        List<Integer> data = new ArrayList<>();
+        String sql = "SELECT \n"
+                + "    months.month AS Thang,\n"
+                + "    COALESCE(SUM(h.Tong_gia_tien), 0) AS DoanhThu\n"
+                + "FROM \n"
+                + "    (SELECT 1 AS month UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL \n"
+                + "     SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL \n"
+                + "     SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL \n"
+                + "     SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12) AS months\n"
+                + "LEFT JOIN \n"
+                + "    hoa_don h ON MONTH(h.NgayThanhToan) = months.month \n"
+                + "                AND YEAR(h.NgayThanhToan) = YEAR(CURDATE())\n"
+                + "                AND h.Trang_thai = 1\n"
+                + "LEFT JOIN \n"
+                + "    hop_dong hd ON hd.ID_HopDong = h.ID_HopDong \n"
+                + "    LEFT JOIN \n"
+                + "    phong_tro pt ON pt.ID_Phong = hd.ID_PhongTro \n"
+                + "WHERE \n"
+                + "   pt.ID_NhaTro = ? OR h.ID_HopDong IS NULL\n"
+                + "GROUP BY \n"
+                + "    months.month\n"
+                + "ORDER BY \n"
+                + "    months.month;";
+
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, nhaTroId);
+
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+
+                    data.add(rs.getInt("DoanhThu"));
+
+                }
             }
+        } catch (SQLException e) {
+            System.out.println("Error in PhongDAO.getStatisticRevenueByApartment: " + e.getMessage());
         }
-    } catch (SQLException e) {
-        System.out.println("Error in PhongDAO.searchRooms: " + e.getMessage());
+        return data;
     }
-    return rooms;
-}
+
 }

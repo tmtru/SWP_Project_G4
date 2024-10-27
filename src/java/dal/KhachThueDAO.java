@@ -18,14 +18,12 @@ public class KhachThueDAO extends DBContext {
             if (rs.next()) {
                 khachThue = new KhachThue();
                 khachThue.setId(rs.getInt("ID_KhachThue"));
-                khachThue.setName(rs.getNString("Ten_khach"));
+                //khachThue.setName(rs.getNString("TenKhachThue"));
                 khachThue.setDob(rs.getDate("Ngay_sinh"));
                 khachThue.setPhone(rs.getNString("SDT"));
                 khachThue.setCccd(rs.getNString("CCCD"));
                 khachThue.setJob(rs.getNString("Nghe_nghiep"));
                 khachThue.setHk_thuong_tru(rs.getNString("Hk_thuong_tru"));
-                khachThue.setNoi_cap(rs.getNString("Noi_cap"));
-                khachThue.setNgay_cap(rs.getDate("Ngay_cap"));
                 Account account = accountDAO.getAccountById2(rs.getInt("ID_Account"));
                 khachThue.setAccount(account);
             }
@@ -164,7 +162,7 @@ public class KhachThueDAO extends DBContext {
             }
         }
     }
-    
+
     public int getIdAccountByEmail(String email) {
         int idAccount = -1;
         String sql = "SELECT ID_Account FROM account WHERE Email = ?";
@@ -266,7 +264,7 @@ public class KhachThueDAO extends DBContext {
                     khachThue.setPhone(rs.getString("SDT"));
                     khachThue.setHk_thuong_tru(rs.getString("HK_thuong_tru"));
                     khachThue.setNoi_cap(rs.getString("Noi_cap"));
-                    khachThue.setNgay_cap(rs.getDate("Ngay_cap"));
+                    khachThue.setNgay_cap(rs.getString("Ngay_cap"));
                     khachThue.setName(rs.getString("Ten_khach"));
                 }
             }
@@ -274,5 +272,24 @@ public class KhachThueDAO extends DBContext {
             e.printStackTrace();  // Log lỗi nếu cần
         }
         return khachThue;
+    }
+
+    public static void main(String[] args) {
+        KhachThueDAO khachThueDAO = new KhachThueDAO();
+
+        // Dữ liệu CCCD để test
+        String testCCCD = "6666"; // Bạn có thể thay đổi theo CCCD có sẵn trong DB để kiểm tra
+
+        // Gọi phương thức getKhachThueIdByCCCD
+        int khachThueId = khachThueDAO.getKhachThueIdByCCCD(testCCCD);
+
+        // Kiểm tra kết quả
+        if (khachThueId != -1) {
+            System.out.println("Khách thuê với CCCD " + testCCCD + " có ID là: " + khachThueId);
+        } else {
+            System.out.println("Không tìm thấy khách thuê với CCCD: " + testCCCD);
+        }
+
+        // Đóng kết nối (nếu cần thiết)
     }
 }

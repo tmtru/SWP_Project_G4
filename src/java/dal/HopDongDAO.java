@@ -1,5 +1,6 @@
 package dal;
 
+import dal.DBContext;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import model.HopDong;
 import java.sql.Date;
+import model.Account;
+import model.KhachThue;
 import model.Phong;
 
 public class HopDongDAO extends DBContext {
@@ -29,17 +32,12 @@ public class HopDongDAO extends DBContext {
                 hopDong.setID_Phongtro(rs.getInt("ID_Phongtro"));
                 hopDong.setNgay_gia_tri(rs.getDate("Ngay_gia_tri"));
                 hopDong.setNgay_het_han(rs.getDate("Ngay_het_han"));
-                hopDong.setTien_Coc(rs.getInt("Tien_coc"));
-                hopDong.setSo_nguoi(rs.getInt("So_nguoi"));
-                hopDong.setTien_phong(rs.getInt("Tien_phong"));
-                hopDong.setIsActive(rs.getString("isActive"));
-                hopDong.setStatus(rs.getString("Trang_thai"));
-                hopDong.setGhi_chu(rs.getString("Ghi_chu"));
-                hopDong.setLy_do(rs.getString("Li_do_tu_choi"));
+                hopDong.setTien_Coc(rs.getInt("Tien_Coc"));
+
                 hopDongs.add(hopDong);
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            ex.printStackTrace(); // Xử lý lỗi
         }
 
         return hopDongs;
@@ -430,39 +428,138 @@ public class HopDongDAO extends DBContext {
         return hopDong;
     }
 
+    public List<HopDong> getHopDongKhachCocByApartment(int nhatroId, String search, Integer start, Integer recordPerPage) {
+        List<HopDong> hopDongList = new ArrayList<>();
+        String query = "select * from hop_dong hd\n"
+                + "left join khach_thue a on a.ID_KhachThue = hd.ID_KhachThue\n"
+                + "left join phong_tro pt on pt.ID_Phong = hd.ID_PhongTro\n"
+                + "where (hd.Trang_thai = 'accept' and pt.ID_NhaTro = ?) and (? = '' or a.Ten_khach like ?) ";
+
+        if (start != null && recordPerPage != null) {
+            query += "LIMIT ?, ?";
+        }
+
+        try {
+            PreparedStatement stmt = connection.prepareStatement(query);
+
+            stmt.setInt(1, nhatroId);
+            stmt.setString(2, search);
+
+            stmt.setString(3, "%" + search + "%");
+            if (start != null && recordPerPage != null) {
+                stmt.setInt(4, start);
+                stmt.setInt(5, recordPerPage);
+            }
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                HopDong hopDong = new HopDong();
+
+                hopDong.setID_HopDong(rs.getInt("ID_HopDong"));
+                hopDong.setNgay_gia_tri(rs.getDate("Ngay_gia_tri"));
+                hopDong.setNgay_het_han(rs.getDate("Ngay_het_han"));
+                hopDong.setTien_Coc(rs.getInt("Tien_coc"));
+
+                KhachThue account = new KhachThue();
+                account.setName(rs.getString("Ten_khach"));
+                account.setEmail(rs.getString("email"));
+
+                hopDong.setKhachThue(account);
+
+                // Create a new PhongTro object
+                Phong phongTro = new Phong();
+                phongTro.setTenPhongTro(rs.getString("TenPhongTro"));
+                phongTro.setGia(rs.getInt("Gia"));
+
+                // Set PhongTro in HopDong
+                hopDong.setPhongTro(phongTro);
+
+                hopDongList.add(hopDong);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return hopDongList;
+    }
+    //tinh theo ngay het han thoi
+    public List<HopDong> getHopDongKhachSapHetHanByApartment(int nhatroId, String search, Integer start, Integer recordPerPage) {
+        List<HopDong> hopDongList = new ArrayList<>();
+        String query = "select * from hop_dong hd\n"
+                + "left join khach_thue a on a.ID_KhachThue = hd.ID_KhachThue\n"
+                + "left join phong_tro pt on pt.ID_Phong = hd.ID_PhongTro\n"
+                + "where (hd.Trang_thai = 'reject' and pt.ID_NhaTro = ?) and (? = '' or a.Ten_khach like ?) and (hd.Ngay_het_han + INTERVAL 20 DAY >= CURRENT_DATE) ";
+
+        if (start != null && recordPerPage != null) {
+            query += "LIMIT ?, ?";
+        }
+
+        try {
+            PreparedStatement stmt = connection.prepareStatement(query);
+
+            stmt.setInt(1, nhatroId);
+            stmt.setString(2, search);
+
+            stmt.setString(3, "%" + search + "%");
+            if (start != null && recordPerPage != null) {
+                stmt.setInt(4, start);
+                stmt.setInt(5, recordPerPage);
+            }
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                HopDong hopDong = new HopDong();
+
+                hopDong.setID_HopDong(rs.getInt("ID_HopDong"));
+                hopDong.setNgay_gia_tri(rs.getDate("Ngay_gia_tri"));
+                hopDong.setNgay_het_han(rs.getDate("Ngay_het_han"));
+                hopDong.setTien_Coc(rs.getInt("Tien_coc"));
+
+                KhachThue account = new KhachThue();
+                account.setName(rs.getString("Ten_khach"));
+                account.setEmail(rs.getString("email"));
+
+                hopDong.setKhachThue(account);
+
+                // Create a new PhongTro object
+                Phong phongTro = new Phong();
+                phongTro.setTenPhongTro(rs.getString("TenPhongTro"));
+                phongTro.setGia(rs.getInt("Gia"));
+
+                // Set PhongTro in HopDong
+                hopDong.setPhongTro(phongTro);
+
+                hopDongList.add(hopDong);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return hopDongList;
+    }
+
     public static void main(String[] args) {
         HopDongDAO hopDongDAO = new HopDongDAO();
 
-//        // Số phòng cần kiểm tra
-//        int roomId = 1; // Thay số này bằng ID phòng thực tế bạn muốn kiểm tra
-//
-//        // Gọi phương thức để lấy hợp đồng
-//        HopDong hopDong = hopDongDAO.getActiveOrAcceptedContractByRoomId(roomId);
-//
-//        // Kiểm tra kết quả và in ra thông tin
-//        if (hopDong != null) {
-//            System.out.println("Hợp đồng tìm thấy:");
-//            System.out.println("ID Hợp Đồng: " + hopDong.getID_HopDong());
-//            System.out.println("ID Khách Thuê: " + hopDong.getID_KhachThue());
-//            System.out.println("ID Phòng Trọ: " + hopDong.getID_Phongtro());
-//            System.out.println("Ngày Giá Trị: " + hopDong.getNgay_gia_tri());
-//            System.out.println("Ngày Hết Hạn: " + hopDong.getNgay_het_han());
-//            System.out.println("Tiền Cọc: " + hopDong.getTien_Coc());
-//            System.out.println("Số Người: " + hopDong.getSo_nguoi());
-//            System.out.println("Tiền Phòng: " + hopDong.getTien_phong());
-//            System.out.println("Trạng Thái: " + hopDong.getStatus());
-//            System.out.println("Ghi Chú: " + hopDong.getGhi_chu());
-//        } else {
-//            System.out.println("Không tìm thấy hợp đồng nào cho phòng ID: " + roomId);
-//        }
+        // Số phòng cần kiểm tra
+        int roomId = 1; // Thay số này bằng ID phòng thực tế bạn muốn kiểm tra
 
-        List<HopDong> ds = hopDongDAO.getHopDongsByKhachThueID(1);
-        if(ds.isEmpty()){
-            System.out.println("Ko thấy");
+        // Gọi phương thức để lấy hợp đồng
+        HopDong hopDong = hopDongDAO.getActiveOrAcceptedContractByRoomId(roomId);
+
+        // Kiểm tra kết quả và in ra thông tin
+        if (hopDong != null) {
+            System.out.println("Hợp đồng tìm thấy:");
+            System.out.println("ID Hợp Đồng: " + hopDong.getID_HopDong());
+            System.out.println("ID Khách Thuê: " + hopDong.getID_KhachThue());
+            System.out.println("ID Phòng Trọ: " + hopDong.getID_Phongtro());
+            System.out.println("Ngày Giá Trị: " + hopDong.getNgay_gia_tri());
+            System.out.println("Ngày Hết Hạn: " + hopDong.getNgay_het_han());
+            System.out.println("Tiền Cọc: " + hopDong.getTien_Coc());
+            System.out.println("Số Người: " + hopDong.getSo_nguoi());
+            System.out.println("Tiền Phòng: " + hopDong.getTien_phong());
+            System.out.println("Trạng Thái: " + hopDong.getStatus());
+            System.out.println("Ghi Chú: " + hopDong.getGhi_chu());
         } else {
-            for(HopDong hd: ds){
-                System.out.println(hd);
-            }
+            System.out.println("Không tìm thấy hợp đồng nào cho phòng ID: " + roomId);
         }
     }
 }

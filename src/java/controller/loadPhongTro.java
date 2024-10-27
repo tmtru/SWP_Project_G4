@@ -71,7 +71,7 @@ public class loadPhongTro extends HttpServlet {
         NhaTroDAO ntdao = new NhaTroDAO();
         LoaiPhongDAO lpdao = new LoaiPhongDAO();
         
-        // House tuong ung voi role
+        // Get houses based on user role from session
         List<NhaTro> houses = (List<NhaTro>) session.getAttribute("housesByRole");
         
         // Initialize selected house ID
@@ -99,17 +99,10 @@ public class loadPhongTro extends HttpServlet {
             }
 
             // Get room list based on filters
-            String searchText = request.getParameter("search");
             String selectedFloor = request.getParameter("tang");
-            
-            if (searchText != null && !searchText.trim().isEmpty()) {
-                // If there's a search query, use search function
-                rooms = pdao.searchRooms(searchText.trim(), choseHouse);
-            } else if (selectedFloor != null && !selectedFloor.isEmpty()) {
-                // If there's a floor filter but no search, use floor filter
+            if (selectedFloor != null && !selectedFloor.isEmpty()) {
                 rooms = pdao.getRoomsByFloorAndNhaTro(Integer.parseInt(selectedFloor), choseHouse);
             } else {
-                // If no search or floor filter, get all rooms
                 rooms = pdao.getRoomsByNhaTro(choseHouse);
             }
 
@@ -132,7 +125,6 @@ public class loadPhongTro extends HttpServlet {
         request.setAttribute("loaiPhongList", loaiPhongList);
         request.setAttribute("tangList", tangList);
         request.setAttribute("statusMap", statusMap);
-        request.setAttribute("searchValue", request.getParameter("search")); // For maintaining search text in input
 
         // Handle pagination
         int page = 1;
@@ -158,7 +150,6 @@ public class loadPhongTro extends HttpServlet {
         // Forward to the JSP page
         request.getRequestDispatcher("room.jsp").forward(request, response);
     }
-
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
