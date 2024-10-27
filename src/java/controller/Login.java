@@ -1,7 +1,6 @@
 package controller;
 
 import dal.AccountDAO;
-import dal.KhachThueDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,14 +12,10 @@ import model.Account;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
-import model.KhachThue;
 
 public class Login extends HttpServlet {
 
-    KhachThue khachthue = new KhachThue();
-    KhachThueDAO ktdao = new KhachThueDAO();
-
-    private static final String SECRET_KEY = "1234567890123456";
+    private static final String SECRET_KEY = "1234567890123456"; // 16 bytes key for AES
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -49,26 +44,29 @@ public class Login extends HttpServlet {
             throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+        //String remember = request.getParameter("remember");
 
         AccountDAO userdao = new AccountDAO();
         String encryptedPassword = encryptPassword(password);
         HttpSession session = request.getSession();
-
+        // Thay �?i �? s? d?ng m?t kh?u �? m? h�a cho vi?c x�c th?c
         Account acc = userdao.getAccount(username, encryptedPassword);
-
-        if (acc != null) { // Nếu tài khoản tồn tại
+        
+        if (acc != null) {
             int ID_Account = acc.getID_Account();
-            khachthue = ktdao.getKhachThueByAccountId(ID_Account);
-
+//            String email= acc.getEmail();
+//            
+//            Account acc1=new Account();
+//            acc1.setEmail(email);
+//            acc1.setUsername(username);
             session.setAttribute("account", acc);
             session.setAttribute("role", acc.getRole());
+                    
+
             session.setAttribute("ID_Account", ID_Account);
 
-            if ("tenant".equals(acc.getRole())) {
-                session.setAttribute("ID_KhachThue", khachthue.getId());
-            }
             response.sendRedirect("home.jsp");
-        } else { // Trường hợp tài khoản không tồn tại hoặc sai thông tin
+        } else {
             request.setAttribute("errorMessage", "Invalid email or password");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }

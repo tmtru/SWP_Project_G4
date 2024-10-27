@@ -74,6 +74,10 @@
         <servlet-class>controller.loadHoaDonNhaTro</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>profileServlet</servlet-name>
+        <servlet-class>controller.profileServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>ChangePassword</servlet-name>
         <servlet-class>controller.ChangePassword</servlet-class>
     </servlet>
@@ -133,6 +137,8 @@
         <servlet-name>loadPhongTro</servlet-name>
         <servlet-class>controller.loadPhongTro</servlet-class>
     </servlet>
+
+    
     <servlet>
         <servlet-name>AddConTractController</servlet-name>
         <servlet-class>controller.AddConTractController</servlet-class>
@@ -168,26 +174,6 @@
     <servlet>
         <servlet-name>GiaHanHopDongByManagerController</servlet-name>
         <servlet-class>controller.GiaHanHopDongByManagerController</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>maintainanceServlet</servlet-name>
-        <servlet-class>controller.maintainanceServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>saveMaintainanceRequestServlet</servlet-name>
-        <servlet-class>controller.saveMaintainanceRequestServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>editMaintainanceRequestServlet</servlet-name>
-        <servlet-class>controller.editMaintainanceRequestServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>cancelMaintainanceRequestServlet</servlet-name>
-        <servlet-class>controller.cancelMaintainanceRequestServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>adminMaintainanceServlet</servlet-name>
-        <servlet-class>controller.adminMaintainanceServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>homeRooms</servlet-name>
@@ -336,6 +322,11 @@
         <url-pattern>/hoadon</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>profileServlet</servlet-name>
+        <url-pattern>/profileServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
         <servlet-name>actionHoaDon</servlet-name>
         <url-pattern>/actionhoadon</url-pattern>
     </servlet-mapping>
@@ -391,6 +382,9 @@
         <servlet-name>loadPhongTro</servlet-name>
         <url-pattern>/loadPhongTro</url-pattern>
     </servlet-mapping>
+
+
+
     <servlet-mapping>
         <servlet-name>AddConTractController</servlet-name>
         <url-pattern>/addContract</url-pattern>
@@ -426,25 +420,5 @@
     <servlet-mapping>
         <servlet-name>GiaHanHopDongByManagerController</servlet-name>
         <url-pattern>/GiaHanHopDongByManager</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>maintainanceServlet</servlet-name>
-        <url-pattern>/maintainanceServlet</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>saveMaintainanceRequestServlet</servlet-name>
-        <url-pattern>/saveMaintainanceRequest</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>editMaintainanceRequestServlet</servlet-name>
-        <url-pattern>/editMaintainanceRequest</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>cancelMaintainanceRequestServlet</servlet-name>
-        <url-pattern>/cancelMaintainanceRequest</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>adminMaintainanceServlet</servlet-name>
-        <url-pattern>/adminMaintainanceServlet</url-pattern>
     </servlet-mapping>
 </web-app>

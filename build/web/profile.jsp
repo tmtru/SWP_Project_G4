@@ -18,7 +18,9 @@
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <style>
         body {
-            background-color: lightgray;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f4f7f6;
+            background-image: url('assets/img/decor-phong-ngu-9.jpg');
             color: #333;
             margin: 0;
             padding: 0;
@@ -52,7 +54,7 @@
             padding: 10px 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.5);
             display: block;
-            text-align: left;
+            text-align: center;
         }
 
         .menu-item:last-child {
@@ -63,16 +65,15 @@
             background-color: white;
             border-radius: 10px;
             padding: 30px;
-            margin-left: 320px; 
-            margin-right: 20px;
-            height: calc(100vh - 80px); 
+            margin-left: 320px; /* Đặt khoảng cách bên trái để tránh sidebar */
+            height: calc(100vh - 80px); /* Đặt chiều cao vừa với màn hình, trừ đi khoảng cách breadcrumb */
             display: flex;
             flex-direction: column;
-            justify-content: space-around; 
-            font-size: 1.4rem; 
+            justify-content: space-around; /* Dãn đều khoảng cách giữa các mục */
+            font-size: 1.4rem; /* Tăng cỡ chữ trong profile-info */
         }
 
-        .info-item h4 {
+        .info-item h6 {
             margin-bottom: 5px;
             font-weight: bold;
             color: #333;
@@ -97,13 +98,6 @@
         .breadcrumb-item.active {
             color: #333;
         }
-        h2 {
-                font-size: 28px;
-                color: #6E00FF;
-                margin-bottom: 30px;
-                border-bottom: 2px solid #A78BFA;
-                padding-bottom: 10px;
-            }
     </style>
 </head>
 <body>
@@ -138,8 +132,6 @@
 
         // Kiểm tra role của người dùng
         boolean isTenant = "tenant".equalsIgnoreCase(account.getRole());
-        
-        boolean isManager = "manager".equalsIgnoreCase(account.getRole());
     %>
 
     <nav aria-label="breadcrumb" class="main-breadcrumb">
@@ -159,15 +151,11 @@
         <nav class="nav flex-column nav-pills nav-gap-y-1">
             <a href="profile.jsp" class="menu-item">Thông tin <%= account.getRole() %></a>
             <a href="changePassword.jsp" class="menu-item">Đổi mật khẩu</a>
-
-            <% if (isTenant) { %>
-            <a href="viewUserContracts.jsp" class="menu-item">Xem hợp đồng</a>
-            <a href="viewUserInvoices.jsp" class="menu-item">Xem hóa đơn</a>
-            <a href="maintainanceServlet" class="menu-item">Yêu cầu bảo trì</a>
-            <% } %>
             
-            <% if (isManager) { %>
-            <a href="adminMaintainanceServlet" class="menu-item">Xem yêu cầu bảo trì</a>
+            <% if (isTenant) { %>
+            <a href="profileServlet?action=viewContracts" class="menu-item">Xem hợp đồng</a>
+            <a href="#" class="menu-item">Xem hóa đơn</a>
+            <a href="#" class="menu-item">Yêu cầu bảo trì</a>
             <% } %>
 
             <a href="home.jsp" class="menu-item">Về trang chủ</a>
@@ -176,29 +164,29 @@
 
     <!-- Main Content -->
     <div class="profile-info">
-        <h2 style="color: #6E00FF">Thông tin tài khoản</h2>
+        <h4 class="mb-4" style="color: #6E00FF">Thông tin tài khoản</h4>
         <div class="info-item">
-            <h4 class="mb-0">Email</h4>
+            <h6 class="mb-0">Email</h6>
             <p class="text-muted"><%= account.getEmail() %></p>
         </div>
         <div class="info-item">
-            <h4 class="mb-0">Ngày sinh</h4>
+            <h6 class="mb-0">Ngày sinh</h6>
             <p class="text-muted"><%= (khachThue != null) ? khachThue.getDob() : "Chưa có thông tin hiển thị" %></p>
         </div>
         <div class="info-item">
-            <h4 class="mb-0">Số CCCD</h4>
+            <h6 class="mb-0">Số CCCD</h6>
             <p class="text-muted"><%= (khachThue != null) ? khachThue.getCccd() : "Chưa có thông tin hiển thị" %></p>
         </div>
         <div class="info-item">
-            <h4 class="mb-0">Nghề nghiệp</h4>
+            <h6 class="mb-0">Nghề nghiệp</h6>
             <p class="text-muted"><%= (khachThue != null) ? khachThue.getJob() : "Chưa có thông tin hiển thị" %></p>
         </div>
         <div class="info-item">
-            <h4 class="mb-0">Số điện thoại</h4>
+            <h6 class="mb-0">Số điện thoại</h6>
             <p class="text-muted"><%= (khachThue != null) ? khachThue.getPhone() : "Chưa có thông tin hiển thị" %></p>
         </div>
         <div class="info-item">
-            <h4 class="mb-0">Địa chỉ thường trú</h4>
+            <h6 class="mb-0">Địa chỉ thường trú</h6>
             <p class="text-muted"><%= (khachThue != null) ? khachThue.getHk_thuong_tru() : "Chưa có thông tin hiển thị" %></p>
         </div>
     </div>

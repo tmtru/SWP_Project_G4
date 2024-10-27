@@ -1,5 +1,13 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package model;
 
+/**
+ *
+ * @author hihihihaha
+ */
 public class ThietBi {
 
     private int ID_ThietBi;
@@ -9,6 +17,10 @@ public class ThietBi {
     private String So_luong;
     private int so_luong_con_lai;
     private int so_luong_da_them;
+    
+    private Phong phong;
+    private int ID_ThietBiPhong;
+    private String tenNhaTro;
 
     public ThietBi() {
     }
@@ -75,6 +87,30 @@ public class ThietBi {
 
     public void setSo_luong_da_them(int so_luong_da_them) {
         this.so_luong_da_them = so_luong_da_them;
+    }
+
+    public Phong getPhong() {
+        return phong;
+    }
+
+    public void setPhong(Phong phong) {
+        this.phong = phong;
+    }
+
+    public int getID_ThietBiPhong() {
+        return ID_ThietBiPhong;
+    }
+
+    public void setID_ThietBiPhong(int ID_ThietBiPhong) {
+        this.ID_ThietBiPhong = ID_ThietBiPhong;
+    }
+
+    public String getTenNhaTro() {
+        return tenNhaTro;
+    }
+
+    public void setTenNhaTro(String tenNhaTro) {
+        this.tenNhaTro = tenNhaTro;
     }
 
     @Override

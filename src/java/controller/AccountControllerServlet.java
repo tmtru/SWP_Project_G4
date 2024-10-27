@@ -8,19 +8,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import dal.AccountDAO;
-import dal.QuanLyDAO;
 import jakarta.servlet.RequestDispatcher;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import model.Account;
-import model.QuanLy;
 
 public class AccountControllerServlet extends HttpServlet {
 
-    private static final int ACCOUNTS_PER_PAGE = 10;
+    private static final int ACCOUNTS_PER_PAGE = 10; 
     private final AccountDAO accountDAO = new AccountDAO();
-    private final QuanLyDAO quanlyDAO = new QuanLyDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -56,6 +50,7 @@ public class AccountControllerServlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
+    //Encrypt here
     private void addAccount(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String username = request.getParameter("username");
@@ -63,37 +58,17 @@ public class AccountControllerServlet extends HttpServlet {
         String password = request.getParameter("password");
         String role = request.getParameter("role");
         boolean isActive = Boolean.parseBoolean(request.getParameter("isActive"));
-        String name = request.getParameter("name");
-        String phone = request.getParameter("phone");
-        String cccd = request.getParameter("cccd");
-        int idNhaTro = Integer.parseInt(request.getParameter("nhaTroId"));
-
-        // Chuyển đổi chuỗi "dob" sang đối tượng Date
-        String dobStr = request.getParameter("dob");
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date dob = null;
-        try {
-            dob = dateFormat.parse(dobStr);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
 
         EncryptPassword ep = new EncryptPassword();
         String encryptedPassword = ep.encryptPassword(password);
+        
+        Account newAccount = new Account(0, email, username, encryptedPassword, role, isActive);
+        accountDAO.addAccount(newAccount);
 
-        Account acc = new Account(0, email, username, encryptedPassword, null, isActive);
-        boolean checkAdd = accountDAO.addAccount2(email, username, encryptedPassword);
-
-        if (checkAdd) {
-            int thisAccountId = accountDAO.getAccountIdByEmail(email);
-
-            quanlyDAO.insertQuanLy(thisAccountId, name, dob, phone, cccd, idNhaTro);
-            
-            response.sendRedirect("accountController");
-        }
+        response.sendRedirect("accountController");
     }
 
-    protected void listAccounts(HttpServletRequest request, HttpServletResponse response)
+    private void listAccounts(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int page = 1;
         String pageStr = request.getParameter("page");
@@ -106,24 +81,17 @@ public class AccountControllerServlet extends HttpServlet {
             searchTerm = "";
         }
 
-        // Get role filter, default to empty string to show all roles
-        String roleFilter = request.getParameter("role");
-        if (roleFilter == null) {
-            roleFilter = "";
-        }
+        int start = (page - 1) * ACCOUNTS_PER_PAGE;
 
-        // Get accounts based on filters
         List<Account> accounts;
         int totalAccounts;
 
-        if (searchTerm.isEmpty() && roleFilter.isEmpty()) {
-            // No filters applied - get all accounts
-            accounts = accountDAO.getAllAccountsPaginated(page, ACCOUNTS_PER_PAGE);
+        if (searchTerm.isEmpty()) {
+            accounts = accountDAO.getAccountsPaginated(start, ACCOUNTS_PER_PAGE);
             totalAccounts = accountDAO.getTotalAccounts();
         } else {
-            // Apply filters
-            accounts = accountDAO.getFilteredAccounts(searchTerm, roleFilter, page, ACCOUNTS_PER_PAGE);
-            totalAccounts = accountDAO.getTotalFilteredAccounts(searchTerm, roleFilter);
+            accounts = accountDAO.searchAccountsByName(searchTerm, start, ACCOUNTS_PER_PAGE);
+            totalAccounts = accountDAO.getTotalAccountsBySearch(searchTerm);
         }
 
         int totalPages = (int) Math.ceil((double) totalAccounts / ACCOUNTS_PER_PAGE);
@@ -132,28 +100,33 @@ public class AccountControllerServlet extends HttpServlet {
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("searchTerm", searchTerm);
-        request.setAttribute("roleFilter", roleFilter);
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("adminUserManagement/account-management.jsp");
-        dispatcher.forward(request, response);
+        request.getRequestDispatcher("adminUserManagement/account-management.jsp").forward(request, response);
     }
 
     private void toggleAccountActive(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int accountId = Integer.parseInt(request.getParameter("id"));
+        int id = Integer.parseInt(request.getParameter("id"));
         boolean isActive = Boolean.parseBoolean(request.getParameter("isActive"));
-
-        accountDAO.toggleActive(accountId, isActive);
-
+        
+        boolean success = accountDAO.updateAccountStatus(id, isActive);
+        
+        response.setContentType("application/json");
         PrintWriter out = response.getWriter();
-        out.print("Status updated successfully");
+        if (success) {
+            out.print("{\"status\":\"success\"}");
+        } else {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.print("{\"status\":\"error\"}");
+        }
+        out.flush();
     }
 
     private void showEditForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
-        Account existingAccount = accountDAO.getAccountById(id);
-        request.setAttribute("account", existingAccount);
+        Account account = accountDAO.getAccountById(id);
+        request.setAttribute("account", account);
         RequestDispatcher dispatcher = request.getRequestDispatcher("adminUserManagement/edit-account.jsp");
         dispatcher.forward(request, response);
     }
@@ -167,11 +140,8 @@ public class AccountControllerServlet extends HttpServlet {
         String role = request.getParameter("role");
         boolean isActive = Boolean.parseBoolean(request.getParameter("isActive"));
 
-        EncryptPassword ep = new EncryptPassword();
-        String encryptedPassword = ep.encryptPassword(password);
-
-        Account updatedAccount = new Account(id, email, username, encryptedPassword, role, isActive);
-        accountDAO.updateAccount(updatedAccount);
+        Account account = new Account(id, email, username, password, role, isActive);
+        accountDAO.updateAccount(account);
 
         response.sendRedirect("accountController");
     }

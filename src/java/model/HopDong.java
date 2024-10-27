@@ -19,6 +19,8 @@ public class HopDong {
     private String Ly_do;
     private String tenPhongTro;
     private Phong phongTro;
+    
+    private KhachThue khachThue;
 
     public Phong getPhongTro() {
         return phongTro;
@@ -167,6 +169,14 @@ public class HopDong {
 
     public void setLy_do(String Ly_do) {
         this.Ly_do = Ly_do;
+    }
+
+    public KhachThue getKhachThue() {
+        return khachThue;
+    }
+
+    public void setKhachThue(KhachThue khachThue) {
+        this.khachThue = khachThue;
     }
 
     @Override

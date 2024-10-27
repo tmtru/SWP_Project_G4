@@ -58,7 +58,11 @@
                         </div>
                         <div class="form-group">
                             <label for="role">Role:</label>
-                            <input type="text" id="role" name="role" value="manager" readonly="">
+                            <select id="role" name="role">
+                                <option value="User">User</option>
+                                <option value="Admin">Admin</option>
+                                <option value="Manager">Manager</option>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="isActive">Active:</label>
@@ -66,30 +70,6 @@
                                 <option value="true">Yes</option>
                                 <option value="false">No</option>
                             </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="name">Name:</label>
-                            <input type="text" id="name" name="name" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="dob">Date of Birth:</label>
-                            <input type="date" id="dob" name="dob" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="phone">Phone:</label>
-                            <input type="text" id="phone" name="phone" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="cccd">CCCD:</label>
-                            <input type="text" id="cccd" name="cccd" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="nhaTroId">Nhà trọ:</label>
-                            <input type="text" id="nhaTroId" name="nhaTroId" required>
                         </div>
                         <div class="form-group">
                             <button type="submit">Add Account</button>
