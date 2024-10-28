@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package controller;
 
 import dal.LoaiPhongDAO;
@@ -22,24 +21,12 @@ import model.LoaiPhong;
 import model.NhaTro;
 import model.Phong;
 
-/**
- *
- * @author hihihihaha
- */
 public class loadPhongTro extends HttpServlet {
    
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -52,14 +39,6 @@ public class loadPhongTro extends HttpServlet {
         }
     } 
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
-     * Handles the HTTP <code>GET</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -71,7 +50,7 @@ public class loadPhongTro extends HttpServlet {
         NhaTroDAO ntdao = new NhaTroDAO();
         LoaiPhongDAO lpdao = new LoaiPhongDAO();
         
-        // Get houses based on user role from session
+        // House tuong ung voi role
         List<NhaTro> houses = (List<NhaTro>) session.getAttribute("housesByRole");
         
         // Initialize selected house ID
@@ -99,10 +78,17 @@ public class loadPhongTro extends HttpServlet {
             }
 
             // Get room list based on filters
+            String searchText = request.getParameter("search");
             String selectedFloor = request.getParameter("tang");
-            if (selectedFloor != null && !selectedFloor.isEmpty()) {
+            
+            if (searchText != null && !searchText.trim().isEmpty()) {
+                // If there's a search query, use search function
+                rooms = pdao.searchRooms(searchText.trim(), choseHouse);
+            } else if (selectedFloor != null && !selectedFloor.isEmpty()) {
+                // If there's a floor filter but no search, use floor filter
                 rooms = pdao.getRoomsByFloorAndNhaTro(Integer.parseInt(selectedFloor), choseHouse);
             } else {
+                // If no search or floor filter, get all rooms
                 rooms = pdao.getRoomsByNhaTro(choseHouse);
             }
 
@@ -125,6 +111,7 @@ public class loadPhongTro extends HttpServlet {
         request.setAttribute("loaiPhongList", loaiPhongList);
         request.setAttribute("tangList", tangList);
         request.setAttribute("statusMap", statusMap);
+        request.setAttribute("searchValue", request.getParameter("search")); // For maintaining search text in input
 
         // Handle pagination
         int page = 1;
@@ -156,13 +143,9 @@ public class loadPhongTro extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
     }
-    /** 
-     * Returns a short description of the servlet.
-     * @return a String containing servlet description
-     */
+
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
-
+    }
 }

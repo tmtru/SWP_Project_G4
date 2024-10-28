@@ -482,23 +482,23 @@ public class HopDongDAO extends DBContext {
         return hopDongList;
     }
     //tinh theo ngay het han thoi
+
     public List<HopDong> getHopDongKhachSapHetHanByApartment(int nhatroId, String search, Integer start, Integer recordPerPage) {
         List<HopDong> hopDongList = new ArrayList<>();
         String query = "select * from hop_dong hd\n"
                 + "left join khach_thue a on a.ID_KhachThue = hd.ID_KhachThue\n"
                 + "left join phong_tro pt on pt.ID_Phong = hd.ID_PhongTro\n"
-                + "where (hd.Trang_thai = 'reject' and pt.ID_NhaTro = ?) and (? = '' or a.Ten_khach like ?) and (hd.Ngay_het_han + INTERVAL 20 DAY >= CURRENT_DATE) ";
+                + "where ( pt.ID_NhaTro = ?) and (? = '' or a.Ten_khach like ?) "
+                // Thêm điều kiện để lấy hợp đồng sắp hết hạn trong vòng 20 ngày
+                + "and (hd.Ngay_het_han BETWEEN CURRENT_DATE AND DATE_ADD(CURRENT_DATE, INTERVAL 20 DAY)) ";
 
         if (start != null && recordPerPage != null) {
             query += "LIMIT ?, ?";
         }
-
         try {
             PreparedStatement stmt = connection.prepareStatement(query);
-
             stmt.setInt(1, nhatroId);
             stmt.setString(2, search);
-
             stmt.setString(3, "%" + search + "%");
             if (start != null && recordPerPage != null) {
                 stmt.setInt(4, start);
@@ -507,32 +507,25 @@ public class HopDongDAO extends DBContext {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 HopDong hopDong = new HopDong();
-
                 hopDong.setID_HopDong(rs.getInt("ID_HopDong"));
                 hopDong.setNgay_gia_tri(rs.getDate("Ngay_gia_tri"));
                 hopDong.setNgay_het_han(rs.getDate("Ngay_het_han"));
                 hopDong.setTien_Coc(rs.getInt("Tien_coc"));
-
                 KhachThue account = new KhachThue();
                 account.setName(rs.getString("Ten_khach"));
                 account.setEmail(rs.getString("email"));
-
                 hopDong.setKhachThue(account);
-
                 // Create a new PhongTro object
                 Phong phongTro = new Phong();
                 phongTro.setTenPhongTro(rs.getString("TenPhongTro"));
                 phongTro.setGia(rs.getInt("Gia"));
-
                 // Set PhongTro in HopDong
                 hopDong.setPhongTro(phongTro);
-
                 hopDongList.add(hopDong);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return hopDongList;
     }
 
