@@ -206,7 +206,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         </a>
                     </li>
 
-                  <li class="dropdown">
+                    <li class="dropdown">
                         <a href="statistic-room" class="dropdown-toggle active">
                             <i class='bx bx-cog icon'></i>
                             <span class="text nav-text">Dashboard</span>
@@ -214,34 +214,34 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         <ul class="dropdown-menu">
                             <li>
                                 <a href="statistic-room">
-                                    <span class="text nav-text">Room Statistic</span>
+                                    <span class="text nav-text">Phòng trống</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="statistic-revenue">
-                                    <span class="text nav-text">Revenue Statistic</span>
+                                    <span class="text nav-text">Doanh thu</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="khach-no">
-                                    <span class="text nav-text">Danh sách khách nợ</span>
+                                    <span class="text nav-text">Khách nợ</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="khach-coc">
-                                    <span class="text nav-text">Danh sách khách cọc</span>
+                                    <span class="text nav-text">Khách đã cọc</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="khach-sap-het-han">
-                                    <span class="text nav-text">Danh sách khách sắp hết hạn hợp đồng</span>
+                                    <span class="text nav-text">Khách sắp hết hạn hợp đồng</span>
                                 </a>
                             </li>
-                              <li>
-            <a href="thiet-bi">
-                <span class="text nav-text">Thiết bị</span>
-            </a>
-        </li>
+                            <li>
+                                <a href="thiet-bi">
+                                    <span class="text nav-text">Thiết bị cần sửa</span>
+                                </a>
+                            </li>
                         </ul>
                     </li>
 
@@ -411,8 +411,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             yValues.push(`${r}`);
             </c:forEach>
             const barColors = [
-                "#00aba9",
-                "#b91d47"
+                "#bc6da6",
+                "#55549b"
             ];
 
             new Chart("myChart", {
@@ -427,7 +427,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 options: {
                     title: {
                         display: true,
-                        text: "Room status statistics"
+                        text: "Danh sách phòng còn trống và đang thuê"
                     }
                 }
             });

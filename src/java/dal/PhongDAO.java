@@ -873,4 +873,41 @@ public class PhongDAO extends DBContext {
         return data;
     }
 
+    public List<Phong> searchRooms(String searchText, int idNhaTro) {
+        List<Phong> rooms = new ArrayList<>();
+        String sql = "SELECT p.ID_Phong, n.TenNhaTro, p.TenPhongTro, p.ID_LoaiPhong, p.Tang, p.Dien_Tich, "
+                + "l.TenLoaiPhong, p.Gia, l.Mo_ta, p.Trang_thai, p.ID_NhaTro "
+                + "FROM phong_tro p "
+                + "JOIN nha_tro n ON p.ID_NhaTro = n.ID_NhaTro "
+                + "JOIN loai_phong l ON p.ID_LoaiPhong = l.ID_LoaiPhong "
+                + "WHERE p.ID_NhaTro = ? AND p.TenPhongTro LIKE ? "
+                + "ORDER BY p.ID_Phong";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, idNhaTro);
+            st.setString(2, "%" + searchText + "%");
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    Phong r = new Phong();
+                    r.setID_Phong(rs.getInt("ID_Phong"));
+                    r.setTenNhaTro(rs.getString("TenNhaTro"));
+                    r.setTenPhongTro(rs.getString("TenPhongTro"));
+                    r.setID_LoaiPhong(rs.getInt("ID_LoaiPhong"));
+                    r.setTang(rs.getInt("Tang"));
+                    r.setDien_tich(rs.getFloat("Dien_Tich"));
+                    r.setTenLoaiPhong(rs.getString("TenLoaiPhong"));
+                    r.setGia(rs.getInt("Gia"));
+                    r.setMo_ta(rs.getString("Mo_ta"));
+                    r.setTrang_thai(rs.getString("Trang_thai"));
+                    r.setID_NhaTro(rs.getInt("ID_NhaTro"));
+                    List<String> images = getImagesByPhongId(rs.getInt("ID_Phong"));
+                    r.setImages(images);
+                    rooms.add(r);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in PhongDAO.searchRooms: " + e.getMessage());
+        }
+        return rooms;
+    }
+
 }

@@ -214,12 +214,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         <ul class="dropdown-menu">
                             <li>
                                 <a href="statistic-room">
-                                    <span class="text nav-text">Room Statistic</span>
+                                    <span class="text nav-text">Phòng trống</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="statistic-revenue">
-                                    <span class="text nav-text">Revenue Statistic</span>
+                                    <span class="text nav-text">Doanh thu</span>
                                 </a>
                             </li>
                             <li>
@@ -328,7 +328,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
 
             <section class="property-management">
                 <div class="header">
-                    <h2>Room status statistics</h2>
+                    <h2>Doanh thu trong năm</h2>
 
                 </div>
 
@@ -405,7 +405,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
         </script>
         <script type="text/javascript">
-            const xValues = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            const xValues = ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"];
             var yValues = [];
             <c:forEach items="${statisticRevenue}" var="r">
             yValues.push(`${r}`);
@@ -438,7 +438,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     legend: {display: false},
                     title: {
                         display: true,
-                        text: "Revenue statistics"
+                        text: "Doanh thu theo tháng"
                     }
                 }
             });

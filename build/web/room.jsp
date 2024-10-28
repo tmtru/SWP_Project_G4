@@ -39,23 +39,23 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <style>
             .dropdown {
-    position: relative; /* Để vị trí dropdown có thể được căn chỉnh */
-}
+                position: relative; /* Để vị trí dropdown có thể được căn chỉnh */
+            }
 
-.dropdown-menu {
-    display: none; /* Ẩn menu theo mặc định */
-    position: absolute; /* Để nó hiển thị bên dưới menu cha */
-    background-color: white; /* Màu nền */
-    border: 1px solid #ccc; /* Đường viền */
-    padding: 10px; /* Khoảng cách bên trong */
-    z-index: 1000; /* Để đảm bảo nó nằm trên các phần tử khác */
-}
+            .dropdown-menu {
+                display: none; /* Ẩn menu theo mặc định */
+                position: absolute; /* Để nó hiển thị bên dưới menu cha */
+                background-color: white; /* Màu nền */
+                border: 1px solid #ccc; /* Đường viền */
+                padding: 10px; /* Khoảng cách bên trong */
+                z-index: 1000; /* Để đảm bảo nó nằm trên các phần tử khác */
+            }
 
-.dropdown:hover .dropdown-menu {
-    display: block; /* Hiển thị menu khi di chuột vào mục cha */
-}
-            
-            
+            .dropdown:hover .dropdown-menu {
+                display: block; /* Hiển thị menu khi di chuột vào mục cha */
+            }
+
+
             .img-preview {
                 width: 50px;
                 border: 1px solid #ddd;
@@ -162,8 +162,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     width: 100%;
                 }
             }
-            
-            
+
+
         </style>
     </head>
     <body>
@@ -193,104 +193,104 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         <input type="text" placeholder="Search...">
                     </li>
                     -->
-                    
 
-                        <li class="">
-                            <a href="#">
-                                <i class='bx bx-home-alt icon' ></i>
-                                <span class="text nav-text">Trang chủ</span>
-                            </a>
-                        </li>
 
-                                            <li class="dropdown">
-    <a href="statistic-room" class="dropdown-toggle">
-        <i class='bx bx-cog icon'></i>
-        <span class="text nav-text">Dashboard</span>
-    </a>
-    <ul class="dropdown-menu">
-        <li>
-            <a href="statistic-room">
-                <span class="text nav-text">Room Statistic</span>
-            </a>
-        </li>
-        <li>
-            <a href="statistic-revenue">
-                <span class="text nav-text">Revenue Statistic</span>
-            </a>
-        </li>
-         <li>
-            <a href="khach-no">
-                <span class="text nav-text">Danh sách khách nợ</span>
-            </a>
-        </li>
-         <li>
-            <a href="khach-coc">
-                <span class="text nav-text">Danh sách khách cọc</span>
-            </a>
-        </li>
-        <li>
-            <a href="khach-sap-het-han">
-                <span class="text nav-text">Danh sách khách sắp hết hạn hợp đồng</span>
-            </a>
-        </li>
-        <li>
-            <a href="thiet-bi">
-                <span class="text nav-text">Thiết bị</span>
-            </a>
-        </li>
-    </ul>
-</li>
-                        
-                        
-                        <li class="">
-                            <a href="nhatro">
-                                <i class='bx bxs-home icon' ></i>
-                                <span class="text nav-text">Nhà trọ</span>
-                            </a>
-                        </li>
+                    <li class="">
+                        <a href="#">
+                            <i class='bx bx-home-alt icon' ></i>
+                            <span class="text nav-text">Trang chủ</span>
+                        </a>
+                    </li>
 
-                        <li class="">
-                            <a href="room" class="active">
-                                <i class='bx bx-bar-chart-alt-2 icon active' ></i>
-                                <span class="text nav-text">Phòng trọ</span>
-                            </a>
-                        </li>
+                    <li class="dropdown">
+                        <a href="statistic-room" class="dropdown-toggle">
+                            <i class='bx bx-cog icon'></i>
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="statistic-room">
+                                    <span class="text nav-text">Phòng trống</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="statistic-revenue">
+                                    <span class="text nav-text">Doanh thu</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="khach-no">
+                                    <span class="text nav-text">Danh sách khách nợ</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="khach-coc">
+                                    <span class="text nav-text">Danh sách khách cọc</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="khach-sap-het-han">
+                                    <span class="text nav-text">Danh sách khách sắp hết hạn hợp đồng</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="thiet-bi">
+                                    <span class="text nav-text">Thiết bị</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
 
-                        <li class="">
-                            <a href="accountController">
-                                <i class='bx bx-face icon' ></i>
-                                <span class="text nav-text">Người dùng</span>
-                            </a>
-                        </li>
 
-                        <li class="s">
-                            <a href="loaddichvu" >
-                                <i class='bx bx-bell icon'></i>
-                                <span class="text nav-text">Dịch vụ</span>
-                            </a>
-                        </li>
+                    <li class="">
+                        <a href="nhatro">
+                            <i class='bx bxs-home icon' ></i>
+                            <span class="text nav-text">Nhà trọ</span>
+                        </a>
+                    </li>
 
-                        <li class="">
-                            <a href="hop-dong">
-                                <i class='bx bx-id-card icon' ></i>
-                                <span class="text nav-text">Hợp đồng</span>
-                            </a>
-                        </li>
+                    <li class="">
+                        <a href="room" class="active">
+                            <i class='bx bx-bar-chart-alt-2 icon active' ></i>
+                            <span class="text nav-text">Phòng trọ</span>
+                        </a>
+                    </li>
 
-                        <li class="">
-                            <a href="hoadon">
-                                <i class='bx bx-wallet icon' ></i>
-                                <span class="text nav-text">Hóa đơn</span>
-                            </a>
-                        </li>
-                        <c:if test="${sessionScope.account.role == 'landlord'}">
+                    <li class="">
+                        <a href="accountController">
+                            <i class='bx bx-face icon' ></i>
+                            <span class="text nav-text">Người dùng</span>
+                        </a>
+                    </li>
+
+                    <li class="s">
+                        <a href="loaddichvu" >
+                            <i class='bx bx-bell icon'></i>
+                            <span class="text nav-text">Dịch vụ</span>
+                        </a>
+                    </li>
+
+                    <li class="">
+                        <a href="hop-dong">
+                            <i class='bx bx-id-card icon' ></i>
+                            <span class="text nav-text">Hợp đồng</span>
+                        </a>
+                    </li>
+
+                    <li class="">
+                        <a href="hoadon">
+                            <i class='bx bx-wallet icon' ></i>
+                            <span class="text nav-text">Hóa đơn</span>
+                        </a>
+                    </li>
+                    <c:if test="${sessionScope.account.role == 'landlord'}">
                         <li class="">
                             <a href="loadThietBi">
                                 <i class='bx bx-devices icon' ></i>
                                 <span class="text nav-text">Thiết bị</span>
                             </a>
                         </li>
-                        </c:if>
+                    </c:if>
 
                     </ul>
                 </div>
@@ -335,8 +335,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 <div class="header">
                     <h2>Danh sách phòng trọ </h2>
                     <div class="search-container">
-                        <form action="searchRoomByName" method="get">
-                            <input type="text" name="tenPhongTro" placeholder="Tìm kiếm phòng..." required>
+                        <form action="loadPhongTro" method="GET">
+                            <input type="text" name="search" value="${searchValue}" placeholder="Tìm kiếm phòng...">
+                            <input type="hidden" name="nhaTro" value="${param.nhaTro}">
                             <button type="submit"><i class='bx bx-search'></i></button>
                         </form>
                     </div>
@@ -577,52 +578,52 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                             </a>
                                             <c:if test="${sessionScope.account.role == 'landlord'}">
 
-                                            <!-- Edit and Delete Buttons -->
-                                            <c:if test="${!empty room.trang_thai}">
-                                                <a href="#" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;"
-                                                   onclick='openEditModal(
-                                                                   "${room.ID_Phong}",
-                                                                   "${room.tenPhongTro}",
-                                                                   "${room.tang}",
-                                                                   "${room.dien_tich}",
-                                                                   "${room.gia}",
-                                                                   "${room.trang_thai}",
-                                                                   "${room.ID_NhaTro}",
-                                                                   "${room.ID_LoaiPhong}",
-                                                           [<c:forEach var="image" items="${room.images}" varStatus="status">
-                                                           "${fn:replace(image, '\\', '/')}"
-                                                       <c:if test="${!status.last}">,</c:if>
-                                                   </c:forEach>]
-                                                                   );
-                                                           return false;'>
-                                                    <i class="bx bx-edit"></i> Chỉnh sửa
-                                                </a>
-                                                <a href="#" class="btn btn-link text-danger text-gradient px-3 mb-0" data-toggle="modal" data-target="#myModalDelete${room.ID_Phong}">
-                                                    <i class="fa-solid fa-trash"></i>Xóa
-                                                </a>
+                                                <!-- Edit and Delete Buttons -->
+                                                <c:if test="${!empty room.trang_thai}">
+                                                    <a href="#" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;"
+                                                       onclick='openEditModal(
+                                                                       "${room.ID_Phong}",
+                                                                       "${room.tenPhongTro}",
+                                                                       "${room.tang}",
+                                                                       "${room.dien_tich}",
+                                                                       "${room.gia}",
+                                                                       "${room.trang_thai}",
+                                                                       "${room.ID_NhaTro}",
+                                                                       "${room.ID_LoaiPhong}",
+                                                               [<c:forEach var="image" items="${room.images}" varStatus="status">
+                                                               "${fn:replace(image, '\\', '/')}"
+                                                           <c:if test="${!status.last}">,</c:if>
+                                                       </c:forEach>]
+                                                                       );
+                                                               return false;'>
+                                                        <i class="bx bx-edit"></i> Chỉnh sửa
+                                                    </a>
+                                                    <a href="#" class="btn btn-link text-danger text-gradient px-3 mb-0" data-toggle="modal" data-target="#myModalDelete${room.ID_Phong}">
+                                                        <i class="fa-solid fa-trash"></i>Xóa
+                                                    </a>
 
-                                                <!-- Modal xóa phòng -->
-                                                <div id="myModalDelete${room.ID_Phong}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog modal-confirm">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header flex-column">
-                                                                <div class="icon-box">
-                                                                    <i class="fa-solid fa-circle-xmark"></i>
+                                                    <!-- Modal xóa phòng -->
+                                                    <div id="myModalDelete${room.ID_Phong}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog modal-confirm">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header flex-column">
+                                                                    <div class="icon-box">
+                                                                        <i class="fa-solid fa-circle-xmark"></i>
+                                                                    </div>
+                                                                    <h5 class="modal-title w-100">Bạn có chắc chắn bạn muốn xóa phòng này?</h5>
                                                                 </div>
-                                                                <h5 class="modal-title w-100">Bạn có chắc chắn bạn muốn xóa phòng này?</h5>
-                                                            </div>
-                                                            <div class="modal-footer justify-content-center">
-                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                                                                <button type="button" class="btn btn-danger">
-                                                                    <a href="deleteRoom?id=${room.ID_Phong}" class="edit-film" style="color: white !important;">Xóa phòng</a>
-                                                                </button>
+                                                                <div class="modal-footer justify-content-center">
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                                                                    <button type="button" class="btn btn-danger">
+                                                                        <a href="deleteRoom?id=${room.ID_Phong}" class="edit-film" style="color: white !important;">Xóa phòng</a>
+                                                                    </button>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </c:if>
+                                                </c:if>
 
-                                                
+
                                             </c:if>
 
                                         </div>
