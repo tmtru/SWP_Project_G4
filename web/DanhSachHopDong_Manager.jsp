@@ -162,7 +162,7 @@ border: 1px solid #007bff;
                             <th>Số Thứ Tự</th>
                             <th>Tên Phòng Trọ</th>
                             <th>Ngày Bắt Đầu</th>
-<th>Ngày Hết Hạn</th>
+                            <th>Ngày Hết Hạn</th>
                             <th>Giá phòng</th>
                             <th>Trạng Thái Phòng</th>
                             <th>Trạng Thái Hợp Đồng</th>
@@ -183,7 +183,7 @@ border: 1px solid #007bff;
                                     String reasonReject = hopDong.getLy_do();
 
                                     // Kiểm tra nếu ngày hết hạn hợp đồng cách ngày hiện tại 20 ngày và trạng thái là "accept"
-                                    if ("active".equalsIgnoreCase(hopDong.getStatus()) && ngayHetHan != null && hopDong.getPhongTro() != null) {
+                                    if ("accept".equalsIgnoreCase(hopDong.getStatus()) && ngayHetHan != null && hopDong.getPhongTro() != null) {
                                         long differenceInMillies = ngayHetHan.getTime() - currentDate.getTime();
                                         long differenceInDays = differenceInMillies / (1000 * 60 * 60 * 24);
 

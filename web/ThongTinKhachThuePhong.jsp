@@ -5,7 +5,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Thông tin người đại diện thuê phòng</title>
+        <title>Thông tin người thuê phòng</title>
         <link rel="stylesheet" href="css/stylehopdong.css">
         <style>
             .container {
@@ -20,7 +20,7 @@
         <jsp:include page="adminUserManagement/sidebar.jsp"></jsp:include>
             <div class="container">
                 <div class="header">
-                    <h1>Thông tin người đại diện thuê phòng</h1>
+                    <h1>Thông tin người thuê phòng</h1>
                     <div class="buttons">
                         <button class="btn return" onclick="window.history.back();">Quay về</button>
                         <button class="btn save">Lưu</button>
@@ -28,27 +28,33 @@
                 </div>
                 <div class="form">
                     <div class="tabs">
-                        <a style="text-decoration: none;" href="addContract" class="tab active">Thông tin người đại diện thuê phòng</a>
+                        <a style="text-decoration: none;" href="ThongTinKhachThuePhong" class="tab active">Thông tin người thuê phòng</a>
                     <% 
                                 String message = (String) request.getAttribute("message");
                                 if (message != null) {
                     %>
-                    <a style="text-decoration: none;" href="DangKyDichVuPhongTro?Cmnd=${Cmnd}" class="tab">Dịch vụ</a>
+                    <a href="#" class="tab" onclick="redirectToHopDong()">Hợp đồng</a>
+
                     <% 
                         }
                     %>
                 </div>
-                <form>
+                <form action="ThongTinKhachThuePhong" method="get">
+                    <% 
+    int hopDongId = Integer.parseInt(request.getParameter("hopDongId")); 
+                    %>
+
                     <% 
     if (message != null) {
                     %>
                     <div class="alert alert-info" style="color: green; font-weight: bold; margin-top: 10px;">
                         <%= message %>
                     </div>
-                   
+
                     <%
                         }
                     %>
+                    <input type="hidden" id="hopDongId" name="hopDongId" value="<%= hopDongId %>">
 
                     <div class="form-row">
                         <div class="form-group">
@@ -79,10 +85,11 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="issue-date">Ngày cấp</label>
-                            <input type="date" name="issuedate" id="issue-date" value="${Ngaycap}" required>
-                            <span id="issue-date-error" style="color:red; display:none;">Ngày cấp phải sau ngày sinh và không được sau ngày hiện tại.</span>
+                            <label for="dob">Ngày sinh (dd/MM/yyyy)</label>
+                            <input type="date" id="dob" name="dob" value="${NgaySinh}" required>
+                            <span id="dob-error" style="color:red; display:none;">Ngày sinh không được sau ngày hiện tại.</span>
                         </div>
+
                     </div>
 
                     <div class="form-row">
@@ -99,17 +106,7 @@
 
                     </div>
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="thuephong">Thuê Phòng Số:</label>
-                            <input type="text" name="tenPhongTro" id="thuephong" placeholder="phòng thuê" 
-                                   value="${SoPhong}" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="city">Tỉnh/Thành phố</label>
-                            <input type="text" name="city" id="city" placeholder="Thành phố" value="${ThanhPho}" required>
-                        </div>
-                    </div>
+
 
                     <div class="form-row">
                         <div class="form-group">
@@ -117,33 +114,7 @@
                             <input type="text" name="address" id="address" placeholder="Địa chỉ thường trú" 
                                    value="${DiaChi}" required>
                         </div>
-                        <div class="form-group">
-                            <label for="nghenghiep">Nghề Nghiệp</label>
-                            <input type="text" name="nghenghiep" id="nghenghiep" placeholder="Nghề nghiệp" value="${Nghenghiep}" required>
-                        </div>
-                    </div>
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="dob">Ngày sinh (dd/MM/yyyy)</label>
-                            <input type="date" id="dob" name="dob" value="${NgaySinh}" required>
-                            <span id="dob-error" style="color:red; display:none;">Ngày sinh không được sau ngày hiện tại.</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="other-notes">Ghi chú khác</label>
-                            <input type="text" name="note" id="other-notes" placeholder="Ghi chú khác" value="${GhiChu}" required>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="image-upload">Ảnh mặt trước</label>
-                            <input type="file" name="imgMatTruoc" id="image-upload" class="file-input" value="${MatTruoc}" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="image-upload">Ảnh mặt sau</label>
-                            <input type="file" name="imgMatSau" id="image-upload" class="file-input" value="${MatSau}" required>
-                        </div>
                     </div>
 
                     <div class="form-row">
@@ -190,6 +161,12 @@
                 }
             });
         });
+        function redirectToHopDong() {
+            // Lấy giá trị của hopDongId từ input ẩn
+            var hopDongId = document.getElementById('hopDongId').value;
+            // Chuyển hướng tới trang hợp đồng với tham số hopDongId
+            window.location.href = 'HopDongThueTro?hopDongId=' + hopDongId;
+        }
     </script>
 
 

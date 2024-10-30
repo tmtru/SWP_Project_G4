@@ -2,6 +2,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="model.HopDong" %>
 
+
 <!DOCTYPE html>
 <html lang="vi">
     <head>
@@ -9,6 +10,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Danh Sách Các Hợp Đồng</title>
         <link rel="stylesheet" href="css/styledichvuthuephong.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <style>
             .container {
                 max-width: 1255px !important;
@@ -120,6 +122,12 @@
                 border: 1px solid #ccc;
                 border-radius: 5px;
             }
+            .reject-icon {
+                color: red;
+                font-size: 25px;
+                margin-left: 10px;
+                cursor: pointer;
+            }
         </style>
     </head>
     <body>
@@ -142,7 +150,16 @@
                         <option value="expired">expired</option>
                     </select>
                 </div>
-
+<% 
+                String message = (String) request.getAttribute("message");
+                if (message != null) {
+            %>
+            <div class="alert alert-info" style="color: green; font-weight: bold; margin-top: 10px;">
+                <%= message %>
+            </div>
+            <%
+                }
+            %>
 
 
                 <div class="service-section">
@@ -174,6 +191,12 @@
                                     <input type="hidden" name="hopDongId" value="<%= hopDong.getID_HopDong() %>">
                                     <button type="submit">Xem Chi Tiết</button>
                                 </form>
+                                <form action="KetThucHopDongSomByAdmin" method="get" style="display:inline;">
+                                    <input type="hidden" name="hopDongId" value="<%= hopDong.getID_HopDong() %>">
+                                    <button type="submit" onclick="return confirm('Bạn có chắc chắn muốn kết thúc hợp đồng này không?')" style="background: none; border: none; cursor: pointer;">
+                                        <i class="fas fa-times-circle reject-icon"></i>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                         <%
@@ -198,7 +221,7 @@
         </div>
 
         <script>
-            const itemsPerPage = 7; // Số hợp đồng mỗi trang
+            const itemsPerPage = 6; // Số hợp đồng mỗi trang
             let currentPage = 1;
 
             function paginate() {
@@ -240,28 +263,29 @@
                 checkNoResult(hasResult); // Kiểm tra có kết quả hay không
             }
 
-         function filterTable() {
-    const filterTrangThaiHopDong = document.getElementById("filterTrangThaiHopDong").value;
-    const rows = document.querySelectorAll("#contractBody tr:not(#noResultRow)");
-    let hasResult = false;
+            function filterTable() {
+                const filterTrangThaiPhong = document.getElementById("filterTrangThaiPhong").value;
+                const filterTrangThaiHopDong = document.getElementById("filterTrangThaiHopDong").value;
+                const rows = document.querySelectorAll("#contractBody tr:not(#noResultRow)");
+                let hasResult = false;
 
-    rows.forEach(row => {
-        const trangThaiHopDong = row.querySelector("td:nth-child(5)").textContent; // Cột 5: Trạng thái hợp đồng
+                rows.forEach(row => {
+                    const trangThaiPhong = row.querySelector("td:nth-child(5)").textContent;
+                    const trangThaiHopDong = row.querySelector("td:nth-child(5)").textContent;
 
-        const matchHopDong = filterTrangThaiHopDong === "" || trangThaiHopDong === filterTrangThaiHopDong;
+                    const matchPhong = filterTrangThaiPhong === "" || trangThaiPhong === filterTrangThaiPhong;
+                    const matchHopDong = filterTrangThaiHopDong === "" || trangThaiHopDong === filterTrangThaiHopDong;
 
-        if (matchHopDong) {
-            row.style.display = ""; 
-            hasResult = true;
-        } else {
-            row.style.display = "none";
-        }
-    });
+                    if (matchPhong && matchHopDong) {
+                        row.style.display = ""; // Hiển thị hàng phù hợp
+                        hasResult = true;
+                    } else {
+                        row.style.display = "none"; // Ẩn hàng không phù hợp
+                    }
+                });
 
-    checkNoResult(hasResult); 
-}
-
-
+                checkNoResult(hasResult); // Kiểm tra có kết quả hay không
+            }
 
             function checkNoResult(hasResult) {
                 const rows = document.querySelectorAll("#contractBody tr:not(#noResultRow)");
@@ -287,4 +311,3 @@
 
     </body>
 </html>
-<a href="TransactionForm.jsp"></a>

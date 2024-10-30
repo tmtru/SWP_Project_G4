@@ -161,6 +161,14 @@
         <servlet-name>GiaHanHopDongByManagerController</servlet-name>
         <servlet-class>controller.GiaHanHopDongByManagerController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>KetThucHopDongSomByAdminController</servlet-name>
+        <servlet-class>controller.KetThucHopDongSomByAdminController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ThongTinKhachThuePhongController</servlet-name>
+        <servlet-class>controller.ThongTinKhachThuePhongController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>homeRooms</servlet-name>
         <url-pattern>/homer</url-pattern>
@@ -402,5 +410,13 @@
     <servlet-mapping>
         <servlet-name>GiaHanHopDongByManagerController</servlet-name>
         <url-pattern>/GiaHanHopDongByManager</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>KetThucHopDongSomByAdminController</servlet-name>
+        <url-pattern>/KetThucHopDongSomByAdmin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ThongTinKhachThuePhongController</servlet-name>
+        <url-pattern>/ThongTinKhachThuePhong</url-pattern>
     </servlet-mapping>
 </web-app>
