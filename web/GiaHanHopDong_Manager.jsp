@@ -7,7 +7,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="model.DichVu" %>
 <%@ page import="java.util.List" %>
-<%@ page import="model.HopDong" %>
 
 <!DOCTYPE html>
 <html>
@@ -23,7 +22,6 @@
         <% 
             Integer giaPhong = (Integer) request.getAttribute("giaPhong");
             String diaChiPhongTro = (String) request.getAttribute("diaChiPhongTro");
-            HopDong hopDong = (HopDong) request.getAttribute("hopDong");
         %>
         <script>
             // Khởi tạo nội dung hợp đồng
@@ -149,20 +147,7 @@
             html2pdf().from(tempElement).set(options).save();
             }
 
-// Biến chứa ngày hết hạn của hợp đồng
-            const ngayHetHan = new Date('<%= hopDong.getNgay_het_han() %>');
 
-            // Kiểm tra ngày gia hạn phải sau ngày hết hạn hiện tại
-            function validateDate() {
-                const ngayGiaHan = new Date(document.getElementById('endDate').value);
-
-                // Nếu ngày gia hạn nhỏ hơn hoặc bằng ngày hết hạn hiện tại, cảnh báo và ngăn submit form
-                if (ngayGiaHan <= ngayHetHan) {
-                    alert('Ngày gia hạn phải sau ngày hết hạn hợp đồng hiện tại: ' + ngayHetHan.toLocaleDateString());
-                    return false;
-                }
-                return true; // Cho phép gửi form nếu hợp lệ
-            }
 
             document.addEventListener('DOMContentLoaded', function() {
             initializeEditor(); // Khởi tạo editor khi trang load
@@ -295,10 +280,11 @@
                 String hopDongId = request.getParameter("hopDongId");
             %>
 
-            <form action="GiaHanHopDongByManager" method="post" onsubmit="return validateDate()">
-                <input type="hidden" name="hopDongId" value="<%= hopDongId %>">
+            <form action="GiaHanHopDongByManager" method="post">
+                <input type="hidden" name="hopDongId" value="<%= hopDongId %>"> <!-- Gửi hopDongId -->
 
                 <div class="form-row">
+                    
                     <div class="form-group">
                         <label for="endDate">Gia hạn hợp đồng đến ngày:</label>
                         <input type="date" id="endDate" name="endDate" required>
@@ -309,8 +295,8 @@
                 <textarea id="contractContent" name="contractContent"></textarea>
 
                 <div style="margin-top: 20px;">
-                    <button type="submit" style="padding: 10px 20px; background-color: green; color: white;">Lưu</button>
-                    <button type="button" style="padding: 10px 20px; background-color: blue; color: white;" onclick="exportToPdf()">Xuất PDF</button>
+                    <button type="submit" style="padding: 10px 20px; background-color: green; color: white; border: none;">Lưu</button>
+                    <button type="button" style="padding: 10px 20px; background-color: blue; color: white; border: none;" onclick="exportToPdf()">Xuất PDF</button>
                 </div>
             </form>
 

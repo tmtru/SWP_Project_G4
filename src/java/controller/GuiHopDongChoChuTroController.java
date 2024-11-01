@@ -5,23 +5,13 @@
 
 package controller;
 
-import dal.ChuTroDAO;
-import dal.DichVuDAO;
 import dal.HopDongDAO;
-import dal.KhachThueDAO;
-import dal.NhaTroDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import model.ChuTro;
-import model.DichVu;
-import model.HopDong;
-import model.KhachThue;
-import model.Phong;
 
 /**
  *
@@ -80,25 +70,7 @@ public class GuiHopDongChoChuTroController extends HttpServlet {
         String hopDongIdStr = request.getParameter("hopDongId");
         int hopDongId = Integer.parseInt(hopDongIdStr);
         HopDongDAO hopDongDAO = new HopDongDAO();
-        ChuTroDAO chuTroDAO = new ChuTroDAO();
-        KhachThueDAO khachThueDAO = new KhachThueDAO();
-        DichVuDAO dichVuDAO = new DichVuDAO();
-        NhaTroDAO nhaTroDAO = new NhaTroDAO();
         boolean isUpdated = hopDongDAO.updateHopDongStatusToPending(hopDongId);
-        NhaTroDAO nhaTroDao = new NhaTroDAO();
-                    ChuTro chuTro = chuTroDAO.getChuTroByHopDongId(hopDongId);
-            KhachThue khachThue = khachThueDAO.getKhachThueByHopDongId(hopDongId);
-            List<DichVu> dichVuList = dichVuDAO.getDichVuByHopDongId(hopDongId);
-            Phong roomDetails = nhaTroDao.getRoomDetailsByHopDongId(hopDongId);
-            HopDong hopDong = hopDongDAO.getHopDongById(hopDongId);
-            request.setAttribute("hopDongId", hopDongId);
-            request.setAttribute("chuTro", chuTro);
-            request.setAttribute("khachThue", khachThue);
-            request.setAttribute("dichVuList", dichVuList);
-            request.setAttribute("giaPhong", roomDetails.getGia());
-            request.setAttribute("diaChiPhongTro", roomDetails.getDiaChiPhongTro());
-            request.setAttribute("trangThai", roomDetails.getTrang_thai());
-            request.setAttribute("hopDong", hopDong);
         if (isUpdated) {
                 // Status updated successfully
                 request.setAttribute("message", "Hợp đồng đã được gửi cho chủ trọ xử lý.");

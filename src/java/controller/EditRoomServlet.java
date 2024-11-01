@@ -117,6 +117,8 @@ public class EditRoomServlet extends HttpServlet {
 
             pdao.updateRoom(updatedRoom);
 
+            
+            // for action history
             // Log the changes
             StringBuilder changesLog = new StringBuilder("Cập nhật chi tiết nhà trọ: \n");
 
@@ -166,7 +168,7 @@ public class EditRoomServlet extends HttpServlet {
             // Log the action if the user is a manager
             HttpSession session = request.getSession();
             Account account = (Account) session.getAttribute("account");
-            if (account.getRole().equals("Quản lý")) {
+            if (account.getRole().equals("manager")) {
                 ActionHistoryDAO ahdao = new ActionHistoryDAO();
                 ActionHistory history = new ActionHistory();
 

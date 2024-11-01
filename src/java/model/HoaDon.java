@@ -21,6 +21,9 @@ public class HoaDon {
     private List<DichVu> DichVus;
     private boolean isActive;
     private String MoTa;
+    
+    private KhachThue khachThue;
+    private int tienDaThanhToan;
 
     public HoaDon() {
         
@@ -116,6 +119,22 @@ public class HoaDon {
 
     public void setMoTa(String MoTa) {
         this.MoTa = MoTa;
+    }
+
+    public KhachThue getKhachThue() {
+        return khachThue;
+    }
+
+    public void setKhachThue(KhachThue khachThue) {
+        this.khachThue = khachThue;
+    }
+
+    public int getTienDaThanhToan() {
+        return tienDaThanhToan;
+    }
+
+    public void setTienDaThanhToan(int tienDaThanhToan) {
+        this.tienDaThanhToan = tienDaThanhToan;
     }
     
 

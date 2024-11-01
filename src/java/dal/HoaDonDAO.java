@@ -17,6 +17,8 @@ import java.util.List;
 import java.text.SimpleDateFormat;
 import model.DichVu;
 import model.HoaDon;
+import model.HopDong;
+import model.KhachThue;
 import model.Phong;
 
 /**
@@ -465,6 +467,65 @@ public class HoaDonDAO extends DBContext {
 
         return hoaDons;
     }
+//lay hoa dơn theo thnags hiện tại
+
+    public List<HoaDon> getHoaDonByCurrentMonthAndByIdHopDong(int idHopDong) {
+        List<HoaDon> hoaDons = new ArrayList<>();
+        String sql = "SELECT hd.ID_HoaDon, hd.ID_HopDong, hd.Ngay, hd.Trang_thai, "
+                + "hd.Tong_gia_tien, hd.NgayThanhToan, hd.NguoiTao, hd.MoTa, "
+                + "dv.ID_DichVu, dv.TenDichVu, dv.Don_gia, dv.Don_vi, dv.Mo_ta, "
+                + "hdv.ChiSo_Cu, hdv.ChiSo_Moi, hdv.DauNguoi "
+                + "FROM hoa_don hd "
+                + "LEFT JOIN hoa_don_dich_vu hdv ON hd.ID_HoaDon = hdv.ID_HoaDon "
+                + "LEFT JOIN dich_vu dv ON hdv.ID_DichVu = dv.ID_DichVu "
+                + "WHERE hd.ID_HopDong = ? AND hd.isActive=1 "
+                + "AND MONTH(hd.Ngay) = MONTH(CURRENT_DATE()) "
+                + "AND YEAR(hd.Ngay) = YEAR(CURRENT_DATE()) "
+                + "ORDER BY hd.ID_HoaDon DESC";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, idHopDong); // Đặt ID hợp đồng vào tham số truy vấn
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int idHoaDon = rs.getInt("ID_HoaDon");
+                HoaDon hoaDon = findHoaDonById(hoaDons, idHoaDon);
+
+                if (hoaDon == null) {
+                    hoaDon = new HoaDon();
+                    hoaDon.setID_HoaDon(idHoaDon);
+                    hoaDon.setID_HopDong(rs.getInt("ID_HopDong"));
+                    hoaDon.setNgay(rs.getDate("Ngay"));
+                    hoaDon.setTrang_thai(rs.getInt("Trang_thai"));
+                    hoaDon.setTong_gia_tien(rs.getInt("Tong_gia_tien"));
+                    hoaDon.setNgayThanhToan(rs.getDate("NgayThanhToan"));
+                    hoaDon.setNguoiTao(rs.getString("NguoiTao"));
+                    hoaDon.setMoTa(rs.getNString("MoTa"));
+                    hoaDon.setDichVus(new ArrayList<>()); // Khởi tạo danh sách dịch vụ
+                    hoaDons.add(hoaDon); // Thêm hóa đơn mới vào danh sách
+                }
+
+                // Thêm dịch vụ vào danh sách dịch vụ của hóa đơn
+                int idDichVu = rs.getInt("ID_DichVu");
+                if (idDichVu != 0) { // Nếu có dịch vụ
+                    DichVu dichVu = new DichVu();
+                    dichVu.setID_DichVu(idDichVu);
+                    dichVu.setTenDichVu(rs.getString("TenDichVu"));
+                    dichVu.setDon_gia(rs.getInt("Don_gia"));
+                    dichVu.setDon_vi(rs.getString("Don_vi"));
+                    dichVu.setMo_ta(rs.getString("Mo_ta"));
+                    dichVu.setChiSoCu(rs.getInt("ChiSo_Cu"));
+                    dichVu.setChiSoMoi(rs.getInt("ChiSo_Moi"));
+                    dichVu.setDauNguoi(rs.getInt("DauNguoi"));
+                    hoaDon.getDichVus().add(dichVu); // Thêm dịch vụ vào danh sách
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return hoaDons;
+    }
 
     //method  lấy các ID hợp đồng mà có roomId là idRoom 
     public List<Integer> getHopDongOfRentedRoom(int idRoom) {
@@ -555,5 +616,75 @@ public class HoaDonDAO extends DBContext {
         }
     }
 
-   
+    public List<HoaDon> getKhachNo(int nhatroId, String search, Integer start, Integer recordPerPage) {
+        List<HoaDon> l = new ArrayList<>();
+        String query = "select a.Ten_khach,a.email, h.* from hop_dong hd\n"
+                + "left join hoa_don h on hd.ID_HopDong = h.ID_HopDong\n"
+                + "left join khach_thue a on a.ID_KhachThue = hd.ID_KhachThue\n"
+                + "left join phong_tro pt on pt.ID_Phong = hd.ID_PhongTro\n"
+                + "where pt.ID_NhaTro = ? and (h.Trang_thai is null or h.Trang_thai = 0) and (? = '' or a.Ten_khach like ?) ";
+
+        if (start != null && recordPerPage != null) {
+            query += "LIMIT ?, ?";
+        }
+
+        try {
+            PreparedStatement stmt = connection.prepareStatement(query);
+
+            stmt.setInt(1, nhatroId);
+            stmt.setString(2, search);
+
+            stmt.setString(3, "%" + search + "%");
+            if (start != null && recordPerPage != null) {
+                stmt.setInt(4, start);
+                stmt.setInt(5, recordPerPage);
+            }
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                HoaDon h = new HoaDon();
+
+                h.setID_HoaDon(rs.getInt("ID_HoaDon"));
+                h.setNgay(rs.getDate("Ngay"));
+                h.setTong_gia_tien(rs.getInt("Tong_gia_tien"));
+                h.setNguoiTao(rs.getString("NguoiTao"));
+
+                KhachThue account = new KhachThue();
+                account.setName(rs.getString("Ten_khach"));
+                account.setEmail(rs.getString("email"));
+
+                h.setKhachThue(account);
+
+                int tienDaThanhToan = getTotalTransAmountByHoaDon(h.getID_HoaDon());
+
+                h.setTienDaThanhToan(tienDaThanhToan);
+
+                l.add(h);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return l;
+    }
+
+    public int getTotalTransAmountByHoaDon(int hoadonId) {
+        String query = "select sum(t.Amount) from transaction t where t.ID_HoaDon = ?";
+        int sum = 0;
+        try {
+            PreparedStatement stmt = connection.prepareStatement(query);
+
+            stmt.setInt(1, hoadonId);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                sum += rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return sum;
+    }
+
+
 }

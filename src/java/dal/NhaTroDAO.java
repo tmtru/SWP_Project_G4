@@ -72,7 +72,7 @@ public class NhaTroDAO extends DBContext {
                 + "JOIN NHA_TRO n ON p.ID_NhaTro = n.ID_NhaTro "
                 + "JOIN LOAI_PHONG l ON p.ID_LoaiPhong = l.ID_LoaiPhong "
                 + "LEFT JOIN ANH_PHONG_TRO a ON p.ID_Phong = a.ID_Phong "
-                + "WHERE p.ID_NhaTro = ?";
+                + "WHERE p.ID_NhaTro = ? order by p.ID_Phong;";
         try (PreparedStatement ps = connection.prepareStatement(sql);) {
             ps.setInt(1, idNhaTro);
             ResultSet rs = ps.executeQuery();
@@ -270,6 +270,48 @@ public class NhaTroDAO extends DBContext {
         }
         return nhaTro;
     }
+    public List<NhaTro> getAllNhaTroForManager( int mId) {
+        List<NhaTro> nhaTro = new ArrayList<>();
+        List<Object> list = new ArrayList<>();
+        ChuTroDAO ctdao = new ChuTroDAO();
+
+        try {
+            StringBuilder query = new StringBuilder();
+            query.append("select n.* ,  COUNT(pt.ID_Phong) AS roomNumber from nha_tro n join quan_ly ql on ql.ID_NhaTro = n.ID_NhaTro ")
+                    .append("LEFT JOIN phong_tro pt ON n.ID_NhaTro = pt.ID_NhaTro ")
+                    .append("WHERE ql.ID_QuanLy  = ? ");
+                    
+
+            query.append("ORDER BY n.ID_NhaTro ASC");
+            list.add(mId);
+            PreparedStatement preparedStatement = connection.prepareStatement(query.toString());
+            mapParams(preparedStatement, list);
+
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                while (rs.next()) {
+                    NhaTro nt = new NhaTro();
+                    nt.setID_NhaTro(rs.getInt("ID_NhaTro"));
+                    nt.setTenNhaTro(rs.getString("TenNhaTro"));
+                    nt.setMo_ta(rs.getString("Mo_ta"));
+                    nt.setDia_chi(rs.getString("Dia_chi"));
+                    nt.setRoomNumber(rs.getInt("roomNumber"));  // Set the room count
+
+                    // Get associated ChuTro details
+                    ChuTro chuTro = ctdao.getChuTroById(rs.getInt("ID_chutro"));
+                    nt.setChuTro(chuTro);
+
+                    // Fetch images for the current NhaTro
+                    nt.setAnhNhaTro(getImagesForNhaTro(nt.getID_NhaTro()));
+
+                    nhaTro.add(nt);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return nhaTro;
+    }
+
 
     public void saveImages(int nhaTroId, List<String> imageUrls) {
         try {
@@ -543,6 +585,13 @@ public class NhaTroDAO extends DBContext {
     } else {
         System.out.println("No room details found for Hop Dong ID: " + sampleHopDongId);
     }
+
+        List<NhaTro> list = dAO.getAllNhaTroForManager(2);
+        for (NhaTro string : list) {
+            System.out.println(string);
+        }
+
+
 //        // Kiểm tra phương thức getAll
 //        System.out.println("Danh sách nhà trọ:");
 //        ArrayList<NhaTro> danhSachNhaTro = nhaTroDAO.getAll();

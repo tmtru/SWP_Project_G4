@@ -19,7 +19,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Bootstrap CSS -->
 
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
         <!----======== CSS ======== -->
         <link rel="stylesheet" href="css/styleRoom.css">
         <link rel="stylesheet" href="css/modelDelete.css">
@@ -51,16 +51,16 @@
 
     </head>
     <body>
-         <jsp:include page="sidebarHoaDonManagement.jsp"></jsp:include>
-        <section class="home">
-            <section class="property-management">
-                <div class="header">
-                    <h2>Danh sách hóa đơn nhà trọ</h2>
+        <jsp:include page="sidebarHoaDonManagement.jsp"></jsp:include>
+            <section class="home">
+                <section class="property-management">
+                    <div class="header">
+                        <h2>Danh sách hóa đơn nhà trọ</h2>
 
-                </div>
+                    </div>
 
-                <nav>
-                    <div class="warpper">
+                    <nav>
+                        <div class="warpper">
                         <c:forEach var="nt" items="${sessionScope.housesByRole}">
                             <a href="hoadon?id=${nt.ID_NhaTro}">
                                 <div class="tab <c:if test="${nt.ID_NhaTro == sessionScope.currentHouse}">active</c:if>" id="tab-${nt.ID_NhaTro}" >
@@ -83,7 +83,7 @@
                     <div class="my-4 ml-4 ">
                         <h4 class="">Thông tin hóa đơn phòng ${currentRoomOfHoaDon.tenPhongTro}</h4>
                         <a class="btn btn-success" href="loadHoaDonForm?roomId=${currentRoomOfHoaDon.ID_Phong}" >+ Thêm hóa đơn tiền phòng</a>
-                        
+
                     </div>
                     <div class="col-lg-10 mt-1 ml-2">
                         <!--                        <div class="row filter">
@@ -94,6 +94,16 @@
                         <div class="card">
                             <div class="card-header pb-0 p-3">
                                 <h6 class="mb-0">Thông tin hóa đơn</h6>
+                                <c:if test="${not empty notification}">
+                                    <div class="alert alert-success" role="alert">
+                                        ${notification}
+                                    </div>
+                                </c:if>
+                                <c:if test="${not empty errorMessage}">
+                                    <div class="alert alert-danger" role="alert">
+                                        ${errorMessage}
+                                    </div>
+                                </c:if>
 
                             </div>
                             <div class="card-body pt-4 p-3">
@@ -173,12 +183,12 @@
                                                     </div>
                                                     <div class="mt-2">
                                                         <a class="btn btn-link text-success px-3 mb-0" href="TransactionForm.jsp?id=${hd.ID_HoaDon}"><i class="fa-solid fa-plus"></i>Thêm giao dịch</a>
-                                                        
+
                                                         <button type="button" class="btn btn-link text-danger text-gradient px-3 mb-0" data-toggle="modal" data-target="#myModalDelete${hd.ID_HoaDon}">
                                                             <i class="fa-solid fa-trash"></i>Delete
                                                         </button>
                                                         <div id="myModalDelete${hd.ID_HoaDon}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                            <div class="modal-dialog modal-confirm">
+                                                            <div class="modal-dialog modal-confirm-delete">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header flex-column">
                                                                         <div class="icon-box">
@@ -218,32 +228,36 @@
                                                                     <span class="mb-2 text-xs">Mã giao dịch: ${tr.maGiaoDich}</span>
                                                                     <span class="mb-2 text-xs">Mô tả: ${tr.moTa}</span>
                                                                 </div>
-                                                                
-                                                            </div>
-                                                                <div class="ms-auto text-end">
-                                                            <button type="button" class="col-4 btn btn-link text-danger text-gradient px-3 mb-0" data-toggle="modal" data-target="#myModalDelete${tr.ID_Transaction}">
-                                                                <i class="fa-solid fa-trash"></i>Delete
 
-                                                            </button>
-                                                        </div>
-                                                        <div id="myModalDelete${tr.ID_Transaction}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                            <div class="modal-dialog modal-confirm">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header flex-column">
-                                                                        <div class="icon-box">
-                                                                            <i class="material-icons"><i class="fa-solid fa-circle-xmark"></i></i>
-                                                                        </div>
-                                                                        <h5 class="modal-title w-100">Bạn có chắc chắn bạn muốn xóa giao dịch ?<br/> <span style="color: #5932ea"></span></h5>
-                                                                    </div>
-                                                                    <div class="modal-footer justify-content-end">
-                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                                                                        <button type="button" class="btn btn-danger">
-                                                                            <a href="actionTransaction?action=dele&id=${tr.ID_Transaction}&exit=" class="edit-film" style="color: white !important;">Xóa giao dịch</a>
+                                                            </div>
+                                                            <c:if test="${a!=null}">
+                                                                <c:if test="${a.role.equals('landlord')}">
+                                                                    <div class="ms-auto text-end">
+                                                                        <button type="button" class="col-4 btn btn-link text-danger text-gradient px-3 mb-0" data-toggle="modal" data-target="#myModalDelete${tr.ID_Transaction}">
+                                                                            <i class="fa-solid fa-trash"></i>Delete
+
                                                                         </button>
                                                                     </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                                    <div id="myModalDelete${tr.ID_Transaction}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                        <div class="modal-dialog modal-confirm-delete">
+                                                                            <div class="modal-content">
+                                                                                <div class="modal-header flex-column">
+                                                                                    <div class="icon-box">
+                                                                                        <i class="material-icons"><i class="fa-solid fa-circle-xmark"></i></i>
+                                                                                    </div>
+                                                                                    <h5 class="modal-title w-100">Bạn có chắc chắn bạn muốn xóa giao dịch ?<br/> <span style="color: #5932ea"></span></h5>
+                                                                                </div>
+                                                                                <div class="modal-footer justify-content-center">
+                                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                                                                                    <button type="button" class="btn btn-danger">
+                                                                                        <a href="actionTransaction?action=dele&id=${tr.ID_Transaction}&exit=" class="edit-film" style="color: white !important;">Xóa giao dịch</a>
+                                                                                    </button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </c:if>
+                                                            </c:if>
 
 
 
@@ -266,10 +280,7 @@
         </section>
 
         <!-- Bootstrap JS and dependencies -->
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
         <!--Date Range Picker-->
         <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>

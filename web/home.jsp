@@ -29,10 +29,12 @@
 
         <!--AOS lib to reveal web when scroll-->
         <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+        <!--leaftlet-->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
         <!-- Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
-        
+
 
     </head>
     <body>
@@ -88,9 +90,12 @@
                                 <div class="col-md-5">
 
                                     <div class="form-input" data-target-input="nearest">
-                                        <label for="location" class="label mb-1">Vị trí</label>
-                                        <input id="location" type="text" class="form-control"
-                                               placeholder="Địa điểm bạn muốn tìm..." />
+                                        <label for="addressInput" class="label mb-1">Vị trí</label>
+                                        <input id="addressInput" type="text" class="form-control" 
+                                               placeholder="Địa điểm của bạn..." oninput="suggestAddress(this.value)"/>
+                                        <div id="suggestions"></div>
+                                        <input type="text" id="selectedlat" name="lat" hidden/>
+                                        <input type="text" id="selectedlon" name="lon" hidden/>
                                     </div>
                                 </div>
                                 <div class="col-md-5">
@@ -219,12 +224,12 @@
                                 </section>-->
                 <div id="housesContainer">
 
-                    
+
                 </div>
 
 
             </div>
-            
+
         </section>
 
 
@@ -278,11 +283,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="image-column">
-                    <img loading="lazy"
-                         src="https://cdn.builder.io/api/v1/image/assets/TEMP/d3c84be9490fee00cd3c4cf5426e3474c8735a9e869f0b5a756b98bb3d589a88?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
-                         class="contact-image" alt="Illustration of property or contact information">
-                </div>
+
+
+                <div id="map"></div>
+
             </div>
         </section>
         <!--Map end-->
@@ -330,11 +334,78 @@
             </div>
 
         </div>
+
         <!-- Footer End -->
-   <!--jquery-->
+        <!--jquery-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="js/main.js"></script>
- 
+        <script src="js/main.js"></script>
+
+        <!--leaftlet-->
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+        <script>
+            // JavaScript
+            var map = L.map('map').setView([10.823099, 106.629654], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+            var marker = null;
+            map.on('click', function (e) {
+                let lat = e.latlng.lat; // Lấy vĩ độ
+                let lon = e.latlng.lng; // Lấy kinh độ
+
+                if (marker) {
+                    map.removeLayer(marker);
+                }
+                marker = new L.marker([lat, lon]);
+
+                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=\${lat}&lon=\${lon}&addressdetails=1`)
+                        .then(response => response.json())
+                        .then(data => {
+                            let address = data.display_name || 'Địa chỉ không tìm thấy';
+                            map.addLayer(marker); // Thêm marker với địa chỉ
+                            marker.bindPopup(address).openPopup(); // Hiển thị popup với địa chỉ
+                        })
+                        .catch(error => console.error('Error:', error));
+            });
+
+            function suggestAddress(input) {
+                if (input.length < 3) {
+                    document.getElementById('suggestions').innerHTML = ''; // Xóa gợi ý
+                    return;
+                }
+
+                fetch(`https://nominatim.openstreetmap.org/search?format=json&q=\${input}&addressdetails=1&countrycodes=VN`)
+                        .then(response => response.json())
+                        .then(data => {
+                            let suggestions = document.getElementById('suggestions');
+                            suggestions.innerHTML = ''; // Xóa gợi ý trước đó
+
+                            data.forEach(item => {
+                                let div = document.createElement('div');
+                                div.className = 'suggestion-item';
+                                div.textContent = item.display_name;
+                                div.onclick = () => {
+                                    selectAddress(item.lat, item.lon, item.display_name);
+                                    document.getElementById('addressInput').value = item.display_name; // Cập nhật giá trị input
+                                }
+                                suggestions.appendChild(div);
+                            });
+                        })
+                        .catch(error => console.error('Error:', error));
+            }
+
+            function selectAddress(lat, lon, address) {
+
+                map.setView([lat, lon], 13);
+                if (marker) {
+                    map.removeLayer(marker);
+                }
+                marker = new L.marker([lat, lon]).addTo(map).bindPopup(address).openPopup();
+                document.getElementById('suggestions').innerHTML = '';
+            }
+
+        </script>
         <!-- JavaScript Libraries -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
         <!--font awasome-->
@@ -342,12 +413,12 @@
         <!--AOS lib-->
         <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
         <script>
-                    AOS.init();
+            AOS.init();
         </script>
         <!--jquery-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script>
-            
+
         </script>
     </body>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

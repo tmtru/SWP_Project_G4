@@ -167,4 +167,14 @@ public class ThietBiPhongDAO extends DBContext {
         return false;
     }
 
+    public boolean updateStatusThietBiToPhong(int id) throws SQLException {
+
+        String sql = "UPDATE thiet_bi_phong set Trang_thai = 'BT' where ID_ThietBiPhong = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        }
+        return true;
+    }
+
 }

@@ -5,6 +5,7 @@
 package controller;
 
 import dal.DichVuDAO;
+import dal.HoaDonDAO;
 import dal.PhongDAO;
 import dal.TransactionDAO;
 import java.io.IOException;
@@ -69,7 +70,10 @@ public class loadHoaDonForm extends HttpServlet {
         HttpSession session = request.getSession();
         String roomIdParam = request.getParameter("roomId");
         PhongDAO pd = new PhongDAO();
-        List<Phong> pList = pd.getAllRooms();
+
+        Integer idCurrentHouse=Integer.parseInt(session.getAttribute("currentHouse").toString());
+
+        List<Phong> pList = pd.getRoomsByNhaTro(idCurrentHouse);
         List<Phong> rentedPList = new ArrayList<>();
 
         for (Phong p : pList) { 
@@ -77,11 +81,11 @@ public class loadHoaDonForm extends HttpServlet {
                 rentedPList.add(p); 
             }
         }
-        int roomId = -1;  // Giá trị mặc định nếu không chuyển đổi được
+        int roomId = -1;  
 
         if (roomIdParam != null) {
             try {
-                roomId = Integer.parseInt(roomIdParam); // Chuyển đổi chuỗi thành int
+                roomId = Integer.parseInt(roomIdParam);
             } catch (NumberFormatException e) {
                 // Xử lý lỗi nếu roomId không phải là số
                 request.setAttribute("errorMessage", "ID phòng không hợp lệ.");
@@ -89,25 +93,18 @@ public class loadHoaDonForm extends HttpServlet {
         }
 
         if (roomId > -1) {
-            // Tạo đối tượng PhongDAO
             PhongDAO pdao = new PhongDAO();
-
-            // Tìm kiếm thông tin phòng
-            Phong room = pdao.getDetailRoom(roomId); // Phương thức cần được định nghĩa trong PhongDAO
-
+            HoaDonDAO hddao= new HoaDonDAO();
+            Phong room = pdao.getDetailRoom(roomId); 
+//            HopDong hopDong= hddao.getHopDongHienTaiOfRentedRoom(roomID);
             if (room != null) {
-                // Lấy giá của phòng
-                int amount = room.getGia(); // Phương thức để lấy giá phòng
-
-                // Lưu thông tin phòng và số tiền vào request
+                int amount = room.getGia(); 
                 request.setAttribute("room", room);
                 request.setAttribute("amount", amount);
             } else {
-                // Xử lý trường hợp không tìm thấy phòng
                 request.setAttribute("errorMessage", "Không tìm thấy thông tin phòng.");
             }
         } else {
-            // Xử lý trường hợp ID phòng không hợp lệ
             request.setAttribute("errorMessage", "ID phòng không hợp lệ.");
         }
         //load all dich vu
@@ -115,9 +112,6 @@ public class loadHoaDonForm extends HttpServlet {
         List<DichVu> dvlist = dvdao.getAll();
         request.setAttribute("dvList", dvlist);
         request.setAttribute("rentedrooms", rentedPList);
-
-        //load all rooms of nha tro (session Rooms)
-        // Chuyển tiếp đến trang hiển thị hóa đơn
         request.getRequestDispatcher("hoaDonForm.jsp").forward(request, response);
     }
 

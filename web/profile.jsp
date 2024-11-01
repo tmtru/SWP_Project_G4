@@ -1,209 +1,196 @@
 <%@page import="model.KhachThue"%> 
-<%@page import="model.Account"%>
+<%@page import="model.Account"%> 
 <%@page session="true" %> 
-<%@page contentType="text/html" pageEncoding="UTF-8"%> <!-- Chỉ cần dòng này -->
-
-<%
-    // Lấy ID_Account từ session
-    Integer accountId = (Integer) session.getAttribute("ID_Account");
-    if (accountId == null) {
-        // Nếu không có session, chuyển hướng tới trang đăng nhập
-        response.sendRedirect("login.jsp");
-        return;
-    }
-
-    // Khởi tạo DAO để lấy thông tin từ database
-    dal.AccountDAO accountDAO = new dal.AccountDAO();
-    dal.KhachThueDAO khachThueDAO = new dal.KhachThueDAO();
-
-    // Lấy thông tin account từ DAO
-    model.Account account = accountDAO.getAccountById(accountId);
-
-    // Nếu không tìm thấy account, báo lỗi
-    if (account == null) {
-        out.println("<p>Error loading account data.</p>");
-        return;
-    }
-
-    // Lấy thông tin KhachThue nếu có
-    model.KhachThue khachThue = khachThueDAO.getKhachThueByAccountId(accountId);
-    
-    if (khachThue != null) {
-        session.setAttribute("ID_KhachThue", khachThue.getId());
-    }
-%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html> 
-<html lang="en"> 
-    <head> 
-        <meta charset="UTF-8"> 
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-        <title>Profile</title> 
-        <style>
-            body {
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                background: linear-gradient(to bottom, #F6F5FF, #FFFFFF);
-                color: #333;
-                margin: 0;
-                padding: 0;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                min-height: 100vh;
-            }
-            .layout {
-                display: flex;
-                width: 1200px;
-                background-color: white;
-                border-radius: 15px;
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-                overflow: hidden;
-            }
-            .sidebar {
-                width: 300px;
-                background-color: #a18cd1;
-                color: white;
-                padding: 30px;
-                display: flex;
-                flex-direction: column;
-            }
-            .sidebar img.avatar {
-                width: 150px;
-                height: 150px;
-                border-radius: 50%;
-                margin: 0 auto 20px;
-                border: 5px solid white;
-            }
-            .sidebar h2 {
-                font-size: 24px;
-                margin-bottom: 5px;
-                text-align: center;
-            }
-            .sidebar p {
-                font-size: 18px;
-                margin-bottom: 30px;
-                text-align: center;
-            }
-            .menu-item {
-                font-size: 18px;
-                margin-bottom: 15px;
-                padding: 10px 0;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-            }
-            .menu-item:last-child {
-                border-bottom: none;
-            }
-            .container {
-                flex-grow: 1;
-                padding: 30px;
-            }
-            h1 {
-                font-size: 28px;
-                color: #333;
-                margin-bottom: 30px;
-                border-bottom: 2px solid #a18cd1;
-                padding-bottom: 10px;
-            }
-            .profile-info {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 20px;
-            }
-            .profile-info > div {
-                background-color: #f8f9fa;
-                padding: 15px;
-                border-radius: 10px;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            }
-            .profile-info label {
-                font-weight: bold;
-                display: block;
-                margin-bottom: 5px;
-            }
-            .profile-info span {
-                display: block;
-                color: #555;
-            }
-            .stats {
-                display: flex;
-                justify-content: space-around;
-                margin-top: 30px;
-            }
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <script src="https://kit.fontawesome.com/aab0c35bef.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f4f7f6;
+            background-image: url('assets/img/decor-phong-ngu-9.jpg');
+            color: #333;
+            margin: 0;
+            padding: 0;
+            font-size: 1.2rem; /* Tăng cỡ chữ tổng thể */
+        }
 
-            .stat-item {
-                text-align: center;
-            }
+        .sidebar {
+            background-color: #A78BFA;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 300px; /* Đặt chiều ngang cố định */
+            padding: 30px 10px;
+            z-index: 100;
+            font-size: 1.3rem; /* Tăng cỡ chữ trong sidebar */
+        }
 
-            .stat-item .value {
-                font-size: 24px;
-                font-weight: bold;
-                color: #a18cd1;
-            }
+        .sidebar img.avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid white;
+            margin-bottom: 20px;
+        }
 
-            .stat-item .label {
-                font-size: 14px;
-                color: #666;
-            }
-        </style> 
-    </head> 
-    <body> 
-        <div class="layout"> 
-            <!-- Sidebar -->
-            <div class="sidebar"> 
-                <img src="assets/img/Avatar.jpg" alt="Avatar" class="avatar"> 
-                <h2><%= account.getUsername() %></h2> 
-                <p>Role: <%= account.getRole() %></p> 
+        .menu-item {
+            color: white;
+            text-decoration: none;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            display: block;
+            text-align: center;
+        }
 
-                <!-- Form cho các lựa chọn trong sidebar -->
-                <a href="profile.jsp" class="menu-item" style="color: white; text-decoration: none;">Thông tin <%= account.getRole() %></a>
-                <a href="changePassword.jsp" class="menu-item" style="color: white; text-decoration: none;">Đổi mật khẩu</a>
-                <a href="profileServlet?action=viewContracts" class="menu-item" style="color: white; text-decoration: none;">Xem hợp đồng</a>
-                <div class="menu-item">Xem hóa đơn</div>
-                <div class="menu-item">Yêu cầu bảo trì</div>
-                <a href="home.jsp" class="menu-item" style="color: white; text-decoration: none;">Về trang chủ</a>
-            </div> 
+        .menu-item:last-child {
+            border-bottom: none;
+        }
 
-            <!-- Profile Container -->
-            <div class="container"> 
-                <h1>Thông tin tài khoản</h1> 
+        .profile-info {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-left: 320px; /* Đặt khoảng cách bên trái để tránh sidebar */
+            height: calc(100vh - 80px); /* Đặt chiều cao vừa với màn hình, trừ đi khoảng cách breadcrumb */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around; /* Dãn đều khoảng cách giữa các mục */
+            font-size: 1.4rem; /* Tăng cỡ chữ trong profile-info */
+        }
 
-                <div class="profile-info"> 
-                    <div> 
-                        <label>Email:</label> 
-                        <span><%= account.getEmail() %></span> 
-                    </div> 
-                    <div> 
-                        <label>Ngày sinh:</label> 
-                        <span><%= (khachThue != null) ? khachThue.getDob() : "Chưa có thông tin" %></span> 
-                    </div> 
-                    <div> 
-                        <label>Số CCCD:</label> 
-                        <span><%= (khachThue != null) ? khachThue.getCccd() : "Chưa có thông tin" %></span> 
-                    </div> 
-                    <div> 
-                        <label>Nghề nghiệp:</label> 
-                        <span><%= (khachThue != null) ? khachThue.getJob() : "Chưa có thông tin" %></span> 
-                    </div> 
-                    <div> 
-                        <label>Số điện thoại:</label> 
-                        <span><%= (khachThue != null) ? khachThue.getPhone() : "Chưa có thông tin" %></span> 
-                    </div> 
-                    <div> 
-                        <label>Hộ khẩu thường trú:</label> 
-                        <span><%= (khachThue != null) ? khachThue.getHk_thuong_tru() : "Chưa có thông tin" %></span> 
-                    </div> 
-                </div>
-                <div class="stats">
-                    <div class="stat-item">
-                        <div class="value">3</div>
-                        <div class="label">Active Contracts</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="value">12</div>
-                        <div class="label">Completed Payments</div>
-                    </div>
-                </div>
-            </div> 
-        </div> 
-    </body> 
+        .info-item h6 {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .info-item p {
+            color: #666;
+        }
+
+        .breadcrumb {
+            background-color: transparent;
+            padding: 0;
+            margin-left: 320px; /* Đặt khoảng cách bên trái để tránh sidebar */
+            font-size: 1.2rem; /* Tăng cỡ chữ cho breadcrumb */
+        }
+
+        .breadcrumb-item a {
+            color: #6E00FF;
+            text-decoration: none;
+        }
+
+        .breadcrumb-item.active {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <%
+        // Lấy ID_Account từ session
+        Integer accountId = (Integer) session.getAttribute("ID_Account");
+        if (accountId == null) {
+            // Nếu không có session, chuyển hướng tới trang đăng nhập
+            response.sendRedirect("login.jsp");
+            return;
+        }
+
+        // Khởi tạo DAO để lấy thông tin từ database
+        dal.AccountDAO accountDAO = new dal.AccountDAO();
+        dal.KhachThueDAO khachThueDAO = new dal.KhachThueDAO();
+
+        // Lấy thông tin account từ DAO
+        model.Account account = accountDAO.getAccountById(accountId);
+
+        // Nếu không tìm thấy account, báo lỗi
+        if (account == null) {
+            out.println("<p>Error loading account data.</p>");
+            return;
+        }
+
+        // Lấy thông tin KhachThue nếu có
+        model.KhachThue khachThue = khachThueDAO.getKhachThueByAccountId(accountId);
+        
+        if (khachThue != null) {
+            session.setAttribute("ID_KhachThue", khachThue.getId());
+        }
+
+        // Kiểm tra role của người dùng
+        boolean isTenant = "tenant".equalsIgnoreCase(account.getRole());
+    %>
+
+    <nav aria-label="breadcrumb" class="main-breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="home.jsp">Trang chủ</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Thông tin cá nhân</li>
+        </ol>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="d-flex flex-column align-items-center text-center">
+            <img src="assets/img/Avatar.jpg" alt="Avatar" class="avatar mb-3">
+            <h4><%= account.getUsername() %></h4>
+            <p>Role: <%= account.getRole() %></p>
+        </div>
+        <nav class="nav flex-column nav-pills nav-gap-y-1">
+            <a href="profile.jsp" class="menu-item">Thông tin <%= account.getRole() %></a>
+            <a href="changePassword.jsp" class="menu-item">Đổi mật khẩu</a>
+            
+            <% if (isTenant) { %>
+            <a href="profileServlet?action=viewContracts" class="menu-item">Xem hợp đồng</a>
+            <a href="#" class="menu-item">Xem hóa đơn</a>
+            <a href="#" class="menu-item">Yêu cầu bảo trì</a>
+            <% } %>
+
+            <a href="home.jsp" class="menu-item">Về trang chủ</a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="profile-info">
+        <h4 class="mb-4" style="color: #6E00FF">Thông tin tài khoản</h4>
+        <div class="info-item">
+            <h6 class="mb-0">Email</h6>
+            <p class="text-muted"><%= account.getEmail() %></p>
+        </div>
+        <div class="info-item">
+            <h6 class="mb-0">Ngày sinh</h6>
+            <p class="text-muted"><%= (khachThue != null) ? khachThue.getDob() : "Chưa có thông tin hiển thị" %></p>
+        </div>
+        <div class="info-item">
+            <h6 class="mb-0">Số CCCD</h6>
+            <p class="text-muted"><%= (khachThue != null) ? khachThue.getCccd() : "Chưa có thông tin hiển thị" %></p>
+        </div>
+        <div class="info-item">
+            <h6 class="mb-0">Nghề nghiệp</h6>
+            <p class="text-muted"><%= (khachThue != null) ? khachThue.getJob() : "Chưa có thông tin hiển thị" %></p>
+        </div>
+        <div class="info-item">
+            <h6 class="mb-0">Số điện thoại</h6>
+            <p class="text-muted"><%= (khachThue != null) ? khachThue.getPhone() : "Chưa có thông tin hiển thị" %></p>
+        </div>
+        <div class="info-item">
+            <h6 class="mb-0">Địa chỉ thường trú</h6>
+            <p class="text-muted"><%= (khachThue != null) ? khachThue.getHk_thuong_tru() : "Chưa có thông tin hiển thị" %></p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-whLSQoQJWlg5dmjXp1Av7kwix0f2QlnL+udt3zSK+XOo+l3qO3LeCcCNiP8Aj+gJ" crossorigin="anonymous"></script>
+</body>
 </html>

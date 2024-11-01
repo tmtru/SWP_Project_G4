@@ -212,7 +212,7 @@ public class KhachThueDAO extends DBContext {
     }
 
     public int getKhachThueIdByCCCD(String Cmnd) {
-        String sql = "SELECT MAX(ID_KhachThue) AS ID_KhachThue FROM khach_thue WHERE CCCD = ?";
+        String sql = "SELECT ID_KhachThue FROM khach_thue WHERE CCCD = ?";
         int khachThueId = -1; // Default value if not found
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, Cmnd);

@@ -91,7 +91,7 @@
             .pagination a {
                 margin: 0 5px;
                 padding: 8px 12px;
-border: 1px solid #007bff;
+                border: 1px solid #007bff;
                 color: #007bff;
                 text-decoration: none;
             }
@@ -112,15 +112,19 @@ border: 1px solid #007bff;
                 justify-content: center;
             }
             .filter-section {
-        margin-bottom: 20px;
-        display: flex;
-        gap: 10px;
-    }
-    .filter-section input, .filter-section select {
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
+                margin-bottom: 20px;
+                display: flex;
+                gap: 10px;
+            }
+            .filter-section input, .filter-section select {
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+            .Calender{
+                margin-top: 11px;
+            }
+
         </style>
     </head>
     <body>
@@ -152,12 +156,16 @@ border: 1px solid #007bff;
                     <option value="reject">reject</option>
                     <option value="expired">expired</option>
                 </select>
+                <div class="Calender">
+                    <a href="CalendarByManager" class="tab active">Lịch Quản Lý</a>
+                </div>
             </div>
+
 
             <div class="service-section">
                 <table class="service-table" id="hopDongTable">
                     <thead>
-                        
+
                         <tr>
                             <th>Số Thứ Tự</th>
                             <th>Tên Phòng Trọ</th>
@@ -242,7 +250,7 @@ border: 1px solid #007bff;
                         %>
                     </tbody>
                 </table>
-                    <p id="noResultsRow" style="display:none;">Không tìm thấy hợp đồng nào phù hợp với tìm kiếm.</p>
+                <p id="noResultsRow" style="display:none;">Không tìm thấy hợp đồng nào phù hợp với tìm kiếm.</p>
 
             </div>
             <div id="pagination" class="pagination"></div>
@@ -266,172 +274,173 @@ border: 1px solid #007bff;
             <div class="modal-content">
                 <h3>Lý do từ chối:</h3>
                 <p id="rejectReasonText"></p>
-<button onclick="closeRejectReasonModal()">Đóng</button>
+                <button onclick="closeRejectReasonModal()">Đóng</button>
             </div>
         </div>
 
         <script>
             const rowsPerPage = 6; // Số dòng hiển thị mỗi trang
-let currentPage = 1;
-let filteredRows = []; // Mảng chứa các hàng đã lọc
+            let currentPage = 1;
+            let filteredRows = []; // Mảng chứa các hàng đã lọc
 
-function paginateTable() {
-    const tbody = document.getElementById('hopDongBody');
-    const rows = filteredRows.length ? filteredRows : Array.from(tbody.getElementsByTagName('tr')); // Sử dụng hàng đã lọc hoặc tất cả hàng
-    const totalRows = rows.length;
-    const totalPages = Math.ceil(totalRows / rowsPerPage); // Tổng số trang
+            function paginateTable() {
+                const tbody = document.getElementById('hopDongBody');
+                const rows = filteredRows.length ? filteredRows : Array.from(tbody.getElementsByTagName('tr')); // Sử dụng hàng đã lọc hoặc tất cả hàng
+                const totalRows = rows.length;
+                const totalPages = Math.ceil(totalRows / rowsPerPage); // Tổng số trang
 
-    // Ẩn tất cả các hàng trước
-    Array.from(tbody.getElementsByTagName('tr')).forEach(row => {
-        row.style.display = 'none';
-    });
+                // Ẩn tất cả các hàng trước
+                Array.from(tbody.getElementsByTagName('tr')).forEach(row => {
+                    row.style.display = 'none';
+                });
 
-    // Hiển thị hàng cho trang hiện tại
-    const startRow = (currentPage - 1) * rowsPerPage;
-    const endRow = Math.min(currentPage * rowsPerPage, totalRows);
+                // Hiển thị hàng cho trang hiện tại
+                const startRow = (currentPage - 1) * rowsPerPage;
+                const endRow = Math.min(currentPage * rowsPerPage, totalRows);
 
-    for (let i = startRow; i < endRow; i++) {
-        rows[i].style.display = ''; // Hiển thị các hàng thuộc trang hiện tại
-    }
-
-    // Hiển thị phân trang
-    displayPagination(totalPages);
-}
-
-function displayPagination(totalPages) {
-    const paginationDiv = document.getElementById('pagination');
-    paginationDiv.innerHTML = ''; // Xóa nội dung cũ của phân trang
-
-    if (totalPages <= 1) return; // Không hiển thị phân trang nếu chỉ có 1 trang
-
-    // Nút quay lại
-    const prevLink = document.createElement('a');
-    prevLink.href = '#';
-    prevLink.innerHTML = '&laquo;';
-    prevLink.classList.add('prev');
-    prevLink.addEventListener('click', function (e) {
-        e.preventDefault();
-        if (currentPage > 1) {
-            currentPage--;
-            paginateTable(); // Cập nhật phân trang
-        }
-    });
-    paginationDiv.appendChild(prevLink);
-
-    // Tạo các trang
-    for (let i = 1; i <= totalPages; i++) {
-        const pageLink = document.createElement('a');
-        pageLink.href = '#';
-        pageLink.textContent = i;
-
-        if (i === currentPage) {
-            pageLink.classList.add('active'); // Đánh dấu trang hiện tại
-        }
-
-        pageLink.addEventListener('click', function (e) {
-            e.preventDefault();
-            currentPage = i;
-            paginateTable(); // Cập nhật phân trang
-        });
-
-        paginationDiv.appendChild(pageLink);
-    }
-
-    // Nút tiếp theo
-    const nextLink = document.createElement('a');
-    nextLink.href = '#';
-    nextLink.innerHTML = '&raquo;';
-    nextLink.classList.add('next');
-    nextLink.addEventListener('click', function (e) {
-        e.preventDefault();
-        if (currentPage < totalPages) {
-            currentPage++;
-            paginateTable(); // Cập nhật phân trang
-        }
-    });
-    paginationDiv.appendChild(nextLink);
-}
-
-function searchTable() {
-    const searchInput = document.getElementById('searchInput').value.toLowerCase();
-const tbody = document.getElementById('hopDongBody');
-    const rows = Array.from(tbody.getElementsByTagName('tr'));
-    const noResultsRow = document.getElementById('noResultsRow');
-    
-    filteredRows = []; // Đặt lại filteredRows khi tìm kiếm mới
-
-    let matchCount = 0;
-
-    rows.forEach(row => {
-        if (row.id !== 'noResultsRow') {
-            const tenPhongCell = row.getElementsByTagName('td')[1]; // Tên phòng trọ
-            if (tenPhongCell) {
-                const tenPhongText = tenPhongCell.textContent.toLowerCase();
-                if (tenPhongText.includes(searchInput)) {
-                    row.style.display = ''; // Hiển thị dòng nếu khớp
-                    filteredRows.push(row); // Lưu kết quả vào filteredRows
-                    matchCount++;
-                } else {
-                    row.style.display = 'none'; // Ẩn dòng nếu không khớp
+                for (let i = startRow; i < endRow; i++) {
+                    rows[i].style.display = ''; // Hiển thị các hàng thuộc trang hiện tại
                 }
+
+                // Hiển thị phân trang
+                displayPagination(totalPages);
             }
-        }
-    });
 
-    if (matchCount === 0) {
-        noResultsRow.style.display = ''; // Hiển thị dòng thông báo nếu không có kết quả
-        tbody.style.display = 'none'; // Ẩn toàn bộ bảng danh sách hợp đồng
-    } else {
-        noResultsRow.style.display = 'none'; // Ẩn dòng thông báo nếu có kết quả
-        tbody.style.display = ''; // Hiển thị lại bảng danh sách hợp đồng
-    }
+            function displayPagination(totalPages) {
+                const paginationDiv = document.getElementById('pagination');
+                paginationDiv.innerHTML = ''; // Xóa nội dung cũ của phân trang
 
-    currentPage = 1;
-    paginateTable(); // Cập nhật lại phân trang
-}
+                if (totalPages <= 1)
+                    return; // Không hiển thị phân trang nếu chỉ có 1 trang
+
+                // Nút quay lại
+                const prevLink = document.createElement('a');
+                prevLink.href = '#';
+                prevLink.innerHTML = '&laquo;';
+                prevLink.classList.add('prev');
+                prevLink.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    if (currentPage > 1) {
+                        currentPage--;
+                        paginateTable(); // Cập nhật phân trang
+                    }
+                });
+                paginationDiv.appendChild(prevLink);
+
+                // Tạo các trang
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageLink = document.createElement('a');
+                    pageLink.href = '#';
+                    pageLink.textContent = i;
+
+                    if (i === currentPage) {
+                        pageLink.classList.add('active'); // Đánh dấu trang hiện tại
+                    }
+
+                    pageLink.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        currentPage = i;
+                        paginateTable(); // Cập nhật phân trang
+                    });
+
+                    paginationDiv.appendChild(pageLink);
+                }
+
+                // Nút tiếp theo
+                const nextLink = document.createElement('a');
+                nextLink.href = '#';
+                nextLink.innerHTML = '&raquo;';
+                nextLink.classList.add('next');
+                nextLink.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    if (currentPage < totalPages) {
+                        currentPage++;
+                        paginateTable(); // Cập nhật phân trang
+                    }
+                });
+                paginationDiv.appendChild(nextLink);
+            }
+
+            function searchTable() {
+                const searchInput = document.getElementById('searchInput').value.toLowerCase();
+                const tbody = document.getElementById('hopDongBody');
+                const rows = Array.from(tbody.getElementsByTagName('tr'));
+                const noResultsRow = document.getElementById('noResultsRow');
+
+                filteredRows = []; // Đặt lại filteredRows khi tìm kiếm mới
+
+                let matchCount = 0;
+
+                rows.forEach(row => {
+                    if (row.id !== 'noResultsRow') {
+                        const tenPhongCell = row.getElementsByTagName('td')[1]; // Tên phòng trọ
+                        if (tenPhongCell) {
+                            const tenPhongText = tenPhongCell.textContent.toLowerCase();
+                            if (tenPhongText.includes(searchInput)) {
+                                row.style.display = ''; // Hiển thị dòng nếu khớp
+                                filteredRows.push(row); // Lưu kết quả vào filteredRows
+                                matchCount++;
+                            } else {
+                                row.style.display = 'none'; // Ẩn dòng nếu không khớp
+                            }
+                        }
+                    }
+                });
+
+                if (matchCount === 0) {
+                    noResultsRow.style.display = ''; // Hiển thị dòng thông báo nếu không có kết quả
+                    tbody.style.display = 'none'; // Ẩn toàn bộ bảng danh sách hợp đồng
+                } else {
+                    noResultsRow.style.display = 'none'; // Ẩn dòng thông báo nếu có kết quả
+                    tbody.style.display = ''; // Hiển thị lại bảng danh sách hợp đồng
+                }
+
+                currentPage = 1;
+                paginateTable(); // Cập nhật lại phân trang
+            }
 
 
-function filterTable() {
-    const trangThaiPhongFilter = document.getElementById('filterTrangThaiPhong').value.toLowerCase().trim();
-    const trangThaiHopDongFilter = document.getElementById('filterTrangThaiHopDong').value.toLowerCase().trim();
-    const tbody = document.getElementById('hopDongBody');
-    const rows = Array.from(tbody.getElementsByTagName('tr'));
-    const noResultsRow = document.getElementById('noResultsRow');
-    filteredRows = []; // Đặt lại filteredRows khi lọc mới
+            function filterTable() {
+                const trangThaiPhongFilter = document.getElementById('filterTrangThaiPhong').value.toLowerCase().trim();
+                const trangThaiHopDongFilter = document.getElementById('filterTrangThaiHopDong').value.toLowerCase().trim();
+                const tbody = document.getElementById('hopDongBody');
+                const rows = Array.from(tbody.getElementsByTagName('tr'));
+                const noResultsRow = document.getElementById('noResultsRow');
+                filteredRows = []; // Đặt lại filteredRows khi lọc mới
 
-    let matchCount = 0;
+                let matchCount = 0;
 
-    rows.forEach(row => {
-        const trangThaiPhongCell = row.getElementsByTagName('td')[5];
-        const trangThaiHopDongCell = row.getElementsByTagName('td')[6];
+                rows.forEach(row => {
+                    const trangThaiPhongCell = row.getElementsByTagName('td')[5];
+                    const trangThaiHopDongCell = row.getElementsByTagName('td')[6];
 
-        let matchTrangThaiPhong = !trangThaiPhongFilter || (trangThaiPhongCell && trangThaiPhongCell.textContent.toLowerCase().includes(trangThaiPhongFilter));
-        let matchTrangThaiHopDong = !trangThaiHopDongFilter || (trangThaiHopDongCell && trangThaiHopDongCell.textContent.toLowerCase().includes(trangThaiHopDongFilter));
+                    let matchTrangThaiPhong = !trangThaiPhongFilter || (trangThaiPhongCell && trangThaiPhongCell.textContent.toLowerCase().includes(trangThaiPhongFilter));
+                    let matchTrangThaiHopDong = !trangThaiHopDongFilter || (trangThaiHopDongCell && trangThaiHopDongCell.textContent.toLowerCase().includes(trangThaiHopDongFilter));
 
-        if (matchTrangThaiPhong && matchTrangThaiHopDong) {
-            row.style.display = '';
-            filteredRows.push(row); // Lưu kết quả vào filteredRows
-            matchCount++;
-        } else {
-            row.style.display = 'none';
-        }
-    });
+                    if (matchTrangThaiPhong && matchTrangThaiHopDong) {
+                        row.style.display = '';
+                        filteredRows.push(row); // Lưu kết quả vào filteredRows
+                        matchCount++;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
 
-    if (matchCount === 0) {
-        noResultsRow.style.display = '';
-        tbody.style.display = 'none';
-    } else {
-        noResultsRow.style.display = 'none';
-        tbody.style.display = '';
-    }
+                if (matchCount === 0) {
+                    noResultsRow.style.display = '';
+                    tbody.style.display = 'none';
+                } else {
+                    noResultsRow.style.display = 'none';
+                    tbody.style.display = '';
+                }
 
-    currentPage = 1;
-paginateTable();
-}
+                currentPage = 1;
+                paginateTable();
+            }
 
 
 // Khởi tạo phân trang khi tải trang
-window.onload = paginateTable;
+            window.onload = paginateTable;
 
 
 // Hiển thị modal và truyền ID hợp đồng
