@@ -363,6 +363,139 @@ public class AccountDAO extends DBContext {
             return false;
         }
     }
+    
+    public List<Account> getTenantAccountsByManager(int ID_Account, int start, int accountsPerPage) {
+        List<Account> tenants = new ArrayList<>();
+        String sql = "SELECT DISTINCT a.ID_Account, a.Email, a.Username, a.Role, a.isActive\n"
+                + "FROM account a\n"
+                + "JOIN khach_thue kt ON a.ID_Account = kt.ID_Account\n"
+                + "JOIN hop_dong hd ON kt.ID_KhachThue = hd.ID_KhachThue\n"
+                + "JOIN phong_tro pt ON hd.ID_PhongTro = pt.ID_Phong\n"
+                + "JOIN nha_tro nt ON pt.ID_NhaTro = nt.ID_NhaTro\n"
+                + "JOIN quan_ly ql ON nt.ID_NhaTro = ql.ID_NhaTro\n"
+                + "WHERE a.Role = 'tenant' \n"
+                + "  AND ql.ID_Account = ? LIMIT ?, ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setInt(1, ID_Account);
+            stmt.setInt(2, start);
+            stmt.setInt(3, accountsPerPage);
+            ResultSet rs = stmt.executeQuery();
+
+            // Duyệt qua kết quả và thêm vào danh sách tenants
+            while (rs.next()) {
+                Account account = new Account();
+                account.setID_Account(rs.getInt("ID_Account"));
+                account.setEmail(rs.getString("Email"));
+                account.setUsername(rs.getString("Username"));
+                account.setRole(rs.getString("Role"));
+                account.setActive(rs.getBoolean("isActive"));
+                tenants.add(account);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return tenants;
+    }
+
+    public int countTenantAccountsByManager(int ID_Account) {
+        int count = 0;
+        String sql = "SELECT COUNT(DISTINCT a.ID_Account) AS tenant_count " +
+                     "FROM account a " +
+                     "JOIN khach_thue kt ON a.ID_Account = kt.ID_Account " +
+                     "JOIN hop_dong hd ON kt.ID_KhachThue = hd.ID_KhachThue " +
+                     "JOIN phong_tro pt ON hd.ID_PhongTro = pt.ID_Phong " +
+                     "JOIN nha_tro nt ON pt.ID_NhaTro = nt.ID_NhaTro " +
+                     "JOIN quan_ly ql ON nt.ID_NhaTro = ql.ID_NhaTro " +
+                     "WHERE a.Role = 'tenant' " +
+                     "AND ql.ID_Account = ? ";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            // Set giá trị ID_QuanLy vào truy vấn
+            stmt.setInt(1, ID_Account);
+            ResultSet rs = stmt.executeQuery();
+
+            // Lấy kết quả count
+            if (rs.next()) {
+                count = rs.getInt("tenant_count");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
+    
+    public List<Account> searchTenantByUsername(int ID_Account, String username, int start, int accountsPerPage) {
+        List<Account> tenants = new ArrayList<>();
+        String sql = "SELECT DISTINCT a.ID_Account, a.Email, a.Username, a.Role, a.isActive " +
+                     "FROM account a " +
+                     "JOIN khach_thue kt ON a.ID_Account = kt.ID_Account " +
+                     "JOIN hop_dong hd ON kt.ID_KhachThue = hd.ID_KhachThue " +
+                     "JOIN phong_tro pt ON hd.ID_PhongTro = pt.ID_Phong " +
+                     "JOIN nha_tro nt ON pt.ID_NhaTro = nt.ID_NhaTro " +
+                     "JOIN quan_ly ql ON nt.ID_NhaTro = ql.ID_NhaTro " +
+                     "WHERE a.Role = 'tenant' " +
+                     "AND ql.ID_Account = ? " +
+                     "AND a.Username LIKE ? LIMIT ?, ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            // Set giá trị ID_QuanLy và username vào truy vấn
+            stmt.setInt(1, ID_Account);
+            stmt.setString(2, "%" + username + "%"); // Sử dụng LIKE cho tìm kiếm theo mẫu
+            stmt.setInt(3, start);
+            stmt.setInt(4, accountsPerPage);
+
+            ResultSet rs = stmt.executeQuery();
+
+            // Duyệt qua kết quả và thêm vào danh sách tenants
+            while (rs.next()) {
+                Account account = new Account();
+                account.setID_Account(rs.getInt("ID_Account"));
+                account.setEmail(rs.getString("Email"));
+                account.setUsername(rs.getString("Username"));
+                account.setRole(rs.getString("Role"));
+                account.setActive(rs.getBoolean("isActive"));
+                tenants.add(account);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return tenants;
+    }
+    
+    public int countTenantsByUsername(int ID_Account, String username) {
+        int count = 0;
+        String sql = "SELECT COUNT(DISTINCT a.ID_Account) AS tenant_count " +
+                     "FROM account a " +
+                     "JOIN khach_thue kt ON a.ID_Account = kt.ID_Account " +
+                     "JOIN hop_dong hd ON kt.ID_KhachThue = hd.ID_KhachThue " +
+                     "JOIN phong_tro pt ON hd.ID_PhongTro = pt.ID_Phong " +
+                     "JOIN nha_tro nt ON pt.ID_NhaTro = nt.ID_NhaTro " +
+                     "JOIN quan_ly ql ON nt.ID_NhaTro = ql.ID_NhaTro " +
+                     "WHERE a.Role = 'tenant' " +
+                     "AND ql.ID_Account = ? " +
+                     "AND a.Username LIKE ? ";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            // Set giá trị ID_QuanLy và username vào truy vấn
+            stmt.setInt(1, ID_Account);
+            stmt.setString(2, "%" + username + "%"); // Sử dụng LIKE để tìm kiếm theo mẫu
+
+            ResultSet rs = stmt.executeQuery();
+
+            // Lấy kết quả count
+            if (rs.next()) {
+                count = rs.getInt("tenant_count");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
 
     public static void main(String[] args) {
         AccountDAO dao = new AccountDAO();
