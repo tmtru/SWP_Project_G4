@@ -82,7 +82,7 @@ public class addThietBiToRoom extends HttpServlet {
             // Check for null or empty values
             if (idPhongStr == null || idThietBiStr == null || soLuongStr == null
                     || idPhongStr.isEmpty() || idThietBiStr.isEmpty() || soLuongStr.isEmpty()) {
-                throw new IllegalArgumentException("Các trường bắt buộc không được để trống");
+                throw new IllegalArgumentException("Vui lòng điền đầy đủ thông tin!");
             }
 
             int idPhong = Integer.parseInt(idPhongStr);
@@ -90,29 +90,36 @@ public class addThietBiToRoom extends HttpServlet {
             int soLuong = Integer.parseInt(soLuongStr);
 
             ThietBiPhongDAO thietBiPhongDAO = new ThietBiPhongDAO();
-            boolean success = thietBiPhongDAO.addThietBiToPhong(idPhong, idThietBi, soLuong, trangThai, moTa);
 
-            if (success) {
-                // Thiết bị đã được thêm thành công
-                response.sendRedirect("detailRoom?id=" + idPhong);
-            } else {
-                // Không đủ số lượng thiết bị
+            try {
+                boolean success = thietBiPhongDAO.addThietBiToPhong(idPhong, idThietBi, soLuong, trangThai, moTa);
+                if (success) {
+                    // Thiết bị đã được thêm thành công
+                    HttpSession session = request.getSession();
+                    session.setAttribute("successMessage", "Thêm thiết bị thành công!");
+                    response.sendRedirect("detailRoom?id=" + idPhong);
+                } else {
+                    // Không đủ số lượng thiết bị
+                    HttpSession session = request.getSession();
+                    session.setAttribute("errorMessage", "Không đủ số lượng thiết bị để thêm vào phòng.");
+                    response.sendRedirect("detailRoom?id=" + idPhong);
+                }
+            } catch (IllegalArgumentException e) {
+                // Bắt lỗi thiết bị đã tồn tại
                 HttpSession session = request.getSession();
-                session.setAttribute("errorMessage", "Không đủ số lượng thiết bị để thêm vào phòng.");
+                session.setAttribute("errorMessage", e.getMessage());
                 response.sendRedirect("detailRoom?id=" + idPhong);
             }
         } catch (NumberFormatException e) {
             String idPhong = request.getParameter("idPhong");
-            request.setAttribute("errorMessage", "Lỗi: Dữ liệu số không hợp lệ.");
-            request.getRequestDispatcher("detailRoom?id=" + idPhong).forward(request, response);
-        } catch (IllegalArgumentException e) {
-            String idPhong = request.getParameter("idPhong");
-            request.setAttribute("errorMessage", e.getMessage());
-            request.getRequestDispatcher("detailRoom?id=" + idPhong).forward(request, response);
+            HttpSession session = request.getSession();
+            session.setAttribute("errorMessage", "Lỗi: Dữ liệu số không hợp lệ.");
+            response.sendRedirect("detailRoom?id=" + idPhong);
         } catch (Exception e) {
             String idPhong = request.getParameter("idPhong");
-            request.setAttribute("errorMessage", "Đã xảy ra lỗi khi thêm thiết bị: " + e.getMessage());
-            request.getRequestDispatcher("detailRoom?id=" + idPhong).forward(request, response);
+            HttpSession session = request.getSession();
+            session.setAttribute("errorMessage", "Đã xảy ra lỗi khi thêm thiết bị: " + e.getMessage());
+            response.sendRedirect("detailRoom?id=" + idPhong);
         }
     }
 

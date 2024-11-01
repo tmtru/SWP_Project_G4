@@ -23,19 +23,8 @@
             <file>file:/D:/Work/Java/JSPServlet/QLNhaTro_MinhAnh_ZL/SWP_Project_G4/src/java/dal/HoaDonDAO.java</file>
         </group>
         <group>
-            <file>file:/D:/SWP_Project_G4/web/statistic-room-dashboard.jsp</file>
-            <file>file:/D:/SWP_Project_G4/src/java/dal/DBContext.java</file>
-            <file>file:/D:/SWP_Project_G4/src/java/model/HopDong.java</file>
-            <file>file:/D:/SWP_Project_G4/web/room.jsp</file>
-            <file>file:/D:/SWP_Project_G4/src/java/controller/addRoomExcel.java</file>
-            <file>file:/D:/SWP_Project_G4/src/java/dal/KhachThueDAO.java</file>
-            <file>file:/D:/SWP_Project_G4/web/statistic-revenue-dashboard.jsp</file>
-            <file>file:/D:/SWP_Project_G4/src/java/controller/ExportThietBiCSCController.java</file>
-            <file>file:/D:/SWP_Project_G4/src/java/controller/loadPhongTro.java</file>
-            <file>file:/D:/SWP_Project_G4/src/java/dal/HoaDonDAO.java</file>
-            <file>file:/D:/SWP_Project_G4/src/java/dal/PhongDAO.java</file>
-            <file>file:/D:/SWP_Project_G4/web/sidebarNhaTroManagement.jsp</file>
-            <file>file:/D:/SWP_Project_G4/src/java/dal/HopDongDAO.java</file>
+            <file>file:/D:/SWP_Project_G4/src/java/controller/addThietBiToRoom.java</file>
+            <file>file:/D:/SWP_Project_G4/src/java/dal/ThietBiDAO.java</file>
         </group>
     </open-files>
 </project-private>

@@ -384,8 +384,8 @@ public class PhongDAO extends DBContext {
     }
 
     public void updateRoom(Phong room) {
-        String sql = "UPDATE phong_tro set ID_NhaTro = ?, ID_LoaiPhong  = ?, TenPhongTro  = ?, "
-                + " Tang  = ?, Dien_Tich  = ?, Gia  = ?, Trang_thai  = ? where ID_Phong = ? ";
+        String sql = "UPDATE phong_tro set ID_NhaTro = ?, ID_LoaiPhong = ?, TenPhongTro = ?, "
+                + "Tang = ?, Dien_Tich = ?, Gia = ? where ID_Phong = ?";
         try {
             try (PreparedStatement st = connection.prepareStatement(sql)) {
                 st.setInt(1, room.getID_NhaTro());
@@ -394,12 +394,11 @@ public class PhongDAO extends DBContext {
                 st.setInt(4, room.getTang());
                 st.setFloat(5, room.getDien_tich());
                 st.setInt(6, room.getGia());
-                st.setString(7, room.getTrang_thai());
-                st.setInt(8, room.getID_Phong());
+                st.setInt(7, room.getID_Phong());
                 st.executeUpdate();
             }
         } catch (SQLException e) {
-            System.out.println("Error in PhongDAO.updateRoom: " + e.getMessage());
+            System.out.println("Error updating room: " + e.getMessage());
         }
     }
 

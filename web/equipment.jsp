@@ -21,7 +21,7 @@
         <!----======== CSS ======== -->
         <link rel="stylesheet" href="css/styleRoom.css">
         <link rel="stylesheet" href="css/styleDichVu.css">
-        
+
         <link rel="stylesheet" href="css/modelDelete.css">
         <script src="https://kit.fontawesome.com/aab0c35bef.js" crossorigin="anonymous"></script>
 
@@ -37,6 +37,38 @@
     <style>
         textarea {
             resize: none;
+        }
+        .custom-alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+            max-width: 350px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            animation: slideInRight 0.5s ease-out;
+            border-left: 5px solid #dc3545; /* Thêm border màu đỏ để nhấn mạnh */
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .custom-alert .btn-close {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+        }
+
+        .custom-alert .alert-content {
+            margin-right: 30px; /* Để tránh chồng lấn với nút đóng */
         }
     </style>
     <body>
@@ -156,8 +188,34 @@
                 </div>
 
 
-
-
+                <%-- Error message add fail --%>
+                <c:if test="${not empty addThietBiError}">
+                    <div class="alert alert-danger alert-dismissible custom-alert" role="alert">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <i class="fas fa-exclamation-circle"></i> 
+                            </div>
+                            <div class="alert-content flex-grow-1">
+                                ${addThietBiError}
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </c:if>
+                <%-- Error message edit fail --%>
+                <c:if test="${not empty editThietBiError}">
+                    <div class="alert alert-danger alert-dismissible custom-alert" role="alert">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <i class="fas fa-exclamation-circle"></i>
+                            </div>
+                            <div class="alert-content flex-grow-1">
+                                ${editThietBiError}
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </c:if>
                 <div class="filters">
                     <!-- Button trigger modal -->
                     <button class="btn add-room " data-toggle="modal" data-target="#addThietBiModal">+ Thêm thiết bị</button>
@@ -175,19 +233,22 @@
                                     <form action="addThietBi" method="post">
                                         <div class="form-group">
                                             <label for="tenthietbi">Tên Thiết bị:</label>
-                                            <input type="text" class="form-control" id="tenthietbi" name="tenthietbi" required>
+                                            <input type="text" class="form-control" id="tenthietbi" name="tenthietbi" 
+                                                   value="${tenThietBi}" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="giatien">Giá tiền (VNĐ):</label>
-                                            <input type="number" class="form-control" id="giatien" name="giatien" required>
+                                            <input type="number" class="form-control" id="giatien" name="giatien" 
+                                                   value="${giaTien}" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="soluong">Số lượng:</label>
-                                            <input type="number" class="form-control" id="soluong" name="soluong" required>
+                                            <input type="number" class="form-control" id="soluong" name="soluong" 
+                                                   value="${soLuong}" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="mota">Mô tả:</label>
-                                            <textarea id="mota" name="mota" rows="4" cols="55" class="form-control"></textarea>
+                                            <textarea id="mota" name="mota" rows="4" cols="55" class="form-control">${moTa}</textarea>
                                         </div>
                                         <button type="submit" class="btn btn-primary">Thêm</button>
                                     </form>
@@ -195,9 +256,13 @@
                             </div>
                         </div>
                     </div>
-                    <input type="text" placeholder="Tìm kiếm..." />
+                    <form action="searchThietBi" method="get">
+                        <input type="text" name="search" placeholder="Tìm kiếm..." value="${searchTerm}" />
+                        <button type="submit" class="btn btn-primary" style="background-color: #5a67d8"><i class='bx bx-search'></i></button>
+                    </form>
                 </div>
             </section>
+
             <section class="ftco-section">
                 <div class="mx-5">
                     <table class="table mt-3">
@@ -262,32 +327,32 @@
                                     </td>
                                 </tr>
                             </c:forEach>
-                        
+
                         </tbody>
 
                     </table>
                 </div>
             </section>
             <div class="pagination">
-                            <c:if test="${currentPage > 1}">
-                                <a href="?page=${currentPage - 1}" class="prev-next"><i class="fas fa-chevron-left"></i></a> <!-- Sử dụng biểu tượng mũi tên trái -->
-                                </c:if>
+                <c:if test="${currentPage > 1}">
+                    <a href="?page=${currentPage - 1}" class="prev-next"><i class="fas fa-chevron-left"></i></a> <!-- Sử dụng biểu tượng mũi tên trái -->
+                    </c:if>
 
-                            <c:forEach begin="1" end="${totalPages}" var="i">
-                                <c:choose>
-                                    <c:when test="${currentPage eq i}">
-                                        <span class="current-page">${i}</span>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <a href="?page=${i}" class="page-number">${i}</a>
-                                    </c:otherwise>
-                                </c:choose>
-                            </c:forEach>
+                <c:forEach begin="1" end="${totalPages}" var="i">
+                    <c:choose>
+                        <c:when test="${currentPage eq i}">
+                            <span class="current-page">${i}</span>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="?page=${i}" class="page-number">${i}</a>
+                        </c:otherwise>
+                    </c:choose>
+                </c:forEach>
 
-                            <c:if test="${currentPage < totalPages}">
-                                <a href="?page=${currentPage + 1}" class="prev-next"><i class="fas fa-chevron-right"></i></a> <!-- Sử dụng biểu tượng mũi tên phải -->
-                                </c:if>
-                        </div>
+                <c:if test="${currentPage < totalPages}">
+                    <a href="?page=${currentPage + 1}" class="prev-next"><i class="fas fa-chevron-right"></i></a> <!-- Sử dụng biểu tượng mũi tên phải -->
+                    </c:if>
+            </div>
         </section>
 
         <!-- Bootstrap JS and dependencies -->

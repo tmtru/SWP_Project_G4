@@ -476,14 +476,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                             <!-- Preview images will be appended here -->
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="modalTrangThai">Trạng thái:</label>
-                                        <select name="trangThai" id="modalTrangThai" required>
-                                            <option value="T">Trống</option>
-                                            <option value="D">Đang thuê</option>
-                                            <option value="DS">Đang sửa</option>
-                                        </select>
-                                    </div>
+                                    
                                     <button type="submit" class="btn btn-primary">Lưu</button>
                                 </form>
                             </div>
@@ -587,7 +580,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                                                        "${room.tang}",
                                                                        "${room.dien_tich}",
                                                                        "${room.gia}",
-                                                                       "${room.trang_thai}",
+                                                                       
                                                                        "${room.ID_NhaTro}",
                                                                        "${room.ID_LoaiPhong}",
                                                                [<c:forEach var="image" items="${room.images}" varStatus="status">
@@ -740,14 +733,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         </script>
 
         <script type="text/javascript">
-            function openEditModal(idPhong, tenPhongTro, tang, dienTich, gia, trangThai, idNhaTro, idLoaiPhong, images) {
+            function openEditModal(idPhong, tenPhongTro, tang, dienTich, gia, idNhaTro, idLoaiPhong, images) {
                 // Hiển thị thông tin trong modal
                 document.getElementById('modalIdPhong').value = idPhong;
                 document.getElementById('modalTenPhongTro').value = tenPhongTro;
                 document.getElementById('modalTang').value = tang;
                 document.getElementById('modalDienTich').value = dienTich;
-                document.getElementById('modalGia').value = gia;
-                document.getElementById('modalTrangThai').value = trangThai;
+                document.getElementById('modalGia').value = gia;      
                 document.getElementById('modalIDNhaTro').value = idNhaTro;
                 document.getElementById('modalIDLoaiPhong').value = idLoaiPhong;
 
