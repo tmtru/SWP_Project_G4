@@ -64,25 +64,54 @@ public class ThietBiPhongDAO extends DBContext {
         return list;
     }
 
-    public boolean addThietBiToPhong(int idPhong, int idThietBi, int soLuong, String trangThai, String moTa) throws SQLException {
-        ThietBiDAO thietBiDAO = new ThietBiDAO();
-
-        // Check and update quantity in ThietBi table
-        if (!thietBiDAO.checkAndUpdateQuantity(idThietBi, soLuong)) {
-            return false; // Not enough quantity or ThietBi not found
-        }
-
-        // If quantity check passed, proceed with adding to THIET_BI_PHONG
-        String sql = "INSERT INTO THIET_BI_PHONG (ID_Phong, ID_ThietBi, So_luong, Trang_thai, Mo_ta) VALUES (?, ?, ?, ?, ?)";
+    public boolean checkDuplicateThietBiInRoom(int idPhong, int idThietBi) {
+        String sql = "SELECT COUNT(*) as count FROM thiet_bi_phong tbp " +
+                    "WHERE tbp.ID_Phong = ? AND tbp.ID_ThietBi = ?";
+        
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, idPhong);
             ps.setInt(2, idThietBi);
-            ps.setInt(3, soLuong);
-            ps.setString(4, trangThai);
-            ps.setString(5, moTa);
-            ps.executeUpdate();
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("count") > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return true;
+        return false;
+    }
+
+    public boolean addThietBiToPhong(int idPhong, int idThietBi, int soLuong, String trangThai, String moTa) {
+        // First check if the equipment already exists in the room
+        if (checkDuplicateThietBiInRoom(idPhong, idThietBi)) {
+            throw new IllegalArgumentException("Thiết bị này đã tồn tại trong phòng!");
+        }
+
+        // Check if there's enough quantity available
+        ThietBiDAO thietBiDAO = new ThietBiDAO();
+        try {
+            boolean hasEnoughQuantity = thietBiDAO.checkAndUpdateQuantity(idThietBi, soLuong);
+            if (!hasEnoughQuantity) {
+                return false;
+            }
+
+            // If we have enough quantity, proceed with adding to the room
+            String sql = "INSERT INTO thiet_bi_phong (ID_Phong, ID_ThietBi, So_luong, Trang_thai, Mo_ta) VALUES (?, ?, ?, ?, ?)";
+            try (PreparedStatement ps = connection.prepareStatement(sql)) {
+                ps.setInt(1, idPhong);
+                ps.setInt(2, idThietBi);
+                ps.setInt(3, soLuong);
+                ps.setString(4, trangThai);
+                ps.setString(5, moTa);
+                ps.executeUpdate();
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public boolean deleteThietBiFromPhong(int idThietBiPhong) throws SQLException {

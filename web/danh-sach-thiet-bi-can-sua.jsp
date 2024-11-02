@@ -44,22 +44,60 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
 
         <style>
             .dropdown {
-                position: relative; /* Để vị trí dropdown có thể được căn chỉnh */
+                position: relative;
             }
 
             .dropdown-menu {
-                display: none; /* Ẩn menu theo mặc định */
-                position: absolute; /* Để nó hiển thị bên dưới menu cha */
-                background-color: white; /* Màu nền */
-                border: 1px solid #ccc; /* Đường viền */
-                padding: 10px; /* Khoảng cách bên trong */
-                z-index: 1000; /* Để đảm bảo nó nằm trên các phần tử khác */
+                display: none;
+                position: absolute;
+                left: 0;     /* Căn thẳng với bên trái menu cha */
+                top: 100%;   /* Hiển thị bên dưới menu cha */
+                background-color: white;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                padding: 8px 0;
+                min-width: 200px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                z-index: 1000;
+            }
+
+            .dropdown-menu li {
+                padding: 0;
+                margin: 0;
+                list-style: none;
+            }
+
+            .dropdown-menu li a {
+                padding: 8px 16px;
+                display: block;
+                color: #333;
+                text-decoration: none;
+                font-size: 14px;
+                white-space: nowrap;
+                transition: background-color 0.2s;
+            }
+
+            .dropdown-menu li a:hover {
+                background-color: #f5f5f5;
             }
 
             .dropdown:hover .dropdown-menu {
-                display: block; /* Hiển thị menu khi di chuột vào mục cha */
+                display: block;
             }
 
+            /* Điều chỉnh cho menu item cha */
+            .dropdown > a {
+                position: relative;
+            }
+
+            .dropdown > a::after {
+                content: '▼';
+                position: absolute;
+                right: 16px;
+                top: 50%;
+                transform: translateY(-50%);
+                font-size: 12px;
+            }
 
 
             .img-preview {
@@ -211,44 +249,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         </a>
                     </li>
 
-                    <li class="dropdown">
-                        <a href="statistic-room" class="dropdown-toggle active">
-                            <i class='bx bx-cog icon'></i>
-                            <span class="text nav-text">Dashboard</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="statistic-room">
-                                    <span class="text nav-text">Room Statistic</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="statistic-revenue">
-                                    <span class="text nav-text">Revenue Statistic</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="khach-no">
-                                    <span class="text nav-text">Danh sách khách nợ</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="statistic-revenue">
-                                    <span class="text nav-text">Danh sách khách cọc</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="khach-sap-het-han">
-                                    <span class="text nav-text">Danh sách khách sắp hết hạn hợp đồng</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="thiet-bi">
-                                    <span class="text nav-text">Thiết bị</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
 
 
                     <li class="">
@@ -310,6 +310,44 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                             </a>
                         </li>
                     </c:if>
+                    <li class="dropdown">
+                        <a href="statistic-room" class="dropdown-toggle active">
+                            <i class='bx bx-cog icon'></i>
+                            <span class="text nav-text">Thống kê</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="statistic-room">
+                                    <span class="text nav-text">Phòng trống</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="statistic-revenue">
+                                    <span class="text nav-text">Doanh thu</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="khach-no">
+                                    <span class="text nav-text">Khách nợ</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="statistic-revenue">
+                                    <span class="text nav-text">Khách đã cọc</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="khach-sap-het-han">
+                                    <span class="text nav-text">Khách sắp hết hạn hợp đồng</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="thiet-bi">
+                                    <span class="text nav-text">Thiết bị cần sửa</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
 
                     </ul>
                 </div>

@@ -242,31 +242,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     </li>
 
 
-                        <c:if test="${sessionScope.account.role == 'landlord'}">
-                        <li class="">
-                            <a href="DanhSachCacHopDongByAdmin">
-                                <i class='bx bx-id-card icon' ></i>
-                            <span class="text nav-text">Hợp đồng</span>
-                            </a>
-                        </li>
-                    </c:if>
-                   
-                         <c:if test="${sessionScope.account.role == 'manager'}">
-                        <li class="">
-                            <a href="DanhSachCacHopDongByManager">
-                                <i class='bx bx-id-card icon' ></i>
-                            <span class="text nav-text">Hợp đồng</span>
-                            </a>
-                        </li>
-                    </c:if>
-=======
                     <li class="">
                         <a href="nhatro">
                             <i class='bx bxs-home icon' ></i>
                             <span class="text nav-text">Nhà trọ</span>
                         </a>
                     </li>
->>>>>>> 04eab50f426a74653b9043c178a81be4cad56966
 
                     <li class="">
                         <a href="room" class="active">
@@ -363,21 +344,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 </div>
 
                 <!-- hien thi export -->
-<<<<<<< HEAD
-
-                <div class="room-actions">
-                    <button class="btn add-room" data-toggle="modal" data-target="#addRoomModal">+ Thêm phòng trọ</button>
-                    <button class="btn quick-add-room">+ Thêm phòng trọ nhanh</button>
-
-                    <form action="/NhaTroTQAT/addRoomExcel" method="get" style="display: inline; background-color: green; border-radius: 5px">
-                        <button type="submit" class="btn export-to-excel">
-                            <i class="bx bxs-file-export"></i>
-                            <span>Export to Excel</span>
-                        </button>
-                    </form>
-                </div>
-=======
->>>>>>> 04eab50f426a74653b9043c178a81be4cad56966
 
                 <div class="room-actions">
                     <c:if test="${sessionScope.account.role == 'landlord'}">
@@ -510,14 +476,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                             <!-- Preview images will be appended here -->
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="modalTrangThai">Trạng thái:</label>
-                                        <select name="trangThai" id="modalTrangThai" required>
-                                            <option value="T">Trống</option>
-                                            <option value="D">Đang thuê</option>
-                                            <option value="DS">Đang sửa</option>
-                                        </select>
-                                    </div>
+                                    
                                     <button type="submit" class="btn btn-primary">Lưu</button>
                                 </form>
                             </div>
@@ -610,35 +569,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                             <a href="detailRoom?id=${room.ID_Phong}" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;">
                                                 <i class="bx bx-info-circle"></i> Chi tiết
                                             </a>
-<<<<<<< HEAD
-
-                                            <!-- Edit and Delete Buttons -->
-                                            <c:if test="${!empty room.trang_thai}">
-                                                <a href="#" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;"
-                                                   onclick='openEditModal(
-                                                                   "${room.ID_Phong}",
-                                                                   "${room.tenPhongTro}",
-                                                                   "${room.tang}",
-                                                                   "${room.dien_tich}",
-                                                                   "${room.gia}",
-                                                                   "${room.trang_thai}",
-                                                                   "${room.ID_NhaTro}",
-                                                                   "${room.ID_LoaiPhong}",
-                                                           [<c:forEach var="image" items="${room.images}" varStatus="status">
-                                                           "${fn:replace(image, '\\', '/')}"
-                                                       <c:if test="${!status.last}">,</c:if>
-                                                   </c:forEach>]
-                                                                   );
-                                                           return false;'>
-                                                    <i class="bx bx-edit"></i> Chỉnh sửa
-                                                </a>
-                                                <a href="#" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;" 
-                                                   onclick="confirmDelete(${room.ID_Phong});
-                                                           return false;">
-                                                    <i class="bx bx-minus-circle"></i> Xóa
-                                                </a>
-                                            </c:if>
-=======
                                             <c:if test="${sessionScope.account.role == 'landlord'}">
 
                                                 <!-- Edit and Delete Buttons -->
@@ -650,7 +580,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                                                        "${room.tang}",
                                                                        "${room.dien_tich}",
                                                                        "${room.gia}",
-                                                                       "${room.trang_thai}",
+                                                                       
                                                                        "${room.ID_NhaTro}",
                                                                        "${room.ID_LoaiPhong}",
                                                                [<c:forEach var="image" items="${room.images}" varStatus="status">
@@ -689,7 +619,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
 
                                             </c:if>
 
->>>>>>> 04eab50f426a74653b9043c178a81be4cad56966
                                         </div>
                                     </div>
                                 </div>
@@ -804,14 +733,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         </script>
 
         <script type="text/javascript">
-            function openEditModal(idPhong, tenPhongTro, tang, dienTich, gia, trangThai, idNhaTro, idLoaiPhong, images) {
+            function openEditModal(idPhong, tenPhongTro, tang, dienTich, gia, idNhaTro, idLoaiPhong, images) {
                 // Hiển thị thông tin trong modal
                 document.getElementById('modalIdPhong').value = idPhong;
                 document.getElementById('modalTenPhongTro').value = tenPhongTro;
                 document.getElementById('modalTang').value = tang;
                 document.getElementById('modalDienTich').value = dienTich;
-                document.getElementById('modalGia').value = gia;
-                document.getElementById('modalTrangThai').value = trangThai;
+                document.getElementById('modalGia').value = gia;      
                 document.getElementById('modalIDNhaTro').value = idNhaTro;
                 document.getElementById('modalIDLoaiPhong').value = idLoaiPhong;
 

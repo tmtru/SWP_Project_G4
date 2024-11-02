@@ -134,15 +134,10 @@
         <servlet-class>controller.updateThietBiInRoom</servlet-class>
     </servlet>
     <servlet>
-<<<<<<< HEAD
-=======
         <servlet-name>loadPhongTro</servlet-name>
         <servlet-class>controller.loadPhongTro</servlet-class>
     </servlet>
-
-    
     <servlet>
->>>>>>> 04eab50f426a74653b9043c178a81be4cad56966
         <servlet-name>AddConTractController</servlet-name>
         <servlet-class>controller.AddConTractController</servlet-class>
     </servlet>
@@ -178,17 +173,14 @@
         <servlet-name>GiaHanHopDongByManagerController</servlet-name>
         <servlet-class>controller.GiaHanHopDongByManagerController</servlet-class>
     </servlet>
-<<<<<<< HEAD
     <servlet>
-        <servlet-name>KetThucHopDongSomByAdminController</servlet-name>
-        <servlet-class>controller.KetThucHopDongSomByAdminController</servlet-class>
+        <servlet-name>CalendarByManagerController</servlet-name>
+        <servlet-class>controller.CalendarByManagerController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ThongTinKhachThuePhongController</servlet-name>
-        <servlet-class>controller.ThongTinKhachThuePhongController</servlet-class>
+        <servlet-name>DanhSachPhongTroCalenderController</servlet-name>
+        <servlet-class>controller.DanhSachPhongTroCalenderController</servlet-class>
     </servlet>
-=======
->>>>>>> 04eab50f426a74653b9043c178a81be4cad56966
     <servlet-mapping>
         <servlet-name>homeRooms</servlet-name>
         <url-pattern>/homer</url-pattern>
@@ -339,14 +331,7 @@
         <servlet-name>profileServlet</servlet-name>
         <url-pattern>/profileServlet</url-pattern>
     </servlet-mapping>
-<<<<<<< HEAD
-    <servlet>
-        <servlet-name>ChangePassword</servlet-name>
-        <servlet-class>controller.ChangePassword</servlet-class>
-    </servlet>
-=======
 
->>>>>>> 04eab50f426a74653b9043c178a81be4cad56966
     <servlet-mapping>
         <servlet-name>actionHoaDon</servlet-name>
         <url-pattern>/actionhoadon</url-pattern>
@@ -400,16 +385,10 @@
         <url-pattern>/updateThietBiInRoom</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-<<<<<<< HEAD
-=======
         <servlet-name>loadPhongTro</servlet-name>
         <url-pattern>/loadPhongTro</url-pattern>
     </servlet-mapping>
-
-
-
     <servlet-mapping>
->>>>>>> 04eab50f426a74653b9043c178a81be4cad56966
         <servlet-name>AddConTractController</servlet-name>
         <url-pattern>/addContract</url-pattern>
     </servlet-mapping>
@@ -445,15 +424,12 @@
         <servlet-name>GiaHanHopDongByManagerController</servlet-name>
         <url-pattern>/GiaHanHopDongByManager</url-pattern>
     </servlet-mapping>
-<<<<<<< HEAD
     <servlet-mapping>
-        <servlet-name>KetThucHopDongSomByAdminController</servlet-name>
-        <url-pattern>/KetThucHopDongSomByAdmin</url-pattern>
+        <servlet-name>CalendarByManagerController</servlet-name>
+        <url-pattern>/CalendarByManager</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ThongTinKhachThuePhongController</servlet-name>
-        <url-pattern>/ThongTinKhachThuePhong</url-pattern>
+        <servlet-name>DanhSachPhongTroCalenderController</servlet-name>
+        <url-pattern>/DanhSachPhongTroCalender</url-pattern>
     </servlet-mapping>
-=======
->>>>>>> 04eab50f426a74653b9043c178a81be4cad56966
 </web-app>

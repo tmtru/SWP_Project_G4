@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller;
 
 import static controller.AddRoomServlet.extractFileName;
@@ -68,7 +64,6 @@ public class EditRoomServlet extends HttpServlet {
             String dienTich = request.getParameter("dienTich");
             String gia = request.getParameter("gia");
             String id = request.getParameter("phongId");
-            String trangThai = request.getParameter("trangThai");
 
             // Fetch the old room details before updating
             Phong oldRoom = pdao.getDetailRoom(Integer.parseInt(id));
@@ -107,11 +102,11 @@ public class EditRoomServlet extends HttpServlet {
                 }
             }
 
-            // Update room
+            // Update room - keeping the original trangThai
             Phong updatedRoom = new Phong(Integer.parseInt(id), Integer.parseInt(loaiPhongId),
                     tenPhongTro, Integer.parseInt(nhaTroId),
                     Integer.parseInt(tang),
-                    trangThai,
+                    oldRoom.getTrang_thai(), // Keep the original status
                     Float.parseFloat(dienTich),
                     Integer.parseInt(gia));
 
@@ -151,13 +146,6 @@ public class EditRoomServlet extends HttpServlet {
                         .append(oldRoom.getGia())
                         .append("' thành '")
                         .append(gia)
-                        .append("'.\n");
-            }
-            if (!oldRoom.getTrang_thai().equals(trangThai)) {
-                changesLog.append("Trạng thái phòng đã đổi từ '")
-                        .append(oldRoom.getTrang_thai())
-                        .append("' thành '")
-                        .append(trangThai)
                         .append("'.\n");
             }
 
@@ -228,6 +216,6 @@ public class EditRoomServlet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
+    }
 
-}
+    }
