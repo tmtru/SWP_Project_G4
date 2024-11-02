@@ -574,10 +574,23 @@ public class NhaTroDAO extends DBContext {
  
     public static void main(String[] args) {
         NhaTroDAO dAO = new NhaTroDAO();
+        int sampleHopDongId = 1; // Change this ID based on your test data
+    Phong roomDetails = dAO.getRoomDetailsByHopDongId(sampleHopDongId);
+
+    // Print the room details
+    if (roomDetails != null) {
+        System.out.println("Address: " + roomDetails.getDiaChiPhongTro());
+        System.out.println("Price: " + roomDetails.getGia());
+        System.out.println("Status: " + roomDetails.getTrang_thai());
+    } else {
+        System.out.println("No room details found for Hop Dong ID: " + sampleHopDongId);
+    }
+
         List<NhaTro> list = dAO.getAllNhaTroForManager(2);
         for (NhaTro string : list) {
             System.out.println(string);
         }
+
 
 //        // Kiểm tra phương thức getAll
 //        System.out.println("Danh sách nhà trọ:");

@@ -87,7 +87,7 @@
                         </li>
 
                         <li class="">
-                            <a href="#">
+                            <a href="DanhSachCacHopDongByManager">
                                 <i class='bx bx-id-card icon' ></i>
                                 <span class="text nav-text">Hợp đồng</span>
                             </a>

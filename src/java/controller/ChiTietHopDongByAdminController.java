@@ -4,13 +4,23 @@
  */
 package controller;
 
+import dal.ChuTroDAO;
+import dal.DichVuDAO;
 import dal.HopDongDAO;
+import dal.KhachThueDAO;
+import dal.NhaTroDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
+import model.ChuTro;
+import model.DichVu;
+import model.HopDong;
+import model.KhachThue;
+import model.Phong;
 
 /**
  *
@@ -56,7 +66,7 @@ public class ChiTietHopDongByAdminController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
     }
 
     /**
@@ -71,21 +81,64 @@ public class ChiTietHopDongByAdminController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HopDongDAO hopDongDao = new HopDongDAO();
+        ChuTroDAO chuTroDAO = new ChuTroDAO();
+        KhachThueDAO khachThueDAO = new KhachThueDAO();
+        DichVuDAO dichVuDAO = new DichVuDAO();
+        NhaTroDAO nhaTroDao = new NhaTroDAO();
+
         String hopDongIdStr = request.getParameter("hopDongId");
         int hopDongId = Integer.parseInt(hopDongIdStr);
         String action = request.getParameter("action");
         String reason = request.getParameter("reason");
-        int khachThueId = hopDongDao.getKhachThueIdByHopDongId(hopDongId);
+
         int phongTroId = hopDongDao.getPhongTroIdByHopDongId(hopDongId);
+        int khachThueId = hopDongDao.getKhachThueIdByHopDongId(hopDongId);
+
         if ("accept".equals(action)) {
+            boolean isRoomAvailable = hopDongDao.isRoomAvailableForAccept(phongTroId);
+
+            if (!isRoomAvailable) {
+                request.setAttribute("message", "Căn phòng này đã được thuê trong hợp đồng trước. Không thể chấp nhận hợp đồng.");
+                loadHopDongDetails(request, hopDongId, khachThueId, phongTroId);
+                request.getRequestDispatcher("/ChiTietHopDongDaDangKy_Admin.jsp").forward(request, response);
+                return;
+            }
+
+            // Chấp nhận hợp đồng nếu phòng trọ chưa có hợp đồng nào đang thuê
             boolean isAccepted = hopDongDao.acceptHopDong(hopDongId, khachThueId, phongTroId);
             request.setAttribute("message", "Hợp đồng đã được chấp nhận thành công.");
+            loadHopDongDetails(request, hopDongId, khachThueId, phongTroId);
             request.getRequestDispatcher("/ChiTietHopDongDaDangKy_Admin.jsp").forward(request, response);
+
         } else if ("reject".equals(action)) {
             boolean success = hopDongDao.rejectHopDong(hopDongId, reason);
             request.setAttribute("message", "Hợp đồng đã bị từ chối thành công.");
+            loadHopDongDetails(request, hopDongId, khachThueId, phongTroId);
             request.getRequestDispatcher("/ChiTietHopDongDaDangKy_Admin.jsp").forward(request, response);
         }
+    }
+
+    private void loadHopDongDetails(HttpServletRequest request, int hopDongId, int khachThueId, int phongTroId) {
+        HopDongDAO hopDongDao = new HopDongDAO();
+        ChuTroDAO chuTroDAO = new ChuTroDAO();
+        KhachThueDAO khachThueDAO = new KhachThueDAO();
+        DichVuDAO dichVuDAO = new DichVuDAO();
+        NhaTroDAO nhaTroDao = new NhaTroDAO();
+
+        KhachThue khachThue = khachThueDAO.getKhachThueByHopDongId(hopDongId);
+        List<DichVu> dichVuList = dichVuDAO.getDichVuByHopDongId(hopDongId);
+        Phong roomDetails = nhaTroDao.getRoomDetailsByHopDongId(hopDongId);
+        HopDong hopDong = hopDongDao.getHopDongById(hopDongId);
+        ChuTro chuTro = chuTroDAO.getChuTroByHopDongId(hopDongId);
+
+        request.setAttribute("hopDongId", hopDongId);
+        request.setAttribute("chuTro", chuTro);
+        request.setAttribute("khachThue", khachThue);
+        request.setAttribute("dichVuList", dichVuList);
+        request.setAttribute("giaPhong", roomDetails.getGia());
+        request.setAttribute("diaChiPhongTro", roomDetails.getDiaChiPhongTro());
+        request.setAttribute("trangThai", roomDetails.getTrang_thai());
+        request.setAttribute("hopDong", hopDong);
     }
 
     /**

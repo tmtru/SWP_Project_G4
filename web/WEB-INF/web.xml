@@ -174,8 +174,12 @@
         <servlet-class>controller.GiaHanHopDongByManagerController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>searchThietBi</servlet-name>
-        <servlet-class>controller.searchThietBi</servlet-class>
+        <servlet-name>CalendarByManagerController</servlet-name>
+        <servlet-class>controller.CalendarByManagerController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DanhSachPhongTroCalenderController</servlet-name>
+        <servlet-class>controller.DanhSachPhongTroCalenderController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>homeRooms</servlet-name>
@@ -327,6 +331,7 @@
         <servlet-name>profileServlet</servlet-name>
         <url-pattern>/profileServlet</url-pattern>
     </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>actionHoaDon</servlet-name>
         <url-pattern>/actionhoadon</url-pattern>
@@ -420,7 +425,11 @@
         <url-pattern>/GiaHanHopDongByManager</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>searchThietBi</servlet-name>
-        <url-pattern>/searchThietBi</url-pattern>
+        <servlet-name>CalendarByManagerController</servlet-name>
+        <url-pattern>/CalendarByManager</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DanhSachPhongTroCalenderController</servlet-name>
+        <url-pattern>/DanhSachPhongTroCalender</url-pattern>
     </servlet-mapping>
 </web-app>
