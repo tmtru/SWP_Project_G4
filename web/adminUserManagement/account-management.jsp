@@ -10,6 +10,44 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
         <link href="${pageContext.request.contextPath}/css/css-account-management.css" rel="stylesheet" />
+        <style>
+            .warpper {
+                display: flex;
+                justify-content: flex-start;
+                gap: 10px;
+                margin-bottom: 20px;
+                overflow-x: auto;
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+
+            .warpper::-webkit-scrollbar {
+                display: none;
+            }
+
+            .warpper a {
+                text-decoration: none;
+            }
+
+            .warpper .tab {
+                background: #9ca3af;
+                color: white;
+                padding: 12px 24px;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                font-size: 16px;
+                white-space: nowrap;
+            }
+
+            .warpper .tab:hover {
+                background: #6b7280;
+            }
+
+            .warpper .tab.active {
+                background: #4f46e5;
+            }
+        </style>
     </head>
     <body>
         <div class="container">
@@ -28,6 +66,18 @@
                             </button>
                         </form>
                     </div>
+                            <div class="warpper">
+                            <c:forEach var="nt" items="${sessionScope.housesByRole}">
+                                <a href="accountController?idHouse=${nt.ID_NhaTro}">
+                                    <div class="tab <c:if test="${nt.ID_NhaTro == sessionScope.currentHouse}">active</c:if>" id="tab-${nt.ID_NhaTro}">
+                                        ${nt.tenNhaTro}
+                                    </div>
+                                </a>
+                            </c:forEach>
+                            <c:if test="${sessionScope.housesByRole==null}">
+                                <div>Bạn không được quyền truy cập vào bất cứ nhà trọ nào</div>
+                            </c:if>
+                        </div>
                     <table class="account-table">
                         <thead>
                             <tr>
