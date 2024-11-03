@@ -151,6 +151,11 @@
             #roomListModal button:hover {
                 background-color: #45a049;
             }
+            .current-date {
+                background-color: #d4edda; 
+                font-weight: bold; 
+                border-radius: 5px; 
+            }
 
         </style>
     </head>
@@ -205,6 +210,12 @@
                     int firstDayOfMonth = calendar.get(Calendar.DAY_OF_WEEK) - 1;
                     int day = 1;
 
+                    // Get today's date for comparison
+                    Calendar today = Calendar.getInstance();
+                    int currentDay = today.get(Calendar.DAY_OF_MONTH);
+                    int currentMonthToday = today.get(Calendar.MONTH);
+                    int currentYearToday = today.get(Calendar.YEAR);
+
                     for (int week = 0; week < 6; week++) {
                         out.print("<tr>");
                         for (int i = 0; i < 7; i++) {
@@ -233,16 +244,20 @@
                                         }
                                     }
                                 }
-                                
+                    
                                 if (danhSachPhongTroTrong != null && !danhSachPhongTroTrong.isEmpty()) {
-                    hasGreenDot = true;
-                }
+                                    hasGreenDot = true;
+                                }
+                    
+                                // Determine if the current day matches
+                                String currentDateClass = (day == currentDay && currentMonthToday == (currentMonth - 1) && currentYearToday == currentYear) ? "current-date" : "";
+
                                 // Thêm sự kiện onclick vào phần tử <td> của ngày
-                                out.print("<td onclick='showRoomList(" + day + ")'>" + day);
+                                out.print("<td class='" + currentDateClass + "' onclick='showRoomList(" + day + ")'>" + day);
 
                                 if (hasGreenDot) {
-                    out.print("<span class='dot green-dot' title='Rooms available'></span>");
-                }
+                                    out.print("<span class='dot green-dot' title='Rooms available'></span>");
+                                }
                                 if (hasYellowDot) {
                                     out.print("<span class='dot yellow-dot' title='Contract is expiring soon'></span>");
                                 }
@@ -259,6 +274,7 @@
                 %>
             </table>
 
+
             <div id="roomListModal" >
                 <h3>Danh sách phòng trọ</h3>
 
@@ -268,95 +284,95 @@
 
         </div>
 
-       <script>
-    const year = <%= currentYear %>;  // Gán year từ JSP
-    const month = <%= currentMonth %>; // Gán month từ JSP
+        <script>
+           const year = <%= currentYear %>;  // Gán year từ JSP
+           const month = <%= currentMonth %>; // Gán month từ JSP
 
-    function showRoomList(day) {
-        console.log("Clicked day: ", day);
+           function showRoomList(day) {
+               console.log("Clicked day: ", day);
 
-        const url = 'DanhSachPhongTroCalender?year=' + encodeURIComponent(year) + '&month=' + encodeURIComponent(month) + '&day=' + encodeURIComponent(day);
-        console.log("Fetching from URL: ", url);
+               const url = 'DanhSachPhongTroCalender?year=' + encodeURIComponent(year) + '&month=' + encodeURIComponent(month) + '&day=' + encodeURIComponent(day);
+               console.log("Fetching from URL: ", url);
 
-        fetch(url)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok: ' + response.statusText);
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log("Data received: ", data); // Kiểm tra dữ liệu nhận được
+               fetch(url)
+                       .then(response => {
+                           if (!response.ok) {
+                               throw new Error('Network response was not ok: ' + response.statusText);
+                           }
+                           return response.json();
+                       })
+                       .then(data => {
+                           console.log("Data received: ", data); // Kiểm tra dữ liệu nhận được
 
-                // Kiểm tra xem data có phải là đối tượng và có các thuộc tính đã được đặt tên chính xác hay không
-                if (data && typeof data === 'object') {
-                    const roomListDiv = document.getElementById('roomList');
-                    roomListDiv.innerHTML = ''; // Xóa nội dung cũ
+                           // Kiểm tra xem data có phải là đối tượng và có các thuộc tính đã được đặt tên chính xác hay không
+                           if (data && typeof data === 'object') {
+                               const roomListDiv = document.getElementById('roomList');
+                               roomListDiv.innerHTML = ''; // Xóa nội dung cũ
 
-                    // Hiển thị danh sách phòng đang thuê
-                    const rentedHeader = document.createElement('h4');
-                    rentedHeader.textContent = "Danh sách phòng đang thuê:";
-                    roomListDiv.appendChild(rentedHeader);
+                               // Hiển thị danh sách phòng đang thuê
+                               const rentedHeader = document.createElement('h4');
+                               rentedHeader.textContent = "Danh sách phòng đang thuê:";
+                               roomListDiv.appendChild(rentedHeader);
 
-                    if (Array.isArray(data.phongDangThue) && data.phongDangThue.length > 0) {
-                        data.phongDangThue.forEach(phongDangThue => {
-                            const roomDiv = document.createElement('div');
-                            roomDiv.textContent = "Room Name: " + phongDangThue.phongTro.TenPhongTro + ", Price: " + phongDangThue.phongTro.Gia;
-                            roomListDiv.appendChild(roomDiv);
-                        });
-                    } else {
-                        const noRentedMessage = document.createElement('div');
-                        noRentedMessage.textContent = "Không có phòng nào đang thuê.";
-                        roomListDiv.appendChild(noRentedMessage);
-                    }
+                               if (Array.isArray(data.phongDangThue) && data.phongDangThue.length > 0) {
+                                   data.phongDangThue.forEach(phongDangThue => {
+                                       const roomDiv = document.createElement('div');
+                                       roomDiv.textContent = "Room Name: " + phongDangThue.phongTro.TenPhongTro + ", Price: " + phongDangThue.phongTro.Gia;
+                                       roomListDiv.appendChild(roomDiv);
+                                   });
+                               } else {
+                                   const noRentedMessage = document.createElement('div');
+                                   noRentedMessage.textContent = "Không có phòng nào đang thuê.";
+                                   roomListDiv.appendChild(noRentedMessage);
+                               }
 
-                    // Hiển thị danh sách phòng sắp hết hạn
-                    const nearingExpiryHeader = document.createElement('h4');
-                    nearingExpiryHeader.textContent = "Danh sách phòng sắp hết hạn:";
-                    roomListDiv.appendChild(nearingExpiryHeader);
+                               // Hiển thị danh sách phòng sắp hết hạn
+                               const nearingExpiryHeader = document.createElement('h4');
+                               nearingExpiryHeader.textContent = "Danh sách phòng sắp hết hạn:";
+                               roomListDiv.appendChild(nearingExpiryHeader);
 
-                    if (Array.isArray(data.phongSapHetHan) && data.phongSapHetHan.length > 0) {
-                        data.phongSapHetHan.forEach(phongSapHetHan => {
-                            const roomDiv = document.createElement('div');
-                            roomDiv.textContent = "Room Name: " + phongSapHetHan.phongTro.TenPhongTro + ", Price: " + phongSapHetHan.phongTro.Gia;
-                            roomListDiv.appendChild(roomDiv);
-                        });
-                    } else {
-                        const noExpiringMessage = document.createElement('div');
-                        noExpiringMessage.textContent = "Không có phòng nào sắp hết hạn.";
-                        roomListDiv.appendChild(noExpiringMessage);
-                    }
+                               if (Array.isArray(data.phongSapHetHan) && data.phongSapHetHan.length > 0) {
+                                   data.phongSapHetHan.forEach(phongSapHetHan => {
+                                       const roomDiv = document.createElement('div');
+                                       roomDiv.textContent = "Room Name: " + phongSapHetHan.phongTro.TenPhongTro + ", Price: " + phongSapHetHan.phongTro.Gia;
+                                       roomListDiv.appendChild(roomDiv);
+                                   });
+                               } else {
+                                   const noExpiringMessage = document.createElement('div');
+                                   noExpiringMessage.textContent = "Không có phòng nào sắp hết hạn.";
+                                   roomListDiv.appendChild(noExpiringMessage);
+                               }
 
-                    // Hiển thị danh sách phòng trống
-                    const availableHeader = document.createElement('h4');
-                    availableHeader.textContent = "Danh sách phòng trống:";
-                    roomListDiv.appendChild(availableHeader);
+                               // Hiển thị danh sách phòng trống
+                               const availableHeader = document.createElement('h4');
+                               availableHeader.textContent = "Danh sách phòng trống:";
+                               roomListDiv.appendChild(availableHeader);
 
-                    if (Array.isArray(data.phongTrong) && data.phongTrong.length > 0) {
-                        data.phongTrong.forEach(phongTrong => {
-                            const roomDiv = document.createElement('div');
-                            roomDiv.textContent = "Room Name: " + phongTrong.TenPhongTro + ", Price: " + phongTrong.Gia;
-                            roomListDiv.appendChild(roomDiv);
-                        });
-                    } else {
-                        const noAvailableMessage = document.createElement('div');
-                        noAvailableMessage.textContent = "Không có phòng trống.";
-                        roomListDiv.appendChild(noAvailableMessage);
-                    }
+                               if (Array.isArray(data.phongTrong) && data.phongTrong.length > 0) {
+                                   data.phongTrong.forEach(phongTrong => {
+                                       const roomDiv = document.createElement('div');
+                                       roomDiv.textContent = "Room Name: " + phongTrong.TenPhongTro + ", Price: " + phongTrong.Gia;
+                                       roomListDiv.appendChild(roomDiv);
+                                   });
+                               } else {
+                                   const noAvailableMessage = document.createElement('div');
+                                   noAvailableMessage.textContent = "Không có phòng trống.";
+                                   roomListDiv.appendChild(noAvailableMessage);
+                               }
 
-                    document.getElementById('roomListModal').style.display = 'block'; // Đảm bảo modal được hiển thị
+                               document.getElementById('roomListModal').style.display = 'block'; // Đảm bảo modal được hiển thị
 
-                } else {
-                    alert('Dữ liệu không hợp lệ nhận được từ server.');
-                    console.error('Expected an object with arrays, but got:', data);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Có lỗi xảy ra khi lấy dữ liệu. Vui lòng kiểm tra console để biết thêm chi tiết.');
-            });
-    }
-</script>
+                           } else {
+                               alert('Dữ liệu không hợp lệ nhận được từ server.');
+                               console.error('Expected an object with arrays, but got:', data);
+                           }
+                       })
+                       .catch(error => {
+                           console.error('Error:', error);
+                           alert('Có lỗi xảy ra khi lấy dữ liệu. Vui lòng kiểm tra console để biết thêm chi tiết.');
+                       });
+           }
+        </script>
 
     </body>
 </html>
