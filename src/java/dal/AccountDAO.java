@@ -363,7 +363,7 @@ public class AccountDAO extends DBContext {
             return false;
         }
     }
-    
+
     public List<Account> getTenantAccountsByManager(int ID_Account, int start, int accountsPerPage) {
         List<Account> tenants = new ArrayList<>();
         String sql = "SELECT DISTINCT a.ID_Account, a.Email, a.Username, a.Role, a.isActive\n"
@@ -401,15 +401,15 @@ public class AccountDAO extends DBContext {
 
     public int countTenantAccountsByManager(int ID_Account) {
         int count = 0;
-        String sql = "SELECT COUNT(DISTINCT a.ID_Account) AS tenant_count " +
-                     "FROM account a " +
-                     "JOIN khach_thue kt ON a.ID_Account = kt.ID_Account " +
-                     "JOIN hop_dong hd ON kt.ID_KhachThue = hd.ID_KhachThue " +
-                     "JOIN phong_tro pt ON hd.ID_PhongTro = pt.ID_Phong " +
-                     "JOIN nha_tro nt ON pt.ID_NhaTro = nt.ID_NhaTro " +
-                     "JOIN quan_ly ql ON nt.ID_NhaTro = ql.ID_NhaTro " +
-                     "WHERE a.Role = 'tenant' " +
-                     "AND ql.ID_Account = ? ";
+        String sql = "SELECT COUNT(DISTINCT a.ID_Account) AS tenant_count "
+                + "FROM account a "
+                + "JOIN khach_thue kt ON a.ID_Account = kt.ID_Account "
+                + "JOIN hop_dong hd ON kt.ID_KhachThue = hd.ID_KhachThue "
+                + "JOIN phong_tro pt ON hd.ID_PhongTro = pt.ID_Phong "
+                + "JOIN nha_tro nt ON pt.ID_NhaTro = nt.ID_NhaTro "
+                + "JOIN quan_ly ql ON nt.ID_NhaTro = ql.ID_NhaTro "
+                + "WHERE a.Role = 'tenant' "
+                + "AND ql.ID_Account = ? ";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 
@@ -426,19 +426,19 @@ public class AccountDAO extends DBContext {
         }
         return count;
     }
-    
+
     public List<Account> searchTenantByUsername(int ID_Account, String username, int start, int accountsPerPage) {
         List<Account> tenants = new ArrayList<>();
-        String sql = "SELECT DISTINCT a.ID_Account, a.Email, a.Username, a.Role, a.isActive " +
-                     "FROM account a " +
-                     "JOIN khach_thue kt ON a.ID_Account = kt.ID_Account " +
-                     "JOIN hop_dong hd ON kt.ID_KhachThue = hd.ID_KhachThue " +
-                     "JOIN phong_tro pt ON hd.ID_PhongTro = pt.ID_Phong " +
-                     "JOIN nha_tro nt ON pt.ID_NhaTro = nt.ID_NhaTro " +
-                     "JOIN quan_ly ql ON nt.ID_NhaTro = ql.ID_NhaTro " +
-                     "WHERE a.Role = 'tenant' " +
-                     "AND ql.ID_Account = ? " +
-                     "AND a.Username LIKE ? LIMIT ?, ?";
+        String sql = "SELECT DISTINCT a.ID_Account, a.Email, a.Username, a.Role, a.isActive "
+                + "FROM account a "
+                + "JOIN khach_thue kt ON a.ID_Account = kt.ID_Account "
+                + "JOIN hop_dong hd ON kt.ID_KhachThue = hd.ID_KhachThue "
+                + "JOIN phong_tro pt ON hd.ID_PhongTro = pt.ID_Phong "
+                + "JOIN nha_tro nt ON pt.ID_NhaTro = nt.ID_NhaTro "
+                + "JOIN quan_ly ql ON nt.ID_NhaTro = ql.ID_NhaTro "
+                + "WHERE a.Role = 'tenant' "
+                + "AND ql.ID_Account = ? "
+                + "AND a.Username LIKE ? LIMIT ?, ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 
@@ -465,19 +465,19 @@ public class AccountDAO extends DBContext {
         }
         return tenants;
     }
-    
+
     public int countTenantsByUsername(int ID_Account, String username) {
         int count = 0;
-        String sql = "SELECT COUNT(DISTINCT a.ID_Account) AS tenant_count " +
-                     "FROM account a " +
-                     "JOIN khach_thue kt ON a.ID_Account = kt.ID_Account " +
-                     "JOIN hop_dong hd ON kt.ID_KhachThue = hd.ID_KhachThue " +
-                     "JOIN phong_tro pt ON hd.ID_PhongTro = pt.ID_Phong " +
-                     "JOIN nha_tro nt ON pt.ID_NhaTro = nt.ID_NhaTro " +
-                     "JOIN quan_ly ql ON nt.ID_NhaTro = ql.ID_NhaTro " +
-                     "WHERE a.Role = 'tenant' " +
-                     "AND ql.ID_Account = ? " +
-                     "AND a.Username LIKE ? ";
+        String sql = "SELECT COUNT(DISTINCT a.ID_Account) AS tenant_count "
+                + "FROM account a "
+                + "JOIN khach_thue kt ON a.ID_Account = kt.ID_Account "
+                + "JOIN hop_dong hd ON kt.ID_KhachThue = hd.ID_KhachThue "
+                + "JOIN phong_tro pt ON hd.ID_PhongTro = pt.ID_Phong "
+                + "JOIN nha_tro nt ON pt.ID_NhaTro = nt.ID_NhaTro "
+                + "JOIN quan_ly ql ON nt.ID_NhaTro = ql.ID_NhaTro "
+                + "WHERE a.Role = 'tenant' "
+                + "AND ql.ID_Account = ? "
+                + "AND a.Username LIKE ? ";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 
@@ -495,6 +495,207 @@ public class AccountDAO extends DBContext {
             e.printStackTrace();
         }
         return count;
+    }
+
+    public List<Account> getAccountsByIdHouse(int idHouse, int start, int accountsPerPage) {
+        List<Account> accountsByIdHouses = new ArrayList<>();
+        String sql = "SELECT \n"
+                + "    tenant_account.ID_Account AS Tenant_Account_ID,\n"
+                + "    tenant_account.Email AS Tenant_Email,\n"
+                + "    tenant_account.Username AS Tenant_Username,\n"
+                + "    tenant_account.Role AS Tenant_Role,\n"
+                + "    tenant.isActive AS Tenant_isActive,\n"
+                + "    manager_account.ID_Account AS Manager_Account_ID,\n"
+                + "    manager_account.Email AS Manager_Email,\n"
+                + "    manager_account.Username AS Manager_Username,\n"
+                + "    manager_account.Role AS Manager_Role,\n"
+                + "    manager.isActive AS Manager_isActive\n"
+                + "FROM \n"
+                + "    nha_tro AS house\n"
+                + "LEFT JOIN \n"
+                + "    phong_tro AS room ON room.ID_NhaTro = house.ID_NhaTro\n"
+                + "LEFT JOIN \n"
+                + "    hop_dong AS contract ON contract.ID_PhongTro = room.ID_Phong\n"
+                + "LEFT JOIN \n"
+                + "    khach_thue AS tenant ON tenant.ID_KhachThue = contract.ID_KhachThue\n"
+                + "LEFT JOIN \n"
+                + "    account AS tenant_account ON tenant_account.ID_Account = tenant.ID_Account AND tenant_account.Role = 'tenant'\n"
+                + "LEFT JOIN \n"
+                + "    quan_ly AS manager ON house.ID_NhaTro = manager.ID_NhaTro\n"
+                + "LEFT JOIN \n"
+                + "    account AS manager_account ON manager_account.ID_Account = manager.ID_Account\n"
+                + "WHERE \n"
+                + "    house.ID_NhaTro = ? LIMIT ?, ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, idHouse);
+            stmt.setInt(2, start);
+            stmt.setInt(3, accountsPerPage);
+            ResultSet rs = stmt.executeQuery();
+
+            Account managerAccount = null; // Khởi tạo biến cho manager
+
+            // Duyệt qua kết quả và thêm vào danh sách accountsByIdHouses
+            while (rs.next()) {
+                // Thêm thông tin của tenant (nếu có)
+                if (rs.getInt("Tenant_Account_ID") > 0) { // Kiểm tra tenant có tồn tại không
+                    Account tenantAccount = new Account();
+                    tenantAccount.setID_Account(rs.getInt("Tenant_Account_ID"));
+                    tenantAccount.setEmail(rs.getString("Tenant_Email"));
+                    tenantAccount.setUsername(rs.getString("Tenant_Username"));
+                    tenantAccount.setRole(rs.getString("Tenant_Role"));
+                    tenantAccount.setActive(rs.getBoolean("Tenant_isActive"));
+                    accountsByIdHouses.add(tenantAccount);
+                }
+
+                // Thêm thông tin của manager (nếu có) chỉ một lần
+                if (rs.getInt("Manager_Account_ID") > 0) { // Kiểm tra manager có tồn tại không
+                    if (managerAccount == null) { // Nếu managerAccount chưa được khởi tạo
+                        managerAccount = new Account();
+                        managerAccount.setID_Account(rs.getInt("Manager_Account_ID"));
+                        managerAccount.setEmail(rs.getString("Manager_Email"));
+                        managerAccount.setUsername(rs.getString("Manager_Username"));
+                        managerAccount.setRole(rs.getString("Manager_Role"));
+                        managerAccount.setActive(rs.getBoolean("Manager_isActive"));
+                        accountsByIdHouses.add(managerAccount); // Thêm manager vào danh sách
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return accountsByIdHouses;
+    }
+
+    public int getTotalAccountsByIdHouse(int idHouse) {
+        String sql = "SELECT COUNT(DISTINCT tenant_account.ID_Account) AS Total_Tenant_Accounts,\n"
+                + "       COUNT(DISTINCT manager_account.ID_Account) AS Total_Manager_Accounts\n"
+                + "FROM nha_tro AS house\n"
+                + "LEFT JOIN phong_tro AS room ON room.ID_NhaTro = house.ID_NhaTro\n"
+                + "LEFT JOIN hop_dong AS contract ON contract.ID_PhongTro = room.ID_Phong\n"
+                + "LEFT JOIN khach_thue AS tenant ON tenant.ID_KhachThue = contract.ID_KhachThue\n"
+                + "LEFT JOIN account AS tenant_account ON tenant_account.ID_Account = tenant.ID_Account AND tenant_account.Role = 'tenant'\n"
+                + "LEFT JOIN quan_ly AS manager ON house.ID_NhaTro = manager.ID_NhaTro\n"
+                + "LEFT JOIN account AS manager_account ON manager_account.ID_Account = manager.ID_Account\n"
+                + "WHERE house.ID_NhaTro = ?;";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, idHouse);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int totalTenantAccounts = rs.getInt("Total_Tenant_Accounts");
+                int totalManagerAccounts = rs.getInt("Total_Manager_Accounts");
+
+                // Trả về tổng số tài khoản mà không bị duplicate
+                return totalTenantAccounts + (totalManagerAccounts > 0 ? 1 : 0);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0; // Trả về 0 nếu không có tài khoản nào
+    }
+
+    public List<Account> getAccountsByIdHouseAndUsername(int idHouse, String usernameSearchTerm, int start, int accountsPerPage) {
+        List<Account> accountsByIdHouses = new ArrayList<>();
+        String sql = "SELECT \n"
+                + "    tenant_account.ID_Account AS Account_ID,\n"
+                + "    tenant_account.Email AS Tenant_Email,\n"
+                + "    tenant_account.Username AS Tenant_Username,\n"
+                + "    tenant_account.Role AS Tenant_Role,\n"
+                + "    tenant.isActive AS Tenant_isActive,\n"
+                + "    manager_account.ID_Account AS Manager_Account_ID,\n"
+                + "    manager_account.Email AS Manager_Email,\n"
+                + "    manager_account.Username AS Manager_Username,\n"
+                + "    manager_account.Role AS Manager_Role,\n"
+                + "    manager.isActive AS Manager_isActive\n"
+                + "FROM \n"
+                + "    account AS tenant_account\n"
+                + "JOIN \n"
+                + "    khach_thue AS tenant ON tenant_account.ID_Account = tenant.ID_Account\n"
+                + "JOIN \n"
+                + "    hop_dong AS contract ON tenant.ID_KhachThue = contract.ID_KhachThue\n"
+                + "JOIN \n"
+                + "    phong_tro AS room ON contract.ID_PhongTro = room.ID_Phong\n"
+                + "JOIN \n"
+                + "    nha_tro AS house ON room.ID_NhaTro = house.ID_NhaTro\n"
+                + "JOIN \n"
+                + "    quan_ly AS manager ON house.ID_NhaTro = manager.ID_NhaTro\n"
+                + "JOIN \n"
+                + "    account AS manager_account ON manager.ID_Account = manager_account.ID_Account\n"
+                + "WHERE \n"
+                + "    tenant_account.Role = 'tenant' \n"
+                + "    AND house.ID_NhaTro = ? \n"
+                + "    AND (tenant_account.Username LIKE ? OR manager_account.Username LIKE ?) LIMIT ?, ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, idHouse);
+            stmt.setString(2, "%" + usernameSearchTerm + "%"); // Tìm ki?m theo tenant's username
+            stmt.setString(3, "%" + usernameSearchTerm + "%"); // Tìm ki?m theo manager's username
+            stmt.setInt(4, start);
+            stmt.setInt(5, accountsPerPage);
+            ResultSet rs = stmt.executeQuery();
+
+            // Duy?t qua k?t qu? và thêm vào danh sách accounts
+            while (rs.next()) {
+                // Thêm thông tin c?a tenant
+                Account tenantAccount = new Account();
+                tenantAccount.setID_Account(rs.getInt("Account_ID"));
+                tenantAccount.setEmail(rs.getString("Tenant_Email"));
+                tenantAccount.setUsername(rs.getString("Tenant_Username"));
+                tenantAccount.setRole(rs.getString("Tenant_Role"));
+                tenantAccount.setActive(rs.getBoolean("Tenant_isActive"));
+                accountsByIdHouses.add(tenantAccount);
+
+                // Thêm thông tin c?a manager
+                Account managerAccount = new Account();
+                managerAccount.setID_Account(rs.getInt("Manager_Account_ID"));
+                managerAccount.setEmail(rs.getString("Manager_Email"));
+                managerAccount.setUsername(rs.getString("Manager_Username"));
+                managerAccount.setRole(rs.getString("Manager_Role"));
+                managerAccount.setActive(rs.getBoolean("Manager_isActive"));
+                accountsByIdHouses.add(managerAccount);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return accountsByIdHouses;
+    }
+
+    public int countAccountsByIdHouseAndUsername(int idHouse, String usernameSearchTerm) {
+        String sql = "SELECT COUNT(*) AS Total_Accounts\n"
+                + "FROM \n"
+                + "    account AS tenant_account\n"
+                + "JOIN \n"
+                + "    khach_thue AS tenant ON tenant_account.ID_Account = tenant.ID_Account\n"
+                + "JOIN \n"
+                + "    hop_dong AS contract ON tenant.ID_KhachThue = contract.ID_KhachThue\n"
+                + "JOIN \n"
+                + "    phong_tro AS room ON contract.ID_PhongTro = room.ID_Phong\n"
+                + "JOIN \n"
+                + "    nha_tro AS house ON room.ID_NhaTro = house.ID_NhaTro\n"
+                + "JOIN \n"
+                + "    quan_ly AS manager ON house.ID_NhaTro = manager.ID_NhaTro\n"
+                + "JOIN \n"
+                + "    account AS manager_account ON manager.ID_Account = manager_account.ID_Account\n"
+                + "WHERE \n"
+                + "    tenant_account.Role = 'tenant' \n"
+                + "    AND house.ID_NhaTro = ? \n"
+                + "    AND (tenant_account.Username LIKE ? OR manager_account.Username LIKE ?)";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, idHouse);
+            stmt.setString(2, "%" + usernameSearchTerm + "%"); // Tìm kiếm theo tenant's username
+            stmt.setString(3, "%" + usernameSearchTerm + "%"); // Tìm kiếm theo manager's username
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("Total_Accounts");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     public static void main(String[] args) {

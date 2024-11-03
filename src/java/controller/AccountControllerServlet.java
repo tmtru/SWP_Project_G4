@@ -71,68 +71,81 @@ public class AccountControllerServlet extends HttpServlet {
     }
 
     private void listAccounts(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    int page = 1;
-    String pageStr = request.getParameter("page");
-    if (pageStr != null && !pageStr.isEmpty()) {
-        page = Integer.parseInt(pageStr);
-    }
+            throws ServletException, IOException {
+        int page = 1;
+        String pageStr = request.getParameter("page");
+        if (pageStr != null && !pageStr.isEmpty()) {
+            page = Integer.parseInt(pageStr);
+        }
 
-    String searchTerm = request.getParameter("searchTerm");
-    if (searchTerm == null) {
-        searchTerm = "";
-    }
+        String searchTerm = request.getParameter("searchTerm");
+        int idHouse;
 
-    int start = (page - 1) * ACCOUNTS_PER_PAGE;
+        if (searchTerm == null) {
+            searchTerm = "";
+        }
 
-    List<Account> accounts = new ArrayList<>(); // Khởi tạo danh sách
-    int totalAccounts = 0; // Khởi tạo biến totalAccounts
-    HttpSession session = request.getSession(false);
-    if (session != null) {
-        int ID_Account = (int) session.getAttribute("ID_Account");
-        String role = (String) session.getAttribute("role");
-        
-        if (role.equals("landlord")) {
-            if (searchTerm.isEmpty()) {
-                accounts = accountDAO.getAccountsPaginated(start, ACCOUNTS_PER_PAGE);
-                totalAccounts = accountDAO.getTotalAccounts();
-            } else {
-                accounts = accountDAO.searchAccountsByName(searchTerm, start, ACCOUNTS_PER_PAGE);
-                totalAccounts = accountDAO.getTotalAccountsBySearch(searchTerm);
+        try {
+            idHouse = Integer.parseInt(request.getParameter("idHouse"));
+            request.getSession().setAttribute("currentHouse", idHouse);
+        } catch (NumberFormatException e) {
+            idHouse = 1; // Giá trị mặc định nếu idHouse không hợp lệ
+        }
+
+        int start = (page - 1) * ACCOUNTS_PER_PAGE;
+
+        List<Account> accounts = new ArrayList<>();
+        List<Account> accountManager = new ArrayList<>();// Khởi tạo danh sách
+        int totalAccounts = 0; // Khởi tạo biến totalAccounts
+        int totalManagerAccounts = 0;
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            int ID_Account = (int) session.getAttribute("ID_Account");
+            String role = (String) session.getAttribute("role");
+
+            if (role.equals("landlord")) {
+                if (searchTerm.isEmpty()) {
+                    accounts = accountDAO.getAccountsByIdHouse(idHouse, start, ACCOUNTS_PER_PAGE);
+                    totalAccounts = accountDAO.getTotalAccountsByIdHouse(idHouse);
+                
+                } else {
+                    accounts = accountDAO.getAccountsByIdHouseAndUsername(idHouse, searchTerm, start, ACCOUNTS_PER_PAGE);
+                    totalAccounts = accountDAO.countAccountsByIdHouseAndUsername(idHouse, searchTerm);
+                    
+                }
+            } else if (role.equals("manager")) {
+                if (searchTerm.isEmpty()) {
+                    accounts = accountDAO.getTenantAccountsByManager(ID_Account, start, ACCOUNTS_PER_PAGE);
+                    totalAccounts = accountDAO.countTenantAccountsByManager(ID_Account);
+                } else {
+                    accounts = accountDAO.searchTenantByUsername(ID_Account, searchTerm, start, ACCOUNTS_PER_PAGE);
+                    totalAccounts = accountDAO.countTenantsByUsername(ID_Account, searchTerm);
+                }
             }
-        } else if (role.equals("manager")) {
-            if (searchTerm.isEmpty()) {
-                accounts = accountDAO.getTenantAccountsByManager(ID_Account, start, ACCOUNTS_PER_PAGE);
-                totalAccounts = accountDAO.countTenantAccountsByManager(ID_Account);
-            } else {
-                accounts = accountDAO.searchTenantByUsername(ID_Account, searchTerm, start, ACCOUNTS_PER_PAGE);
-                totalAccounts = accountDAO.countTenantsByUsername(ID_Account, searchTerm);
+
+            // Kiểm tra và tính toán số trang
+            int totalPages = 0;
+            if (totalAccounts > 0 && ACCOUNTS_PER_PAGE > 0) {
+                totalPages = (int) Math.ceil((double) totalAccounts / ACCOUNTS_PER_PAGE);
             }
+
+            // Kiểm tra nếu accounts là null và khởi tạo nếu cần
+            if (accounts == null) {
+                accounts = new ArrayList<>(); // Khởi tạo danh sách rỗng nếu accounts là null
+            }
+
+            // Thiết lập các thuộc tính cho request
+            request.setAttribute("accounts", accounts);
+            request.setAttribute("currentPage", page);
+            request.setAttribute("totalPages", totalPages);
+            request.setAttribute("searchTerm", searchTerm);
+
+            request.getRequestDispatcher("adminUserManagement/account-management.jsp").forward(request, response);
+        } else {
+            // Nếu session không tồn tại, chuyển hướng về trang login
+            response.sendRedirect("login.jsp");
         }
-
-        // Kiểm tra và tính toán số trang
-        int totalPages = 0;
-        if (totalAccounts > 0 && ACCOUNTS_PER_PAGE > 0) {
-            totalPages = (int) Math.ceil((double) totalAccounts / ACCOUNTS_PER_PAGE);
-        }
-
-        // Kiểm tra nếu accounts là null và khởi tạo nếu cần
-        if (accounts == null) {
-            accounts = new ArrayList<>(); // Khởi tạo danh sách rỗng nếu accounts là null
-        }
-
-        // Thiết lập các thuộc tính cho request
-        request.setAttribute("accounts", accounts);
-        request.setAttribute("currentPage", page);
-        request.setAttribute("totalPages", totalPages);
-        request.setAttribute("searchTerm", searchTerm);
-
-        request.getRequestDispatcher("adminUserManagement/account-management.jsp").forward(request, response);
-    } else {
-        // Nếu session không tồn tại, chuyển hướng về trang login
-        response.sendRedirect("login.jsp");
     }
-}
 
     private void toggleAccountActive(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
