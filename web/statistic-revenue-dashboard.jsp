@@ -163,6 +163,50 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     width: 100%;
                 }
             }
+            
+            /* Container styles */
+            .year-selector {
+                padding: 20px 0;
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                font-family: 'Poppins', sans-serif;
+            }
+
+
+
+
+            /* Select styles */
+            .year-selector select {
+                width: 200px;
+                padding: 8px 15px;
+                border: 2px solid rgba(105, 92, 254, 0.2);
+                border-radius: 6px;
+                background-color: white;
+                color: #444;
+                font-size: 14px;
+                transition: all 0.3s ease;
+                cursor: pointer;
+                
+            }
+
+            /* Select hover state */
+            .year-selector select:hover {
+                border-color: rgba(105, 92, 254, 0.4);
+            }
+
+
+            /* Select option styles */
+            .year-selector select option {
+                padding: 10px;
+                background-color: white;
+                color: #444;
+            }
+
+            /* Select option hover state */
+            .year-selector select option:hover {
+                background-color: rgba(105, 92, 254, 0.1);
+            }
 
 
         </style>
@@ -206,7 +250,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         </a>
                     </li>
 
-                 <li class="dropdown">
+                    <li class="dropdown">
                         <a href="statistic-room" class="dropdown-toggle active">
                             <i class='bx bx-cog icon'></i>
                             <span class="text nav-text">Dashboard</span>
@@ -237,11 +281,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                     <span class="text nav-text">Danh sách khách sắp hết hạn hợp đồng</span>
                                 </a>
                             </li>
-                              <li>
-            <a href="thiet-bi">
-                <span class="text nav-text">Thiết bị</span>
-            </a>
-        </li>
+                            <li>
+                                <a href="thiet-bi">
+                                    <span class="text nav-text">Thiết bị</span>
+                                </a>
+                            </li>
                         </ul>
                     </li>
 
@@ -278,16 +322,16 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         <li class="">
                             <a href="DanhSachCacHopDongByAdmin">
                                 <i class='bx bx-id-card icon' ></i>
-                            <span class="text nav-text">Hợp đồng</span>
+                                <span class="text nav-text">Hợp đồng</span>
                             </a>
                         </li>
                     </c:if>
-                   
-                         <c:if test="${sessionScope.account.role == 'manager'}">
+
+                    <c:if test="${sessionScope.account.role == 'manager'}">
                         <li class="">
                             <a href="DanhSachCacHopDongByManager">
                                 <i class='bx bx-id-card icon' ></i>
-                            <span class="text nav-text">Hợp đồng</span>
+                                <span class="text nav-text">Hợp đồng</span>
                             </a>
                         </li>
                     </c:if>
@@ -362,7 +406,19 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             </section>
 
             <section class="ftco-section">
-
+                <div class="year-selector" style="padding: 20px 0;">
+                    <form action="statistic-revenue" method="GET" style="display: flex; gap: 10px; align-items: center;">
+                        <input type="hidden" name="idHouse" value="${sessionScope.currentHouse}">
+                        <label for="year" style="margin-left:35px">Năm:</label>
+                        <select name="year" id="year" class="form-control" style="width: 200px;" onchange="this.form.submit()">
+                            <c:forEach items="${availableYears}" var="year">
+                                <option value="${year}" ${year == selectedYear ? 'selected' : ''}>
+                                    ${year}
+                                </option>
+                            </c:forEach>
+                        </select>
+                    </form>
+                </div>
 
                 <div class="container">
                     <div class="row mt-4">
@@ -415,7 +471,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
         </script>
         <script type="text/javascript">
-            const xValues = ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"];
+            const xValues = ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+                "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"];
             var yValues = [];
             <c:forEach items="${statisticRevenue}" var="r">
             yValues.push(`${r}`);
@@ -448,7 +505,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     legend: {display: false},
                     title: {
                         display: true,
-                        text: "Doanh thu theo tháng"
+                        text: "Doanh thu theo tháng năm ${selectedYear}"
                     }
                 }
             });

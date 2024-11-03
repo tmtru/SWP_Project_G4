@@ -99,7 +99,7 @@ public class AddRoomServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try {
-            //get value from form insert
+            // Get parameters
             String nhaTroId = request.getParameter("tenNhaTro");
             String loaiPhongId = request.getParameter("tenLoaiPhong");
             String tenPhongTro = request.getParameter("tenPhongTro");
@@ -107,50 +107,116 @@ public class AddRoomServlet extends HttpServlet {
             String dienTich = request.getParameter("dienTich");
             String gia = request.getParameter("gia");
 
-            // Xử lý upload nhiều file image
+            // Validation variables
+            boolean hasError = false;
+            String errorMessage = "";
+            PhongDAO pdao = new PhongDAO();
+
+            // Validate room name
+            if (tenPhongTro == null || tenPhongTro.trim().isEmpty()) {
+                hasError = true;
+                errorMessage += "Tên phòng không được để trống. ";
+            } else {
+                if (pdao.isRoomNameExists(tenPhongTro.trim(), Integer.parseInt(nhaTroId))) {
+                    hasError = true;
+                    errorMessage += "Tên phòng đã tồn tại trong nhà trọ này. ";
+                }
+            }
+
+            // Validate floor number
+            int tangNumber;
+            try {
+                tangNumber = Integer.parseInt(tang);
+                if (tangNumber <= 0) {
+                    hasError = true;
+                    errorMessage += "Số tầng phải là số nguyên dương. ";
+                }
+            } catch (NumberFormatException e) {
+                hasError = true;
+                errorMessage += "Số tầng không hợp lệ. ";
+            }
+
+            // Validate area
+            float dienTichValue;
+            try {
+                dienTichValue = Float.parseFloat(dienTich);
+                if (dienTichValue <= 0) {
+                    hasError = true;
+                    errorMessage += "Diện tích phải lớn hơn 0. ";
+                }
+            } catch (NumberFormatException e) {
+                hasError = true;
+                errorMessage += "Diện tích không hợp lệ. ";
+            }
+
+            // Validate price
+            int giaValue;
+            try {
+                giaValue = Integer.parseInt(gia);
+                if (giaValue <= 0) {
+                    hasError = true;
+                    errorMessage += "Giá phòng phải lớn hơn 0. ";
+                }
+            } catch (NumberFormatException e) {
+                hasError = true;
+                errorMessage += "Giá phòng không hợp lệ. ";
+            }
+
+            // If there are errors, redirect back with error message
+            if (hasError) {
+                HttpSession session = request.getSession();
+                session.setAttribute("addRoomError", errorMessage);
+                session.setAttribute("tenPhongTro", tenPhongTro);
+                session.setAttribute("tang", tang);
+                session.setAttribute("dienTich", dienTich);
+                session.setAttribute("gia", gia);
+                response.sendRedirect("room");
+                return;
+            }
+
+            // Process image upload
             List<String> imageFiles = new ArrayList<>();
-            Collection<Part> fileParts = request.getParts(); // Lấy tất cả các file được gửi
+            Collection<Part> fileParts = request.getParts();
 
             String applicationPath = getServletContext().getRealPath("");
             String uploadFilePath = applicationPath + File.separator + UPLOAD_IMAGES_DIR;
 
-            // Tạo thư mục nếu chưa tồn tại
             File uploadDir = new File(uploadFilePath);
             if (!uploadDir.exists()) {
                 uploadDir.mkdir();
             }
 
             for (Part filePart : fileParts) {
-                // Kiểm tra nếu là một file (vì request.getParts() có thể trả về cả các part không phải file)
                 if (filePart.getName().equals("urlPhongTro") && filePart.getSize() > 0) {
                     String fileName = extractFileName(filePart);
-
-                    // Lưu file hình ảnh
                     String imageFilePath = uploadFilePath + File.separator + fileName;
+
                     try (InputStream fileContent = filePart.getInputStream()) {
-                        // Nếu file chưa tồn tại thì lưu ảnh
                         Path destinationPath = Paths.get(imageFilePath);
                         if (!Files.exists(destinationPath)) {
                             Files.copy(fileContent, new File(imageFilePath).toPath());
                         }
                     }
-                    // Thêm đường dẫn file vào danh sách
+
                     String imageFile = UPLOAD_IMAGES_DIR + File.separator + fileName;
                     imageFiles.add(imageFile);
                 }
             }
 
-            //insert room
-            Phong room = new Phong(Integer.parseInt(loaiPhongId),
-                    tenPhongTro, Integer.parseInt(nhaTroId),
+            // Create and insert room
+            Phong room = new Phong(
+                    Integer.parseInt(loaiPhongId),
+                    tenPhongTro.trim(),
+                    Integer.parseInt(nhaTroId),
                     Integer.parseInt(tang),
                     "T",
                     Float.parseFloat(dienTich),
                     Integer.parseInt(gia),
-                    imageFiles);
-            PhongDAO pdao = new PhongDAO();
+                    imageFiles
+            );
             pdao.insertRoom(room);
-            
+            // Get the latest room for redirect
+            Phong latestRoom = pdao.getLatestPhong();
             // for action history
             NhaTroDAO ntdao = new NhaTroDAO();
             Phong phong = pdao.getLatestPhong();
@@ -170,9 +236,12 @@ public class AddRoomServlet extends HttpServlet {
                 history.setContent("Thêm phòng " + phong.getTenPhongTro() + " của " + nhaTro.getTenNhaTro());
                 ahdao.insertActionHistory(history);
             }
-            response.sendRedirect("room");
+              // Redirect to detail page of the newly created room
+            response.sendRedirect("detailRoom?id=" + latestRoom.getID_Phong());
         } catch (Exception e) {
             e.printStackTrace();
+            // In case of error, redirect to room list
+            response.sendRedirect("room");
         }
     }
 

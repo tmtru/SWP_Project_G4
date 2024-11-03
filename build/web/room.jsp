@@ -38,21 +38,16 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <style>
-            .dropdown {
-                position: relative; /* Để vị trí dropdown có thể được căn chỉnh */
-            }
-
             .dropdown-menu {
-                display: none; /* Ẩn menu theo mặc định */
-                position: absolute; /* Để nó hiển thị bên dưới menu cha */
-                background-color: white; /* Màu nền */
-                border: 1px solid #ccc; /* Đường viền */
-                padding: 10px; /* Khoảng cách bên trong */
-                z-index: 1000; /* Để đảm bảo nó nằm trên các phần tử khác */
+                display: none;
+                list-style: none;
+                padding: 0px 27px;
+                margin: 0px ;
             }
 
-            .dropdown:hover .dropdown-menu {
-                display: block; /* Hiển thị menu khi di chuột vào mục cha */
+            /* Khi li có class active, hiển thị dropdown */
+            .dropdown.active .dropdown-menu {
+                display: block;
             }
 
 
@@ -163,12 +158,54 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 }
             }
 
+            .custom-alert {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 1050;
+                max-width: 350px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                animation: slideInRight 0.5s ease-out;
+                border-left: 5px solid #dc3545;
+            }
+
+            @keyframes slideInRight {
+                from {
+                    opacity: 0;
+                    transform: translateX(100%);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+
+            .custom-alert .btn-close {
+                position: absolute;
+                top: 50%;
+                right: 10px;
+                transform: translateY(-50%);
+            }
+
+            .custom-alert .alert-content {
+                margin-right: 30px;
+            }
 
         </style>
     </head>
     <body>
         <!--Room manegement dash board-->
-
+        <%
+            // Xóa session attributes sau khi đã hiển thị alert
+            if (session.getAttribute("addRoomError") != null || session.getAttribute("editRoomError") != null) {
+                String addError = (String)session.getAttribute("addRoomError");
+                String editError = (String)session.getAttribute("editRoomError");
+                session.removeAttribute("addRoomError");
+                session.removeAttribute("editRoomError");
+                request.setAttribute("addRoomError", addError);
+                request.setAttribute("editRoomError", editError);
+            }
+        %>
         <nav class="sidebar">
             <header>
                 <div class="image-text">
@@ -203,41 +240,17 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     </li>
 
                     <li class="dropdown">
-                        <a href="statistic-room" class="dropdown-toggle">
+                        <a href="javascript:void(0);" class="dropdown-toggle" onclick="toggleDropdown()">
                             <i class='bx bx-cog icon'></i>
-                            <span class="text nav-text">Dashboard</span>
+                            <span class="text nav-text">Báo cáo</span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li>
-                                <a href="statistic-room">
-                                    <span class="text nav-text">Phòng trống</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="statistic-revenue">
-                                    <span class="text nav-text">Doanh thu</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="khach-no">
-                                    <span class="text nav-text">Danh sách khách nợ</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="khach-coc">
-                                    <span class="text nav-text">Danh sách khách cọc</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="khach-sap-het-han">
-                                    <span class="text nav-text">Danh sách khách sắp hết hạn hợp đồng</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="thiet-bi">
-                                    <span class="text nav-text">Thiết bị</span>
-                                </a>
-                            </li>
+                            <li><a href="statistic-room"><span class="text nav-text" style="margin-left: 30px">Phòng trống</span></a></li>
+                            <li><a href="statistic-revenue"><span class="text nav-text" style="margin-left: 30px">Doanh thu</span></a></li>
+                            <li><a href="khach-no"><span class="text nav-text" style="margin-left: 30px">Khách nợ</span></a></li>
+                            <li><a href="khach-coc"><span class="text nav-text" style="margin-left: 30px">Khách cọc</span></a></li>
+                            <li><a href="khach-sap-het-han"><span class="text nav-text">Sắp hết hạn hợp đồng</span></a></li>
+                            <li><a href="thiet-bi"><span class="text nav-text" style="margin-left: 33px">Thiết bị</span></a></li>
                         </ul>
                     </li>
 
@@ -270,23 +283,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         </a>
                     </li>
 
-                    <c:if test="${sessionScope.account.role == 'landlord'}">
-                        <li class="">
-                            <a href="DanhSachCacHopDongByAdmin">
-                                <i class='bx bx-id-card icon' ></i>
+                    <li class="">
+                        <a href="hop-dong">
+                            <i class='bx bx-id-card icon' ></i>
                             <span class="text nav-text">Hợp đồng</span>
-                            </a>
-                        </li>
-                    </c:if>
-                   
-                         <c:if test="${sessionScope.account.role == 'manager'}">
-                        <li class="">
-                            <a href="DanhSachCacHopDongByManager">
-                                <i class='bx bx-id-card icon' ></i>
-                            <span class="text nav-text">Hợp đồng</span>
-                            </a>
-                        </li>
-                    </c:if>
+                        </a>
+                    </li>
 
                     <li class="">
                         <a href="hoadon">
@@ -314,17 +316,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         </a>
                     </li>
 
-                    <li class="mode">
-                        <div class="sun-moon">
-                            <i class='bx bx-moon icon moon'></i>
-                            <i class='bx bx-sun icon sun'></i>
-                        </div>
-                        <span class="mode-text text">Dark mode</span>
-
-                        <div class="toggle-switch">
-                            <span class="switch"></span>
-                        </div>
-                    </li>
 
                 </div>
             </div>
@@ -340,6 +331,39 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             <c:if test="${param.deleteError eq 'true'}">
                 <div class="alert alert-danger" role="alert">
                     Nhà trọ đang có người thuê
+                </div>
+            </c:if>
+            <%-- Error message add room fail --%>
+            <c:if test="${not empty addRoomError}">
+                <div class="alert alert-danger alert-dismissible custom-alert" role="alert">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                        <div class="alert-content flex-grow-1">
+                            ${addRoomError}
+                        </div>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+            </c:if>
+
+            <%-- Error message edit room fail --%>
+            <c:if test="${not empty editRoomError}">
+                <div class="alert alert-danger alert-dismissible custom-alert" role="alert">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                        <div class="alert-content flex-grow-1">
+                            ${editRoomError}
+                        </div>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
                 </div>
             </c:if>
             <section class="property-management">
@@ -359,7 +383,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 <div class="room-actions">
                     <c:if test="${sessionScope.account.role == 'landlord'}">
                         <button class="btn add-room" data-toggle="modal" data-target="#addRoomModal">+ Thêm phòng trọ</button>
-                        <button class="btn quick-add-room">+ Thêm phòng trọ nhanh</button>
                         <form action="/NhaTroTQAT/addRoomExcel" method="get" style="display: inline; background-color: green; border-radius: 5px">
                             <button type="submit" class="btn export-to-excel">
                                 <i class="bx bxs-file-export"></i>
@@ -487,7 +510,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                             <!-- Preview images will be appended here -->
                                         </div>
                                     </div>
-                                    
+
                                     <button type="submit" class="btn btn-primary">Lưu</button>
                                 </form>
                             </div>
@@ -522,10 +545,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                             </option>
                         </c:forEach>
                     </select>
-                    <select name="status">
-                        <option value="">Trạng thái</option>
+                    <select name="status" id="status" onchange="filterRoomsByStatus(this)">
+                        <option value="">Tất cả trạng thái</option>
                         <c:forEach items="${statusMap}" var="entry">
-                            <option value="${entry.key}" ${entry.key eq selectedStatus ? 'selected' : ''}>${entry.value}</option>
+                            <option value="${entry.key}" ${param.status == entry.key ? 'selected' : ''}>
+                                ${entry.value}
+                            </option>
                         </c:forEach>
                     </select>
 
@@ -591,7 +616,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                                                        "${room.tang}",
                                                                        "${room.dien_tich}",
                                                                        "${room.gia}",
-                                                                       
                                                                        "${room.ID_NhaTro}",
                                                                        "${room.ID_LoaiPhong}",
                                                                [<c:forEach var="image" items="${room.images}" varStatus="status">
@@ -695,16 +719,44 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             function filterRoomsByFloor(select) {
                 var selectedFloor = select.value;
                 var url = 'room?';
-
                 // Thêm tham số tầng nếu có
                 if (selectedFloor) {
                     url += 'tang=' + selectedFloor;
                 }
-
                 // Lấy giá trị nhà trọ hiện tại từ session
                 var currentHouse = '${sessionScope.currentHouse}';
                 if (currentHouse) {
                     url += (selectedFloor ? '&' : '') + 'idHouse=' + currentHouse;
+                }
+                // Thêm status vào URL nếu đang được chọn
+                var currentStatus = document.getElementById('status').value;
+                if (currentStatus) {
+                    url += '&status=' + currentStatus;
+                }
+                // Chuyển hướng đến URL mới
+                window.location.href = url;
+            }
+
+            // Thêm function filter status
+            function filterRoomsByStatus(select) {
+                var selectedStatus = select.value;
+                var url = 'room?';
+
+                // Lấy giá trị nhà trọ hiện tại từ session
+                var currentHouse = '${sessionScope.currentHouse}';
+                if (currentHouse) {
+                    url += 'idHouse=' + currentHouse;
+                }
+
+                // Thêm tầng vào URL nếu đang được chọn
+                var currentFloor = document.getElementById('tang').value;
+                if (currentFloor) {
+                    url += '&tang=' + currentFloor;
+                }
+
+                // Thêm status nếu có
+                if (selectedStatus) {
+                    url += '&status=' + selectedStatus;
                 }
 
                 // Chuyển hướng đến URL mới
@@ -719,6 +771,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     window.location.href = 'deleteRoom?id=' + roomId;
                 }
             }
+
         </script>
         <script type="text/javascript">
             function previewImage(input) {
@@ -750,7 +803,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 document.getElementById('modalTenPhongTro').value = tenPhongTro;
                 document.getElementById('modalTang').value = tang;
                 document.getElementById('modalDienTich').value = dienTich;
-                document.getElementById('modalGia').value = gia;      
+                document.getElementById('modalGia').value = gia;
                 document.getElementById('modalIDNhaTro').value = idNhaTro;
                 document.getElementById('modalIDLoaiPhong').value = idLoaiPhong;
 
@@ -791,6 +844,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 }
             }
         </script>
-
+        <script>
+            function toggleDropdown() {
+                var dropdown = document.querySelector('.dropdown');
+                dropdown.classList.toggle('active'); // Thêm/xóa class 'active' khi nhấn
+            }
+        </script>
     </body>
 </html>

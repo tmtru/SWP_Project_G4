@@ -36,14 +36,14 @@ public class DashboardRevenueController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PhongDAO roomDAO = new PhongDAO();
         String idHouseStr = request.getParameter("idHouse");
+        String yearStr = request.getParameter("year");
 
         // Get houses by role from session
         @SuppressWarnings("unchecked")
         List<NhaTro> housesByRole = (List<NhaTro>) request.getSession().getAttribute("housesByRole");
 
-        // Handle house selection with automatic selection of first house
+        // Handle house selection
         int currentHouseId = -1;
-
         if (idHouseStr != null && !idHouseStr.isEmpty()) {
             try {
                 currentHouseId = Integer.parseInt(idHouseStr);
@@ -62,12 +62,33 @@ public class DashboardRevenueController extends HttpServlet {
             currentHouseId = housesByRole.get(0).getID_NhaTro();
         }
 
+        // Get available years
+        List<Integer> availableYears = roomDAO.getAvailableYears(currentHouseId);
+
+        // Handle year selection
+        int selectedYear;
+        if (yearStr != null && !yearStr.isEmpty()) {
+            try {
+                selectedYear = Integer.parseInt(yearStr);
+            } catch (NumberFormatException e) {
+                selectedYear = availableYears.isEmpty()
+                        ? java.time.Year.now().getValue() : availableYears.get(0);
+            }
+        } else {
+            selectedYear = availableYears.isEmpty()
+                    ? java.time.Year.now().getValue() : availableYears.get(0);
+        }
+
         // Store the selected house ID in session
         request.getSession().setAttribute("currentHouse", currentHouseId);
-        List<Integer> statisticRevenue = roomDAO.getStatisticRevenueByApartment(currentHouseId);
-        request.setAttribute("statisticRevenue", statisticRevenue);
 
-        // Forward to JSP
+        // Get revenue statistics for the selected year
+        List<Integer> statisticRevenue = roomDAO.getStatisticRevenueByApartment(currentHouseId, selectedYear);
+
+        request.setAttribute("statisticRevenue", statisticRevenue);
+        request.setAttribute("selectedYear", selectedYear);
+        request.setAttribute("availableYears", availableYears);
+
         request.getRequestDispatcher("statistic-revenue-dashboard.jsp").forward(request, response);
     }
 

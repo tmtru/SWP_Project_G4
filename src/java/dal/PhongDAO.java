@@ -340,6 +340,21 @@ public class PhongDAO extends DBContext {
         }
     }
 
+    //check duplicate name Room in that house
+    public boolean isRoomNameExists(String roomName, int houseId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM phong_tro WHERE TenPhongTro = ? AND ID_NhaTro = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, roomName);
+            st.setInt(2, houseId);
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
+    }
+
     private int getIDNhaTroByName(String tenNhaTro) throws SQLException {
         String sql = "SELECT ID_NhaTro FROM nha_tro WHERE TenNhaTro = ?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
@@ -831,7 +846,7 @@ public class PhongDAO extends DBContext {
         return data;
     }
 
-    public List<Integer> getStatisticRevenueByApartment(int nhaTroId) {
+    public List<Integer> getStatisticRevenueByApartment(int nhaTroId, int year) {
         List<Integer> data = new ArrayList<>();
         String sql = "SELECT \n"
                 + "    months.month AS Thang,\n"
@@ -843,33 +858,53 @@ public class PhongDAO extends DBContext {
                 + "     SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12) AS months\n"
                 + "LEFT JOIN \n"
                 + "    hoa_don h ON MONTH(h.NgayThanhToan) = months.month \n"
-                + "                AND YEAR(h.NgayThanhToan) = YEAR(CURDATE())\n"
+                + "                AND YEAR(h.NgayThanhToan) = ?\n"
                 + "                AND h.Trang_thai = 1\n"
                 + "LEFT JOIN \n"
                 + "    hop_dong hd ON hd.ID_HopDong = h.ID_HopDong \n"
-                + "    LEFT JOIN \n"
+                + "LEFT JOIN \n"
                 + "    phong_tro pt ON pt.ID_Phong = hd.ID_PhongTro \n"
                 + "WHERE \n"
-                + "   pt.ID_NhaTro = ? OR h.ID_HopDong IS NULL\n"
+                + "    pt.ID_NhaTro = ? OR h.ID_HopDong IS NULL\n"
                 + "GROUP BY \n"
                 + "    months.month\n"
                 + "ORDER BY \n"
                 + "    months.month;";
-
         try (PreparedStatement st = connection.prepareStatement(sql)) {
-            st.setInt(1, nhaTroId);
-
+            st.setInt(1, year);
+            st.setInt(2, nhaTroId);
             try (ResultSet rs = st.executeQuery()) {
                 while (rs.next()) {
-
                     data.add(rs.getInt("DoanhThu"));
-
                 }
             }
         } catch (SQLException e) {
             System.out.println("Error in PhongDAO.getStatisticRevenueByApartment: " + e.getMessage());
         }
         return data;
+    }
+
+// Add a method to get available years
+    public List<Integer> getAvailableYears(int nhaTroId) {
+        List<Integer> years = new ArrayList<>();
+        String sql = "SELECT DISTINCT YEAR(h.NgayThanhToan) as year\n"
+                + "FROM hoa_don h\n"
+                + "JOIN hop_dong hd ON hd.ID_HopDong = h.ID_HopDong\n"
+                + "JOIN phong_tro pt ON pt.ID_Phong = hd.ID_PhongTro\n"
+                + "WHERE pt.ID_NhaTro = ?\n"
+                + "ORDER BY year DESC";
+
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, nhaTroId);
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    years.add(rs.getInt("year"));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in PhongDAO.getAvailableYears: " + e.getMessage());
+        }
+        return years;
     }
 
     public List<Phong> searchRooms(String searchText, int idNhaTro) {
@@ -905,6 +940,82 @@ public class PhongDAO extends DBContext {
             }
         } catch (SQLException e) {
             System.out.println("Error in PhongDAO.searchRooms: " + e.getMessage());
+        }
+        return rooms;
+    }
+
+    public List<Phong> getRoomByStatus(String status) {
+        List<Phong> rooms = new ArrayList<>();
+        String sql = "SELECT p.ID_Phong, n.TenNhaTro, p.TenPhongTro, p.ID_LoaiPhong, p.Tang, p.Dien_Tich, "
+                + "l.TenLoaiPhong, p.Gia, l.Mo_ta, p.Trang_thai, p.ID_NhaTro "
+                + "FROM phong_tro p "
+                + "JOIN nha_tro n ON p.ID_NhaTro = n.ID_NhaTro "
+                + "JOIN loai_phong l ON p.ID_LoaiPhong = l.ID_LoaiPhong "
+                + "WHERE p.Trang_thai = ? "
+                + "ORDER BY p.ID_Phong";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, status);
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    Phong r = new Phong();
+                    r.setID_Phong(rs.getInt("ID_Phong"));
+                    r.setTenNhaTro(rs.getString("TenNhaTro"));
+                    r.setTenPhongTro(rs.getString("TenPhongTro"));
+                    r.setID_LoaiPhong(rs.getInt("ID_LoaiPhong"));
+                    r.setTang(rs.getInt("Tang"));
+                    r.setDien_tich(rs.getFloat("Dien_Tich"));
+                    r.setTenLoaiPhong(rs.getString("TenLoaiPhong"));
+                    r.setGia(rs.getInt("Gia"));
+                    r.setMo_ta(rs.getString("Mo_ta"));
+                    r.setTrang_thai(rs.getString("Trang_thai"));
+                    r.setID_NhaTro(rs.getInt("ID_NhaTro"));
+                    List<String> images = getImagesByPhongId(rs.getInt("ID_Phong"));
+                    r.setImages(images);
+                    rooms.add(r);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in PhongDAO.getRoomByStatus: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return rooms;
+    }
+
+// Phương thức lấy phòng theo tầng và trạng thái
+    public List<Phong> getRoomByFloorAndStatus(int tang, String status) {
+        List<Phong> rooms = new ArrayList<>();
+        String sql = "SELECT p.ID_Phong, n.TenNhaTro, p.TenPhongTro, p.ID_LoaiPhong, p.Tang, p.Dien_Tich, "
+                + "l.TenLoaiPhong, p.Gia, l.Mo_ta, p.Trang_thai, p.ID_NhaTro "
+                + "FROM phong_tro p "
+                + "JOIN nha_tro n ON p.ID_NhaTro = n.ID_NhaTro "
+                + "JOIN loai_phong l ON p.ID_LoaiPhong = l.ID_LoaiPhong "
+                + "WHERE p.Tang = ? AND p.Trang_thai = ? "
+                + "ORDER BY p.ID_Phong";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, tang);
+            st.setString(2, status);
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    Phong r = new Phong();
+                    r.setID_Phong(rs.getInt("ID_Phong"));
+                    r.setTenNhaTro(rs.getString("TenNhaTro"));
+                    r.setTenPhongTro(rs.getString("TenPhongTro"));
+                    r.setID_LoaiPhong(rs.getInt("ID_LoaiPhong"));
+                    r.setTang(rs.getInt("Tang"));
+                    r.setDien_tich(rs.getFloat("Dien_Tich"));
+                    r.setTenLoaiPhong(rs.getString("TenLoaiPhong"));
+                    r.setGia(rs.getInt("Gia"));
+                    r.setMo_ta(rs.getString("Mo_ta"));
+                    r.setTrang_thai(rs.getString("Trang_thai"));
+                    r.setID_NhaTro(rs.getInt("ID_NhaTro"));
+                    List<String> images = getImagesByPhongId(rs.getInt("ID_Phong"));
+                    r.setImages(images);
+                    rooms.add(r);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in PhongDAO.getRoomByFloorAndStatus: " + e.getMessage());
+            e.printStackTrace();
         }
         return rooms;
     }

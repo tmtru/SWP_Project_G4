@@ -34,6 +34,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
 
         <!-- Bootstrap JS and dependencies -->
+
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -163,8 +164,76 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     width: 100%;
                 }
             }
+            .stats-container {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 2rem;
+                padding: 2rem;
+            }
 
+            .chart-container {
+                width: 60%;
+                position: relative;
+            }
 
+            .legend-container {
+                background: #f8f9fa;
+                padding: 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+
+            .legend-item {
+                display: flex;
+                align-items: center;
+                margin-bottom: 1rem;
+                font-size: 1.1rem;
+            }
+
+            .color-box {
+                width: 20px;
+                height: 20px;
+                margin-right: 10px;
+                border-radius: 4px;
+            }
+
+            .count {
+                font-weight: bold;
+                margin-left: 8px;
+            }
+            .card {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                min-width: 0;
+                word-wrap: break-word;
+                background-color: #fff;
+                background-clip: border-box;
+                border: 1px solid #e3e6f0;
+                border-radius: 0.35rem;
+                transition: transform 0.2s ease-in-out;
+            }
+
+            .card:hover {
+                transform: translateY(-5px);
+            }
+
+            .text-xs {
+                font-size: 1rem;
+            }
+
+            .text-gray-300 {
+                color: #dddfeb!important;
+            }
+
+            .text-gray-800 {
+                color: #5a5c69!important;
+            }
+
+            .shadow {
+                box-shadow: 0 .15rem 1.75rem 0 rgba(58,59,69,.15)!important;
+            }
         </style>
     </head>
     <body>
@@ -274,20 +343,20 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         </a>
                     </li>
 
-                   <c:if test="${sessionScope.account.role == 'landlord'}">
+                    <c:if test="${sessionScope.account.role == 'landlord'}">
                         <li class="">
                             <a href="DanhSachCacHopDongByAdmin">
                                 <i class='bx bx-id-card icon' ></i>
-                            <span class="text nav-text">Hợp đồng</span>
+                                <span class="text nav-text">Hợp đồng</span>
                             </a>
                         </li>
                     </c:if>
-                   
-                         <c:if test="${sessionScope.account.role == 'manager'}">
+
+                    <c:if test="${sessionScope.account.role == 'manager'}">
                         <li class="">
                             <a href="DanhSachCacHopDongByManager">
                                 <i class='bx bx-id-card icon' ></i>
-                            <span class="text nav-text">Hợp đồng</span>
+                                <span class="text nav-text">Hợp đồng</span>
                             </a>
                         </li>
                     </c:if>
@@ -339,7 +408,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
 
             <section class="property-management">
                 <div class="header">
-                    <h2>Room status statistics</h2>
+                    <h2>Thống kê phòng</h2>
 
                 </div>
 
@@ -362,23 +431,109 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 </nav>
             </section>
 
+            <div class="container mt-4">
+                <div class="row">
+                    <!-- Total Rooms Card -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-primary shadow h-100 py-2" style="border-left: 4px solid #4e73df;">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            Tổng số phòng</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">${statisticRoom[0] + statisticRoom[1]}</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-building fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Empty Rooms Card -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-success shadow h-100 py-2" style="border-left: 4px solid #1cc88a;">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                            Phòng trống</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">${statisticRoom[0]}</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-door-open fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Occupied Rooms Card -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-info shadow h-100 py-2" style="border-left: 4px solid #36b9cc;">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                            Phòng đã thuê</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">${statisticRoom[1]}</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-users fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Occupancy Rate Card -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-warning shadow h-100 py-2" style="border-left: 4px solid #f6c23e;">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                            Tỷ lệ lấp đầy</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            <fmt:formatNumber 
+                                                value="${(statisticRoom[1] / (statisticRoom[0] + statisticRoom[1])) * 100}" 
+                                                maxFractionDigits="1"/>%
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-chart-pie fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <section class="ftco-section">
 
 
-                <div class="container">
-                    <div class="row mt-4">
-
+                </div>
+                <div class="stats-container">
+                    <div class="chart-container">
+                        <canvas id="myChart"></canvas>
                     </div>
-                    <div class="row" style="justify-content: center">
-                        <div class="col-10">
-                            <canvas id="myChart" style="width:100%"></canvas>
+                    <div class="legend-container">
+                        <h3 style="margin-bottom: 1rem;"></h3>
+                        <div class="legend-item">
+                            <div class="color-box" style="background: #bc6da6"></div>
+                            <span>Phòng trống:</span>
+                            <span class="count" id="empty-count"></span>
                         </div>
-
+                        <div class="legend-item">
+                            <div class="color-box" style="background: #55549b"></div>
+                            <span>Đang thuê:</span>
+                            <span class="count" id="occupied-count"></span>
+                        </div>
                     </div>
-
-
                 </div>
             </section>
+
 
         </section>
         <script>
@@ -415,16 +570,19 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         <script
             src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
         </script>
-        <script type="text/javascript">
+        <script>
             const xValues = ["Trống", "Đang thuê"];
-            var yValues = [];
+            const yValues = [];
+
             <c:forEach items="${statisticRoom}" var="r">
             yValues.push(`${r}`);
             </c:forEach>
-            const barColors = [
-                "#bc6da6",
-                "#55549b"
-            ];
+
+            const barColors = ["#bc6da6", "#55549b"];
+
+            // Update legend counts
+            document.getElementById('empty-count').textContent = yValues[0] + " phòng";
+            document.getElementById('occupied-count').textContent = yValues[1] + " phòng";
 
             new Chart("myChart", {
                 type: "pie",
@@ -438,10 +596,22 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 options: {
                     title: {
                         display: true,
-                        text: "Danh sách phòng còn trống và đang thuê"
+                        text: "Danh sách phòng còn trống và đang thuê",
+                        fontSize: 16,
+                        padding: 20
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true,
+                        duration: 2000,
+                        easing: 'easeInOutQuart'
+                    },
+                    legend: {
+                        display: false
                     }
                 }
             });
+
         </script>
     </body>
 </html>

@@ -15,7 +15,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.HopDong;
 import model.NhaTro;
 import model.ThietBi;
@@ -29,12 +32,14 @@ public class DanhSachThietBiCanSuaController extends HttpServlet {
 
     private static final int ACCOUNTS_PER_PAGE = 10;
     private final AccountDAO accountDAO = new AccountDAO();
+    private final ThietBiDAO thietBiDAO = new ThietBiDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PhongDAO roomDAO = new PhongDAO();
+
         String idHouseStr = request.getParameter("idHouse");
 
         // Get houses by role from session
@@ -43,7 +48,6 @@ public class DanhSachThietBiCanSuaController extends HttpServlet {
 
         // Handle house selection with automatic selection of first house
         int currentHouseId = -1;
-
         if (idHouseStr != null && !idHouseStr.isEmpty()) {
             try {
                 currentHouseId = Integer.parseInt(idHouseStr);
@@ -59,13 +63,37 @@ public class DanhSachThietBiCanSuaController extends HttpServlet {
 
         // If no house is selected and there are available houses, select the first one
         if (currentHouseId == -1 && housesByRole != null && !housesByRole.isEmpty()) {
-            currentHouseId = housesByRole.get(0).getID_NhaTro();
+            currentHouseId = ((NhaTro) housesByRole.get(0)).getID_NhaTro();
         }
 
         // Store the selected house ID in session
         request.getSession().setAttribute("currentHouse", currentHouseId);
 
-        ThietBiDAO hddao = new ThietBiDAO();
+        // Calculate dashboard statistics
+        try {
+            // Get total equipment count
+            int totalEquipment = thietBiDAO.getTotalEquipmentCount(currentHouseId);
+
+            // Get equipment counts by status
+            int goodEquipment = thietBiDAO.getEquipmentCountByStatus(currentHouseId, "T");
+            int normalEquipment = thietBiDAO.getEquipmentCountByStatus(currentHouseId, "BT");
+            int brokenEquipment = thietBiDAO.getEquipmentCountByStatus(currentHouseId, "CSC");
+
+            // Set attributes for the dashboard
+            request.setAttribute("totalEquipment", totalEquipment);            
+            request.setAttribute("goodEquipment", goodEquipment);
+            request.setAttribute("normalEquipment", normalEquipment);
+            request.setAttribute("brokenEquipment", brokenEquipment);
+        } catch (SQLException e) {
+            // Log the error and set default values
+            e.printStackTrace();
+            request.setAttribute("totalEquipment", 0);           
+            request.setAttribute("goodEquipment", 0);
+            request.setAttribute("normalEquipment", 0);
+            request.setAttribute("brokenEquipment", 0);
+        }
+
+        // Handle pagination
         int page = 1;
         String pageStr = request.getParameter("page");
         if (pageStr != null && !pageStr.isEmpty()) {
@@ -78,11 +106,10 @@ public class DanhSachThietBiCanSuaController extends HttpServlet {
         }
 
         int start = (page - 1) * ACCOUNTS_PER_PAGE;
-
-        List<ThietBi> thietBis = hddao.getThietBiCanSuaByNhaTro(currentHouseId, searchTerm, start, ACCOUNTS_PER_PAGE);
-        int total = hddao.getThietBiCanSuaByNhaTro(currentHouseId, searchTerm, null, ACCOUNTS_PER_PAGE).size();
-
+        List<ThietBi> thietBis = thietBiDAO.getThietBiCanSuaByNhaTro(currentHouseId, searchTerm, start, ACCOUNTS_PER_PAGE);
+        int total = thietBiDAO.getThietBiCanSuaByNhaTro(currentHouseId, searchTerm, null, ACCOUNTS_PER_PAGE).size();
         int totalPages = (int) Math.ceil((double) total / ACCOUNTS_PER_PAGE);
+
         request.setAttribute("thietBis", thietBis);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
@@ -94,6 +121,5 @@ public class DanhSachThietBiCanSuaController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
     }
 }
