@@ -8,6 +8,7 @@ import dal.ChuTroDAO;
 import dal.DichVuDAO;
 import dal.HopDongDAO;
 import dal.KhachThueDAO;
+import dal.KhachThuePhuDAO;
 import dal.NhaTroDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -20,6 +21,7 @@ import model.ChuTro;
 import model.DichVu;
 import model.HopDong;
 import model.KhachThue;
+import model.KhachThuePhu;
 import model.Phong;
 
 /**
@@ -85,6 +87,7 @@ public class ChiTietHopDongByAdminController extends HttpServlet {
         KhachThueDAO khachThueDAO = new KhachThueDAO();
         DichVuDAO dichVuDAO = new DichVuDAO();
         NhaTroDAO nhaTroDao = new NhaTroDAO();
+        
 
         String hopDongIdStr = request.getParameter("hopDongId");
         int hopDongId = Integer.parseInt(hopDongIdStr);
@@ -124,13 +127,13 @@ public class ChiTietHopDongByAdminController extends HttpServlet {
         KhachThueDAO khachThueDAO = new KhachThueDAO();
         DichVuDAO dichVuDAO = new DichVuDAO();
         NhaTroDAO nhaTroDao = new NhaTroDAO();
-
+        KhachThuePhuDAO khachThuePhuDao = new KhachThuePhuDAO();
         KhachThue khachThue = khachThueDAO.getKhachThueByHopDongId(hopDongId);
         List<DichVu> dichVuList = dichVuDAO.getDichVuByHopDongId(hopDongId);
         Phong roomDetails = nhaTroDao.getRoomDetailsByHopDongId(hopDongId);
         HopDong hopDong = hopDongDao.getHopDongById(hopDongId);
         ChuTro chuTro = chuTroDAO.getChuTroByHopDongId(hopDongId);
-
+        List<KhachThuePhu> khachThuePhuList = khachThuePhuDao.getKhachThuePhuByHopDongId(hopDongId);
         request.setAttribute("hopDongId", hopDongId);
         request.setAttribute("chuTro", chuTro);
         request.setAttribute("khachThue", khachThue);
@@ -139,6 +142,7 @@ public class ChiTietHopDongByAdminController extends HttpServlet {
         request.setAttribute("diaChiPhongTro", roomDetails.getDiaChiPhongTro());
         request.setAttribute("trangThai", roomDetails.getTrang_thai());
         request.setAttribute("hopDong", hopDong);
+        request.setAttribute("khachThuePhuList", khachThuePhuList);
     }
 
     /**
