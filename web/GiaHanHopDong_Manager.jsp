@@ -7,6 +7,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="model.DichVu" %>
 <%@ page import="java.util.List" %>
+<%@ page import="model.KhachThuePhu" %>
+<%@ page import="model.HopDong" %>
 
 <!DOCTYPE html>
 <html>
@@ -26,25 +28,56 @@
         <script>
             // Khởi tạo nội dung hợp đồng
             let initialContent = `
-                <p style="text-align: center; font-size: 33px;"><strong>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</strong></p>
-                <p style="text-align: center; font-size: 23px;"><strong>Độc lập - Tự do - Hạnh phúc</strong></p>
-                <p style="text-align: center; font-size: 33px;"><strong>HỢP ĐỒNG THUÊ PHÒNG TRỌ</strong></p>
-                <p style="font-size: 25px;"><strong>Chúng tôi gồm:</strong></p>
-                <p style="font-size: 25px;"><strong>1. Đại diện bên cho thuê phòng trọ (Bên A):</strong></p>
-                <p style="font-size: 23px;">Ông/bà: ${chuTro.name}<br>
-                Sinh ngày: ${chuTro.dob}<br>
-                CMND số: ${chuTro.cccd}<br>
-                Số điện thoại: ${chuTro.phone}</p>
-                <p style="font-size: 25px;"><strong>2. Bên thuê phòng trọ (Bên B):</strong></p>
-                <p style="font-size: 23px;">Ông/bà: ${khachThue.name}<br>
-                Sinh ngày: ${khachThue.dob}<br>
-                Nơi đăng ký HK thường trú: ${khachThue.hk_thuong_tru}<br>
-                CMND số: ${khachThue.cccd} cấp ngày ${khachThue.ngay_cap} tại: ${khachThue.noi_cap}<br>
-                Số điện thoại: ${khachThue.phone}</p>
-                <p style="font-size: 25px;"><strong>Bên A đồng ý cho bên B thuê 01 phòng ở tại địa chỉ: ${diaChiPhongTro}</strong></p>
+        <p style="text-align: center; font-size: 33px;"><strong>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</strong></p>
+        <p style="text-align: center; font-size: 23px;"><strong>Độc lập - Tự do - Hạnh phúc</strong></p>
+        <p style="text-align: center; font-size: 33px;"><strong>HỢP ĐỒNG THUÊ PHÒNG TRỌ</strong></p>
+        <p style="font-size: 25px;"><strong>Chúng tôi gồm:</strong></p>
+        <p style="font-size: 25px;"><strong>1. Đại diện bên cho thuê phòng trọ (Bên A):</strong></p>
+        <p style="font-size: 23px;">Ông/bà: ${chuTro.name}<br>
+        Sinh ngày: ${chuTro.dob}<br>
+        CMND số: ${chuTro.cccd}<br>
+        Số điện thoại: ${chuTro.phone}</p>
+        <p style="font-size: 25px;"><strong>2. Bên thuê phòng trọ (Bên B):</strong></p>
+        <p style="font-size: 23px;">Người đại diện thuê phòng: ${khachThue.name}<br>
+        Sinh ngày: ${khachThue.dob}<br>
+        Nơi đăng ký HK thường trú: ${khachThue.hk_thuong_tru}<br>
+        CMND số: ${khachThue.cccd} cấp ngày ${khachThue.ngay_cap} tại: ${khachThue.noi_cap}<br>
+        Số điện thoại: ${khachThue.phone}</p>
+    
+        <p style="font-size: 25px;"><strong>Thành viên khác:</strong></p>
+    `;
+            // Lấy danh sách thành viên khác từ request attribute khachThuePhuList
+            <% 
+    List<KhachThuePhu> khachThuePhuList = (List<KhachThuePhu>) request.getAttribute("khachThuePhuList");
+            %>
+            <% if (khachThuePhuList != null && !khachThuePhuList.isEmpty()) { %>
+            // Thêm thông tin từng thành viên trong khachThuePhuList vào initialContent
+            <% 
+        int index = 1; // Khởi tạo biến đếm bắt đầu từ 1
+        for (KhachThuePhu khachThuePhu : khachThuePhuList) { 
+            %>
+            initialContent += `<p style="font-size: 23px;">
+        Thành viên <%= index %>: <br>
+        Tên thành viên: <%= khachThuePhu.getTenKhach() %><br>
+        Sinh ngày: <%= khachThuePhu.getNgaySinh() %><br>
+        Nơi đăng ký HK thường trú: <%= khachThuePhu.getHkThuongTru() %><br>
+        CMND số: <%= khachThuePhu.getCccd() %><br>
+        Số điện thoại: <%= khachThuePhu.getSdt() %>
+    </p>`;
+            <%
+        index++; // Tăng biến đếm lên 1 sau mỗi lần lặp
+        } 
+            %>
+            <% } else { %>
+            initialContent += `<p style="font-size: 23px;">Không có thành viên khác.</p>`;
+            <% } %>
+
+
+            initialContent += `
+        <p style="font-size: 25px;"><strong>Bên A đồng ý cho bên B thuê 01 phòng ở tại địa chỉ: ${diaChiPhongTro}</strong></p>
         <p style="font-size: 23px;">Giá thuê: ${giaPhong} đ/tháng<br>
-                Hình thức thanh toán: Chuyển khoản<br>
-            `;
+        Hình thức thanh toán: Chuyển khoản<br>
+    `;
             <% 
                 // Lấy dichVuList từ request
                 List<DichVu> dichVuList = (List<DichVu>) request.getAttribute("dichVuList");
@@ -86,7 +119,7 @@
                     <li>Bên nào vi phạm điều khoản chung thì phải chịu trách nhiệm trước pháp luật.</li>
                     <li>Hợp đồng được lập thành 02 bản có giá trị pháp lý như nhau, mỗi bên giữ một bản.</li>
                 </ul>
-    <p style="font-size: 25px;"><strong>CHỮ KÝ CỦA CÁC BÊN</strong></p>
+                <p style="font-size: 25px;"><strong>CHỮ KÝ CỦA CÁC BÊN</strong></p>
     <div style="display: flex; justify-content: space-between; width: 100%;">
     <div style="text-align: center; margin-left: 40px;">
         <p style="font-size: 23px;">Bên A (Chủ nhà):</p>
@@ -112,7 +145,7 @@
                     toolbar: 'undo redo | formatselect | bold italic backcolor | ' +
                     'alignleft aligncenter alignright alignjustify | ' +
                     'bullist numlist outdent indent | removeformat | help',
-                    readonly: true,
+                    readonly: true, // Thiết lập chế độ chỉ đọc
                     setup: function (editor) {
                     editor.on('init', function () {
                     editor.setContent(initialContent); // Đặt nội dung ban đầu khi khởi tạo
@@ -146,8 +179,6 @@
             // Sử dụng html2pdf để xuất PDF
             html2pdf().from(tempElement).set(options).save();
             }
-
-
 
             document.addEventListener('DOMContentLoaded', function() {
             initializeEditor(); // Khởi tạo editor khi trang load
