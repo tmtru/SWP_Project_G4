@@ -43,61 +43,19 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
 
 
         <style>
-            .dropdown {
-                position: relative;
-            }
-
             .dropdown-menu {
                 display: none;
-                position: absolute;
-                left: 0;     /* Căn thẳng với bên trái menu cha */
-                top: 100%;   /* Hiển thị bên dưới menu cha */
-                background-color: white;
-                border: 1px solid #ccc;
-                border-radius: 6px;
-                padding: 8px 0;
-                min-width: 200px;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-                z-index: 1000;
-            }
-
-            .dropdown-menu li {
-                padding: 0;
-                margin: 0;
                 list-style: none;
+                padding: 0px 27px;
+                margin: 0px ;
             }
 
-            .dropdown-menu li a {
-                padding: 8px 16px;
-                display: block;
-                color: #333;
-                text-decoration: none;
-                font-size: 14px;
-                white-space: nowrap;
-                transition: background-color 0.2s;
-            }
-
-            .dropdown-menu li a:hover {
-                background-color: #f5f5f5;
-            }
-
-            .dropdown:hover .dropdown-menu {
+            /* Khi li có class active, hiển thị dropdown */
+            .dropdown.active .dropdown-menu {
                 display: block;
             }
 
-            /* Điều chỉnh cho menu item cha */
-            .dropdown > a {
-                position: relative;
-            }
 
-            .dropdown > a::after {
-                content: '▼';
-                position: absolute;
-                right: 16px;
-                top: 50%;
-                transform: translateY(-50%);
-                font-size: 12px;
-            }
 
 
             .img-preview {
@@ -207,6 +165,49 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 }
             }
 
+            .color-box {
+                width: 20px;
+                height: 20px;
+                margin-right: 10px;
+                border-radius: 4px;
+            }
+
+            .count {
+                font-weight: bold;
+                margin-left: 8px;
+            }
+            .card {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                min-width: 0;
+                word-wrap: break-word;
+                background-color: #fff;
+                background-clip: border-box;
+                border: 1px solid #e3e6f0;
+                border-radius: 0.35rem;
+                transition: transform 0.2s ease-in-out;
+            }
+
+            .card:hover {
+                transform: translateY(-5px);
+            }
+
+            .text-xs {
+                font-size: 1rem;
+            }
+
+            .text-gray-300 {
+                color: #dddfeb!important;
+            }
+
+            .text-gray-800 {
+                color: #5a5c69!important;
+            }
+
+            .shadow {
+                box-shadow: 0 .15rem 1.75rem 0 rgba(58,59,69,.15)!important;
+            }
 
         </style>
     </head>
@@ -249,6 +250,20 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         </a>
                     </li>
 
+                    <li class="dropdown">
+                        <a href="javascript:void(0);" class="dropdown-toggle" onclick="toggleDropdown()">
+                            <i class='bx bx-cog icon'></i>
+                            <span class="text nav-text">Báo cáo</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="statistic-room"><span class="text nav-text" style="margin-left: 30px">Phòng trống</span></a></li>
+                            <li><a href="statistic-revenue"><span class="text nav-text" style="margin-left: 30px">Doanh thu</span></a></li>
+                            <li><a href="khach-no"><span class="text nav-text" style="margin-left: 30px">Khách nợ</span></a></li>
+                            <li><a href="khach-coc"><span class="text nav-text" style="margin-left: 30px">Khách cọc</span></a></li>
+                            <li><a href="khach-sap-het-han"><span class="text nav-text">Sắp hết hạn hợp đồng</span></a></li>
+                            <li><a href="thiet-bi"><span class="text nav-text" style="margin-left: 33px">Thiết bị</span></a></li>
+                        </ul>
+                    </li>
 
 
                     <li class="">
@@ -283,16 +298,16 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         <li class="">
                             <a href="DanhSachCacHopDongByAdmin">
                                 <i class='bx bx-id-card icon' ></i>
-                            <span class="text nav-text">Hợp đồng</span>
+                                <span class="text nav-text">Hợp đồng</span>
                             </a>
                         </li>
                     </c:if>
-                   
-                         <c:if test="${sessionScope.account.role == 'manager'}">
+
+                    <c:if test="${sessionScope.account.role == 'manager'}">
                         <li class="">
                             <a href="DanhSachCacHopDongByManager">
                                 <i class='bx bx-id-card icon' ></i>
-                            <span class="text nav-text">Hợp đồng</span>
+                                <span class="text nav-text">Hợp đồng</span>
                             </a>
                         </li>
                     </c:if>
@@ -310,44 +325,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                             </a>
                         </li>
                     </c:if>
-                    <li class="dropdown">
-                        <a href="statistic-room" class="dropdown-toggle active">
-                            <i class='bx bx-cog icon'></i>
-                            <span class="text nav-text">Thống kê</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="statistic-room">
-                                    <span class="text nav-text">Phòng trống</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="statistic-revenue">
-                                    <span class="text nav-text">Doanh thu</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="khach-no">
-                                    <span class="text nav-text">Khách nợ</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="statistic-revenue">
-                                    <span class="text nav-text">Khách đã cọc</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="khach-sap-het-han">
-                                    <span class="text nav-text">Khách sắp hết hạn hợp đồng</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="thiet-bi">
-                                    <span class="text nav-text">Thiết bị cần sửa</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+
 
                     </ul>
                 </div>
@@ -420,6 +398,84 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     </form>
                 </div>
             </section>
+            <div class="container mt-4">
+                <div class="row">
+                    <!-- Tổng số thiết bị -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-primary shadow h-100 py-2" style="border-left: 4px solid #4e73df;">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            Tổng số thiết bị</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">${totalEquipment}</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-tools fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Thiết bị trạng thái tốt -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-success shadow h-100 py-2" style="border-left: 4px solid #1cc88a;">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                            Thiết bị hoạt động tốt</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">${goodEquipment}</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tỷ lệ thiết bị bình thường -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-warning shadow h-100 py-2" style="border-left: 4px solid #f6c23e;">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                            Thiết bị đã sửa</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">${normalEquipment}</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-wrench fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Thiết bị cần sửa chữa -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-danger shadow h-100 py-2" style="border-left: 4px solid #e74a3b;">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                            Thiết bị cần sửa chữa</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">${brokenEquipment}</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-exclamation-triangle fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
 
             <section class="ftco-section">
 
@@ -528,5 +584,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
         </script>
 
+        <script>
+            function toggleDropdown() {
+                var dropdown = document.querySelector('.dropdown');
+                dropdown.classList.toggle('active'); // Thêm/xóa class 'active' khi nhấn
+            }
+        </script>
     </body>
 </html>

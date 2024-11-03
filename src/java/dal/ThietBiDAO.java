@@ -380,4 +380,35 @@ public class ThietBiDAO extends DBContext {
         }
         return 0;
     }
+    public int getTotalEquipmentCount(int nhaTroId) throws SQLException {
+        String sql = "SELECT COUNT(*) as count FROM thiet_bi_phong " +
+                    "WHERE ID_Phong IN (SELECT ID_Phong FROM phong_tro WHERE ID_NhaTro = ?)";
+        
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, nhaTroId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("count");
+                }
+            }
+        }
+        return 0;
+    }
+
+    public int getEquipmentCountByStatus(int nhaTroId, String status) throws SQLException {
+        String sql = "SELECT COUNT(*) as count FROM thiet_bi_phong " +
+                    "WHERE ID_Phong IN (SELECT ID_Phong FROM phong_tro WHERE ID_NhaTro = ?) " +
+                    "AND Trang_thai = ?";
+        
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, nhaTroId);
+            stmt.setString(2, status);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("count");
+                }
+            }
+        }
+        return 0;
+    }
 }
