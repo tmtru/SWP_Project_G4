@@ -132,6 +132,7 @@ public class HopDongThueTroController extends HttpServlet {
         DichVuDAO dichVuDAO = new DichVuDAO();
         HopDongDAO hopDongDAO = new HopDongDAO();
         NhaTroDAO nhaTroDAO = new NhaTroDAO();
+        KhachThuePhuDAO khachThuePhuDao = new KhachThuePhuDAO();
 
         try {
            
@@ -158,14 +159,14 @@ public class HopDongThueTroController extends HttpServlet {
                     KhachThue khachThue = khachThueDAO.getKhachThueByHopDongId(hopDongId);
                     List<DichVu> dichVuList = dichVuDAO.getDichVuByHopDongId(hopDongId);
                     Phong roomDetails = nhaTroDAO.getRoomDetailsByHopDongId(hopDongId);
-
+                    List<KhachThuePhu> khachThuePhuList = khachThuePhuDao.getKhachThuePhuByHopDongId(hopDongId);
                     
                     request.setAttribute("chuTro", chuTro);
                     request.setAttribute("khachThue", khachThue);
                     request.setAttribute("dichVuList", dichVuList);
                     request.setAttribute("giaPhong", roomDetails.getGia());
                     request.setAttribute("diaChiPhongTro", roomDetails.getDiaChiPhongTro());
-
+                    request.setAttribute("khachThuePhuList", khachThuePhuList);
                     
                     request.getRequestDispatcher("/HopDongThuePhong.jsp").forward(request, response);
                     return; // Dừng xử lý nếu ngày bắt đầu không hợp lệ
@@ -183,6 +184,7 @@ public class HopDongThueTroController extends HttpServlet {
             List<DichVu> dichVuList = dichVuDAO.getDichVuByHopDongId(hopDongId);
             Phong roomDetails = nhaTroDao.getRoomDetailsByHopDongId(hopDongId);
             HopDong hopDong = hopDongDAO.getHopDongById(hopDongId);
+            List<KhachThuePhu> khachThuePhuList = khachThuePhuDao.getKhachThuePhuByHopDongId(hopDongId);
             request.setAttribute("hopDongId", hopDongId);
             request.setAttribute("chuTro", chuTro);
             request.setAttribute("khachThue", khachThue);
@@ -191,6 +193,7 @@ public class HopDongThueTroController extends HttpServlet {
             request.setAttribute("diaChiPhongTro", roomDetails.getDiaChiPhongTro());
             request.setAttribute("trangThai", roomDetails.getTrang_thai());
             request.setAttribute("hopDong", hopDong);
+            request.setAttribute("khachThuePhuList", khachThuePhuList);
 
                
                 request.getRequestDispatcher("/HopDongThuePhongDaDangKy.jsp").forward(request, response);
