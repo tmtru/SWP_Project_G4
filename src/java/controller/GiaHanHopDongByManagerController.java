@@ -9,6 +9,7 @@ import dal.ChuTroDAO;
 import dal.DichVuDAO;
 import dal.HopDongDAO;
 import dal.KhachThueDAO;
+import dal.KhachThuePhuDAO;
 import dal.NhaTroDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,6 +22,7 @@ import model.ChuTro;
 import model.DichVu;
 import model.HopDong;
 import model.KhachThue;
+import model.KhachThuePhu;
 import model.Phong;
 
 /**
@@ -92,13 +94,13 @@ public class GiaHanHopDongByManagerController extends HttpServlet {
     KhachThueDAO khachThueDAO = new KhachThueDAO();
     DichVuDAO dichVuDAO = new DichVuDAO();
     NhaTroDAO nhaTroDao = new NhaTroDAO();
-    
+    KhachThuePhuDAO khachThuePhuDao = new KhachThuePhuDAO();
     ChuTro chuTro = chuTroDAO.getChuTroByHopDongId(hopDongId);
     KhachThue khachThue = khachThueDAO.getKhachThueByHopDongId(hopDongId);
     List<DichVu> dichVuList = dichVuDAO.getDichVuByHopDongId(hopDongId);
     Phong roomDetails = nhaTroDao.getRoomDetailsByHopDongId(hopDongId);
     HopDong hopDong = hopDongDAO.getHopDongById(hopDongId);
-    
+    List<KhachThuePhu> khachThuePhuList = khachThuePhuDao.getKhachThuePhuByHopDongId(hopDongId);
     request.setAttribute("hopDongId", hopDongId);
     request.setAttribute("chuTro", chuTro);
     request.setAttribute("khachThue", khachThue);
@@ -107,6 +109,7 @@ public class GiaHanHopDongByManagerController extends HttpServlet {
     request.setAttribute("diaChiPhongTro", roomDetails.getDiaChiPhongTro());
     request.setAttribute("trangThai", roomDetails.getTrang_thai());
     request.setAttribute("hopDong", hopDong);
+    request.setAttribute("khachThuePhuList", khachThuePhuList);
 
     if (success) {
         request.setAttribute("message", "Gia hạn hợp đồng thành công");
