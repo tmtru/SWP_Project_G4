@@ -19,14 +19,51 @@ public class HopDong {
     private String Ly_do;
     private String tenPhongTro;
     private Phong phongTro;
-
-    
+    private String noi_dung;
+    private String danh_gia;
+    private String khach_thue;
+    private String ten_phong;
     private KhachThue khachThue;
-
 
     public Phong getPhongTro() {
         return phongTro;
     }
+
+    public String getTen_phong() {
+        return ten_phong;
+    }
+
+    public void setTen_phong(String ten_phong) {
+        this.ten_phong = ten_phong;
+    }
+    
+
+    public String getNoi_dung() {
+        return noi_dung;
+    }
+
+    public String getKhach_thue() {
+        return khach_thue;
+    }
+
+    public void setKhach_thue(String khach_thue) {
+        this.khach_thue = khach_thue;
+    }
+    
+
+    public void setNoi_dung(String noi_dung) {
+        this.noi_dung = noi_dung;
+    }
+
+    public String getDanh_gia() {
+        return danh_gia;
+    }
+
+    public void setDanh_gia(String danh_gia) {
+        this.danh_gia = danh_gia;
+    }
+
+  
 
     public void setPhongTro(Phong phongTro) {
         this.phongTro = phongTro;
@@ -173,7 +210,6 @@ public class HopDong {
         this.Ly_do = Ly_do;
     }
 
-
     public KhachThue getKhachThue() {
         return khachThue;
     }
@@ -181,7 +217,6 @@ public class HopDong {
     public void setKhachThue(KhachThue khachThue) {
         this.khachThue = khachThue;
     }
-
 
     @Override
     public String toString() {

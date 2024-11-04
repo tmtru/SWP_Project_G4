@@ -297,13 +297,17 @@
                                         </c:if>
 
                                     </div>
-                                    <div class="details-button">
-                                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/dca00f6f57a639b42ff911d49af82395b3e490bbba3e80779f4f7169c56fc15a?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
-                                             alt="Details icon" class="details-icon">
-                                        <span class="details-text">Chi tiết</span>
-                                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/38af489b0b824b4e9a4ca4f97538a5a535b0617bf3be7a86b92c79ae52dfe2c5?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
-                                             alt="Underline" class="details-underline">
-                                    </div>
+                                      <div class="details-button">
+    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/dca00f6f57a639b42ff911d49af82395b3e490bbba3e80779f4f7169c56fc15a?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
+         alt="Details icon" class="details-icon">
+    <a href="roomdetails?idPhong=${rs.ID_Phong}">
+
+        <span class="details-text">Chi tiết</span>
+    </a>
+
+    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/38af489b0b824b4e9a4ca4f97538a5a535b0617bf3be7a86b92c79ae52dfe2c5?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
+         alt="Underline" class="details-underline">
+</div>
                                 </div>
                                 <hr class="divider">
                                 <div class="facilities">
