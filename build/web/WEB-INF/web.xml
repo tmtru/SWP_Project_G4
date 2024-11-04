@@ -181,6 +181,10 @@
         <servlet-name>DanhSachPhongTroCalenderController</servlet-name>
         <servlet-class>controller.DanhSachPhongTroCalenderController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>FeedBackController</servlet-name>
+        <servlet-class>controller.FeedBackController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>homeRooms</servlet-name>
         <url-pattern>/homer</url-pattern>
@@ -331,7 +335,6 @@
         <servlet-name>profileServlet</servlet-name>
         <url-pattern>/profileServlet</url-pattern>
     </servlet-mapping>
-
     <servlet-mapping>
         <servlet-name>actionHoaDon</servlet-name>
         <url-pattern>/actionhoadon</url-pattern>
@@ -431,5 +434,9 @@
     <servlet-mapping>
         <servlet-name>DanhSachPhongTroCalenderController</servlet-name>
         <url-pattern>/DanhSachPhongTroCalender</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FeedBackController</servlet-name>
+        <url-pattern>/feedback</url-pattern>
     </servlet-mapping>
 </web-app>

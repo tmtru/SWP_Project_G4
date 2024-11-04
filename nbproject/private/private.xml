@@ -3,52 +3,32 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/addHopDong.jsp</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/src/java/dal/ActionHistoryDAO.java</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/DanhSachHopDong_Manager.jsp</file>
             <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/room.jsp</file>
             <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/statistic-room-dashboard.jsp</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/src/java/controller/DangKyDichVuPhongTroController.java</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/equipment.jsp</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/quanly-account-nha-tro.jsp</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/ThemKhachThuePhong.jsp</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/danh-sach-khach-coc.jsp</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/src/java/dal/HoaDonDAO.java</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/danh-sach-khach-sap-het-han-hd.jsp</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/DichVuDashBoard.jsp</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/src/java/dal/DBContext.java</file>
+            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/src/java/controller/GiaHanHopDongByManagerController.java</file>
+            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/src/java/controller/updateThietBiInRoom.java</file>
+            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/src/java/dal/ThietBiDAO.java</file>
+            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/src/java/dal/ThietBiPhongDAO.java</file>
             <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/ChiTietHopDongDaDangKy_Manager.jsp</file>
+            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/src/java/controller/DanhSachThietBiCanSuaController.java</file>
             <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/GiaHanHopDong_Manager.jsp</file>
             <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/statistic-revenue-dashboard.jsp</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/detailHouseHome.jsp</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/hd.jsp</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/src/java/dal/HopDongDAO.java</file>
             <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/src/java/controller/RoomServlet.java</file>
             <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/src/java/controller/GuiHopDongChoChuTroController.java</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/danh-sach-thiet-bi-can-sua.jsp</file>
             <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/Calendarbymanager.jsp</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/danhSachHopDong_Admin.jsp</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/HopDongThuePhong.jsp</file>
+            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/danh-sach-thiet-bi-can-sua.jsp</file>
+            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/src/java/controller/ChiTietHopDongByManagerController.java</file>
+            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/DichVuThuePhong.jsp</file>
             <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/src/java/controller/ChiTietHopDongByAdminController.java</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/src/java/dal/NhaTroDAO.java</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/src/java/controller/DanhSachPhongTroCalenderController.java</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/src/java/controller/HopDongThueTroController.java</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/src/java/controller/CalendarByManagerController.java</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/src/java/dal/KhachThueDAO.java</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/NhaTro.jsp</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/nbproject/build-impl.xml</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/sidebarHoaDonManagement.jsp</file>
+            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/src/java/controller/DashboardRevenueController.java</file>
             <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/src/java/controller/AccountControllerServlet.java</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/manager-action.jsp</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/src/java/dal/AnhNhaTroDAO.java</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/META-INF/context.xml</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/WEB-INF/web.xml</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/detailRoom.jsp</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/detailNhaTro.jsp</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/src/java/model/HopDong.java</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/sidebarNhaTroManagement.jsp</file>
+            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/src/java/controller/DanhSachCacHopDongByManagerController.java</file>
+            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/src/java/controller/EditRoomServlet.java</file>
+            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/ChiTietHopDongDaDangKy_Admin.jsp</file>
+            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/adminUserManagement/account-management.jsp</file>
+            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/src/java/controller/AddRoomServlet.java</file>
             <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/src/java/dal/AccountDAO.java</file>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/danh-sach-khach-no.jsp</file>
+            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/src/java/dal/PhongDAO.java</file>
         </group>
     </open-files>
 </project-private>
