@@ -12,9 +12,8 @@ import java.util.List;
  */
 public class Phong {
 
-    private int ID_Phong;
+   private int ID_Phong;
     private int ID_LoaiPhong;
-
     private String TenPhongTro;
     private int ID_NhaTro;
     private String TenLoaiPhong;
@@ -28,10 +27,39 @@ public class Phong {
     private List<String> images;
     private String diaChiPhongTro;
 
+    // Updated attributes to hold multiple device details
+    private List<String> motathietbi;
+    private List<Integer> soluongthietbi;
+    private List<String> trangthaithietbi;
+
     public Phong(String Trang_thai, int Gia, String diaChiPhongTro) {
         this.Trang_thai = Trang_thai;
         this.Gia = Gia;
         this.diaChiPhongTro = diaChiPhongTro;
+    }
+
+    public List<String> getMotathietbi() {
+        return motathietbi;
+    }
+
+    public void setMotathietbi(List<String> motathietbi) {
+        this.motathietbi = motathietbi;
+    }
+
+    public List<Integer> getSoluongthietbi() {
+        return soluongthietbi;
+    }
+
+    public void setSoluongthietbi(List<Integer> soluongthietbi) {
+        this.soluongthietbi = soluongthietbi;
+    }
+
+    public List<String> getTrangthaithietbi() {
+        return trangthaithietbi;
+    }
+
+    public void setTrangthaithietbi(List<String> trangthaithietbi) {
+        this.trangthaithietbi = trangthaithietbi;
     }
 
     
