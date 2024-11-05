@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Phong {
 
-    private int ID_Phong;
+   private int ID_Phong;
     private int ID_LoaiPhong;
     private String TenPhongTro;
     private int ID_NhaTro;
@@ -18,7 +18,8 @@ public class Phong {
     private String Mo_ta;
     private List<String> images;
     private String diaChiPhongTro;
-    
+
+    // Updated attributes to hold multiple device details
     private List<String> motathietbi;
     private List<Integer> soluongthietbi;
     private List<String> trangthaithietbi;
@@ -32,6 +33,7 @@ public class Phong {
     public List<String> getMotathietbi() {
         return motathietbi;
     }
+
 
     public List<Integer> getSoluongthietbi() {
         return soluongthietbi;
@@ -52,8 +54,6 @@ public class Phong {
     public void setTrangthaithietbi(List<String> trangthaithietbi) {
         this.trangthaithietbi = trangthaithietbi;
     }
-
-    
 
     public String getDiaChiPhongTro() {
         return diaChiPhongTro;
