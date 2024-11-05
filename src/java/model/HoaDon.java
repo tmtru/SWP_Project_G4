@@ -135,10 +135,11 @@ public class HoaDon {
 
     public void setTienDaThanhToan(int tienDaThanhToan) {
         this.tienDaThanhToan = tienDaThanhToan;
-    }
-    
+    } 
 
-    
-    
+    @Override
+    public String toString() {
+        return "HoaDon{" + "ID_HoaDon=" + ID_HoaDon + ", ID_HopDong=" + ID_HopDong + ", Ngay=" + Ngay + ", NgayThanhToan=" + NgayThanhToan + ", Trang_thai=" + Trang_thai + ", Tong_gia_tien=" + Tong_gia_tien + ", NguoiTao=" + NguoiTao + ", DichVus=" + DichVus + ", isActive=" + isActive + ", MoTa=" + MoTa + ", khachThue=" + khachThue + ", tienDaThanhToan=" + tienDaThanhToan + '}';
+    }
     
 }

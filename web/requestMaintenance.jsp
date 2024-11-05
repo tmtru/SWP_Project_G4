@@ -58,7 +58,7 @@
 
         <div class="card">
             <div class="card-body">
-                <form action="saveMaintainanceRequest" method="post">
+                <form action="saveMaintainanceRequestServlet" method="post">
                     <input type="hidden" name="idThietBiPhong" value="<%= idThietBiPhongStr %>">
                     <input type="hidden" name="idPhong" value="<%= idPhongStr %>">
                     <div class="mb-3">

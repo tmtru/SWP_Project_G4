@@ -189,6 +189,10 @@
         <servlet-name>adminMaintainanceServlet</servlet-name>
         <servlet-class>controller.adminMaintainanceServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>viewUserInvoicesServlet</servlet-name>
+        <servlet-class>controller.viewUserInvoicesServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>homeRooms</servlet-name>
         <url-pattern>/homer</url-pattern>
@@ -447,6 +451,8 @@
         <servlet-name>adminMaintainanceServlet</servlet-name>
         <url-pattern>/adminMaintainanceServlet</url-pattern>
     </servlet-mapping>
-    
-    
+    <servlet-mapping>
+        <servlet-name>viewUserInvoicesServlet</servlet-name>
+        <url-pattern>/viewUserInvoicesServlet</url-pattern>
+    </servlet-mapping>
 </web-app>

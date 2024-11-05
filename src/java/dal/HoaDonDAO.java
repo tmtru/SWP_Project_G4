@@ -686,5 +686,46 @@ public class HoaDonDAO extends DBContext {
         return sum;
     }
 
+    public List<HoaDon> getHoaDonByKhachThueId(int idKhachThue) {
+        List<HoaDon> hoaDons = new ArrayList<>();
+        String query = "SELECT hd.ID_HoaDon, hd.ID_HopDong, hd.Ngay, hd.Trang_thai, "
+                + "hd.Tong_gia_tien, hd.NgayThanhToan, hd.NguoiTao, hd.MoTa "
+                + "FROM hoa_don hd "
+                + "JOIN hop_dong h ON hd.ID_HopDong = h.ID_HopDong "
+                + "WHERE h.ID_KhachThue = ?";
 
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+            pstmt.setInt(1, idKhachThue);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                HoaDon hoaDon = new HoaDon();
+                hoaDon.setID_HoaDon(rs.getInt("ID_HoaDon"));
+                hoaDon.setID_HopDong(rs.getInt("ID_HopDong"));
+                hoaDon.setNgay(rs.getDate("Ngay"));
+                hoaDon.setTrang_thai(rs.getByte("Trang_thai"));
+                hoaDon.setTong_gia_tien(rs.getInt("Tong_gia_tien"));
+                hoaDon.setNgayThanhToan(rs.getDate("NgayThanhToan"));
+                hoaDon.setNguoiTao(rs.getString("NguoiTao"));
+                hoaDon.setMoTa(rs.getString("MoTa"));
+
+                hoaDons.add(hoaDon);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace(); // Xử lý ngoại lệ theo yêu cầu
+        }
+        return hoaDons;
+    }
+    
+    public static void main(String[] arg){
+        HoaDonDAO hdd = new HoaDonDAO();
+        
+        List<HoaDon> hoaDons = hdd.getHoaDonByKhachThueId(1);
+        
+        for(HoaDon hd : hoaDons){
+            System.out.println(hd);
+        }
+    }
 }
