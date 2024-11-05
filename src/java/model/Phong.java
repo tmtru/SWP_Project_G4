@@ -1,20 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
 import java.util.List;
 
-/**
- *
- * @author Admin
- */
 public class Phong {
 
     private int ID_Phong;
     private int ID_LoaiPhong;
-
     private String TenPhongTro;
     private int ID_NhaTro;
     private String TenLoaiPhong;
@@ -27,11 +18,39 @@ public class Phong {
     private String Mo_ta;
     private List<String> images;
     private String diaChiPhongTro;
+    
+    private List<String> motathietbi;
+    private List<Integer> soluongthietbi;
+    private List<String> trangthaithietbi;
 
     public Phong(String Trang_thai, int Gia, String diaChiPhongTro) {
         this.Trang_thai = Trang_thai;
         this.Gia = Gia;
         this.diaChiPhongTro = diaChiPhongTro;
+    }
+
+    public List<String> getMotathietbi() {
+        return motathietbi;
+    }
+
+    public List<Integer> getSoluongthietbi() {
+        return soluongthietbi;
+    }
+
+    public List<String> getTrangthaithietbi() {
+        return trangthaithietbi;
+    }
+
+    public void setMotathietbi(List<String> motathietbi) {
+        this.motathietbi = motathietbi;
+    }
+
+    public void setSoluongthietbi(List<Integer> soluongthietbi) {
+        this.soluongthietbi = soluongthietbi;
+    }
+
+    public void setTrangthaithietbi(List<String> trangthaithietbi) {
+        this.trangthaithietbi = trangthaithietbi;
     }
 
     
@@ -188,9 +207,14 @@ public class Phong {
         this.images = images;
     }
 
+//    @Override
+//    public String toString() {
+//        return "Room{" + "ID_Phong=" + ID_Phong + ", ID_LoaiPhong=" + ID_LoaiPhong + ", TenPhongTro=" + TenPhongTro + ", ID_NhaTro=" + ID_NhaTro + ", TenLoaiPhong=" + TenLoaiPhong + ", TenNhaTro=" + TenNhaTro + ", Tang=" + Tang + ", Trang_thai=" + Trang_thai + ", Dien_tich=" + Dien_tich + ", URL_AnhPhongTro=" + URL_AnhPhongTro + ", Gia=" + Gia + ", Mo_ta=" + Mo_ta + '}';
+//    }
+
     @Override
     public String toString() {
-        return "Room{" + "ID_Phong=" + ID_Phong + ", ID_LoaiPhong=" + ID_LoaiPhong + ", TenPhongTro=" + TenPhongTro + ", ID_NhaTro=" + ID_NhaTro + ", TenLoaiPhong=" + TenLoaiPhong + ", TenNhaTro=" + TenNhaTro + ", Tang=" + Tang + ", Trang_thai=" + Trang_thai + ", Dien_tich=" + Dien_tich + ", URL_AnhPhongTro=" + URL_AnhPhongTro + ", Gia=" + Gia + ", Mo_ta=" + Mo_ta + '}';
+        return "Phong{" + "ID_Phong=" + ID_Phong + ", ID_LoaiPhong=" + ID_LoaiPhong + ", TenPhongTro=" + TenPhongTro + ", ID_NhaTro=" + ID_NhaTro + ", TenLoaiPhong=" + TenLoaiPhong + ", TenNhaTro=" + TenNhaTro + ", Tang=" + Tang + ", Trang_thai=" + Trang_thai + ", Dien_tich=" + Dien_tich + ", URL_AnhPhongTro=" + URL_AnhPhongTro + ", Gia=" + Gia + ", Mo_ta=" + Mo_ta + ", images=" + images + ", diaChiPhongTro=" + diaChiPhongTro + '}';
     }
 
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
-    <!--For home page-->
+    <!--For home-->
     <filter>
         <filter-name>RoleFilterTQAT</filter-name>
         <filter-class>filter.RoleFilterTQAT</filter-class>
@@ -72,10 +72,6 @@
     <servlet>
         <servlet-name>loadHoaDonNhaTro</servlet-name>
         <servlet-class>controller.loadHoaDonNhaTro</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>profileServlet</servlet-name>
-        <servlet-class>controller.profileServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ChangePassword</servlet-name>
@@ -174,12 +170,24 @@
         <servlet-class>controller.GiaHanHopDongByManagerController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>CalendarByManagerController</servlet-name>
-        <servlet-class>controller.CalendarByManagerController</servlet-class>
+        <servlet-name>saveMaintainanceRequestServlet</servlet-name>
+        <servlet-class>controller.saveMaintainanceRequestServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>DanhSachPhongTroCalenderController</servlet-name>
-        <servlet-class>controller.DanhSachPhongTroCalenderController</servlet-class>
+        <servlet-name>maintainanceServlet</servlet-name>
+        <servlet-class>controller.maintainanceServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>editMaintainanceRequestServlet</servlet-name>
+        <servlet-class>controller.editMaintainanceRequestServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>cancelMaintainanceRequestServlet</servlet-name>
+        <servlet-class>controller.cancelMaintainanceRequestServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>adminMaintainanceServlet</servlet-name>
+        <servlet-class>controller.adminMaintainanceServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>homeRooms</servlet-name>
@@ -328,11 +336,6 @@
         <url-pattern>/hoadon</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>profileServlet</servlet-name>
-        <url-pattern>/profileServlet</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
         <servlet-name>actionHoaDon</servlet-name>
         <url-pattern>/actionhoadon</url-pattern>
     </servlet-mapping>
@@ -425,11 +428,25 @@
         <url-pattern>/GiaHanHopDongByManager</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>CalendarByManagerController</servlet-name>
-        <url-pattern>/CalendarByManager</url-pattern>
+        <servlet-name>saveMaintainanceRequestServlet</servlet-name>
+        <url-pattern>/saveMaintainanceRequestServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>DanhSachPhongTroCalenderController</servlet-name>
-        <url-pattern>/DanhSachPhongTroCalender</url-pattern>
+        <servlet-name>maintainanceServlet</servlet-name>
+        <url-pattern>/maintainanceServlet</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>editMaintainanceRequestServlet</servlet-name>
+        <url-pattern>/editMaintainanceRequestServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>cancelMaintainanceRequestServlet</servlet-name>
+        <url-pattern>/cancelMaintainanceRequestServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>adminMaintainanceServlet</servlet-name>
+        <url-pattern>/adminMaintainanceServlet</url-pattern>
+    </servlet-mapping>
+    
+    
 </web-app>

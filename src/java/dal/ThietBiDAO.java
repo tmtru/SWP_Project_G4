@@ -1,3 +1,4 @@
+//he
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -82,36 +83,30 @@ public class ThietBiDAO extends DBContext {
     }
 
     public boolean checkAndUpdateQuantity(int idThietBi, int requestedQuantity) throws SQLException {
-        String checkSql = "SELECT tb.So_luong, " +
-                         "COALESCE(SUM(tbp.So_luong), 0) as so_luong_da_them, " +
-                         "tb.So_luong - COALESCE(SUM(tbp.So_luong), 0) as so_luong_con_lai " +
-                         "FROM thiet_bi tb " +
-                         "LEFT JOIN thiet_bi_phong tbp ON tb.ID_ThietBi = tbp.ID_ThietBi " +
-                         "WHERE tb.ID_ThietBi = ? " +
-                         "GROUP BY tb.ID_ThietBi, tb.So_luong";
-
-        String updateSql = "UPDATE thiet_bi SET So_luong = So_luong WHERE ID_ThietBi = ?";
+        String checkSql = "SELECT So_luong FROM thiet_bi WHERE ID_ThietBi = ?";
+        String updateSql = "UPDATE thiet_bi SET So_luong = So_luong - ? WHERE ID_ThietBi = ?";
 
         connection.setAutoCommit(false);
         try {
-            // Kiểm tra số lượng còn lại
+            // Check current quantity
             try (PreparedStatement checkPs = connection.prepareStatement(checkSql)) {
                 checkPs.setInt(1, idThietBi);
                 try (ResultSet rs = checkPs.executeQuery()) {
                     if (rs.next()) {
-                        int soLuongConLai = rs.getInt("so_luong_con_lai");
-                        if (soLuongConLai < requestedQuantity) {
-                            return false; // Không đủ số lượng còn lại
+                        int currentQuantity = Integer.parseInt(rs.getString("So_luong"));
+                        if (currentQuantity < requestedQuantity) {
+                            return false; // Not enough quantity
                         }
                     } else {
-                        return false; // Không tìm thấy thiết bị
+                        return false; // ThietBi not found
                     }
                 }
             }
 
-            // Cập nhật số lượng nếu đủ
+            // Update quantity
             try (PreparedStatement updatePs = connection.prepareStatement(updateSql)) {
-                updatePs.setInt(1, idThietBi);
+                updatePs.setInt(1, requestedQuantity);
+                updatePs.setInt(2, idThietBi);
                 updatePs.executeUpdate();
             }
 
@@ -124,41 +119,6 @@ public class ThietBiDAO extends DBContext {
             connection.setAutoCommit(true);
         }
     }
-
-    public List<ThietBi> getAllThietBiWithDetailsPaging(int page, int recordsPerPage) {
-        List<ThietBi> list = new ArrayList<>();
-        int start = (page - 1) * recordsPerPage;
-        String sql = "SELECT tb.*, " +
-                    "COALESCE(SUM(tbp.So_luong), 0) as so_luong_da_them, " +
-                    "tb.So_luong - COALESCE(SUM(tbp.So_luong), 0) as so_luong_con_lai " +
-                    "FROM thiet_bi tb " +
-                    "LEFT JOIN thiet_bi_phong tbp ON tb.ID_ThietBi = tbp.ID_ThietBi " +
-                    "GROUP BY tb.ID_ThietBi, tb.TenThietBi, tb.Gia_tien, tb.Mo_ta, tb.So_luong " +
-                    
-                    "LIMIT ? OFFSET ?";
-
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, recordsPerPage);
-            ps.setInt(2, start);
-            ResultSet rs = ps.executeQuery();
-            
-            while (rs.next()) {
-                ThietBi tb = new ThietBi();
-                tb.setID_ThietBi(rs.getInt("ID_ThietBi"));
-                tb.setTenThietBi(rs.getString("TenThietBi"));
-                tb.setGia_tien(rs.getInt("Gia_tien"));
-                tb.setMo_ta(rs.getString("Mo_ta"));
-                tb.setSo_luong(rs.getString("So_luong"));
-                tb.setSo_luong_da_them(rs.getInt("so_luong_da_them"));
-                tb.setSo_luong_con_lai(rs.getInt("so_luong_con_lai"));
-                list.add(tb);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
-
 
     public List<ThietBi> getAllThietBiWithDetails() {
         List<ThietBi> list = new ArrayList<>();
@@ -189,7 +149,8 @@ public class ThietBiDAO extends DBContext {
     // Add new method to get total number of records
     public int getTotalThietBi() {
         String sql = "SELECT COUNT(*) FROM thiet_bi";
-        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+        try (PreparedStatement ps = connection.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
                 return rs.getInt(1);
             }
@@ -199,9 +160,100 @@ public class ThietBiDAO extends DBContext {
         return 0;
     }
 
-   
+    // Modified method to support pagination
+    public List<ThietBi> getAllThietBiWithDetailsPaging(int page, int recordsPerPage) {
+        List<ThietBi> list = new ArrayList<>();
+        int start = (page - 1) * recordsPerPage;
+        String sql = "SELECT tb.*, "
+                + "COALESCE(SUM(tbp.So_luong), 0) as so_luong_da_them, "
+                + "tb.So_luong - COALESCE(SUM(tbp.So_luong), 0) as so_luong_con_lai "
+                + "FROM thiet_bi tb "
+                + "LEFT JOIN thiet_bi_phong tbp ON tb.ID_ThietBi = tbp.ID_ThietBi "
+                + "GROUP BY tb.ID_ThietBi, tb.TenThietBi, tb.Gia_tien, tb.Mo_ta, tb.So_luong "
+                + "LIMIT ? OFFSET ?";
+        
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, recordsPerPage);
+            ps.setInt(2, start);
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                ThietBi tb = new ThietBi();
+                tb.setID_ThietBi(rs.getInt("ID_ThietBi"));
+                tb.setTenThietBi(rs.getString("TenThietBi"));
+                tb.setGia_tien(rs.getInt("Gia_tien"));
+                tb.setMo_ta(rs.getString("Mo_ta"));
+                tb.setSo_luong(rs.getString("So_luong"));
+                tb.setSo_luong_da_them(rs.getInt("so_luong_da_them"));
+                tb.setSo_luong_con_lai(rs.getInt("so_luong_con_lai"));
+                list.add(tb);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    
+    public List<ThietBi> getThietBiByKhachThue(int ID_KhachThue) {
+        List<ThietBi> listThietBi = new ArrayList<>();
+        String sql = "SELECT * " +
+                     "FROM khach_thue kt " +
+                     "JOIN hop_dong hd ON kt.ID_KhachThue = hd.ID_KhachThue " +
+                     "JOIN phong_tro pt ON hd.ID_PhongTro = pt.ID_Phong " +
+                     "JOIN thiet_bi_phong tbp ON pt.ID_Phong = tbp.ID_Phong " +
+                     "JOIN thiet_bi tb ON tbp.ID_ThietBi = tb.ID_ThietBi " +
+                     "WHERE kt.ID_KhachThue = ?";
 
-    //check duplicate thiet bi them vao trung ten nhau
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            // Gán giá trị cho tham số
+            ps.setInt(1, ID_KhachThue);
+
+            // Thực thi truy vấn và xử lý kết quả
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    ThietBi thietBi = new ThietBi();
+                    thietBi.setID_ThietBi(rs.getInt("ID_ThietBi"));
+                    thietBi.setTenThietBi(rs.getString("TenThietBi"));
+                    thietBi.setMo_ta(rs.getString("Mo_ta"));
+                    
+                    listThietBi.add(thietBi);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return listThietBi;
+    }
+    
+    
+    public List<ThietBi> getThietBiByIdPhong(int idPhong) {
+        List<ThietBi> listThietBi = new ArrayList<>();
+        String sql = "SELECT tb.* FROM thiet_bi tb " +
+                     "JOIN thiet_bi_phong tbp ON tb.ID_ThietBi = tbp.ID_ThietBi " +
+                     "WHERE tbp.ID_Phong = ?";
+        
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+             
+            ps.setInt(1, idPhong); // Gán giá trị cho tham số
+            
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                ThietBi thietBi = new ThietBi();
+                thietBi.setID_ThietBi(rs.getInt("ID_ThietBi"));
+                thietBi.setTenThietBi(rs.getString("TenThietBi"));
+                thietBi.setMo_ta(rs.getString("Mo_ta"));
+                
+                listThietBi.add(thietBi);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Ghi log lỗi
+        }
+        return listThietBi; // Trả về danh sách thiết bị
+    }
+    
     public boolean checkDuplicateThietBi(String tenThietBi) {
         boolean duplicate = false;
         String sql = "SELECT COUNT(*) as count_duplicate FROM thiet_bi WHERE TenThietBi = ?";
@@ -221,7 +273,7 @@ public class ThietBiDAO extends DBContext {
 
         return duplicate;
     }
-
+    
     public List<ThietBi> getThietBiCanSuaByNhaTro(int nhatroId, String search, Integer start, Integer recordPerPage) {
         List<ThietBi> list = new ArrayList<>();
         String sql = "select tb.*, pt.TenPhongTro,tbp.So_luong as sl, tbp.ID_ThietBiPhong from phong_tro pt\n"
@@ -265,7 +317,7 @@ public class ThietBiDAO extends DBContext {
         }
         return list;
     }
-
+    
     public List<ThietBi> getAllThietBiCanSua() {
         List<ThietBi> list = new ArrayList<>();
         String sql = "select tb.*, pt.TenPhongTro,tbp.So_luong as sl, tbp.ID_ThietBiPhong, nt.TenNhaTro from phong_tro pt\n"
@@ -299,7 +351,7 @@ public class ThietBiDAO extends DBContext {
         }
         return list;
     }
-
+    
     public List<ThietBi> searchThietBiWithoutSpaces(String searchTerm, int page, int recordsPerPage) {
         List<ThietBi> list = new ArrayList<>();
         int start = (page - 1) * recordsPerPage;
@@ -339,27 +391,7 @@ public class ThietBiDAO extends DBContext {
         }
         return list;
     }
-
-    public int getTotalThietBiBySearch(String searchTerm) {
-        // Remove all spaces from the search term
-        String normalizedSearch = searchTerm.replaceAll("\\s+", "");
-
-        String sql = "SELECT COUNT(*) FROM thiet_bi "
-                + "WHERE REPLACE(LOWER(TenThietBi), ' ', '') LIKE LOWER(?)";
-
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, "%" + normalizedSearch + "%");
-
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
-    // Thêm phương thức để lấy tổng số thiết bị còn số lượng
+    
     public int getTotalThietBiConLai() {
         String sql = "SELECT COUNT(*) FROM (" +
                     "SELECT tb.ID_ThietBi, " +
@@ -380,21 +412,27 @@ public class ThietBiDAO extends DBContext {
         }
         return 0;
     }
-    public int getTotalEquipmentCount(int nhaTroId) throws SQLException {
-        String sql = "SELECT COUNT(*) as count FROM thiet_bi_phong " +
-                    "WHERE ID_Phong IN (SELECT ID_Phong FROM phong_tro WHERE ID_NhaTro = ?)";
-        
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, nhaTroId);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt("count");
-                }
+    
+    public int getTotalThietBiBySearch(String searchTerm) {
+        // Remove all spaces from the search term
+        String normalizedSearch = searchTerm.replaceAll("\\s+", "");
+
+        String sql = "SELECT COUNT(*) FROM thiet_bi "
+                + "WHERE REPLACE(LOWER(TenThietBi), ' ', '') LIKE LOWER(?)";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, "%" + normalizedSearch + "%");
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return 0;
     }
-
+    
     public int getEquipmentCountByStatus(int nhaTroId, String status) throws SQLException {
         String sql = "SELECT COUNT(*) as count FROM thiet_bi_phong " +
                     "WHERE ID_Phong IN (SELECT ID_Phong FROM phong_tro WHERE ID_NhaTro = ?) " +
@@ -403,6 +441,21 @@ public class ThietBiDAO extends DBContext {
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, nhaTroId);
             stmt.setString(2, status);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("count");
+                }
+            }
+        }
+        return 0;
+    }
+    
+    public int getTotalEquipmentCount(int nhaTroId) throws SQLException {
+        String sql = "SELECT COUNT(*) as count FROM thiet_bi_phong " +
+                    "WHERE ID_Phong IN (SELECT ID_Phong FROM phong_tro WHERE ID_NhaTro = ?)";
+        
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, nhaTroId);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return rs.getInt("count");
