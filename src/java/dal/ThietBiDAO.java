@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import model.Phong;
+import model.Maintainance;
 
 /**
  *
@@ -149,8 +150,7 @@ public class ThietBiDAO extends DBContext {
     // Add new method to get total number of records
     public int getTotalThietBi() {
         String sql = "SELECT COUNT(*) FROM thiet_bi";
-        try (PreparedStatement ps = connection.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
                 return rs.getInt(1);
             }
@@ -171,12 +171,12 @@ public class ThietBiDAO extends DBContext {
                 + "LEFT JOIN thiet_bi_phong tbp ON tb.ID_ThietBi = tbp.ID_ThietBi "
                 + "GROUP BY tb.ID_ThietBi, tb.TenThietBi, tb.Gia_tien, tb.Mo_ta, tb.So_luong "
                 + "LIMIT ? OFFSET ?";
-        
+
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, recordsPerPage);
             ps.setInt(2, start);
             ResultSet rs = ps.executeQuery();
-            
+
             while (rs.next()) {
                 ThietBi tb = new ThietBi();
                 tb.setID_ThietBi(rs.getInt("ID_ThietBi"));
@@ -193,16 +193,16 @@ public class ThietBiDAO extends DBContext {
         }
         return list;
     }
-    
+
     public List<ThietBi> getThietBiByKhachThue(int ID_KhachThue) {
         List<ThietBi> listThietBi = new ArrayList<>();
-        String sql = "SELECT * " +
-                     "FROM khach_thue kt " +
-                     "JOIN hop_dong hd ON kt.ID_KhachThue = hd.ID_KhachThue " +
-                     "JOIN phong_tro pt ON hd.ID_PhongTro = pt.ID_Phong " +
-                     "JOIN thiet_bi_phong tbp ON pt.ID_Phong = tbp.ID_Phong " +
-                     "JOIN thiet_bi tb ON tbp.ID_ThietBi = tb.ID_ThietBi " +
-                     "WHERE kt.ID_KhachThue = ?";
+        String sql = "SELECT * "
+                + "FROM khach_thue kt "
+                + "JOIN hop_dong hd ON kt.ID_KhachThue = hd.ID_KhachThue "
+                + "JOIN phong_tro pt ON hd.ID_PhongTro = pt.ID_Phong "
+                + "JOIN thiet_bi_phong tbp ON pt.ID_Phong = tbp.ID_Phong "
+                + "JOIN thiet_bi tb ON tbp.ID_ThietBi = tb.ID_ThietBi "
+                + "WHERE kt.ID_KhachThue = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
 
@@ -216,7 +216,7 @@ public class ThietBiDAO extends DBContext {
                     thietBi.setID_ThietBi(rs.getInt("ID_ThietBi"));
                     thietBi.setTenThietBi(rs.getString("TenThietBi"));
                     thietBi.setMo_ta(rs.getString("Mo_ta"));
-                    
+
                     listThietBi.add(thietBi);
                 }
             }
@@ -227,25 +227,24 @@ public class ThietBiDAO extends DBContext {
 
         return listThietBi;
     }
-    
-    
+
     public List<ThietBi> getThietBiByIdPhong(int idPhong) {
         List<ThietBi> listThietBi = new ArrayList<>();
-        String sql = "SELECT tb.* FROM thiet_bi tb " +
-                     "JOIN thiet_bi_phong tbp ON tb.ID_ThietBi = tbp.ID_ThietBi " +
-                     "WHERE tbp.ID_Phong = ?";
-        
+        String sql = "SELECT tb.* FROM thiet_bi tb "
+                + "JOIN thiet_bi_phong tbp ON tb.ID_ThietBi = tbp.ID_ThietBi "
+                + "WHERE tbp.ID_Phong = ?";
+
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-             
+
             ps.setInt(1, idPhong); // Gán giá trị cho tham số
-            
+
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 ThietBi thietBi = new ThietBi();
                 thietBi.setID_ThietBi(rs.getInt("ID_ThietBi"));
                 thietBi.setTenThietBi(rs.getString("TenThietBi"));
                 thietBi.setMo_ta(rs.getString("Mo_ta"));
-                
+
                 listThietBi.add(thietBi);
             }
         } catch (Exception e) {
@@ -253,7 +252,7 @@ public class ThietBiDAO extends DBContext {
         }
         return listThietBi; // Trả về danh sách thiết bị
     }
-    
+
     public boolean checkDuplicateThietBi(String tenThietBi) {
         boolean duplicate = false;
         String sql = "SELECT COUNT(*) as count_duplicate FROM thiet_bi WHERE TenThietBi = ?";
@@ -273,24 +272,24 @@ public class ThietBiDAO extends DBContext {
 
         return duplicate;
     }
-    
+
     public List<ThietBi> getThietBiCanSuaByNhaTro(int nhatroId, String search, Integer start, Integer recordPerPage) {
         List<ThietBi> list = new ArrayList<>();
-        String sql = "select tb.*, pt.TenPhongTro,tbp.So_luong as sl, tbp.ID_ThietBiPhong from phong_tro pt\n"
-                + "left join thiet_bi_phong tbp on pt.ID_Phong = tbp.ID_Phong\n"
+        String sql = "select tb.*, pt.TenPhongTro, tbp.So_luong as sl, tbp.ID_ThietBiPhong, "
+                + "nt.TenNhaTro, bt.thoi_gian, bt.mo_ta as mo_ta_bao_tri "
+                + "from phong_tro pt "
+                + "left join thiet_bi_phong tbp on pt.ID_Phong = tbp.ID_Phong "
                 + "left join thiet_bi tb on tb.ID_ThietBi = tbp.ID_ThietBi "
-                + "where pt.ID_NhaTro = ? and tbp.Trang_thai = 'CSC' and (? = '' or tb.TenThietBi like ?) ";
-
+                + "left join nha_tro nt on nt.ID_NhaTro = pt.ID_NhaTro "
+                + "left join bao_tri bt on bt.ID_ThietBiPhong = tbp.ID_ThietBiPhong "
+                + "where pt.ID_NhaTro = ? and tbp.Trang_thai = 'CSC' and (? = '' or tb.TenThietBi like ?)";
         if (start != null && recordPerPage != null) {
-            sql += "LIMIT ?, ?";
+            sql += " LIMIT ?, ?";
         }
-
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
-
             stmt.setInt(1, nhatroId);
             stmt.setString(2, search);
-
             stmt.setString(3, "%" + search + "%");
             if (start != null && recordPerPage != null) {
                 stmt.setInt(4, start);
@@ -305,11 +304,14 @@ public class ThietBiDAO extends DBContext {
                 tb.setMo_ta(rs.getString("Mo_ta"));
                 tb.setSo_luong(rs.getString("sl"));
                 tb.setID_ThietBiPhong(rs.getInt("ID_ThietBiPhong"));
+                tb.setTenNhaTro(rs.getString("TenNhaTro"));
+                // Thêm thông tin từ bảng bao_tri
+                tb.setThoiGianBaoTri(rs.getDate("thoi_gian"));
+                tb.setMoTaBaoTri(rs.getString("mo_ta_bao_tri"));
 
                 Phong phong = new Phong();
                 phong.setTenPhongTro(rs.getString("TenPhongTro"));
                 tb.setPhong(phong);
-
                 list.add(tb);
             }
         } catch (Exception e) {
@@ -317,21 +319,23 @@ public class ThietBiDAO extends DBContext {
         }
         return list;
     }
-    
+
     public List<ThietBi> getAllThietBiCanSua() {
         List<ThietBi> list = new ArrayList<>();
-        String sql = "select tb.*, pt.TenPhongTro,tbp.So_luong as sl, tbp.ID_ThietBiPhong, nt.TenNhaTro from phong_tro pt\n"
-                + "left join thiet_bi_phong tbp on pt.ID_Phong = tbp.ID_Phong\n"
-                + "left join thiet_bi tb on tb.ID_ThietBi = tbp.ID_ThietBi \n"
-                + "left join nha_tro nt on nt.ID_NhaTro = pt.ID_NhaTro\n"
+        String sql = "select tb.*, pt.TenPhongTro, tbp.So_luong as sl, tbp.ID_ThietBiPhong, "
+                + "nt.TenNhaTro, bt.thoi_gian, bt.mo_ta as mo_ta_bao_tri "
+                + "from phong_tro pt "
+                + "left join thiet_bi_phong tbp on pt.ID_Phong = tbp.ID_Phong "
+                + "left join thiet_bi tb on tb.ID_ThietBi = tbp.ID_ThietBi "
+                + "left join nha_tro nt on nt.ID_NhaTro = pt.ID_NhaTro "
+                + "left join bao_tri bt on bt.ID_ThietBiPhong = tbp.ID_ThietBiPhong "
                 + "where tbp.Trang_thai = 'CSC'";
-
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
-
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 ThietBi tb = new ThietBi();
+
                 tb.setID_ThietBi(rs.getInt("ID_ThietBi"));
                 tb.setTenThietBi(rs.getString("TenThietBi"));
                 tb.setGia_tien(rs.getInt("Gia_tien"));
@@ -340,10 +344,13 @@ public class ThietBiDAO extends DBContext {
                 tb.setID_ThietBiPhong(rs.getInt("ID_ThietBiPhong"));
                 tb.setTenNhaTro(rs.getString("TenNhaTro"));
 
+                // Thêm thông tin từ bảng bao_tri
+                tb.setThoiGianBaoTri(rs.getDate("thoi_gian"));
+                tb.setMoTaBaoTri(rs.getString("mo_ta_bao_tri"));
+
                 Phong phong = new Phong();
                 phong.setTenPhongTro(rs.getString("TenPhongTro"));
                 tb.setPhong(phong);
-
                 list.add(tb);
             }
         } catch (Exception e) {
@@ -351,7 +358,7 @@ public class ThietBiDAO extends DBContext {
         }
         return list;
     }
-    
+
     public List<ThietBi> searchThietBiWithoutSpaces(String searchTerm, int page, int recordsPerPage) {
         List<ThietBi> list = new ArrayList<>();
         int start = (page - 1) * recordsPerPage;
@@ -391,19 +398,18 @@ public class ThietBiDAO extends DBContext {
         }
         return list;
     }
-    
-    public int getTotalThietBiConLai() {
-        String sql = "SELECT COUNT(*) FROM (" +
-                    "SELECT tb.ID_ThietBi, " +
-                    "tb.So_luong - COALESCE(SUM(tbp.So_luong), 0) as so_luong_con_lai " +
-                    "FROM thiet_bi tb " +
-                    "LEFT JOIN thiet_bi_phong tbp ON tb.ID_ThietBi = tbp.ID_ThietBi " +
-                    "GROUP BY tb.ID_ThietBi, tb.So_luong " +
-                    "HAVING so_luong_con_lai > 0" +
-                    ") as subquery";
 
-        try (PreparedStatement ps = connection.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+    public int getTotalThietBiConLai() {
+        String sql = "SELECT COUNT(*) FROM ("
+                + "SELECT tb.ID_ThietBi, "
+                + "tb.So_luong - COALESCE(SUM(tbp.So_luong), 0) as so_luong_con_lai "
+                + "FROM thiet_bi tb "
+                + "LEFT JOIN thiet_bi_phong tbp ON tb.ID_ThietBi = tbp.ID_ThietBi "
+                + "GROUP BY tb.ID_ThietBi, tb.So_luong "
+                + "HAVING so_luong_con_lai > 0"
+                + ") as subquery";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
                 return rs.getInt(1);
             }
@@ -412,7 +418,7 @@ public class ThietBiDAO extends DBContext {
         }
         return 0;
     }
-    
+
     public int getTotalThietBiBySearch(String searchTerm) {
         // Remove all spaces from the search term
         String normalizedSearch = searchTerm.replaceAll("\\s+", "");
@@ -432,12 +438,12 @@ public class ThietBiDAO extends DBContext {
         }
         return 0;
     }
-    
+
     public int getEquipmentCountByStatus(int nhaTroId, String status) throws SQLException {
-        String sql = "SELECT COUNT(*) as count FROM thiet_bi_phong " +
-                    "WHERE ID_Phong IN (SELECT ID_Phong FROM phong_tro WHERE ID_NhaTro = ?) " +
-                    "AND Trang_thai = ?";
-        
+        String sql = "SELECT COUNT(*) as count FROM thiet_bi_phong "
+                + "WHERE ID_Phong IN (SELECT ID_Phong FROM phong_tro WHERE ID_NhaTro = ?) "
+                + "AND Trang_thai = ?";
+
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, nhaTroId);
             stmt.setString(2, status);
@@ -449,11 +455,11 @@ public class ThietBiDAO extends DBContext {
         }
         return 0;
     }
-    
+
     public int getTotalEquipmentCount(int nhaTroId) throws SQLException {
-        String sql = "SELECT COUNT(*) as count FROM thiet_bi_phong " +
-                    "WHERE ID_Phong IN (SELECT ID_Phong FROM phong_tro WHERE ID_NhaTro = ?)";
-        
+        String sql = "SELECT COUNT(*) as count FROM thiet_bi_phong "
+                + "WHERE ID_Phong IN (SELECT ID_Phong FROM phong_tro WHERE ID_NhaTro = ?)";
+
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, nhaTroId);
             try (ResultSet rs = stmt.executeQuery()) {
@@ -463,5 +469,20 @@ public class ThietBiDAO extends DBContext {
             }
         }
         return 0;
+    }
+
+    public static void main(String[] args) {
+        ThietBiDAO thietBiDAO = new ThietBiDAO();
+
+        List<ThietBi> thietBis = thietBiDAO.getAllThietBiCanSua();
+
+        for (ThietBi thietBi : thietBis) {
+            System.out.println("Tên thiết bị: " + thietBi.getTenThietBi());
+            System.out.println("Tên phòng: " + thietBi.getPhong().getTenPhongTro());
+            System.out.println("Tên nhà trọ: " + thietBi.getTenNhaTro());
+            System.out.println("Thời gian bảo trì: " + thietBi.getThoiGianBaoTri());
+            System.out.println("Mô tả bảo trì: " + thietBi.getMoTaBaoTri());
+            System.out.println("-----------------------");
+        }
     }
 }
