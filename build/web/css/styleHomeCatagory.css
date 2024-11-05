@@ -14,7 +14,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     gap: 100px;
     align-items: center;
     justify-content:  center;
-    margin: 50px 0;
+    margin: 10px 0;
 }
 
 .property-image {
@@ -252,4 +252,35 @@ label {
     border: solid #7065f0;
     border-width: 0 3px 3px 0;
     transform: rotate(45deg) scale(2)
+}
+.carousel-indicators.img-under{
+    position: initial;
+    margin-left: 0;
+    justify-content: left;
+}
+.carousel-indicators.img-under img{
+    min-width: 120px;
+    min-height: 70px;
+        aspect-ratio: 1.7;
+    object-fit: cover;
+    object-position: center;
+    
+}
+.carousel-inner.img-above img{
+        aspect-ratio: 1.7;
+    object-fit: cover;
+    object-position: center;
+    
+}
+#map > div.leaflet-control-container > div.leaflet-top.leaflet-right > div > div {
+    display: none;
+}
+.mo-ta .property-info {
+    background: white;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+.mo-ta #map {
+    margin-left: 0;
 }

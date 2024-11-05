@@ -27,6 +27,7 @@ public class Phong {
     private String Mo_ta;
     private List<String> images;
     private String diaChiPhongTro;
+    
 
     public Phong(String Trang_thai, int Gia, String diaChiPhongTro) {
         this.Trang_thai = Trang_thai;
@@ -187,6 +188,25 @@ public class Phong {
     public void setImages(List<String> images) {
         this.images = images;
     }
+    private boolean isLiked;
+
+    public boolean isIsLiked() {
+        return isLiked;
+    }
+
+    public void setIsLiked(boolean isLiked) {
+        this.isLiked = isLiked;
+    }
+    private int ChiSo;
+
+    public int getChiSo() {
+        return ChiSo;
+    }
+
+    public void setChiSo(int ChiSo) {
+        this.ChiSo = ChiSo;
+    }
+    
 
     @Override
     public String toString() {

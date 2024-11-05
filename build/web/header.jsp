@@ -63,8 +63,7 @@
                                 <a href="category" class="nav-item nav-link ${pageContext.request.servletPath == '/category.jsp' || pageContext.request.servletPath == '/detailHouseHome.jsp' ? 'active' : ''}">Nhà trọ
                                 </a>
 
-                                <a href="about.html" class="nav-item nav-link">About</a>
-                                <a href="contact.html" class="nav-item nav-link">Contact</a>
+                                <a href="thongtinlienhe" class="nav-item nav-link ${pageContext.request.servletPath == '/contactUs_map.jsp' ? 'active' : ''}">Liên hệ</a>
                                 <c:if test="${a!=null}">
                                     <c:if test="${a.role.equals('landlord') || a.role.equals('manager')}">
 
@@ -78,9 +77,9 @@
 
                                 <div class="button">
                                     <a href="register.jsp"
-                                       class="btn my-3 signup-button mx-3">Sign up</a>
+                                       class="btn my-3 signup-button mx-3">Đăng kí</a>
                                     <a href="login.jsp"
-                                       class="btn my-3 login-button mx-3">Login</a>
+                                       class="btn my-3 login-button mx-3">Đăng nhập</a>
                                 </div>
                             </c:if>
                             <c:if test="${a!=null}">
@@ -94,10 +93,10 @@
                                             <!--  <i class="fas fa-user"></i> -->
                                         </a>
                                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                            <li><a class="dropdown-item" href="profile.jsp"><i class="fas fa-sliders-h fa-fw"></i> Account</a></li>
-                                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog fa-fw"></i> Settings</a></li>
+                                            <li><a class="dropdown-item" href="profile.jsp"><i class="fas fa-sliders-h fa-fw"></i> Tài khoản</a></li>
+                                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog fa-fw"></i> Cài đặt</a></li>
                                             <li><hr class="dropdown-divider"></li>
-                                            <li><a class="dropdown-item" href="logout"><i class="fas fa-sign-out-alt fa-fw"></i> Log Out</a></li>
+                                            <li><a class="dropdown-item" href="logout"><i class="fas fa-sign-out-alt fa-fw"></i> Đăng xuất</a></li>
                                         </ul>
                                     </li>
                                 </ul>

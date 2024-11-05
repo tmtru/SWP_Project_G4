@@ -3,23 +3,18 @@ $(document).ready(function () {
     function sendAjaxRequest(sortBy, order) {
         var selectedPrices = [];
         var selectedAreas = [];
-
-        // Lấy các checkbox đã chọn cho diện tích
         $('input[name="area"]:checked').each(function () {
             selectedAreas.push($(this).val());
         });
 
-        // Lấy các checkbox đã chọn cho giá
         $('input[name="price"]:checked').each(function () {
             selectedPrices.push($(this).val());
         });
 
         var status = $('.tab-item-active').data('status');
-
-        // Gửi dữ liệu qua Ajax đến server
         $.ajax({
             type: "GET",
-            url: "filterrooms", 
+            url: "filterrooms",
             data: {
                 price: selectedPrices,
                 area: selectedAreas,
@@ -27,7 +22,7 @@ $(document).ready(function () {
                 sortBy: sortBy,
                 order: order
             },
-            traditional: true, 
+            traditional: true,
             success: function (response) {
                 $('#roomsContainer').html(response);
             },
@@ -37,45 +32,46 @@ $(document).ready(function () {
         });
     }
 
-    // Khi người dùng thay đổi trạng thái của checkbox price và area
     $('input[type="checkbox"]').on('change', function () {
-        var sortBy = $('.dropdown-item.active').data('sort'); // Lấy sortBy từ phần tử active
-        var order = $('.sort-button.active').data('order') || 'desc'; // Lấy order từ phần tử active
+        var sortBy = $('.dropdown-item.active').data('sort');
+        var order = $('.sort-button.active').data('order') || 'desc';
 
-        sendAjaxRequest(sortBy, order); 
+        sendAjaxRequest(sortBy, order);
     });
 
-    // Khi người dùng nhấn vào các tab-item
+
     $('.tab-item').on('click', function () {
         $('.tab-item').removeClass('tab-item-active');
         $(this).addClass('tab-item-active');
-        var sortBy = $('.dropdown-item.active').data('sort'); // Lấy sortBy từ phần tử active
-        var order = $('.sort-button.active').data('order') || 'desc'; // Lấy order từ phần tử active
-        sendAjaxRequest(sortBy, order); 
+        var sortBy = $('.dropdown-item.active').data('sort');
+        var order = $('.sort-button.active').data('order') || 'desc';
+        sendAjaxRequest(sortBy, order);
     });
 
-    // Xử lý sự kiện khi người dùng chọn sắp xếp từ dropdown
+
     $('.dropdown-item').on('click', function () {
-        var sortBy = $(this).data('sort'); 
-        var order = $('.sort-button.active').data('order') || 'desc'; 
+        var sortBy = $(this).data('sort');
+        var order = $('.sort-button.active').data('order') || 'desc';
         var selectedText = $(this).text();
 
-        // Cập nhật văn bản của dropdown
+
         $('#dropdownMenuButton').text(selectedText);
-        
-        // Cập nhật trạng thái active
-        $('.dropdown-item').removeClass('active'); 
-        $(this).addClass('active'); 
+        $('.dropdown-item').removeClass('active');
+        $(this).addClass('active');
 
-        sendAjaxRequest(sortBy, order); 
+        sendAjaxRequest(sortBy, order);
     });
 
-    // Xử lý sự kiện khi người dùng nhấn vào các nút sắp xếp
+
     $('.sort-button').on('click', function () {
-        $('.sort-button').removeClass('active'); 
-        $(this).addClass('active'); // Thêm lớp active vào nút được nhấn
-        var sortBy = $('.dropdown-item.active').data('sort'); // Lấy sortBy từ phần tử active
-        var order = $(this).data('order'); 
-        sendAjaxRequest(sortBy, order); 
+        $('.sort-button').removeClass('active');
+        $(this).addClass('active');
+        var sortBy = $('.dropdown-item.active').data('sort');
+        var order = $(this).data('order');
+        sendAjaxRequest(sortBy, order);
     });
+
+    //lam viec voi coookie like
+    
+    
 });

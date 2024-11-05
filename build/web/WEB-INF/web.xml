@@ -137,8 +137,6 @@
         <servlet-name>loadPhongTro</servlet-name>
         <servlet-class>controller.loadPhongTro</servlet-class>
     </servlet>
-
-    
     <servlet>
         <servlet-name>AddConTractController</servlet-name>
         <servlet-class>controller.AddConTractController</servlet-class>
@@ -174,6 +172,18 @@
     <servlet>
         <servlet-name>GiaHanHopDongByManagerController</servlet-name>
         <servlet-class>controller.GiaHanHopDongByManagerController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>contactUs</servlet-name>
+        <servlet-class>controller.contactUs</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>lienhe</servlet-name>
+        <servlet-class>controller.lienhe</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>addFastInvoices</servlet-name>
+        <servlet-class>controller.addFastInvoices</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>homeRooms</servlet-name>
@@ -325,7 +335,6 @@
         <servlet-name>profileServlet</servlet-name>
         <url-pattern>/profileServlet</url-pattern>
     </servlet-mapping>
-
     <servlet-mapping>
         <servlet-name>actionHoaDon</servlet-name>
         <url-pattern>/actionhoadon</url-pattern>
@@ -382,9 +391,6 @@
         <servlet-name>loadPhongTro</servlet-name>
         <url-pattern>/loadPhongTro</url-pattern>
     </servlet-mapping>
-
-
-
     <servlet-mapping>
         <servlet-name>AddConTractController</servlet-name>
         <url-pattern>/addContract</url-pattern>
@@ -420,5 +426,17 @@
     <servlet-mapping>
         <servlet-name>GiaHanHopDongByManagerController</servlet-name>
         <url-pattern>/GiaHanHopDongByManager</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>contactUs</servlet-name>
+        <url-pattern>/thongtinlienhe</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>lienhe</servlet-name>
+        <url-pattern>/lienhe</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>addFastInvoices</servlet-name>
+        <url-pattern>/addfastinvoice</url-pattern>
     </servlet-mapping>
 </web-app>

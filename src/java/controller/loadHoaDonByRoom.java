@@ -81,28 +81,20 @@ public class loadHoaDonByRoom extends HttpServlet {
 
 // Kiểm tra ID phòng được chọn
         if (choseRoom != -1) {
-            // Nếu có phòng được chọn
             session.setAttribute("currentRoom", choseRoom);
             listhd = getListHoaDonOfRoom(choseRoom);
             room = pdao.getDetailRoom(choseRoom);
         } else if (idRoom != -1) {
-            // Nếu không có phòng được chọn, sử dụng phòng từ session
             listhd = getListHoaDonOfRoom(idRoom);
             room = pdao.getDetailRoom(idRoom);
         } else {
-            // Xử lý trường hợp không có phòng
-            // Bạn có thể thêm thông báo hoặc điều hướng đến trang lỗi
-            // Ví dụ:
             request.setAttribute("errorMessage", "Không tìm thấy thông tin phòng.");
             request.getRequestDispatcher("errorPage.jsp").forward(request, response);
-            return; // Dừng lại ở đây nếu không tìm thấy phòng
+            return; 
         }
 
-// Đặt các thuộc tính cho JSP
         request.setAttribute("invoices", listhd);
         request.setAttribute("currentRoomOfHoaDon", room);
-
-// Forward đến JSP
         request.getRequestDispatcher("HoaDonEachRoom.jsp").forward(request, response);
 
     }

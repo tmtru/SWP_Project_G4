@@ -29,10 +29,13 @@
 
         <!--AOS lib to reveal web when scroll-->
         <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+        <!--leaftlet-->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
         <!-- Stylesheet -->
         <link href="css/styleHomeCatagory.css" rel="stylesheet">
         <link href="css/style.css" rel="stylesheet">
+
         <!--jquery-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
@@ -60,11 +63,47 @@
             <div class="image-column">
 
                 <c:if test="${not empty imgNhaTro}">
-                    <c:forEach var="anh" items="${imgNhaTro}" varStatus="status">
-                        <c:if test="${status.index == 0}">
-                            <img src="${anh.URL_AnhNhaTro.get(0)}" alt="Ảnh nhà trọ" class="property-image"/>
-                        </c:if>
-                    </c:forEach>
+
+                    <div id="anhnhatro" class="carousel slide">
+                        <div style="position: relative">
+                            <div class="carousel-inner img-above">
+                                <c:forEach var="anh" items="${imgNhaTro.get(0).URL_AnhNhaTro}" varStatus="status">
+                                    <div class="carousel-item ${status.first ? 'active' : ''}">
+                                        <img src="${anh}" class="d-block w-100" alt="Slide ${status.index + 1}">
+                                    </div>
+                                </c:forEach>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#anhnhatro" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#anhnhatro" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                        <div class="carousel-indicators img-under">
+                            <c:forEach var="anhUnder" items="${imgNhaTro.get(0).URL_AnhNhaTro}" varStatus="status">
+                                <img src="${anhUnder}"
+                                     type="button" data-bs-target="#anhnhatro" 
+                                     data-bs-slide-to="${status.index}" 
+                                     class="${status.first ? 'active' : ''}" 
+                                     aria-current="${status.first ? 'true' : 'false'}" 
+                                     aria-label="Slide ${status.index + 1}"/>
+                            </c:forEach>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <img id="modalImage" src="" class="img-fluid" alt="Enlarged View">
+                                </div>
+                                <button type="button" class="btn-close position-absolute top-0 end-0 me-2 mt-2" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    </div>
+
                 </c:if>
                 <c:if test="${empty imgNhaTro}">
                     <p>Không có ảnh cho nhà trọ này.</p>
@@ -86,7 +125,7 @@
                     <p class="property-info">
                         <span class="highlight">Số điện thoại liên lạc:</span> 0231545554
                     </p>
-                    
+
                     <div class="facilities">
                         <div class="facility">
                             <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/01d699666662d8bd83b20fc07d97a0db5f5e91bf78cb0ee3e5320f65dcced623?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
@@ -119,17 +158,22 @@
                 </div>
             </div>
         </section>
-                        <p class="property-info">
-                        <% 
+        <div class="container mo-ta">
+            <div class="property-info ">
+                <% 
 
-                                                        NhaTro nt = (NhaTro) session.getAttribute("currenthouse");
-                                                        String moTa = nt.getMo_ta().replaceAll("(\r\n|\n)", "<br />");
-                                                        request.setAttribute("moTa", moTa);
-                        %>
-                        <span class="highlight">Mô tả:</span> ${moTa}
+                                                NhaTro nt = (NhaTro) session.getAttribute("currenthouse");
+                                                String moTa = nt.getMo_ta().replaceAll("(\r\n|\n)", "<br />");
+                                                request.setAttribute("moTa", moTa);
+                %>
+                <h5 class="highlight container">Thông tin mô tả:</h5> 
+                <p class="container px-4" style="font-size: 15px; font-weight: 500;">${moTa}</p>
 
 
-                    </p>
+            </div>
+            <div id="map" class="" style="height: 150px;"></div>
+        </div>
+
         <!-- Room End -->
 
         <!--List Rooms of House Start-->
@@ -275,60 +319,83 @@
                         </div>
                         <div class=" rooms-of-house mt-3 d-flex" id="roomsContainer">
                         <c:forEach items="${rooms}" var="rs">
-                            <article class="listing-card item" >
-                                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/807191b1c5ec9a365e8d960bde1533408c378d956c435939b9c17e77e1cb689b?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
-                                     alt="Room image" class="listing-image">
-                                <div class="listing-info">
-                                    <div class="listing-details">
-                                        <div class="listing-price">
-                                            <span class="price">${rs.gia/1000000} tr</span>
-                                            <span class="price-period">/tháng</span>
-                                        </div>
-                                        <h4 class="listing-name">Phòng ${rs.tenPhongTro}</h4>
-                                        <c:if test="${rs.trang_thai.equals('T')}">
-                                            <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Phòng trống" style="color: red">
-                                                <i class="fa-solid fa-circle-exclamation" style="color: red" disabled></i> Trống
-                                            </span>
-                                        </c:if>
-                                        <c:if test="${rs.trang_thai.equals('D')}">
-                                            <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Phòng trống" style="color: #009933">
-                                                <i class="fa-solid fa-circle-exclamation" style="color: #009933" disabled></i> Đã thuê
-                                            </span>
-                                        </c:if>
+                            <c:if test="${!rs.trang_thai.equals('D')}">
+                                <article class="listing-card item" >
+                                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/807191b1c5ec9a365e8d960bde1533408c378d956c435939b9c17e77e1cb689b?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
+                                         alt="Room image" class="listing-image">
+                                    <div class="listing-info">
+                                        <div class="listing-details">
+                                            <div class="listing-price">
+                                                <span class="price">${rs.gia/1000000} tr</span>
+                                                <span class="price-period">/tháng</span>
+                                            </div>
+                                            <h4 class="listing-name">Phòng ${rs.tenPhongTro}</h4>
+                                            <c:if test="${rs.trang_thai.equals('T')}">
+                                                <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Phòng trống" style="color: red">
+                                                    <i class="fa-solid fa-circle-exclamation" style="color: red" disabled></i> Trống
+                                                </span>
+                                            </c:if>
+                                            <c:if test="${rs.trang_thai.equals('D')}">
+                                                <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Phòng trống" style="color: #009933">
+                                                    <i class="fa-solid fa-circle-exclamation" style="color: #009933" disabled></i> Đã thuê
+                                                </span>
+                                            </c:if>
 
+                                        </div>
+                                        <div class="details-button">
+                                            <button class="icons like" data-room-id="${rs.ID_Phong}">
+                                                <i class="fa-regular fa-heart unlike"></i>
+                                                <i class="fa-solid fa-heart like" style="color:rgb(98, 136, 218); display: none;"></i>
+                                            </button>
+                                            <input id="idphonglike" name="likephong" value="${rs.ID_Phong}" type="hidden"/>
+
+                                            <span class="details-text">Chi tiết</span>
+                                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/38af489b0b824b4e9a4ca4f97538a5a535b0617bf3be7a86b92c79ae52dfe2c5?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
+                                                 alt="Underline" class="details-underline">
+                                        </div>
                                     </div>
-                                    <div class="details-button">
-                                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/dca00f6f57a639b42ff911d49af82395b3e490bbba3e80779f4f7169c56fc15a?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
-                                             alt="Details icon" class="details-icon">
-                                        <span class="details-text">Chi tiết</span>
-                                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/38af489b0b824b4e9a4ca4f97538a5a535b0617bf3be7a86b92c79ae52dfe2c5?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
-                                             alt="Underline" class="details-underline">
+                                    <hr class="divider">
+                                    <div class="facilities">
+                                        <div class="facility">
+                                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/91548f776f5f1c44de4afa0b594a698a690aa51b3155ce2280947cf745e5ca4d?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
+                                                 alt="Bed icon" class="facility-icon">
+                                            <span class="facility-text">Bed</span>
+                                        </div>
+                                        <div class="facility">
+                                            <i class="fa-solid fa-stairs facility-icon"></i>
+                                            <span class="facility-text">Tầng ${rs.tang}</span>
+                                        </div>
+                                        <div class="facility">
+                                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/18c032977b463fe970eb067104d0c95807cbf310ae9c273e9de01b3d7e27099a?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
+                                                 alt="Dimension icon" class="facility-icon">
+                                            <span class="facility-text">${rs.dien_tich} m²</span>
+                                        </div>
                                     </div>
-                                </div>
-                                <hr class="divider">
-                                <div class="facilities">
-                                    <div class="facility">
-                                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/91548f776f5f1c44de4afa0b594a698a690aa51b3155ce2280947cf745e5ca4d?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
-                                             alt="Bed icon" class="facility-icon">
-                                        <span class="facility-text">Bed</span>
-                                    </div>
-                                    <div class="facility">
-                                        <i class="fa-solid fa-stairs facility-icon"></i>
-                                        <span class="facility-text">Tầng ${rs.tang}</span>
-                                    </div>
-                                    <div class="facility">
-                                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/18c032977b463fe970eb067104d0c95807cbf310ae9c273e9de01b3d7e27099a?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
-                                             alt="Dimension icon" class="facility-icon">
-                                        <span class="facility-text">${rs.dien_tich} m²</span>
-                                    </div>
-                                </div>
-                            </article>
+                                </article>
+                            </c:if>
                         </c:forEach>
                     </div>
                 </div>
 
             </div>
             <!--List Rooms of House End-->
+            <div class="modal fade" id="loginPromptModal" tabindex="-1" aria-labelledby="loginPromptLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="loginPromptLabel">Login Required</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Please log in to like rooms.
+                        </div>
+                        <div class="modal-footer">
+                            <a href="/login" class="btn btn-primary">Log In</a>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Footer Start -->
             <div class="container-fluid bg-light text-dark footer">
@@ -376,18 +443,133 @@
             </div>
 
             <!-- Footer End -->
+
             <script src="js/main.js"></script>
             <script src="js/filter.js"></script>
-            <!-- JavaScript Libraries -->
-            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-            <!--font awasome-->
-            <script src="https://kit.fontawesome.com/aab0c35bef.js" crossorigin="anonymous"></script>
-            <!--AOS lib-->
             <script>
-                AOS.init();
-            </script>
+                <c:choose>
+                    <c:when test="${not empty sessionScope.account}">
+                const userId = ${sessionScope.account.ID_Account};
+                function setCookie(name, value, days) {
+                const d = new Date();
+                d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+                document.cookie = `\${name}=\${value};expires=\${d.toUTCString()};path=/`;
+                }
+                function getCookie(name) {
+                const value = `; \${document.cookie}`;
+                const parts = value.split(`; \${name}=`);
+                console.log(value);
+                return parts.length === 2 ? parts.pop().split(';').shift() : null;
+                console.log(parts.length === 2 ? parts.pop().split(';').shift() : null);
+                }
 
-    </body>
+
+                $('.icons.like').on('click', function () {
+                const roomId = $(this).data('room-id');
+                const cookieKey = `liked_\${userId}_\${roomId}`;
+                const isLiked = getCookie(cookieKey) === 'true';
+                const newStatus = !isLiked;
+                setCookie(cookieKey, newStatus, 30);
+                $(this).find('.unlike').toggle(!newStatus);
+                $(this).find('.like').toggle(newStatus);
+                });
+                $('.icons.like').each(function () {
+                const roomId = $(this).data('room-id');
+                const cookieKey = `liked_\${userId}_\${roomId}`;
+                const isLiked = getCookie(cookieKey) === 'true';
+                
+                console.log(roomId + "  " + cookieKey);
+                $(this).find('.unlike').toggle(!isLiked);
+                $(this).find('.like').toggle(isLiked);
+                });
+                    </c:when>
+                    <c:otherwise>
+                        $('.icons.like').on('click', function () {
+                const loginPromptModal = new bootstrap.Modal(document.getElementById('loginPromptModal'));
+                loginPromptModal.show();
+                        });
+                    </c:otherwise>
+                </c:choose>
+            </script>
+            <!--leaftlet-->
+            <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+            <!-- Leaflet Routing Machine JS -->
+            <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+
+   <script>
+            function openModal(imageSrc) {
+                document.getElementById('modalImage').src = imageSrc;
+                var imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
+                imageModal.show();
+            }
+              </script>
+                <script>
+            // JavaScrip            t
+            var map = L.map('map').setView([10.823099, 106.629654], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                            attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+            var marker = null;
+        <%
+double lat = nt.getLat();                 
+double lon = nt.getLon(); 
+String tenNhaTro = nt.getTenNhaTro(); 
+        %>
+                    var nhatroLat = <%= lat %>;
+                    var nhatroLon = <%= lon %>;
+                    var nhatroName = "<%= tenNhaTro %>";
+                    map.setView([nhatroLat, nhatroLon], 13);
+                    var nhatroMarker = new L.marker([nhatroLat, nhatroLon]).addTo(map)
+                            .bindPopup(nhatroName).openPopup();
+        <c:if test="${not empty sessionScope.lat and not empty sessionScope.lon}">
+            <%
+                    String latStr = (String) session.getAttribute("lat");
+                    String lonStr = (String) session.getAttribute("lon");
+                    double userLat = 0.0;
+                    double userLon = 0.0;
+
+                    try {
+                        userLat = Double.parseDouble(latStr);
+                        userLon = Double.parseDouble(lonStr);
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace(); 
+                    }
+            %>
+                    var userMarker = new L.marker([<%= userLat %>, <%= userLon %>], {
+                    icon: L.icon({
+                    iconUrl: 'assets/img/navigation.png',
+                            iconSize: [25, 30]
+                    })
+            }).addTo(map)
+                    .bindPopup("Vị trí của bạn");
+                    var control = L.Routing.control({
+                    waypoints: [
+                            L.latLng(nhatroLat, nhatroLon),
+                            L.latLng(<%= userLat %>, <%= userLon %>)
+                    ],
+                            routeWhileDragging: true,
+                            showAlternatives: false, // Disable alternative routes
+                            createMarker: function () {
+                            return null;
+                            } // Disable default markers
+                    }).addTo(map);
+        </c:if>
+
+
+
+
+    </script>
+    <!-- JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <!--font awasome-->
+    <script src="https://kit.fontawesome.com/aab0c35bef.js" crossorigin="anonymous"></script>
+    <!--AOS lib-->
+    <script>
+                    AOS.init();
+    </script>
+
+</body>
 
 </html>
 

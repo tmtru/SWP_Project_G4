@@ -103,6 +103,7 @@ public class AddConTractController extends HttpServlet {
                 request.getRequestDispatcher("ThemKhachThuePhong.jsp").forward(request, response);
             } else {
                 request.setAttribute("message", "Thêm khách thất bại!");
+                request.getRequestDispatcher("ThemKhachThuePhong.jsp").forward(request, response);
             }
         } else {
             // Nếu có lỗi, chuyển hướng về trang và hiển thị thông báo lỗi

@@ -34,6 +34,8 @@ public class NhaTroDAO extends DBContext {
                 nhaTro.setID_ChuTro(rs.getInt("ID_ChuTro"));  // Chuyển sang getInt
                 nhaTro.setDia_chi(rs.getNString("Dia_Chi"));
                 nhaTro.setMo_ta(rs.getNString("Mo_ta"));
+                nhaTro.setLat(rs.getDouble("lat"));
+                nhaTro.setLon(rs.getDouble("lon"));
                 nhaTroList.add(nhaTro);
             }
         } catch (Exception e) {
@@ -113,6 +115,8 @@ public class NhaTroDAO extends DBContext {
                 nhaTro.setID_ChuTro(Integer.parseInt(rs.getString("ID_ChuTro")));
                 nhaTro.setDia_chi(rs.getNString("Dia_Chi"));
                 nhaTro.setMo_ta(rs.getNString("Mo_ta"));
+                nhaTro.setLat(rs.getDouble("lat"));
+                nhaTro.setLon(rs.getDouble("lon"));
 
             }
         } catch (Exception e) {
@@ -137,6 +141,8 @@ public class NhaTroDAO extends DBContext {
                 nhaTro.setID_ChuTro(Integer.parseInt(rs.getString("ID_ChuTro")));
                 nhaTro.setDia_chi(rs.getNString("Dia_Chi"));
                 nhaTro.setMo_ta(rs.getNString("Mo_ta"));
+                nhaTro.setLat(rs.getDouble("lat"));
+                nhaTro.setLon(rs.getDouble("lon"));
                 ChuTro chuTro = chuTroDAO.getChuTroById(rs.getInt("ID_ChuTro"));
                 nhaTro.setChuTro(chuTro);
             }
@@ -537,6 +543,8 @@ public class NhaTroDAO extends DBContext {
                 nhaTro.setID_ChuTro(rs.getInt("ID_ChuTro"));
                 nhaTro.setDia_chi(rs.getNString("Dia_Chi"));
                 nhaTro.setMo_ta(rs.getNString("Mo_ta"));
+                nhaTro.setLat(rs.getDouble("lat"));
+                nhaTro.setLat(rs.getDouble("lon"));
             }
         } catch (SQLException e) {
             e.printStackTrace();

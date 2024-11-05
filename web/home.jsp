@@ -80,35 +80,35 @@
             <div class="container input">
                 <div class="tag">
                     <div class="bg-white text-dark">
-                        Renting
+                        Tìm kiếm nhà trọ gần bạn
                     </div>
                 </div>
                 <div class="bg-white shadow" style="padding: 25px;">
                     <div class="row g-2">
                         <div class="col-md-12">
-                            <div class="row g-4">
-                                <div class="col-md-5">
+                            <form action="category" class="row g-4" onsubmit="return checkLatLon();">
+                                <div class="col-md-10">
 
                                     <div class="form-input" data-target-input="nearest">
-                                        <label for="addressInput" class="label mb-1">Vị trí</label>
+                                        <label for="addressInput" class="label mb-1">Vị trị</label>
                                         <input id="addressInput" type="text" class="form-control" 
-                                               placeholder="Địa điểm của bạn..." oninput="suggestAddress(this.value)"/>
+                                               placeholder="Địa điểm của bạn..." oninput="suggestAddress(this.value)" required/>
                                         <div id="suggestions"></div>
-                                        <input type="text" id="selectedlat" name="lat" hidden/>
-                                        <input type="text" id="selectedlon" name="lon" hidden/>
+                                        <input type="text" id="selectedlat" name="lat" hidden=""/>
+                                        <input type="text" id="selectedlon" name="lon" hidden=""/>
                                     </div>
                                 </div>
-                                <div class="col-md-5">
-
-                                    <div class="form-input" data-target-input="nearest">
-                                        <label for="date" class="label mb-1">Thời gian</label>
-                                        <input id="date" type="date" class="form-control" placeholder="Check out" />
-                                    </div>
-                                </div>
+                                <!--                                <div class="col-md-5">
+                                
+                                                                    <div class="form-input" data-target-input="nearest">
+                                                                        <label for="date" class="label mb-1">Thời gian</label>
+                                                                        <input id="date" type="date" class="form-control" placeholder="Check out" />
+                                                                    </div>
+                                                                </div>-->
                                 <div class="col-md-2 fast-search-btn d-flex justify-content-center align-items-center">
-                                    <button class="btn">Tìm phòng</button>
+                                    <button href="category" class="btn p-3" type="submit">Tìm nhà trọ</button>
                                 </div>
-                            </div>
+                            </form>
                         </div>
 
                     </div>
@@ -235,61 +235,7 @@
 
 
         <!-- Room End -->
-        <!--Map-->
 
-
-        <section class="contact-section">
-            <div class="contact-container container" data-aos="fade-down" data-aos-duration="700">
-                <div class="contact-content">
-                    <div class="contact-info">
-                        <div class="contact-details">
-                            <h2 class="contact-headline">Hãy liên hệ với chúng tôi để biết thêm chi tiết</h2>
-                            <div class="contact-features">
-                                <div class="contact-card">
-                                    <div class="card-header">
-                                        <div class="card-content">
-                                            <div class="icon-wrapper">
-                                                <div class="icon" aria-hidden="true"></div>
-                                            </div>
-                                            <h3 class="card-title">Thông tin liên hệ nhà trọ</h3>
-                                        </div>
-                                        <div class="dropdown">
-                                            <div class="dropdown-header">
-                                                <span class="dropdown-label">Nhà trọ TMT</span>
-                                                <img loading="lazy"
-                                                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/0643ef6a3e60a121631d6b7c6aade8e9196110b12a218cb14d9aee3e52d0bc48?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
-                                                     class="dropdown-icon" alt="" aria-hidden="true">
-                                            </div>
-                                            <div class="dropdown-items"></div>
-                                        </div>
-                                    </div>
-                                    <p class="contact-address">
-                                        <strong>Địa chỉ</strong>: Thôn 4, Thach Hòa, Thạch Thất<br>
-                                        <strong>Số điện thoại</strong>: 02315611542
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="stats-container">
-                            <div class="stat-item">
-                                <span class="stat-value">7.4%</span>
-                                <span class="stat-label">Property Return Rate</span>
-                            </div>
-                            <div class="stat-divider" aria-hidden="true"></div>
-                            <div class="stat-item">
-                                <span class="stat-value">3,856</span>
-                                <span class="stat-label">Property in Sell & Rent</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div id="map"></div>
-
-            </div>
-        </section>
-        <!--Map end-->
         <!-- Footer Start -->
         <div class="container-fluid bg-light text-dark footer">
             <div class="container pb-5">
@@ -344,65 +290,63 @@
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
         <script>
             // JavaScript
-            var map = L.map('map').setView([10.823099, 106.629654], 13);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(map);
-            var marker = null;
-            map.on('click', function (e) {
-                let lat = e.latlng.lat; // Lấy vĩ độ
-                let lon = e.latlng.lng; // Lấy kinh độ
+            
 
-                if (marker) {
-                    map.removeLayer(marker);
-                }
-                marker = new L.marker([lat, lon]);
-
-                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=\${lat}&lon=\${lon}&addressdetails=1`)
-                        .then(response => response.json())
-                        .then(data => {
-                            let address = data.display_name || 'Địa chỉ không tìm thấy';
-                            map.addLayer(marker); // Thêm marker với địa chỉ
-                            marker.bindPopup(address).openPopup(); // Hiển thị popup với địa chỉ
-                        })
-                        .catch(error => console.error('Error:', error));
-            });
+            let debounceTimeout=0;
 
             function suggestAddress(input) {
-                if (input.length < 3) {
-                    document.getElementById('suggestions').innerHTML = ''; // Xóa gợi ý
-                    return;
+                if (debounceTimeout) {
+                    clearTimeout(debounceTimeout); 
                 }
 
-                fetch(`https://nominatim.openstreetmap.org/search?format=json&q=\${input}&addressdetails=1&countrycodes=VN`)
-                        .then(response => response.json())
-                        .then(data => {
-                            let suggestions = document.getElementById('suggestions');
-                            suggestions.innerHTML = ''; // Xóa gợi ý trước đó
+                debounceTimeout = setTimeout(() => {
+                    if (input.length < 3) {
+                        document.getElementById('suggestions').innerHTML = ''; 
+                        return;
+                    }
 
-                            data.forEach(item => {
-                                let div = document.createElement('div');
-                                div.className = 'suggestion-item';
-                                div.textContent = item.display_name;
-                                div.onclick = () => {
-                                    selectAddress(item.lat, item.lon, item.display_name);
-                                    document.getElementById('addressInput').value = item.display_name; // Cập nhật giá trị input
-                                }
-                                suggestions.appendChild(div);
-                            });
-                        })
-                        .catch(error => console.error('Error:', error));
+                    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=\${input}&addressdetails=1&countrycodes=VN`)
+                            .then(response => response.json())
+                            .then(data => {
+                                let suggestions = document.getElementById('suggestions');
+                                suggestions.innerHTML = '';
+
+                                data.forEach(item => {
+                                    let div = document.createElement('div');
+                                    div.className = 'suggestion-item';
+                                    div.textContent = item.display_name;
+                                    div.onclick = () => {
+                                        selectAddress(item.lat, item.lon, item.display_name);
+                                        document.getElementById('addressInput').value = item.display_name; 
+                                    }
+                                    suggestions.appendChild(div);
+                                });
+                            })
+                            .catch(error => console.error('Error:', error));
+                }, 200); // Đợi 500ms trước khi gọi API
             }
+
 
             function selectAddress(lat, lon, address) {
 
-                map.setView([lat, lon], 13);
-                if (marker) {
-                    map.removeLayer(marker);
-                }
-                marker = new L.marker([lat, lon]).addTo(map).bindPopup(address).openPopup();
+                document.getElementById("selectedlat").value = lat;
+                document.getElementById("selectedlon").value = lon;
                 document.getElementById('suggestions').innerHTML = '';
+            }
+            function checkLatLon() {
+                const lat = document.getElementById('selectedlat').value;
+                const lon = document.getElementById('selectedlon').value;
+                if (!lat || !lon) {
+                    const firstSuggestion = document.querySelector('#suggestions .suggestion-item');
+                    if (firstSuggestion) {
+                        firstSuggestion.click(); 
+                    } else {
+
+                        return false; 
+                    }
+                }
+
+                return true; 
             }
 
         </script>

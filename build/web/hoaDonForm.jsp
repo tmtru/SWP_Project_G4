@@ -136,40 +136,51 @@
                                                         </div>
                                                         <c:forEach var="dichVu" items="${dvList}">
                                                             <div class="form-check mb-2">
+                                                                <c:set var="isChecked" value="false"/>
+                                                                <c:forEach var="selectedDichVu" items="${dvListHopDong}">
+                                                                    <c:if test="${selectedDichVu.ID_DichVu == dichVu.ID_DichVu}">
+                                                                        <c:set var="isChecked" value="true"/>
+                                                                    </c:if>
+                                                                </c:forEach>
 
+                                                                <!-- Render checkbox with checked attribute if isChecked is true -->
                                                                 <input class="form-check-input" type="checkbox" name="dichVuId" value="${dichVu.ID_DichVu}" 
                                                                        id="dichVu_${dichVu.ID_DichVu}" 
-                                                                       onchange="toggleServiceInputs('${dichVu.tenDichVu}', ${dichVu.don_gia}, this)">
+                                                                       onchange="toggleServiceInputs('${dichVu.tenDichVu}', '${dichVu.don_vi}', ${dichVu.don_gia}, this)"
+                                                                       <c:if test="${isChecked}">checked="checked"</c:if> >
                                                                 <label class="form-check-label" for="dichVu_${dichVu.ID_DichVu}" style="color: #0B2F9F; font-weight: bolder">
                                                                     ${dichVu.tenDichVu} - Giá: <fmt:formatNumber value="${dichVu.don_gia}" type="number" groupingUsed="true"/> VND/${dichVu.don_vi}
                                                                 </label>
 
                                                                 <!-- Hiển thị ô nhập chỉ số cũ, mới hoặc đầu người -->
                                                                 <c:choose>
-                                                                    <c:when test="${dichVu.tenDichVu == 'Điện' || dichVu.tenDichVu == 'Nước'}">
+                                                                    <c:when test="${dichVu.don_vi != 'Tháng'}">
+                                                                        <!-- Use Chỉ số inputs for services not billed monthly -->
                                                                         <div id="chiSo_${dichVu.ID_DichVu}" class="input-group mt-2">
                                                                             <div class="form-group">
                                                                                 <label for="chiSoCu_dichVu_${dichVu.ID_DichVu}" class="small">Chỉ số cũ</label>
                                                                                 <input type="number" placeholder="Chỉ số cũ" id="chiSoCu_dichVu_${dichVu.ID_DichVu}" name="chiSoCu_dichVu_${dichVu.ID_DichVu}" class="form-control" 
-                                                                                       oninput="updateInvoiceService('${dichVu.tenDichVu}', ${dichVu.don_gia}, 'dichVu_${dichVu.ID_DichVu}')">
+                                                                                       oninput="updateInvoiceService('${dichVu.tenDichVu}','${dichVu.don_vi}', ${dichVu.don_gia}, 'dichVu_${dichVu.ID_DichVu}')">
                                                                             </div>
                                                                             <div class="form-group">
                                                                                 <label for="chiSoMoi_dichVu_${dichVu.ID_DichVu}" class="small">Chỉ số mới</label>
                                                                                 <input type="number" placeholder="Chỉ số mới" id="chiSoMoi_dichVu_${dichVu.ID_DichVu}" name="chiSoMoi_dichVu_${dichVu.ID_DichVu}" class="form-control ml-2"  
-                                                                                       oninput="updateInvoiceService('${dichVu.tenDichVu}', ${dichVu.don_gia}, 'dichVu_${dichVu.ID_DichVu}')">
+                                                                                       oninput="updateInvoiceService('${dichVu.tenDichVu}','${dichVu.don_vi}', ${dichVu.don_gia}, 'dichVu_${dichVu.ID_DichVu}')">
                                                                             </div>
                                                                         </div>
                                                                     </c:when>
                                                                     <c:otherwise>
-                                                                        <div id="dauNguoi_${dichVu.ID_DichVu}" class="input-group mt-2 ">
+                                                                        <!-- Use Đầu người input for monthly services -->
+                                                                        <div id="dauNguoi_${dichVu.ID_DichVu}" class="input-group mt-2">
                                                                             <div class="form-group">
                                                                                 <label for="dauNguoiInput_dichVu_${dichVu.ID_DichVu}" class="small">Đầu người</label>
-                                                                                <input type="number" placeholder="Đầu người" id="dauNguoiInput_dichVu_${dichVu.ID_DichVu}" name="dauNguoiInput_dichVu_${dichVu.ID_DichVu}" class="form-control" value="1" 
-                                                                                       oninput="updateInvoiceService('${dichVu.tenDichVu}', ${dichVu.don_gia}, 'dichVu_${dichVu.ID_DichVu}')">
+                                                                                <input type="number" placeholder="Đầu người" id="dauNguoiInput_dichVu_${dichVu.ID_DichVu}" name="dauNguoiInput_dichVu_${dichVu.ID_DichVu}" class="form-control" value="${nofpeople}" 
+                                                                                       oninput="updateInvoiceService('${dichVu.tenDichVu}','${dichVu.don_vi}', ${dichVu.don_gia}, 'dichVu_${dichVu.ID_DichVu}')">
                                                                             </div>
                                                                         </div>
                                                                     </c:otherwise>
                                                                 </c:choose>
+
 
 
 
@@ -212,6 +223,7 @@
                                 <div class="alert alert-danger mr-3" role="alert" id="notification" style="display: none;">
 
                                 </div>
+
                                 <div class="d-flex submit-part">
 
                                     <button type="submit" class="btn btn-primary">Tạo hóa đơn</button>
@@ -297,7 +309,7 @@
                 });
             }
             function updateInvoiceOnRoomChange() {
-                const selectedRoomId = $('#phong').val(); 
+                const selectedRoomId = $('#phong').val();
 
                 // Gửi yêu cầu AJAX để lấy thông tin hợp đồng và số người
                 $.ajax({
