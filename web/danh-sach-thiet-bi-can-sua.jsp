@@ -261,7 +261,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                             <li><a href="khach-no"><span class="text nav-text" style="margin-left: 30px">Khách nợ</span></a></li>
                             <li><a href="khach-coc"><span class="text nav-text" style="margin-left: 30px">Khách cọc</span></a></li>
                             <li><a href="khach-sap-het-han"><span class="text nav-text">Sắp hết hạn hợp đồng</span></a></li>
-                            <li><a href="thiet-bi"><span class="text nav-text" style="margin-left: 33px">Thiết bị</span></a></li>
+                            <li><a href="thiet-bi"><span class="text nav-text" style="margin-left: 25px">Thiết bị cần sửa</span></a></li>
                         </ul>
                     </li>
 
@@ -443,7 +443,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                            Thiết bị đã sửa</div>
+                                            Thiết bị hoạt động bình thường</div>
                                         <div class="h5 mb-0 font-weight-bold text-gray-800">${normalEquipment}</div>
                                     </div>
                                     <div class="col-auto">
