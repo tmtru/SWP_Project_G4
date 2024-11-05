@@ -193,6 +193,14 @@
         <servlet-name>viewUserInvoicesServlet</servlet-name>
         <servlet-class>controller.viewUserInvoicesServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>TuChoiSuaTBController</servlet-name>
+        <servlet-class>controller.TuChoiSuaTBController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ChapNhanTBController</servlet-name>
+        <servlet-class>controller.ChapNhanTBController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>homeRooms</servlet-name>
         <url-pattern>/homer</url-pattern>
@@ -454,5 +462,13 @@
     <servlet-mapping>
         <servlet-name>viewUserInvoicesServlet</servlet-name>
         <url-pattern>/viewUserInvoicesServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TuChoiSuaTBController</servlet-name>
+        <url-pattern>/tu-choi-sua</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChapNhanTBController</servlet-name>
+        <url-pattern>/chap-nhan</url-pattern>
     </servlet-mapping>
 </web-app>

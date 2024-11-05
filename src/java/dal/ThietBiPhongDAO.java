@@ -181,7 +181,7 @@ public class ThietBiPhongDAO extends DBContext {
             if (rs.next()) {
                 device = new ThietBiPhong();
                 device.setID_ThietBiPhong(rs.getInt("ID_ThietBiPhong"));
-                device.setTenThietBi(rs.getString("TenThietBi")); 
+                device.setTenThietBi(rs.getString("TenThietBi"));
                 device.setMo_ta(rs.getString("Mo_ta"));
                 device.setTrang_thai(rs.getString("Trang_thai"));
                 device.setID_Phong(rs.getInt("ID_Phong"));
@@ -191,9 +191,9 @@ public class ThietBiPhongDAO extends DBContext {
         }
         return device;
     }
-    
-    public void updateTrangThaiAbnormalByIdThietBiPhong(int ID_ThietBiPhong){
-        String sql ="UPDATE thiet_bi_phong SET Trang_thai = 'Abnormal' WHERE ID_ThietBiPhong = ?";
+
+    public void updateTrangThaiAbnormalByIdThietBiPhong(int ID_ThietBiPhong) {
+        String sql = "UPDATE thiet_bi_phong SET Trang_thai = 'Abnormal' WHERE ID_ThietBiPhong = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, ID_ThietBiPhong);
             stmt.executeUpdate();
@@ -201,9 +201,9 @@ public class ThietBiPhongDAO extends DBContext {
             e.printStackTrace();
         }
     }
-    
-    public void updateTrangThaiNormalByIdThietBiPhong(int ID_ThietBiPhong){
-        String sql ="UPDATE thiet_bi_phong SET Trang_thai = 'Normal' WHERE ID_ThietBiPhong = ?";
+
+    public void updateTrangThaiNormalByIdThietBiPhong(int ID_ThietBiPhong) {
+        String sql = "UPDATE thiet_bi_phong SET Trang_thai = 'Normal' WHERE ID_ThietBiPhong = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, ID_ThietBiPhong);
             stmt.executeUpdate();
@@ -213,13 +213,13 @@ public class ThietBiPhongDAO extends DBContext {
     }
 
     public boolean checkDuplicateThietBiInRoom(int idPhong, int idThietBi) {
-        String sql = "SELECT COUNT(*) as count FROM thiet_bi_phong tbp " +
-                    "WHERE tbp.ID_Phong = ? AND tbp.ID_ThietBi = ?";
-        
+        String sql = "SELECT COUNT(*) as count FROM thiet_bi_phong tbp "
+                + "WHERE tbp.ID_Phong = ? AND tbp.ID_ThietBi = ?";
+
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, idPhong);
             ps.setInt(2, idThietBi);
-            
+
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return rs.getInt("count") > 0;
@@ -232,12 +232,47 @@ public class ThietBiPhongDAO extends DBContext {
     }
 
     public boolean updateStatusThietBiToPhong(int id) throws SQLException {
+        // Update device status in thiet_bi_phong table
+        String updateDeviceSQL = "UPDATE thiet_bi_phong SET Trang_thai = 'T' WHERE ID_ThietBiPhong = ?";
+        try (PreparedStatement devicePS = connection.prepareStatement(updateDeviceSQL)) {
+            devicePS.setInt(1, id);
+            devicePS.executeUpdate();
+        }
 
-        String sql = "UPDATE thiet_bi_phong set Trang_thai = 'BT' where ID_ThietBiPhong = ?";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, id);
-            ps.executeUpdate();
+        // Update maintenance request status in bao_tri table
+        String updateMaintenanceSQL = "UPDATE bao_tri SET trang_thai_yeu_cau = 1, trang_thai_chap_thuan = 1 WHERE ID_ThietBiPhong = ?";
+        try (PreparedStatement maintenancePS = connection.prepareStatement(updateMaintenanceSQL)) {
+            maintenancePS.setInt(1, id);
+            maintenancePS.executeUpdate();
         }
         return true;
     }
+        public boolean updateStatusThietBiToPhongTuchoi(int id) throws SQLException {
+        // Update device status in thiet_bi_phong table
+        String updateDeviceSQL = "UPDATE thiet_bi_phong SET Trang_thai = 'BT' WHERE ID_ThietBiPhong = ?";
+        try (PreparedStatement devicePS = connection.prepareStatement(updateDeviceSQL)) {
+            devicePS.setInt(1, id);
+            devicePS.executeUpdate();
+        }
+
+        // Update maintenance request status in bao_tri table
+        String updateMaintenanceSQL = "UPDATE bao_tri SET trang_thai_yeu_cau = 1, trang_thai_chap_thuan = 2 WHERE ID_ThietBiPhong = ?";
+        try (PreparedStatement maintenancePS = connection.prepareStatement(updateMaintenanceSQL)) {
+            maintenancePS.setInt(1, id);
+            maintenancePS.executeUpdate();
+        }
+        return true;
+    }
+       public boolean updateStatusThietBiToPhongChapNhan(int id) throws SQLException {
+        
+        // Update maintenance request status in bao_tri table
+        String updateMaintenanceSQL = "UPDATE bao_tri SET trang_thai_yeu_cau = 1 WHERE ID_ThietBiPhong = ?";
+        try (PreparedStatement maintenancePS = connection.prepareStatement(updateMaintenanceSQL)) {
+            maintenancePS.setInt(1, id);
+            maintenancePS.executeUpdate();
+        }
+        return true;
+    }
+    
+    
 }

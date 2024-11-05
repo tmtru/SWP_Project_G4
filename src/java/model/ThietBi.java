@@ -1,7 +1,8 @@
 package model;
 
-public class ThietBi {
+import java.sql.Date;
 
+public class ThietBi {
     private int ID_ThietBi;
     private String TenThietBi;
     private int Gia_tien;
@@ -9,7 +10,8 @@ public class ThietBi {
     private String So_luong;
     private int so_luong_con_lai;
     private int so_luong_da_them;
-    
+    private Date thoiGianBaoTri;
+    private String moTaBaoTri;
     private Phong phong;
     private int ID_ThietBiPhong;
     private String tenNhaTro;
@@ -105,9 +107,24 @@ public class ThietBi {
         this.so_luong_da_them = so_luong_da_them;
     }
 
-    @Override
-    public String toString() {
-        return "ThietBi{" + "ID_ThietBi=" + ID_ThietBi + ", TenThietBi=" + TenThietBi + ", Gia_tien=" + Gia_tien + ", Mo_ta=" + Mo_ta + ", So_luong=" + So_luong + '}';
+    public Date getThoiGianBaoTri() {
+        return thoiGianBaoTri;
     }
 
+    public void setThoiGianBaoTri(Date thoiGianBaoTri) {
+        this.thoiGianBaoTri = thoiGianBaoTri;
+    }
+
+    public String getMoTaBaoTri() {
+        return moTaBaoTri;
+    }
+
+    public void setMoTaBaoTri(String moTaBaoTri) {
+        this.moTaBaoTri = moTaBaoTri;
+    }
+
+    @Override
+    public String toString() {
+        return "ThietBi{" + "ID_ThietBi=" + ID_ThietBi + ", TenThietBi=" + TenThietBi + ", Gia_tien=" + Gia_tien + ", Mo_ta=" + Mo_ta + ", So_luong=" + So_luong + ", thoiGianBaoTri=" + thoiGianBaoTri + ", moTaBaoTri=" + moTaBaoTri + '}';
+    }
 }
