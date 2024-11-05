@@ -29,7 +29,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         <!-- Them font awesome -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
-
         <!----===== Boxicons CSS ===== -->
         <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
         <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
@@ -39,6 +38,19 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <style>
+            .dropdown-menu {
+                display: none;
+                list-style: none;
+                padding: 0px 27px;
+                margin: 0px ;
+            }
+
+            /* Khi li có class active, hiển thị dropdown */
+            .dropdown.active .dropdown-menu {
+                display: block;
+            }
+
+
             .img-preview {
                 width: 50px;
                 border: 1px solid #ddd;
@@ -145,11 +157,55 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     width: 100%;
                 }
             }
+
+            .custom-alert {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 1050;
+                max-width: 350px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                animation: slideInRight 0.5s ease-out;
+                border-left: 5px solid #dc3545;
+            }
+
+            @keyframes slideInRight {
+                from {
+                    opacity: 0;
+                    transform: translateX(100%);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+
+            .custom-alert .btn-close {
+                position: absolute;
+                top: 50%;
+                right: 10px;
+                transform: translateY(-50%);
+            }
+
+            .custom-alert .alert-content {
+                margin-right: 30px;
+            }
+
         </style>
     </head>
     <body>
         <!--Room manegement dash board-->
-
+        <%
+            // Xóa session attributes sau khi đã hiển thị alert
+            if (session.getAttribute("addRoomError") != null || session.getAttribute("editRoomError") != null) {
+                String addError = (String)session.getAttribute("addRoomError");
+                String editError = (String)session.getAttribute("editRoomError");
+                session.removeAttribute("addRoomError");
+                session.removeAttribute("editRoomError");
+                request.setAttribute("addRoomError", addError);
+                request.setAttribute("editRoomError", editError);
+            }
+        %>
         <nav class="sidebar">
             <header>
                 <div class="image-text">
@@ -175,62 +231,79 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     </li>
                     -->
 
-                    <ul class="menu-links">
-                        <li class="">
-                            <a href="#">
-                                <i class='bx bx-home-alt icon' ></i>
-                                <span class="text nav-text">Trang chủ</span>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a href="nhatro">
-                                <i class='bx bxs-home icon' ></i>
-                                <span class="text nav-text">Nhà trọ</span>
-                            </a>
-                        </li>
 
-                        <li class="">
-                            <a href="room" class="active">
-                                <i class='bx bx-bar-chart-alt-2 icon active' ></i>
-                                <span class="text nav-text">Phòng trọ</span>
-                            </a>
-                        </li>
+                    <li class="">
+                        <a href="#">
+                            <i class='bx bx-home-alt icon' ></i>
+                            <span class="text nav-text">Trang chủ</span>
+                        </a>
+                    </li>
 
-                        <li class="">
-                            <a href="accountController">
-                                <i class='bx bx-face icon' ></i>
-                                <span class="text nav-text">Người dùng</span>
-                            </a>
-                        </li>
+                    <li class="dropdown">
+                        <a href="javascript:void(0);" class="dropdown-toggle" onclick="toggleDropdown()">
+                            <i class='bx bx-cog icon'></i>
+                            <span class="text nav-text">Báo cáo</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="statistic-room"><span class="text nav-text" style="margin-left: 30px">Phòng trống</span></a></li>
+                            <li><a href="statistic-revenue"><span class="text nav-text" style="margin-left: 30px">Doanh thu</span></a></li>
+                            <li><a href="khach-no"><span class="text nav-text" style="margin-left: 30px">Khách nợ</span></a></li>
+                            <li><a href="khach-coc"><span class="text nav-text" style="margin-left: 30px">Khách cọc</span></a></li>
+                            <li><a href="khach-sap-het-han"><span class="text nav-text">Sắp hết hạn hợp đồng</span></a></li>
+                            <li><a href="thiet-bi"><span class="text nav-text" style="margin-left: 33px">Thiết bị</span></a></li>
+                        </ul>
+                    </li>
 
-                        <li class="s">
-                            <a href="loaddichvu" >
-                                <i class='bx bx-bell icon'></i>
-                                <span class="text nav-text">Dịch vụ</span>
-                            </a>
-                        </li>
 
-                        <li class="">
-                            <a href="hop-dong">
-                                <i class='bx bx-id-card icon' ></i>
-                                <span class="text nav-text">Hợp đồng</span>
-                            </a>
-                        </li>
+                    <li class="">
+                        <a href="nhatro">
+                            <i class='bx bxs-home icon' ></i>
+                            <span class="text nav-text">Nhà trọ</span>
+                        </a>
+                    </li>
 
-                        <li class="">
-                            <a href="hoadon">
-                                <i class='bx bx-wallet icon' ></i>
-                                <span class="text nav-text">Hóa đơn</span>
-                            </a>
-                        </li>
-                        <c:if test="${sessionScope.account.role == 'landlord'}">
+                    <li class="">
+                        <a href="room" class="active">
+                            <i class='bx bx-bar-chart-alt-2 icon active' ></i>
+                            <span class="text nav-text">Phòng trọ</span>
+                        </a>
+                    </li>
+
+                    <li class="">
+                        <a href="accountController">
+                            <i class='bx bx-face icon' ></i>
+                            <span class="text nav-text">Người dùng</span>
+                        </a>
+                    </li>
+
+                    <li class="s">
+                        <a href="loaddichvu" >
+                            <i class='bx bx-bell icon'></i>
+                            <span class="text nav-text">Dịch vụ</span>
+                        </a>
+                    </li>
+
+                    <li class="">
+                        <a href="hop-dong">
+                            <i class='bx bx-id-card icon' ></i>
+                            <span class="text nav-text">Hợp đồng</span>
+                        </a>
+                    </li>
+
+                    <li class="">
+                        <a href="hoadon">
+                            <i class='bx bx-wallet icon' ></i>
+                            <span class="text nav-text">Hóa đơn</span>
+                        </a>
+                    </li>
+                    <c:if test="${sessionScope.account.role == 'landlord'}">
                         <li class="">
                             <a href="loadThietBi">
                                 <i class='bx bx-devices icon' ></i>
                                 <span class="text nav-text">Thiết bị</span>
                             </a>
                         </li>
-                        </c:if>
+                    </c:if>
 
                     </ul>
                 </div>
@@ -243,17 +316,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         </a>
                     </li>
 
-                    <li class="mode">
-                        <div class="sun-moon">
-                            <i class='bx bx-moon icon moon'></i>
-                            <i class='bx bx-sun icon sun'></i>
-                        </div>
-                        <span class="mode-text text">Dark mode</span>
-
-                        <div class="toggle-switch">
-                            <span class="switch"></span>
-                        </div>
-                    </li>
 
                 </div>
             </div>
@@ -271,12 +333,46 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     Nhà trọ đang có người thuê
                 </div>
             </c:if>
+            <%-- Error message add room fail --%>
+            <c:if test="${not empty addRoomError}">
+                <div class="alert alert-danger alert-dismissible custom-alert" role="alert">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                        <div class="alert-content flex-grow-1">
+                            ${addRoomError}
+                        </div>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+            </c:if>
+
+            <%-- Error message edit room fail --%>
+            <c:if test="${not empty editRoomError}">
+                <div class="alert alert-danger alert-dismissible custom-alert" role="alert">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                        <div class="alert-content flex-grow-1">
+                            ${editRoomError}
+                        </div>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+            </c:if>
             <section class="property-management">
                 <div class="header">
                     <h2>Danh sách phòng trọ </h2>
                     <div class="search-container">
-                        <form action="searchRoomByName" method="get">
-                            <input type="text" name="tenPhongTro" placeholder="Tìm kiếm phòng..." required>
+                        <form action="loadPhongTro" method="GET">
+                            <input type="text" name="search" value="${searchValue}" placeholder="Tìm kiếm phòng...">
+                            <input type="hidden" name="nhaTro" value="${param.nhaTro}">
                             <button type="submit"><i class='bx bx-search'></i></button>
                         </form>
                     </div>
@@ -287,7 +383,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 <div class="room-actions">
                     <c:if test="${sessionScope.account.role == 'landlord'}">
                         <button class="btn add-room" data-toggle="modal" data-target="#addRoomModal">+ Thêm phòng trọ</button>
-                        <button class="btn quick-add-room">+ Thêm phòng trọ nhanh</button>
                         <form action="/NhaTroTQAT/addRoomExcel" method="get" style="display: inline; background-color: green; border-radius: 5px">
                             <button type="submit" class="btn export-to-excel">
                                 <i class="bx bxs-file-export"></i>
@@ -415,14 +510,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                             <!-- Preview images will be appended here -->
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="modalTrangThai">Trạng thái:</label>
-                                        <select name="trangThai" id="modalTrangThai" required>
-                                            <option value="T">Trống</option>
-                                            <option value="D">Đang thuê</option>
-                                            <option value="DS">Đang sửa</option>
-                                        </select>
-                                    </div>
+
                                     <button type="submit" class="btn btn-primary">Lưu</button>
                                 </form>
                             </div>
@@ -457,10 +545,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                             </option>
                         </c:forEach>
                     </select>
-                    <select name="status">
-                        <option value="">Trạng thái</option>
+                    <select name="status" id="status" onchange="filterRoomsByStatus(this)">
+                        <option value="">Tất cả trạng thái</option>
                         <c:forEach items="${statusMap}" var="entry">
-                            <option value="${entry.key}" ${entry.key eq selectedStatus ? 'selected' : ''}>${entry.value}</option>
+                            <option value="${entry.key}" ${param.status == entry.key ? 'selected' : ''}>
+                                ${entry.value}
+                            </option>
                         </c:forEach>
                     </select>
 
@@ -517,52 +607,51 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                             </a>
                                             <c:if test="${sessionScope.account.role == 'landlord'}">
 
-                                            <!-- Edit and Delete Buttons -->
-                                            <c:if test="${!empty room.trang_thai}">
-                                                <a href="#" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;"
-                                                   onclick='openEditModal(
-                                                                   "${room.ID_Phong}",
-                                                                   "${room.tenPhongTro}",
-                                                                   "${room.tang}",
-                                                                   "${room.dien_tich}",
-                                                                   "${room.gia}",
-                                                                   "${room.trang_thai}",
-                                                                   "${room.ID_NhaTro}",
-                                                                   "${room.ID_LoaiPhong}",
-                                                           [<c:forEach var="image" items="${room.images}" varStatus="status">
-                                                           "${fn:replace(image, '\\', '/')}"
-                                                       <c:if test="${!status.last}">,</c:if>
-                                                   </c:forEach>]
-                                                                   );
-                                                           return false;'>
-                                                    <i class="bx bx-edit"></i> Chỉnh sửa
-                                                </a>
-                                                <a href="#" class="btn btn-link text-danger text-gradient px-3 mb-0" data-toggle="modal" data-target="#myModalDelete${room.ID_Phong}">
-                                                    <i class="fa-solid fa-trash"></i>Xóa
-                                                </a>
+                                                <!-- Edit and Delete Buttons -->
+                                                <c:if test="${!empty room.trang_thai}">
+                                                    <a href="#" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;"
+                                                       onclick='openEditModal(
+                                                                       "${room.ID_Phong}",
+                                                                       "${room.tenPhongTro}",
+                                                                       "${room.tang}",
+                                                                       "${room.dien_tich}",
+                                                                       "${room.gia}",
+                                                                       "${room.ID_NhaTro}",
+                                                                       "${room.ID_LoaiPhong}",
+                                                               [<c:forEach var="image" items="${room.images}" varStatus="status">
+                                                               "${fn:replace(image, '\\', '/')}"
+                                                           <c:if test="${!status.last}">,</c:if>
+                                                       </c:forEach>]
+                                                                       );
+                                                               return false;'>
+                                                        <i class="bx bx-edit"></i> Chỉnh sửa
+                                                    </a>
+                                                    <a href="#" class="btn btn-link text-danger text-gradient px-3 mb-0" data-toggle="modal" data-target="#myModalDelete${room.ID_Phong}">
+                                                        <i class="fa-solid fa-trash"></i>Xóa
+                                                    </a>
 
-                                                <!-- Modal xóa phòng -->
-                                                <div id="myModalDelete${room.ID_Phong}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog modal-confirm">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header flex-column">
-                                                                <div class="icon-box">
-                                                                    <i class="fa-solid fa-circle-xmark"></i>
+                                                    <!-- Modal xóa phòng -->
+                                                    <div id="myModalDelete${room.ID_Phong}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog modal-confirm">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header flex-column">
+                                                                    <div class="icon-box">
+                                                                        <i class="fa-solid fa-circle-xmark"></i>
+                                                                    </div>
+                                                                    <h5 class="modal-title w-100">Bạn có chắc chắn bạn muốn xóa phòng này?</h5>
                                                                 </div>
-                                                                <h5 class="modal-title w-100">Bạn có chắc chắn bạn muốn xóa phòng này?</h5>
-                                                            </div>
-                                                            <div class="modal-footer justify-content-center">
-                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                                                                <button type="button" class="btn btn-danger">
-                                                                    <a href="deleteRoom?id=${room.ID_Phong}" class="edit-film" style="color: white !important;">Xóa phòng</a>
-                                                                </button>
+                                                                <div class="modal-footer justify-content-center">
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                                                                    <button type="button" class="btn btn-danger">
+                                                                        <a href="deleteRoom?id=${room.ID_Phong}" class="edit-film" style="color: white !important;">Xóa phòng</a>
+                                                                    </button>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </c:if>
+                                                </c:if>
 
-                                                
+
                                             </c:if>
 
                                         </div>
@@ -598,7 +687,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             </section>
 
         </section>
-
         <script>
             const body = document.querySelector('body'),
                     sidebar = body.querySelector('nav'),
@@ -631,16 +719,44 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             function filterRoomsByFloor(select) {
                 var selectedFloor = select.value;
                 var url = 'room?';
-
                 // Thêm tham số tầng nếu có
                 if (selectedFloor) {
                     url += 'tang=' + selectedFloor;
                 }
-
                 // Lấy giá trị nhà trọ hiện tại từ session
                 var currentHouse = '${sessionScope.currentHouse}';
                 if (currentHouse) {
                     url += (selectedFloor ? '&' : '') + 'idHouse=' + currentHouse;
+                }
+                // Thêm status vào URL nếu đang được chọn
+                var currentStatus = document.getElementById('status').value;
+                if (currentStatus) {
+                    url += '&status=' + currentStatus;
+                }
+                // Chuyển hướng đến URL mới
+                window.location.href = url;
+            }
+
+            // Thêm function filter status
+            function filterRoomsByStatus(select) {
+                var selectedStatus = select.value;
+                var url = 'room?';
+
+                // Lấy giá trị nhà trọ hiện tại từ session
+                var currentHouse = '${sessionScope.currentHouse}';
+                if (currentHouse) {
+                    url += 'idHouse=' + currentHouse;
+                }
+
+                // Thêm tầng vào URL nếu đang được chọn
+                var currentFloor = document.getElementById('tang').value;
+                if (currentFloor) {
+                    url += '&tang=' + currentFloor;
+                }
+
+                // Thêm status nếu có
+                if (selectedStatus) {
+                    url += '&status=' + selectedStatus;
                 }
 
                 // Chuyển hướng đến URL mới
@@ -655,6 +771,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     window.location.href = 'deleteRoom?id=' + roomId;
                 }
             }
+
         </script>
         <script type="text/javascript">
             function previewImage(input) {
@@ -680,14 +797,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         </script>
 
         <script type="text/javascript">
-            function openEditModal(idPhong, tenPhongTro, tang, dienTich, gia, trangThai, idNhaTro, idLoaiPhong, images) {
+            function openEditModal(idPhong, tenPhongTro, tang, dienTich, gia, idNhaTro, idLoaiPhong, images) {
                 // Hiển thị thông tin trong modal
                 document.getElementById('modalIdPhong').value = idPhong;
                 document.getElementById('modalTenPhongTro').value = tenPhongTro;
                 document.getElementById('modalTang').value = tang;
                 document.getElementById('modalDienTich').value = dienTich;
                 document.getElementById('modalGia').value = gia;
-                document.getElementById('modalTrangThai').value = trangThai;
                 document.getElementById('modalIDNhaTro').value = idNhaTro;
                 document.getElementById('modalIDLoaiPhong').value = idLoaiPhong;
 
@@ -728,6 +844,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 }
             }
         </script>
-
+        <script>
+            function toggleDropdown() {
+                var dropdown = document.querySelector('.dropdown');
+                dropdown.classList.toggle('active'); // Thêm/xóa class 'active' khi nhấn
+            }
+        </script>
     </body>
 </html>

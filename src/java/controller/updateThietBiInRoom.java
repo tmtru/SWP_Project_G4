@@ -62,28 +62,61 @@ public class updateThietBiInRoom extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
+    
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int idThietBiPhong = Integer.parseInt(request.getParameter("idThietBiPhong"));
-        int idPhong = Integer.parseInt(request.getParameter("idPhong"));
-        int soLuong = Integer.parseInt(request.getParameter("soLuong"));
-        String trangThai = request.getParameter("trangThai");
-        String moTa = request.getParameter("moTa");
-
-        ThietBiPhongDAO dao = new ThietBiPhongDAO();
         HttpSession session = request.getSession();
-
+        
         try {
+            // Validate input parameters
+            String idThietBiPhongStr = request.getParameter("idThietBiPhong");
+            String idPhongStr = request.getParameter("idPhong");
+            String soLuongStr = request.getParameter("soLuong");
+            String trangThai = request.getParameter("trangThai");
+            String moTa = request.getParameter("moTa");
+
+            // Check for null or empty values
+            if (idThietBiPhongStr == null || idPhongStr == null || soLuongStr == null
+                    || idThietBiPhongStr.isEmpty() || idPhongStr.isEmpty() || soLuongStr.isEmpty()) {
+                throw new IllegalArgumentException("Vui lòng điền đầy đủ thông tin!");
+            }
+
+            // Parse numeric values
+            int idThietBiPhong = Integer.parseInt(idThietBiPhongStr);
+            int idPhong = Integer.parseInt(idPhongStr);
+            int soLuong = Integer.parseInt(soLuongStr);
+
+            // Validate numeric values
+            if (soLuong <= 0) {
+                throw new IllegalArgumentException("Số lượng phải lớn hơn 0!");
+            }
+
+            ThietBiPhongDAO dao = new ThietBiPhongDAO();
             boolean success = dao.updateThietBiInPhong(idThietBiPhong, soLuong, trangThai, moTa);
+            
             if (success) {
-                session.setAttribute("successMessage", "Cập nhật thiết bị thành công.");
+                session.setAttribute("successMessage", "Cập nhật thiết bị thành công!");
             } else {
                 session.setAttribute("updateErrorMessage", "Không đủ số lượng thiết bị để cập nhật.");
             }
-        } catch (SQLException e) {
-            session.setAttribute("updateErrorMessage", "Lỗi khi cập nhật thiết bị: " + e.getMessage());
+            
+        } catch (NumberFormatException e) {
+            session.setAttribute("updateErrorMessage", "Lỗi: Dữ liệu số không hợp lệ.");
+        } catch (IllegalArgumentException e) {
+            session.setAttribute("updateErrorMessage", e.getMessage());
+       
+        } catch (Exception e) {
+            session.setAttribute("updateErrorMessage", "Đã xảy ra lỗi không mong muốn: " + e.getMessage());
         }
-
+        
+        // Get idPhong for redirect, with error handling
+        String idPhong = "0";
+        try {
+            idPhong = request.getParameter("idPhong");
+        } catch (Exception e) {
+            session.setAttribute("updateErrorMessage", "Lỗi khi xử lý ID phòng.");
+        }
+        
         response.sendRedirect("detailRoom?id=" + idPhong);
     }
 

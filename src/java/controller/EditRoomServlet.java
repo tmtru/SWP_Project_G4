@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller;
 
 import static controller.AddRoomServlet.extractFileName;
@@ -68,10 +64,77 @@ public class EditRoomServlet extends HttpServlet {
             String dienTich = request.getParameter("dienTich");
             String gia = request.getParameter("gia");
             String id = request.getParameter("phongId");
-            String trangThai = request.getParameter("trangThai");
+
+            // Validation variables
+            boolean hasError = false;
+            String errorMessage = "";
 
             // Fetch the old room details before updating
             Phong oldRoom = pdao.getDetailRoom(Integer.parseInt(id));
+
+            // Validate room name
+            if (tenPhongTro == null || tenPhongTro.trim().isEmpty()) {
+                hasError = true;
+                errorMessage += "Tên phòng không được để trống. ";
+            } else {
+                // Check if the room name exists for other rooms in the same nha tro
+                if (!tenPhongTro.equals(oldRoom.getTenPhongTro())
+                        && pdao.isRoomNameExists(tenPhongTro.trim(), Integer.parseInt(nhaTroId))) {
+                    hasError = true;
+                    errorMessage += "Tên phòng đã tồn tại trong nhà trọ này. ";
+                }
+            }
+
+            // Validate floor number
+            int tangNumber;
+            try {
+                tangNumber = Integer.parseInt(tang);
+                if (tangNumber <= 0) {
+                    hasError = true;
+                    errorMessage += "Số tầng phải là số nguyên dương. ";
+                }
+            } catch (NumberFormatException e) {
+                hasError = true;
+                errorMessage += "Số tầng không hợp lệ. ";
+            }
+
+            // Validate area
+            float dienTichValue;
+            try {
+                dienTichValue = Float.parseFloat(dienTich);
+                if (dienTichValue <= 0) {
+                    hasError = true;
+                    errorMessage += "Diện tích phải lớn hơn 0. ";
+                }
+            } catch (NumberFormatException e) {
+                hasError = true;
+                errorMessage += "Diện tích không hợp lệ. ";
+            }
+
+            // Validate price
+            int giaValue;
+            try {
+                giaValue = Integer.parseInt(gia);
+                if (giaValue <= 0) {
+                    hasError = true;
+                    errorMessage += "Giá phòng phải lớn hơn 0. ";
+                }
+            } catch (NumberFormatException e) {
+                hasError = true;
+                errorMessage += "Giá phòng không hợp lệ. ";
+            }
+
+            // If there are errors, redirect back with error message
+            if (hasError) {
+                HttpSession session = request.getSession();
+                session.setAttribute("editRoomError", errorMessage);
+                session.setAttribute("tenPhongTro", tenPhongTro);
+                session.setAttribute("tang", tang);
+                session.setAttribute("dienTich", dienTich);
+                session.setAttribute("gia", gia);
+                response.sendRedirect("room");
+                return;
+            }
 
             // Handling image uploads
             List<String> imageFiles = new ArrayList<>();
@@ -107,17 +170,16 @@ public class EditRoomServlet extends HttpServlet {
                 }
             }
 
-            // Update room
+            // Update room - keeping the original trangThai
             Phong updatedRoom = new Phong(Integer.parseInt(id), Integer.parseInt(loaiPhongId),
                     tenPhongTro, Integer.parseInt(nhaTroId),
                     Integer.parseInt(tang),
-                    trangThai,
+                    oldRoom.getTrang_thai(), // Keep the original status
                     Float.parseFloat(dienTich),
                     Integer.parseInt(gia));
 
             pdao.updateRoom(updatedRoom);
 
-            
             // for action history
             // Log the changes
             StringBuilder changesLog = new StringBuilder("Cập nhật chi tiết nhà trọ: \n");
@@ -151,13 +213,6 @@ public class EditRoomServlet extends HttpServlet {
                         .append(oldRoom.getGia())
                         .append("' thành '")
                         .append(gia)
-                        .append("'.\n");
-            }
-            if (!oldRoom.getTrang_thai().equals(trangThai)) {
-                changesLog.append("Trạng thái phòng đã đổi từ '")
-                        .append(oldRoom.getTrang_thai())
-                        .append("' thành '")
-                        .append(trangThai)
                         .append("'.\n");
             }
 
@@ -228,6 +283,6 @@ public class EditRoomServlet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
+    }
 
 }

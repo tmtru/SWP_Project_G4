@@ -177,8 +177,7 @@
                                                         </div>
                                                         <h3 class="listing-title">${nt.tenNhaTro}</h3>
                                                     </div>
-                                                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/90ea229282d786c2880b0b9f62e1a929d080f8ab2a7374939c5c5341de6a27e6?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
-                                                         alt="Property icon" class="listing-icon">
+
                                                 </div>
                                                 <p class="listing-address">${nt.dia_chi}</p>
                                                 <%
@@ -195,16 +194,7 @@
                                                                  alt="Bed icon" class="facility-icon">
                                                             <span class="facility-text">${rooms.size()} phòng</span>
                                                         </div>
-                                                        <div class="facility">
-                                                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/9231b2dc8c867269a0642952d2e56b1bb47eae017ffe429a8a13c2342805d139?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
-                                                                 alt="Bath icon" class="facility-icon">
-                                                            <span class="facility-text">???</span>
-                                                        </div>
-                                                        <div class="facility">
-                                                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/b386f5e42bcb3e6ff44952904ea0ae16cda92a7ebfd22180c2860cf11135bb36?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
-                                                                 alt="Dimension icon" class="facility-icon">
-                                                            <span class="facility-text">5x7 m²</span>
-                                                        </div>
+
                                                     </div>
 
                                                     <!-- Distance Box -->

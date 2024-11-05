@@ -11,9 +11,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 
 .rental-property {
     display: flex;
-    gap: 100px;
     align-items: center;
-    justify-content:  center;
+    justify-content: space-evenly;
     margin: 10px 0;
 }
 

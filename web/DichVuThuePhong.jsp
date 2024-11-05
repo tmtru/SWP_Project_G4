@@ -38,19 +38,19 @@
             </div>
         </div>
 
-        <form action="DangKyDichVuPhongTro" method="post">
+        <form action="DangKyDichVuPhongTro" method="post" onsubmit="return validateCheckbox()">
             <div class="tabs">
                 <a href="DichVuThuePhong.jsp" class="tab active">Dịch vụ</a>
                 <% 
-        String errorMessage = (String) request.getAttribute("errorMessage");
-        String successMessage = (String) request.getAttribute("Message");
-        
-        if (successMessage != null && errorMessage == null) {
-    %>
-        <a href="#" class="tab" onclick="redirectToHopDong()">Hợp đồng</a>
-    <% 
-        }
-    %>
+                    String errorMessage = (String) request.getAttribute("errorMessage");
+                    String successMessage = (String) request.getAttribute("Message");
+                    
+                    if (successMessage != null && errorMessage == null) {
+                %>
+                    <a href="#" class="tab" onclick="redirectToHopDong()">Hợp đồng</a>
+                <% 
+                    }
+                %>
             </div>
 
             <div class="alert">
@@ -83,7 +83,6 @@
             </div>
 
             <div class="people-section">
-                
                 <div class="input-group">
                     <input type="hidden" id="hopDongId" name="hopDongId" value="${hopDongId}" required>
                 </div>
@@ -107,7 +106,6 @@
 
                             if (dichVuList != null && !dichVuList.isEmpty()) {
                                 for (DichVu dichVu : dichVuList) {
-                                    // Kiểm tra xem dịch vụ có được chọn không
                                     boolean isChecked = false;
                                     if (selectedServices != null) {
                                         for (String selectedService : selectedServices) {
@@ -146,13 +144,30 @@
             </div>
         </form>
     </div>
-                    <script>
-    function redirectToHopDong() {
-        // Lấy giá trị của hopDongId từ input ẩn
-        var hopDongId = document.getElementById('hopDongId').value;
-        // Chuyển hướng tới trang hợp đồng với tham số hopDongId
-        window.location.href = 'HopDongThueTro?hopDongId=' + hopDongId;
-    }
-</script>
+
+    <script>
+        function validateCheckbox() {
+            const checkboxes = document.querySelectorAll('input[name="service-selected"]');
+            let isChecked = false;
+            
+            for (const checkbox of checkboxes) {
+                if (checkbox.checked) {
+                    isChecked = true;
+                    break;
+                }
+            }
+            
+            if (!isChecked) {
+                alert("Vui lòng chọn ít nhất một dịch vụ.");
+                return false; // Ngăn form submit nếu không có checkbox nào được chọn
+            }
+            return true; // Cho phép submit nếu đã chọn ít nhất một checkbox
+        }
+
+        function redirectToHopDong() {
+            var hopDongId = document.getElementById('hopDongId').value;
+            window.location.href = 'HopDongThueTro?hopDongId=' + hopDongId;
+        }
+    </script>
 </body>
 </html>

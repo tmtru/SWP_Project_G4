@@ -38,7 +38,7 @@ body {
     background-color: #7065F0;
     color: #ffffff;
     outline: none;
-    width: 100px;
+    width: 120px;
 }
 .navbar-light .navbar-collapse .signup-button {
     background-color: #ffffff;
@@ -2443,4 +2443,85 @@ nav button {
     font-size: 18px;
     border-radius: 50%;
     border-color: #af9fff
+}
+
+/*//Like part header*/
+li .iq-sub-dropdown .iq-sub-card {
+    position: relative;
+    padding: 15px 15px;
+    line-height: normal;
+    text-align: left;
+    display: block;
+    border: 1px solid;
+    border-image-slice: 1;
+    border-width: 0 0 1px 0;
+    border-image-source: linear-gradient(to right, rgba(209, 208, 207, 0.6), rgba(209, 208, 207, 0.3), rgba(209, 208, 207, 0));
+}
+.nav-item.nav-icon{
+    display: flex;
+    /* font-size: 25px; */
+    align-items: center;
+    margin-right: 25px;
+}
+.iq-sub-dropdown .iq-card-body .iq-sub-card:last-child {
+    border-bottom: 0;
+}
+
+ .iq-sub-card.setting-dropdown {
+    padding: 15px 15px 15px 0 !important;
+
+}
+
+li .iq-sub-dropdown a.iq-sub-card:last-child {
+    border-bottom: 0;
+}
+
+.iq-sub-dropdown .iq-card-body div {
+    border-radius: 0;
+}
+
+.iq-show .iq-sub-dropdown,
+.iq-show .search-box {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(0, 0);
+}
+
+.iq-sub-dropdown {
+    visibility: hidden;
+    position: absolute;
+    top: 90%;
+    right: 100px;
+    background: rgba(11, 11, 66, 0.8);
+    transform: translate(0, -30px);
+    /* transition: all 0.3s ease-in 0s; */
+    z-index: 1;
+    color: white !important;
+    border-radius: 5px;
+    max-height: 350px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.iq-notify-dropdown .iq-sub-card {
+    width: 300px;
+}
+
+.iq-user-dropdown .iq-sub-card {
+    width: 200px;
+}
+
+.iq-sub-card:hover {
+    background: linear-gradient(to left, rgba(235, 235, 235, 0) 0%, rgba(149, 151, 230, 0.3) 100%);
+}
+#likedRoomsContainer .liked .price{
+    font-size: 16px !important;
+}
+#likedRoomsContainer .liked .listing-name{
+    font-size: 18px ;
+}
+#likedRoomsContainer .listing-card {
+        max-width: 330px;
+    padding-bottom: 0;
+    margin: 10px;
 }

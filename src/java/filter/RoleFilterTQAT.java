@@ -120,7 +120,7 @@ public class RoleFilterTQAT implements Filter {
                 || uri.equals("/category") || uri.equals("/login") || uri.equals("/register") || uri.equals("/resetpassword") || uri.equals("/logingoogle")
                 || uri.equals("/verification") || uri.equals("/sendemail") || uri.equals("/logout") || uri.equals("/profileServlet")
                 || uri.equals("/allrooms") ||  uri.equals("/allrooms.jsp") || uri.equals("/filterrooms") || uri.equals("/contactUs_map.jsp")
-                || uri.equals("/thongtinlienhe");
+                || uri.equals("/thongtinlienhe") || uri.equals("/feedback")|| uri.equals("/roomdetails") || uri.equals("/LoadLikedRooms");
         boolean isStaticResource = uri.endsWith(".css") || uri.endsWith(".js") || uri.endsWith(".jpg") || uri.endsWith(".png") || uri.endsWith(".gif");
 
         if ( "landlord".equals(role) || "manager".equals(role)) {

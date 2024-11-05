@@ -5,7 +5,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Thêm khách thuê phòng</title>
+        <title>Thông tin người đại diện thuê phòng</title>
         <link rel="stylesheet" href="css/stylehopdong.css">
         <style>
             .container {
@@ -20,7 +20,7 @@
         <jsp:include page="adminUserManagement/sidebar.jsp"></jsp:include>
             <div class="container">
                 <div class="header">
-                    <h1>Thêm khách thuê phòng</h1>
+                    <h1>Thông tin người đại diện thuê phòng</h1>
                     <div class="buttons">
                         <button class="btn return" onclick="window.history.back();">Quay về</button>
                         <button class="btn save">Lưu</button>
@@ -28,7 +28,7 @@
                 </div>
                 <div class="form">
                     <div class="tabs">
-                        <a style="text-decoration: none;" href="addContract" class="tab active">Thông tin khách thuê</a>
+                        <a style="text-decoration: none;" href="addContract" class="tab active">Thông tin người đại diện thuê phòng</a>
                     <% 
                                 String message = (String) request.getAttribute("message");
                                 if (message != null) {

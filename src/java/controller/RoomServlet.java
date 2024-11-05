@@ -11,14 +11,15 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.ArrayList;
 import model.LoaiPhong;
 import model.NhaTro;
 import model.Phong;
 
 public class RoomServlet extends HttpServlet {
+
     private static final Map<String, String> STATUS_DESCRIPTIONS = new HashMap<>();
-    private static final int DEFAULT_HOUSE_ID = 1;
-    
+
     static {
         STATUS_DESCRIPTIONS.put("D", "Đang thuê");
         STATUS_DESCRIPTIONS.put("T", "Trống");
@@ -50,21 +51,24 @@ public class RoomServlet extends HttpServlet {
             }
         }
 
-        // Handle house selection
-        int currentHouseId = DEFAULT_HOUSE_ID;
+        // Get houses by role from session
+        @SuppressWarnings("unchecked")
+        List<NhaTro> housesByRole = (List<NhaTro>) request.getSession().getAttribute("housesByRole");
+
+        // Handle house selection with automatic selection of first house
+        int currentHouseId = -1;
+
         if (idHouseStr != null && !idHouseStr.isEmpty()) {
             try {
                 currentHouseId = Integer.parseInt(idHouseStr);
-                request.getSession().setAttribute("currentHouse", currentHouseId);
             } catch (NumberFormatException e) {
-                // Use default house ID
+                // Invalid ID, will fall back to first house
             }
         } else if (nhaTroId != null && !nhaTroId.isEmpty()) {
             try {
                 currentHouseId = Integer.parseInt(nhaTroId);
-                request.getSession().setAttribute("currentHouse", currentHouseId);
             } catch (NumberFormatException e) {
-                // Use default house ID
+                // Invalid ID, will fall back to first house
             }
         } else {
             Object sessionHouse = request.getSession().getAttribute("currentHouse");
@@ -73,25 +77,39 @@ public class RoomServlet extends HttpServlet {
             }
         }
 
-        // Apply filters and get rooms
-        List<Phong> filteredRooms;
-        if (tangParam != null && !tangParam.isEmpty()) {
-            try {
-                int tang = Integer.parseInt(tangParam);
-                // Get rooms filtered by both house and floor
-                filteredRooms = roomDAO.getRoomsByNhaTroAndTang(currentHouseId, tang);
-            } catch (NumberFormatException e) {
-                filteredRooms = roomDAO.getPhongsByNhaTroId(currentHouseId);
-            }
-        } else {
-            filteredRooms = roomDAO.getPhongsByNhaTroId(currentHouseId);
+        // If no house is selected and there are available houses, select the first one
+        if (currentHouseId == -1 && housesByRole != null && !housesByRole.isEmpty()) {
+            currentHouseId = housesByRole.get(0).getID_NhaTro();
         }
 
-        // Apply status filter if present
-        if (status != null && !status.isEmpty()) {
-            filteredRooms = filteredRooms.stream()
-                .filter(room -> status.equals(room.getTrang_thai()))
-                .collect(java.util.stream.Collectors.toList());
+        // Store the selected house ID in session
+        request.getSession().setAttribute("currentHouse", currentHouseId);
+
+        // Apply filters and get rooms
+        List<Phong> filteredRooms;
+        if (currentHouseId != -1) {
+            // Lấy danh sách phòng theo nhà trọ
+            filteredRooms = roomDAO.getPhongsByNhaTroId(currentHouseId);
+
+            // Nếu có filter tầng
+            if (tangParam != null && !tangParam.isEmpty()) {
+                try {
+                    int tang = Integer.parseInt(tangParam);
+                    filteredRooms = roomDAO.getRoomsByNhaTroAndTang(currentHouseId, tang);
+                } catch (NumberFormatException e) {
+                    // Giữ nguyên danh sách phòng nếu tầng không hợp lệ
+                }
+            }
+
+            // Nếu có filter status
+            if (status != null && !status.isEmpty()) {
+                // Lọc theo status từ danh sách hiện tại
+                filteredRooms = filteredRooms.stream()
+                        .filter(room -> status.equals(room.getTrang_thai()))
+                        .collect(java.util.stream.Collectors.toList());
+            }
+        } else {
+            filteredRooms = new ArrayList<>(); // Empty list if no house is selected
         }
 
         // Calculate pagination
@@ -107,7 +125,7 @@ public class RoomServlet extends HttpServlet {
         List<Integer> tangList = roomDAO.getAvailableTang();
         List<NhaTro> nhaTroList = nhaTroDAO.getAll();
         List<LoaiPhong> loaiPhongList = loaiPhongDAO.getAllLoaiPhong();
-        Map<String, String> statusMap = getStatusDescriptions(roomDAO.getAvailableStatuses());
+        Map<String, String> statusMap = STATUS_DESCRIPTIONS;
 
         // Set attributes for JSP
         request.setAttribute("rooms", paginatedRooms);

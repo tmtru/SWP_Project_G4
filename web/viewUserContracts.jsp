@@ -1,8 +1,9 @@
 <%@page import="java.util.List"%>
+<%@page import="java.util.Date"%> <!-- Added this import for Date -->
 <%@page import="model.HopDong"%>
-<%@page import="model.KhachThue"%> 
+<%@page import="model.KhachThue"%>
 <%@page import="model.Account"%>
-<%@page session="true" %> 
+<%@page session="true" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     // Lấy ID_Account từ session
@@ -124,6 +125,24 @@
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
+
+        .star-rating i {
+            font-size: 1.5rem;
+            cursor: pointer;
+            margin: 0 2px;
+            color: #FFD700;
+        }
+
+        #feedbackForm textarea {
+            width: 100%;
+            height: 60px;
+            margin-top: 5px;
+        }
+
+        .feedback-section {
+            margin-top: 10px;
+        }
+
     </style> 
 </head> 
 <body> 
@@ -143,12 +162,23 @@
                 <a href="#" class="menu-item">Yêu cầu bảo trì</a>
             <% } %>
 
-            <a href="home.jsp" class="menu-item">Về trang chủ</a>
+            <a href="#" class="menu-item">Về trang chủ</a>
         </nav>
     </div> 
 
     <div class="container"> 
         <h1>Danh sách Hợp Đồng</h1>
+          <%
+            // Display the message if it exists
+            String message = (String) request.getAttribute("message");
+            if (message != null && !message.isEmpty()) {
+        %>
+            <div class="alert alert-info">
+                <%= message %>
+            </div>
+        <%
+            }
+        %>
 
         <%
             List<HopDong> hopDongs = (List<HopDong>) request.getAttribute("hopDongs");
@@ -159,35 +189,111 @@
         <%
             } else {
         %>
-            <table>
-                <tr>
-                    <th>ID Hợp Đồng</th>
-                    <th>ID Khách Thuê</th>
-                    <th>ID Phòng Trọ</th>
-                    <th>Ngày Giá Trị</th>
-                    <th>Ngày Hết Hạn</th>
-                    <th>Tiền Cọc</th>
-                </tr>
-                <%
-                    for (HopDong hopDong : hopDongs) {
-                %>
-                <tr>
-                    <td><%= hopDong.getID_HopDong() %></td>
-                    <td><%= hopDong.getID_KhachThue() %></td>
-                    <td><%= hopDong.getID_Phongtro() %></td>
-                    <td><%= hopDong.getNgay_gia_tri() %></td>
-                    <td><%= hopDong.getNgay_het_han() %></td>
-                    <td><%= hopDong.getTien_Coc() %></td>
-                </tr>
-                <%
+          <table>
+            <tr>
+                <th>ID Hợp Đồng</th>
+                <th>ID Khách Thuê</th>
+                <th>ID Phòng Trọ</th>
+                <th>Ngày Giá Trị</th>
+                <th>Ngày Hết Hạn</th>
+                <th>Tiền Cọc</th>
+                <th>Feedback</th>
+            </tr>
+            <%
+            for (HopDong hopDong : hopDongs) {
+                String feedbackContent = hopDong.getNoi_dung();
+                int rating = (hopDong.getDanh_gia() != null) ? Integer.parseInt(hopDong.getDanh_gia()) : 0;
+                Date currentDate = new Date(); // Current date
+                Date expirationDate = hopDong.getNgay_het_han(); // Expiration date
+                boolean canAddFeedback = currentDate.compareTo(expirationDate) >= 0; // Check if current date >= expiration date
+            %>
+            <tr>
+                <td><%= hopDong.getID_HopDong() %></td>
+                <td><%= hopDong.getKhach_thue() %></td>
+                <td><%= hopDong.getTen_phong() %></td>
+                <td><%= hopDong.getNgay_gia_tri() %></td>
+                <td><%= hopDong.getNgay_het_han() %></td>
+                <td><%= hopDong.getTien_Coc() %></td>
+                <td>
+                    <%
+                    if (feedbackContent != null && !feedbackContent.isEmpty()) {
+                    %>
+                        <div>
+                            <strong>Feedback:</strong> <%= feedbackContent %> <br/>
+                            <strong>Rating:</strong>
+                            <div class="star-rating">
+                                <% for (int i = 1; i <= 5; i++) { %>
+                                    <i class="<%= (i <= rating) ? "fas" : "far" %> fa-star"></i>
+                                <% } %>
+                            </div>
+                        </div>
+                    <%
+                    } else {
+                        if (canAddFeedback) {
+                    %>
+                        <button onclick="toggleFeedbackForm(<%= hopDong.getID_HopDong() %>)" class="btn btn-primary">Add Feedback</button>
+                        <div id="feedbackForm_<%= hopDong.getID_HopDong() %>" class="feedback-section" style="display: none;">
+                            <form action="feedback" method="post">
+                               
+    
+    <input type="hidden" name="idKhachThue" value="<%= hopDong.getID_KhachThue() %>">
+    <input type="hidden" name="idPhong" value="<%= hopDong.getID_Phongtro() %>">
+    <textarea name="noiDung" required placeholder="Enter your feedback"></textarea>
+    <div class="star-rating" onclick="setRating(<%= hopDong.getID_HopDong() %>, event)">
+        <i class="far fa-star" data-value="1"></i>
+        <i class="far fa-star" data-value="2"></i>
+        <i class="far fa-star" data-value="3"></i>
+        <i class="far fa-star" data-value="4"></i>
+        <i class="far fa-star" data-value="5"></i>
+    </div>
+    <input type="hidden" id="ratingInput_<%= hopDong.getID_HopDong() %>" name="danhGia" value="0">
+    <button type="submit" class="btn btn-success mt-2">Submit Feedback</button>
+</form>
+
+                            </form>
+                        </div>
+                    <%
+                        } else {
+                            out.println("Feedback not available.");
+                        }
                     }
-                %>
+                    %>
+                </td>
+            </tr>
+            <%
+                }
+            %>
             </table>
         <%
             }
         %>
-    </div> 
+    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleFeedbackForm(hopDongId) {
+            var form = document.getElementById('feedbackForm_' + hopDongId);
+            if (form.style.display === 'none' || form.style.display === '') {
+                form.style.display = 'block';
+            } else {
+                form.style.display = 'none';
+            }
+        }
+
+        function setRating(hopDongId, event) {
+            var stars = event.currentTarget.querySelectorAll('i');
+            var ratingInput = document.getElementById('ratingInput_' + hopDongId);
+            var rating = event.target.getAttribute('data-value');
+            ratingInput.value = rating;
+
+            stars.forEach((star, index) => {
+                star.classList.remove('fas');
+                star.classList.add('far');
+                if (index < rating) {
+                    star.classList.remove('far');
+                    star.classList.add('fas');
+                }
+            });
+        }
+    </script>
 </body> 
 </html>

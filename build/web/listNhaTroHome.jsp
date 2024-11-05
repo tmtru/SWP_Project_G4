@@ -105,20 +105,21 @@
                                                 <h4 class="listing-name">Phòng ${rs.tenPhongTro}</h4>
                                                 <c:if test="${rs.trang_thai.equals('T')}">
                                                     <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Phòng trống" style="color: red">
-                                                        <i class="fa-solid fa-circle-exclamation" style="color: red" disabled></i> Trống
+                                                        <i class="fa-solid fa-circle-exclamation" style="color: green" disabled></i> Trống
                                                     </span>
                                                 </c:if>
-                                                <c:if test="${rs.trang_thai.equals('D')}">
+                                                <c:if test="${rs.trang_thai.equals('DT')}">
                                                     <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Phòng trống" style="color: #009933">
-                                                        <i class="fa-solid fa-circle-exclamation" style="color: #009933" disabled></i> Đã thuê
+                                                        <i class="fa-solid fa-circle-exclamation" style="color: red" disabled></i> Trống tháng sau
                                                     </span>
                                                 </c:if>
 
                                             </div>
                                             <div class="details-button">
-                                                <span class="details-text">Chi tiết</span>
-                                                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/38af489b0b824b4e9a4ca4f97538a5a535b0617bf3be7a86b92c79ae52dfe2c5?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
-                                                     alt="Underline" class="details-underline">
+                                                <a href="roomdetails?idPhong=${rs.ID_Phong}" class="mt-2">
+
+                                                    <span class="details-text">Chi tiết</span>
+                                                </a>
                                             </div>
                                         </div>
 

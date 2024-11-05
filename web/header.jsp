@@ -6,7 +6,8 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page import="java.util.List, java.util.ArrayList,java.text.DecimalFormat, model.NhaTro, model.Phong, dal.NhaTroDAO, dal.PhongDAO"%>
+
+<%@page import="jakarta.servlet.http.Cookie,java.util.List, java.util.ArrayList,java.text.DecimalFormat, model.NhaTro,model.Account, model.Phong, dal.NhaTroDAO, dal.PhongDAO"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -32,6 +33,46 @@
 
         <!-- Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                // Hàm để lấy giá trị của cookie theo tên
+                function getCookie(name) {
+                    let cookieArr = document.cookie.split(";");
+                    for (let i = 0; i < cookieArr.length; i++) {
+                        let cookiePair = cookieArr[i].trim();
+                        // Kiểm tra cookie có tên yêu cầu
+                        if (cookiePair.startsWith(name + "=")) {
+                            return cookiePair.split("=")[1]; // Trả về giá trị của cookie
+                        }
+                    }
+                    return null; // Nếu không tìm thấy cookie
+                }
+
+                // Lấy giá trị cookie likedRooms theo userId
+                let userId = '${sessionScope.account.getID_Account()}'; // Giả sử bạn đã lưu userId trong session
+                let likedRoomsCookie = getCookie("likedRooms_" + userId);
+
+                if (likedRoomsCookie) {
+                    let likedRoomsArray = likedRoomsCookie.split(","); // Chia tách giá trị cookie thành mảng
+
+                    // Gửi danh sách ID phòng về server
+                    $.ajax({
+                        type: "POST",
+                        url: "likedRooms.jsp", // Thay đổi thành URL của servlet hoặc JSP xử lý
+                        data: {likedRooms: likedRoomsArray.join(",")}, // Chuyển đổi mảng thành chuỗi
+                        success: function (response) {
+                            $('#likedRoomsContainer').html(response); // Cập nhật nội dung từ response
+                        },
+                        error: function () {
+                            $('#likedRoomsContainer').html('<div>Có lỗi xảy ra.</div>');
+                        }
+                    });
+                } else {
+                    $('#likedRoomsContainer').html('<div>Không có phòng nào đã thích.</div>');
+                }
+            });
+        </script>
 
 
     </head>
@@ -73,6 +114,12 @@
                                 </c:if>
                             </div>
 
+
+
+
+
+
+
                             <c:if test="${a==null}">
 
                                 <div class="button">
@@ -82,8 +129,27 @@
                                        class="btn my-3 login-button mx-3">Đăng nhập</a>
                                 </div>
                             </c:if>
+
+
                             <c:if test="${a!=null}">
                                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0 profile-menu"> 
+                                    <li class="nav-item nav-icon">
+                                        <a href="#" class="search-toggle" data-toggle="search-toggle">
+                                            <i class="fa-solid fa-heart-circle-exclamation" style="font-size: 25px; color: #cc33ff"></i>
+                                            <span class="bg-danger dots"></span>
+                                        </a>
+                                        <div class="iq-sub-dropdown iq-notify-dropdown" style="
+    z-index: 900;">
+                                            <div class="iq-card shadow-none m-0">
+                                                <div class="iq-card-body">
+                                                    <div id="likedRoomsContainer"> <!-- Container for liked rooms will be populated here -->
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </li>
                                     <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             <div class="profile-pic">
@@ -112,6 +178,7 @@
         <!-- Header End -->
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
 
 
 

@@ -132,31 +132,12 @@
                                  alt="Bed icon" class="facility-icon">
                             <span class="facility-text">${rooms.size()} phòng</span>
                         </div>
-                        <div class="facility">
-                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/9231b2dc8c867269a0642952d2e56b1bb47eae017ffe429a8a13c2342805d139?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
-                                 alt="Bath icon" class="facility-icon">
-                            <span class="facility-text">???</span>
-                        </div>
-                        <div class="facility">
-                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/b386f5e42bcb3e6ff44952904ea0ae16cda92a7ebfd22180c2860cf11135bb36?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
-                                 alt="Dimension icon" class="facility-icon">
-                            <span class="facility-text">5x7 m²</span>
-                        </div>
+
                     </div>
                 </div>
 
             </div>
-            <div class="stats">
-                <div class="stat-item">
-                    <span class="stat-value vacant">Trống</span>
-                    <span class="stat-label">3 phòng</span>
-                </div>
-                <div class="stat-divider"></div>
-                <div class="stat-item">
-                    <span class="stat-value occupied">Đã thuê</span>
-                    <span class="stat-label">7 phòng</span>
-                </div>
-            </div>
+
         </section>
         <div class="container mo-ta">
             <div class="property-info ">
@@ -261,30 +242,7 @@
                                 </div>
                             </div>
 
-                            <div class="box">
-                                <div class="box-label text-uppercase d-flex align-items-center">Tiện nghi phòng
-                                    <button class="btn ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#room-facilities" aria-expanded="false" aria-controls="room-facilities">
-                                        <span class="fas fa-plus"></span>
-                                    </button>
-                                </div>
-                                <div id="room-facilities" class="collapse">
-                                    <div class="my-1">
-                                        <label class="tick">Điều hòa <input type="checkbox" checked="checked"> <span class="check"></span></label>
-                                    </div>
-                                    <div class="my-1">
-                                        <label class="tick">Bàn làm việc <input type="checkbox"> <span class="check"></span></label>
-                                    </div>
-                                    <div class="my-1">
-                                        <label class="tick">Ban công <input type="checkbox"> <span class="check"></span></label>
-                                    </div>
-                                    <div class="my-1">
-                                        <label class="tick">TV  <input type="checkbox"> <span class="check"></span></label>
-                                    </div>
-                                    <div class="my-1">
-                                        <label class="tick">Máy pha cà phê/trà <input type="checkbox"> <span class="check"></span></label>
-                                    </div>
-                                </div>
-                            </div>
+
                         </div>
                     </form>
                 </div>
@@ -319,60 +277,95 @@
                         </div>
                         <div class=" rooms-of-house mt-3 d-flex" id="roomsContainer">
                         <c:forEach items="${rooms}" var="rs">
-                            <c:if test="${!rs.trang_thai.equals('D')}">
-                                <article class="listing-card item" >
-                                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/807191b1c5ec9a365e8d960bde1533408c378d956c435939b9c17e77e1cb689b?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
-                                         alt="Room image" class="listing-image">
-                                    <div class="listing-info">
-                                        <div class="listing-details">
-                                            <div class="listing-price">
-                                                <span class="price">${rs.gia/1000000} tr</span>
-                                                <span class="price-period">/tháng</span>
-                                            </div>
-                                            <h4 class="listing-name">Phòng ${rs.tenPhongTro}</h4>
-                                            <c:if test="${rs.trang_thai.equals('T')}">
-                                                <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Phòng trống" style="color: red">
-                                                    <i class="fa-solid fa-circle-exclamation" style="color: red" disabled></i> Trống
-                                                </span>
-                                            </c:if>
-                                            <c:if test="${rs.trang_thai.equals('D')}">
-                                                <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Phòng trống" style="color: #009933">
-                                                    <i class="fa-solid fa-circle-exclamation" style="color: #009933" disabled></i> Đã thuê
-                                                </span>
-                                            </c:if>
 
+                            <article class="listing-card item" >
+                                <div class="">
+                                    <!-- Image Carousel -->
+                                    <c:set var="room" value="${rs.ID_Phong}" />
+
+                                    <!--Get all room of the current nhatro-->
+                                    <%  Integer idRoom = (Integer) pageContext.getAttribute("room");
+                                            
+                                                                    PhongDAO pd= new PhongDAO();
+                                                                List<String> images= pd.getImagesByPhongId(idRoom);
+                                                                request.setAttribute("images",images);
+
+                                    %>
+                                    <div id="roomImageCarousel" class="carousel slide " data-ride="carousel">
+                                        <div class="carousel-inner img-detailRoom">
+                                            <c:forEach items="${images}" var="image" varStatus="status">
+                                                <div class="carousel-item ${status.index == 0 ? 'active' : ''}">
+                                                    <img src="${image}" class="d-block w-100" alt="${rs.tenPhongTro}" style="
+                                                         aspect-ratio: 16/9;
+                                                         ">
+                                                </div>
+                                            </c:forEach>
                                         </div>
-                                        <div class="details-button">
-                                            <button class="icons like" data-room-id="${rs.ID_Phong}">
-                                                <i class="fa-regular fa-heart unlike"></i>
-                                                <i class="fa-solid fa-heart like" style="color:rgb(98, 136, 218); display: none;"></i>
-                                            </button>
-                                            <input id="idphonglike" name="likephong" value="${rs.ID_Phong}" type="hidden"/>
+                                        <a class="carousel-control-prev" href="#roomImageCarousel" role="button" data-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                        <a class="carousel-control-next" href="#roomImageCarousel" role="button" data-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Next</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="listing-info">
+                                    <div class="listing-details">
+                                        <div class="listing-price">
+                                            <span class="price">${rs.gia/1000000} tr</span>
+                                            <span class="price-period">/tháng</span>
+                                        </div>
+                                        <h4 class="listing-name">Phòng ${rs.tenPhongTro}</h4>
+                                        <c:if test="${rs.trang_thai.equals('T')}">
+                                            <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Phòng trống" style="color: green">
+                                                <i class="fa-solid fa-circle-exclamation" style="color: #28A745" disabled></i> Trống
+                                            </span>
+                                        </c:if>
+                                        <c:if test="${rs.trang_thai.equals('D')}">
+                                            <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Phòng trống" style="color: red">
+                                                <i class="fa-solid fa-circle-exclamation" style="color: red" disabled></i> Đã thuê
+                                            </span>
+                                        </c:if>
+                                        <c:if test="${rs.trang_thai.equals('DT')}">
+                                            <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Phòng trống" style="color: #007BFF">
+                                                <i class="fa-solid fa-circle-exclamation" style="color: #007BFF" disabled></i> Trống tháng sau
+                                            </span>
+                                        </c:if>
+
+                                    </div>
+
+                                    <div class="details-button">
+                                        <button class="icons like" data-room-id="${rs.ID_Phong}">
+                                            <i class="fa-regular fa-heart unlike"></i>
+                                            <i class="fa-solid fa-heart like" style="color:rgb(98, 136, 218); display: none;"></i>
+                                        </button>
+                                        <input id="idphonglike" name="likephong" value="${rs.ID_Phong}" type="hidden"/>
+                                        <a href="roomdetails?idPhong=${rs.ID_Phong}" class="mt-2">
 
                                             <span class="details-text">Chi tiết</span>
-                                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/38af489b0b824b4e9a4ca4f97538a5a535b0617bf3be7a86b92c79ae52dfe2c5?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
-                                                 alt="Underline" class="details-underline">
-                                        </div>
+                                        </a>
+
+                                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/38af489b0b824b4e9a4ca4f97538a5a535b0617bf3be7a86b92c79ae52dfe2c5?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
+                                             alt="Underline" class="details-underline">
                                     </div>
-                                    <hr class="divider">
-                                    <div class="facilities">
-                                        <div class="facility">
-                                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/91548f776f5f1c44de4afa0b594a698a690aa51b3155ce2280947cf745e5ca4d?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
-                                                 alt="Bed icon" class="facility-icon">
-                                            <span class="facility-text">Bed</span>
-                                        </div>
-                                        <div class="facility">
-                                            <i class="fa-solid fa-stairs facility-icon"></i>
-                                            <span class="facility-text">Tầng ${rs.tang}</span>
-                                        </div>
-                                        <div class="facility">
-                                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/18c032977b463fe970eb067104d0c95807cbf310ae9c273e9de01b3d7e27099a?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
-                                                 alt="Dimension icon" class="facility-icon">
-                                            <span class="facility-text">${rs.dien_tich} m²</span>
-                                        </div>
+                                </div>
+                                <hr class="divider">
+                                <div class="facilities">
+
+                                    <div class="facility">
+                                        <i class="fa-solid fa-stairs facility-icon"></i>
+                                        <span class="facility-text">Tầng ${rs.tang}</span>
                                     </div>
-                                </article>
-                            </c:if>
+                                    <div class="facility">
+                                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/18c032977b463fe970eb067104d0c95807cbf310ae9c273e9de01b3d7e27099a?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
+                                             alt="Dimension icon" class="facility-icon">
+                                        <span class="facility-text">${rs.dien_tich} m²</span>
+                                    </div>
+                                </div>
+                            </article>
+
                         </c:forEach>
                     </div>
                 </div>
@@ -383,16 +376,13 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="loginPromptLabel">Login Required</h5>
+                            <h5 class="modal-title" id="loginPromptLabel">Yêu cầu đăng nhập</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            Please log in to like rooms.
+                            Xin vui lòng đăng nhập để sử dụng tiện ích của chúng tôi.
                         </div>
-                        <div class="modal-footer">
-                            <a href="/login" class="btn btn-primary">Log In</a>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -450,126 +440,160 @@
                 <c:choose>
                     <c:when test="${not empty sessionScope.account}">
                 const userId = ${sessionScope.account.ID_Account};
+                const likedRoomsKey = `likedRooms_\${userId}`;
+
                 function setCookie(name, value, days) {
-                const d = new Date();
-                d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
-                document.cookie = `\${name}=\${value};expires=\${d.toUTCString()};path=/`;
+                    const d = new Date();
+                    d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+                    document.cookie = `\${name}=\${value};expires=\${d.toUTCString()};path=/NhaTroTQAT`;
                 }
+
                 function getCookie(name) {
-                const value = `; \${document.cookie}`;
-                const parts = value.split(`; \${name}=`);
-                console.log(value);
-                return parts.length === 2 ? parts.pop().split(';').shift() : null;
-                console.log(parts.length === 2 ? parts.pop().split(';').shift() : null);
+                    const value = `; \${document.cookie}`;
+                    const parts = value.split(`; \${name}=`);
+                    return parts.length === 2 ? parts.pop().split(';').shift() : null;
                 }
 
+                // Lấy danh sách các phòng đã thích từ cookie
+                function getLikedRooms() {
+                    const likedRooms = getCookie(likedRoomsKey);
+                    return likedRooms ? likedRooms.split(',') : [];
+                }
 
+                // Cập nhật danh sách phòng đã thích trong cookie
+                function updateLikedRooms(roomId, isLiked) {
+                    let likedRooms = getLikedRooms();
+
+                    if (isLiked) {
+                        // Thêm phòng vào danh sách nếu chưa có
+                        if (!likedRooms.includes(roomId)) {
+                            likedRooms.push(roomId);
+                        }
+                    } else {
+                        // Xóa phòng khỏi danh sách nếu đã có
+                        likedRooms = likedRooms.filter(id => id !== roomId);
+                    }
+
+                    // Cập nhật lại cookie với danh sách phòng mới
+                    setCookie(likedRoomsKey, likedRooms.join(','), 30);
+                }
+
+                // Xử lý sự kiện khi nhấn nút like
                 $('.icons.like').on('click', function () {
-                const roomId = $(this).data('room-id');
-                const cookieKey = `liked_\${userId}_\${roomId}`;
-                const isLiked = getCookie(cookieKey) === 'true';
-                const newStatus = !isLiked;
-                setCookie(cookieKey, newStatus, 30);
-                $(this).find('.unlike').toggle(!newStatus);
-                $(this).find('.like').toggle(newStatus);
+                    const roomId = $(this).data('room-id').toString();
+                    const likedRooms = getLikedRooms();
+                    const isLiked = likedRooms.includes(roomId);
+                    const newStatus = !isLiked;
+
+                    // Cập nhật danh sách và cookie
+                    updateLikedRooms(roomId, newStatus);
+
+                    // Cập nhật giao diện
+                    $(this).find('.unlike').toggle(!newStatus);
+                    $(this).find('.like').toggle(newStatus);
                 });
-                $('.icons.like').each(function () {
-                const roomId = $(this).data('room-id');
-                const cookieKey = `liked_\${userId}_\${roomId}`;
-                const isLiked = getCookie(cookieKey) === 'true';
-                
-                console.log(roomId + "  " + cookieKey);
-                $(this).find('.unlike').toggle(!isLiked);
-                $(this).find('.like').toggle(isLiked);
+
+                // Cập nhật giao diện khi tải trang
+                $(document).ready(function () {
+                    const likedRooms = getLikedRooms();
+
+                    $('.icons.like').each(function () {
+                        const roomId = $(this).data('room-id').toString();
+                        const isLiked = likedRooms.includes(roomId);
+
+                        $(this).find('.unlike').toggle(!isLiked);
+                        $(this).find('.like').toggle(isLiked);
+                    });
                 });
                     </c:when>
                     <c:otherwise>
-                        $('.icons.like').on('click', function () {
-                const loginPromptModal = new bootstrap.Modal(document.getElementById('loginPromptModal'));
-                loginPromptModal.show();
-                        });
+                $('.icons.like').on('click', function () {
+                    const loginPromptModal = new bootstrap.Modal(document.getElementById('loginPromptModal'));
+                    loginPromptModal.show();
+                });
                     </c:otherwise>
                 </c:choose>
             </script>
+
             <!--leaftlet-->
             <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
             <!-- Leaflet Routing Machine JS -->
             <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
 
-   <script>
-            function openModal(imageSrc) {
-                document.getElementById('modalImage').src = imageSrc;
-                var imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
-                imageModal.show();
-            }
-              </script>
-                <script>
-            // JavaScrip            t
-            var map = L.map('map').setView([10.823099, 106.629654], 13);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            <script>
+                function openModal(imageSrc) {
+                    document.getElementById('modalImage').src = imageSrc;
+                    var imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
+                    imageModal.show();
+                }
+            </script>
+            <script>
+                // JavaScrip            t
+                var map = L.map('map').setView([10.823099, 106.629654], 13);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     maxZoom: 19,
-                            attribution: '© OpenStreetMap contributors'
-            }).addTo(map);
-            var marker = null;
-        <%
+                    attribution: '© OpenStreetMap contributors'
+                }).addTo(map);
+                var marker = null;
+                <%
 double lat = nt.getLat();                 
 double lon = nt.getLon(); 
 String tenNhaTro = nt.getTenNhaTro(); 
-        %>
-                    var nhatroLat = <%= lat %>;
-                    var nhatroLon = <%= lon %>;
-                    var nhatroName = "<%= tenNhaTro %>";
-                    map.setView([nhatroLat, nhatroLon], 13);
-                    var nhatroMarker = new L.marker([nhatroLat, nhatroLon]).addTo(map)
-                            .bindPopup(nhatroName).openPopup();
-        <c:if test="${not empty sessionScope.lat and not empty sessionScope.lon}">
-            <%
-                    String latStr = (String) session.getAttribute("lat");
-                    String lonStr = (String) session.getAttribute("lon");
-                    double userLat = 0.0;
-                    double userLon = 0.0;
+                %>
+                var nhatroLat = <%= lat %>;
+                var nhatroLon = <%= lon %>;
+                var nhatroName = "<%= tenNhaTro %>";
+                map.setView([nhatroLat, nhatroLon], 13);
+                var nhatroMarker = new L.marker([nhatroLat, nhatroLon]).addTo(map)
+                        .bindPopup(nhatroName).openPopup();
+                <c:if test="${not empty sessionScope.lat and not empty sessionScope.lon}">
+                    <%
+                String latStr = (String) session.getAttribute("lat");
+                String lonStr = (String) session.getAttribute("lon");
+                double userLat = 0.0;
+                double userLon = 0.0;
 
-                    try {
-                        userLat = Double.parseDouble(latStr);
-                        userLon = Double.parseDouble(lonStr);
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace(); 
-                    }
-            %>
-                    var userMarker = new L.marker([<%= userLat %>, <%= userLon %>], {
+                try {
+                    userLat = Double.parseDouble(latStr);
+                    userLon = Double.parseDouble(lonStr);
+                } catch (NumberFormatException e) {
+                    e.printStackTrace(); 
+                }
+                    %>
+                var userMarker = new L.marker([<%= userLat %>, <%= userLon %>], {
                     icon: L.icon({
-                    iconUrl: 'assets/img/navigation.png',
-                            iconSize: [25, 30]
+                        iconUrl: 'assets/img/navigation.png',
+                        iconSize: [25, 30]
                     })
-            }).addTo(map)
-                    .bindPopup("Vị trí của bạn");
-                    var control = L.Routing.control({
+                }).addTo(map)
+                        .bindPopup("Vị trí của bạn");
+                var control = L.Routing.control({
                     waypoints: [
-                            L.latLng(nhatroLat, nhatroLon),
-                            L.latLng(<%= userLat %>, <%= userLon %>)
+                        L.latLng(nhatroLat, nhatroLon),
+                        L.latLng(<%= userLat %>, <%= userLon %>)
                     ],
-                            routeWhileDragging: true,
-                            showAlternatives: false, // Disable alternative routes
-                            createMarker: function () {
-                            return null;
-                            } // Disable default markers
-                    }).addTo(map);
-        </c:if>
+                    routeWhileDragging: true,
+                    showAlternatives: false, // Disable alternative routes
+                    createMarker: function () {
+                        return null;
+                    } // Disable default markers
+                }).addTo(map);
+                </c:if>
 
 
 
 
-    </script>
-    <!-- JavaScript Libraries -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <!--font awasome-->
-    <script src="https://kit.fontawesome.com/aab0c35bef.js" crossorigin="anonymous"></script>
-    <!--AOS lib-->
-    <script>
-                    AOS.init();
-    </script>
+            </script>
+            <!-- JavaScript Libraries -->
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+            <!--font awasome-->
+            <script src="https://kit.fontawesome.com/aab0c35bef.js" crossorigin="anonymous"></script>
+            <!--AOS lib-->
+            <script>
+                AOS.init();
+            </script>
 
-</body>
+    </body>
 
 </html>
 

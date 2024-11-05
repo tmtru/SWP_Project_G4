@@ -17,6 +17,8 @@ import java.util.List;
 import java.text.SimpleDateFormat;
 import model.DichVu;
 import model.HoaDon;
+import model.HopDong;
+import model.KhachThue;
 import model.Phong;
 
 /**
@@ -625,7 +627,79 @@ public class HoaDonDAO extends DBContext {
         }
     }
 
-    //lấy chỉ số điện mới cho từng phong
+    
+    public List<HoaDon> getKhachNo(int nhatroId, String search, Integer start, Integer recordPerPage) {
+        List<HoaDon> l = new ArrayList<>();
+        String query = "select a.Ten_khach,a.email, h.* from hop_dong hd\n"
+                + "left join hoa_don h on hd.ID_HopDong = h.ID_HopDong\n"
+                + "left join khach_thue a on a.ID_KhachThue = hd.ID_KhachThue\n"
+                + "left join phong_tro pt on pt.ID_Phong = hd.ID_PhongTro\n"
+                + "where pt.ID_NhaTro = ? and (h.Trang_thai is null or h.Trang_thai = 0) and (? = '' or a.Ten_khach like ?) ";
+
+        if (start != null && recordPerPage != null) {
+            query += "LIMIT ?, ?";
+        }
+
+        try {
+            PreparedStatement stmt = connection.prepareStatement(query);
+
+            stmt.setInt(1, nhatroId);
+            stmt.setString(2, search);
+
+            stmt.setString(3, "%" + search + "%");
+            if (start != null && recordPerPage != null) {
+                stmt.setInt(4, start);
+                stmt.setInt(5, recordPerPage);
+            }
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                HoaDon h = new HoaDon();
+
+                h.setID_HoaDon(rs.getInt("ID_HoaDon"));
+                h.setNgay(rs.getDate("Ngay"));
+                h.setTong_gia_tien(rs.getInt("Tong_gia_tien"));
+                h.setNguoiTao(rs.getString("NguoiTao"));
+
+                KhachThue account = new KhachThue();
+                account.setName(rs.getString("Ten_khach"));
+                account.setEmail(rs.getString("email"));
+
+                h.setKhachThue(account);
+
+                int tienDaThanhToan = getTotalTransAmountByHoaDon(h.getID_HoaDon());
+
+                h.setTienDaThanhToan(tienDaThanhToan);
+
+                l.add(h);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return l;
+    }
+
+    public int getTotalTransAmountByHoaDon(int hoadonId) {
+        String query = "select sum(t.Amount) from transaction t where t.ID_HoaDon = ?";
+        int sum = 0;
+        try {
+            PreparedStatement stmt = connection.prepareStatement(query);
+
+            stmt.setInt(1, hoadonId);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                sum += rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return sum;
+    }
+
+//lấy chỉ số điện mới cho từng phong
+
+
     public int getLatestElectricityReadingByPhongID(int idPhong) {
         Integer latestReading = null; // Initialize to null to represent no reading found
         String sql = "SELECT MAX(hdv.ChiSo_Moi) AS ChiSo_Moi "
@@ -642,7 +716,7 @@ public class HoaDonDAO extends DBContext {
                 if (rs.next()) {
                     latestReading = rs.getInt("ChiSo_Moi"); // Get the maximum reading
                 }
-            }
+                            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -718,5 +792,7 @@ public class HoaDonDAO extends DBContext {
         System.out.println(hoaDonDAO.getHoaDonById(4).getDichVus().size());
 
     }
+
+
 
 }

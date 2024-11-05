@@ -15,6 +15,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
@@ -69,35 +70,42 @@ public class DanhSachCacHopDongByManagerController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HopDongDAO hopDongDao = new HopDongDAO();
-        List<HopDong> hopDongList = hopDongDao.getHopDongWithPhongDetails();
-        Date currentDate = new Date();
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            int ID_Account = (int) session.getAttribute("ID_Account");
+            List<HopDong> hopDongList = hopDongDao.getHopDongByQuanLyId(ID_Account);
+            Date currentDate = new Date();
 
-        for (HopDong hopDong : hopDongList) {
-            Date ngayGiaTri = hopDong.getNgay_gia_tri();
-            Date ngayHetHan = hopDong.getNgay_het_han();
+            for (HopDong hopDong : hopDongList) {
+                Date ngayGiaTri = hopDong.getNgay_gia_tri();
+                Date ngayHetHan = hopDong.getNgay_het_han();
 
-            if (ngayHetHan != null && ngayHetHan.before(currentDate)) {
-                if (!"expired".equalsIgnoreCase(hopDong.getStatus())) {
-                    hopDong.setStatus("expired");
-                    hopDongDao.updateHopDongStatus(hopDong.getID_HopDong(), "expired");
-                }
-            } else if (ngayGiaTri != null && !ngayGiaTri.after(currentDate)) {
-                // If ngayGiaTri is today or a past date, set status to 'active'
-                if (!"active".equalsIgnoreCase(hopDong.getStatus())) {
-                    hopDong.setStatus("active");
-                    hopDongDao.updateHopDongStatus(hopDong.getID_HopDong(), "active");
+                if (ngayHetHan != null && ngayHetHan.before(currentDate)) {
+                    if (!"expired".equalsIgnoreCase(hopDong.getStatus())) {
+                        hopDong.setStatus("expired");
+                        hopDongDao.updateHopDongStatus(hopDong.getID_HopDong(), "expired");
+                    }
+                } else if (ngayGiaTri != null && !ngayGiaTri.after(currentDate)) {
+                    // If ngayGiaTri is today or a past date, set status to 'active'
+                    if (!"active".equalsIgnoreCase(hopDong.getStatus())) {
+                        hopDong.setStatus("active");
+                        hopDongDao.updateHopDongStatus(hopDong.getID_HopDong(), "active");
+                    }
                 }
             }
+
+            request.setAttribute("hopDongList", hopDongList);
+
+            String message = request.getParameter("message");
+            if (message != null) {
+                request.setAttribute("message", message);
+            }
+
+            request.getRequestDispatcher("/DanhSachHopDong_Manager.jsp").forward(request, response);
+        } else {
+            // Nếu session không tồn tại, chuyển hướng về trang login
+            response.sendRedirect("login.jsp");
         }
-
-        request.setAttribute("hopDongList", hopDongList);
-
-        String message = request.getParameter("message");
-        if (message != null) {
-            request.setAttribute("message", message);
-        }
-
-        request.getRequestDispatcher("/DanhSachHopDong_Manager.jsp").forward(request, response);
     }
 
     /**

@@ -116,6 +116,12 @@
                                                         </c:if>
                                                     </select>
                                                 </div>
+                                                 <%
+                                        int idPhong = (Integer) ((Phong) request.getAttribute("room")).getID_Phong();
+                                        HoaDonDAO hddao = new HoaDonDAO();
+                                        int reading = hddao.getLatestElectricityReadingByPhongID(idPhong);
+                                        request.setAttribute("chiSo", reading);
+                                    %>
                                                 <div class="form-group mb-3">
                                                     <label for="ngayHoaDon" class="header-service">Ngày hóa đơn *</label>
                                                     <input type="date" name="ngayHoaDon" id="ngayHoaDon" class="form-control" required readonly>
@@ -160,7 +166,7 @@
                                                                             <div class="form-group">
                                                                                 <label for="chiSoCu_dichVu_${dichVu.ID_DichVu}" class="small">Chỉ số cũ</label>
                                                                                 <input type="number" placeholder="Chỉ số cũ" id="chiSoCu_dichVu_${dichVu.ID_DichVu}" name="chiSoCu_dichVu_${dichVu.ID_DichVu}" class="form-control" 
-                                                                                       oninput="updateInvoiceService('${dichVu.tenDichVu}','${dichVu.don_vi}', ${dichVu.don_gia}, 'dichVu_${dichVu.ID_DichVu}')">
+                                                                                       oninput="updateInvoiceService('${dichVu.tenDichVu}','${dichVu.don_vi}', ${dichVu.don_gia}, 'dichVu_${dichVu.ID_DichVu}')" value="${chiSo}">
                                                                             </div>
                                                                             <div class="form-group">
                                                                                 <label for="chiSoMoi_dichVu_${dichVu.ID_DichVu}" class="small">Chỉ số mới</label>

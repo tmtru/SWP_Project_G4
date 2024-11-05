@@ -72,12 +72,10 @@ public class DangKyDichVuPhongTroController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Nhận dữ liệu từ biểu mẫu
         int soLuong = Integer.parseInt(request.getParameter("people-count"));
         int idHopDong = Integer.parseInt(request.getParameter("hopDongId"));
         String[] serviceSelected = request.getParameterValues("service-selected");
 
-        // Tạo đối tượng DAO
         DichVuDAO dichVuDAO = new DichVuDAO();
 
         // Cập nhật số lượng người vào hợp đồng
@@ -101,17 +99,22 @@ public class DangKyDichVuPhongTroController extends HttpServlet {
                 }
             }
         }
+
         DichVuDAO dichvuDao = new DichVuDAO();
         List<DichVu> dichVuList = dichvuDao.getAll();
         request.setAttribute("dichVuList", dichVuList);
+
         // Đặt lại các thuộc tính để hiển thị trong JSP
         request.setAttribute("peopleCount", soLuong);
         request.setAttribute("selectedServices", serviceSelected);
         request.setAttribute("hopDongId", idHopDong);
-        // Thông báo thành công
         request.setAttribute("Message", "Cập nhật dịch vụ thành công.");
-        // Chuyển hướng đến trang thành công
-        request.getRequestDispatcher("DichVuThuePhong.jsp").forward(request, response);
+
+        if (soLuong > 1) {
+            request.getRequestDispatcher("ThongTinKhachThuePhong.jsp").forward(request, response);
+        } else {
+            request.getRequestDispatcher("DichVuThuePhong.jsp").forward(request, response);
+        }
     }
 
     /**

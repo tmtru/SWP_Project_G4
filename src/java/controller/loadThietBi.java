@@ -11,6 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.ThietBi;
 
@@ -62,7 +63,7 @@ public class loadThietBi extends HttpServlet {
 
         // Get current page and records per page
         int page = 1;
-        int recordsPerPage = 5; // You can adjust this number
+        int recordsPerPage = 8; // You can adjust this number
 
         String pageStr = request.getParameter("page");
         if (pageStr != null && !pageStr.isEmpty()) {
@@ -89,6 +90,14 @@ public class loadThietBi extends HttpServlet {
 
         // Forward to JSP page
         request.getRequestDispatcher("equipment.jsp").forward(request, response);
+        // In the loadThietBi servlet's doGet method
+        HttpSession session = request.getSession();
+        session.removeAttribute("addThietBiError");
+        session.removeAttribute("editThietBiError");
+        session.removeAttribute("tenThietBi");
+        session.removeAttribute("giaTien");
+        session.removeAttribute("moTa");
+        session.removeAttribute("soLuong");
     }
 
     /**
