@@ -120,8 +120,8 @@ public class RoleFilterTQAT implements Filter {
                 || uri.equals("/category") || uri.equals("/login") || uri.equals("/register") || uri.equals("/resetpassword") || uri.equals("/logingoogle")
                 || uri.equals("/verification") || uri.equals("/sendemail") || uri.equals("/logout") || uri.equals("/profileServlet")
                 || uri.equals("/allrooms") || uri.equals("/allrooms.jsp") || uri.equals("/filterrooms") || uri.equals("/maintainance.jsp") || uri.equals("/maintainanceServlet")
-                || uri.equals("/viewUserInvoices.jsp") || uri.equals("/requestMaintenance.jsp") || uri.equals("/saveMaintainanceRequestServlet") || uri.equals("/editMaintainanceRequest")
-                || uri.equals("/editMaintainance.jsp") || uri.equals("/cancelMaintainanceRequest") || uri.equals("/feedback") || uri.equals("/roomdetails");
+                || uri.equals("/viewUserInvoices.jsp") || uri.equals("/requestMaintenance.jsp") || uri.equals("/saveMaintainanceRequestServlet") || uri.equals("/editMaintainanceRequestServlet")
+                || uri.equals("/editMaintainance.jsp") || uri.equals("/cancelMaintainanceRequestServlet") || uri.equals("/feedback") || uri.equals("/roomdetails");
         boolean isStaticResource = uri.endsWith(".css") || uri.endsWith(".js") || uri.endsWith(".jpg") || uri.endsWith(".png") || uri.endsWith(".gif");
 
 

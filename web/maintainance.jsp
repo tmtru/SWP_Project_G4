@@ -263,7 +263,7 @@
                                 <input type="hidden" name="idPhong" value="<%= device.getID_Phong() %>">
                                 <button type="submit" class="btn btn-primary">Sửa</button>
                             </form>
-                            <form action="cancelMaintainanceRequest" method="post" style="display:inline;">
+                            <form action="cancelMaintainanceRequestServlet" method="post" style="display:inline;">
                                 <input type="hidden" name="id" value="<%= mt.getId_bao_tri() %>">
                                 <button type="submit" class="btn btn-danger" value="cancel">Hủy</button>
                             </form>
