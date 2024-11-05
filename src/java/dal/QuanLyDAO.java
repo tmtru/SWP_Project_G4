@@ -7,9 +7,11 @@ package dal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import model.Account;
 import model.ChuTro;
+import model.LichGhiChu;
 import model.QuanLy;
 
 /**
@@ -134,6 +136,64 @@ public class QuanLyDAO extends DBContext {
             e.printStackTrace();
             return false;  // Return false if there was an error
         }
+    }
+
+    public Integer getIDQuanLyByIDAccount(int idAccount) {
+        String sql = "SELECT ID_QuanLy FROM quan_ly WHERE ID_Account = ?";
+        Integer idQuanLy = null; 
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, idAccount); 
+            ResultSet resultSet = statement.executeQuery(); 
+
+            if (resultSet.next()) {
+                idQuanLy = resultSet.getInt("ID_QuanLy"); 
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); 
+        }
+
+        return idQuanLy; 
+    }
+    
+    public boolean saveNote(String date, String note, int idQuanLy) {
+        String sql = "INSERT INTO lich_ghi_chu (GhiChu, Ngay, ID_QuanLy, Status) VALUES (?, ?, ?, 1)";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, note);
+            statement.setString(2, date); // Giữ nguyên kiểu String cho ngày
+            statement.setInt(3, idQuanLy);
+
+            int rowsInserted = statement.executeUpdate();
+            return rowsInserted > 0; // Trả về true nếu có dòng nào được chèn
+        } catch (Exception e) {
+            e.printStackTrace(); // In ra lỗi SQL nếu có
+            return false; // Trả về false nếu có lỗi xảy ra
+        }
+    }
+    
+    public List<LichGhiChu> getGhiChuByIdQuanLy(int idQuanLy) {
+        List<LichGhiChu> ghiChuList = new ArrayList<>();
+        String sql = "SELECT ID_GhiChu, GhiChu, Ngay, ID_QuanLy, Status FROM lich_ghi_chu WHERE ID_QuanLy = ? AND Status = 1";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, idQuanLy);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                int idGhiChu = resultSet.getInt("ID_GhiChu");
+                String ghiChu = resultSet.getString("GhiChu");
+                Date ngay = resultSet.getDate("Ngay");
+                int status = resultSet.getInt("Status");
+
+                LichGhiChu note = new LichGhiChu(idGhiChu, ghiChu, ngay, idQuanLy, status);
+                ghiChuList.add(note);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return ghiChuList;
     }
 
     public static void main(String[] args) {

@@ -109,8 +109,8 @@ public class AccountControllerServlet extends HttpServlet {
                     totalAccounts = accountDAO.getTotalAccountsByIdHouse(idHouse);
                 
                 } else {
-                    accounts = accountDAO.getAccountsByIdHouseAndUsername(idHouse, searchTerm, start, ACCOUNTS_PER_PAGE);
-                    totalAccounts = accountDAO.countAccountsByIdHouseAndUsername(idHouse, searchTerm);
+                    accounts = accountDAO.searchAccountsByName(searchTerm, start, ACCOUNTS_PER_PAGE);
+                    totalAccounts = accountDAO.getTotalAccountsBySearch(searchTerm);
                     
                 }
             } else if (role.equals("manager")) {

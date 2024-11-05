@@ -24,6 +24,7 @@ public class HopDong {
     private String khach_thue;
     private String ten_phong;
     private KhachThue khachThue;
+    private String Ten_khach;
 
     public Phong getPhongTro() {
         return phongTro;
@@ -217,6 +218,16 @@ public class HopDong {
     public void setKhachThue(KhachThue khachThue) {
         this.khachThue = khachThue;
     }
+
+    public String getTen_khach() {
+        return Ten_khach;
+    }
+
+    public void setTen_khach(String Ten_khach) {
+        this.Ten_khach = Ten_khach;
+    }
+    
+    
 
     @Override
     public String toString() {

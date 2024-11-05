@@ -152,9 +152,22 @@
                 background-color: #45a049;
             }
             .current-date {
-                background-color: #d4edda; 
-                font-weight: bold; 
-                border-radius: 5px; 
+                background-color: #d4edda;
+                font-weight: bold;
+                border-radius: 5px;
+            }
+
+            .add-note-btn {
+                background-color: transparent;
+                border: none;
+                font-size: 26px;
+                color: #007bff;
+                cursor: pointer;
+                margin-left: 15px;
+            }
+
+            .add-note-btn:hover {
+                color: #0056b3;
             }
 
         </style>
@@ -172,6 +185,7 @@
             <%
                 int currentYear = (int) request.getAttribute("currentYear");
                 int currentMonth = (int) request.getAttribute("currentMonth");
+                
                 int prevMonth = (currentMonth == 1) ? 12 : currentMonth - 1;
                 int nextMonth = (currentMonth == 12) ? 1 : currentMonth + 1;
                 int prevYear = (currentMonth == 1) ? currentYear - 1 : currentYear;
@@ -204,6 +218,7 @@
                     int daysInMonth = (int) request.getAttribute("daysInMonth");
                     List<HopDong> hopDongList = (List<HopDong>) request.getAttribute("hopDongList");
                     List<Phong> danhSachPhongTroTrong = (List<Phong>) request.getAttribute("danhSachPhongTroTrong");
+                    Map<Date, List<String>> notesByDate = (Map<Date, List<String>>) request.getAttribute("notesByDate");
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(currentYear, currentMonth - 1, 1);
 
@@ -223,12 +238,12 @@
                                 out.print("<td></td>");
                             } else {
                                 calendar.set(currentYear, currentMonth - 1, day);
-                                Date currentDate = calendar.getTime();
-
+Date currentDate = new java.sql.Date(calendar.getTime().getTime());
                                 boolean hasYellowDot = false;
                                 boolean hasGreenDot = false;
                                 boolean hasRedDot = false;
-
+                                
+                                List<String> notes = notesByDate.get(currentDate);
                                 for (HopDong hopDong : hopDongList) {
                                     Phong phongTro = hopDong.getPhongTro();
                                     Date ngayHetHan = hopDong.getNgay_het_han();
@@ -254,6 +269,7 @@
 
                                 // Thêm sự kiện onclick vào phần tử <td> của ngày
                                 out.print("<td class='" + currentDateClass + "' onclick='showRoomList(" + day + ")'>" + day);
+                                
 
                                 if (hasGreenDot) {
                                     out.print("<span class='dot green-dot' title='Rooms available'></span>");
@@ -264,8 +280,17 @@
                                 if (hasRedDot) {
                                     out.print("<span class='dot red-dot' title='Contract is valid'></span>");
                                 }
+                                out.print("<button class='add-note-btn' onclick='addNote(" + day + ", event)'>+</button>");
+                                if (notes != null && !notes.isEmpty()) {
+                        out.print("<div class='notes'>");
+                        for (String note : notes) {
+                            out.print("<p>" + note + "</p>"); // Hiển thị từng ghi chú
+                        }
+                        out.print("</div>");
+                    }
                                 out.print("</td>");
                                 day++;
+                                
                             }
                         }
                         out.print("</tr>");
@@ -285,93 +310,131 @@
         </div>
 
         <script>
-           const year = <%= currentYear %>;  // Gán year từ JSP
-           const month = <%= currentMonth %>; // Gán month từ JSP
+            const year = <%= currentYear %>;  // Gán year từ JSP
+            const month = <%= currentMonth %>; // Gán month từ JSP
 
-           function showRoomList(day) {
-               console.log("Clicked day: ", day);
+            function showRoomList(day) {
+                console.log("Clicked day: ", day);
 
-               const url = 'DanhSachPhongTroCalender?year=' + encodeURIComponent(year) + '&month=' + encodeURIComponent(month) + '&day=' + encodeURIComponent(day);
-               console.log("Fetching from URL: ", url);
+                const url = 'DanhSachPhongTroCalender?year=' + encodeURIComponent(year) + '&month=' + encodeURIComponent(month) + '&day=' + encodeURIComponent(day);
+                console.log("Fetching from URL: ", url);
 
-               fetch(url)
-                       .then(response => {
-                           if (!response.ok) {
-                               throw new Error('Network response was not ok: ' + response.statusText);
-                           }
-                           return response.json();
-                       })
-                       .then(data => {
-                           console.log("Data received: ", data); // Kiểm tra dữ liệu nhận được
+                fetch(url)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok: ' + response.statusText);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log("Data received: ", data); // Kiểm tra dữ liệu nhận được
 
-                           // Kiểm tra xem data có phải là đối tượng và có các thuộc tính đã được đặt tên chính xác hay không
-                           if (data && typeof data === 'object') {
-                               const roomListDiv = document.getElementById('roomList');
-                               roomListDiv.innerHTML = ''; // Xóa nội dung cũ
+                            // Kiểm tra xem data có phải là đối tượng và có các thuộc tính đã được đặt tên chính xác hay không
+                            if (data && typeof data === 'object') {
+                                const roomListDiv = document.getElementById('roomList');
+                                roomListDiv.innerHTML = ''; // Xóa nội dung cũ
 
-                               // Hiển thị danh sách phòng đang thuê
-                               const rentedHeader = document.createElement('h4');
-                               rentedHeader.textContent = "Danh sách phòng đang thuê:";
-                               roomListDiv.appendChild(rentedHeader);
+                                // Hiển thị danh sách phòng đang thuê
+                                const rentedHeader = document.createElement('h4');
+                                rentedHeader.textContent = "Danh sách phòng đang thuê:";
+                                roomListDiv.appendChild(rentedHeader);
 
-                               if (Array.isArray(data.phongDangThue) && data.phongDangThue.length > 0) {
-                                   data.phongDangThue.forEach(phongDangThue => {
-                                       const roomDiv = document.createElement('div');
-                                       roomDiv.textContent = "Room Name: " + phongDangThue.phongTro.TenPhongTro + ", Price: " + phongDangThue.phongTro.Gia;
-                                       roomListDiv.appendChild(roomDiv);
-                                   });
-                               } else {
-                                   const noRentedMessage = document.createElement('div');
-                                   noRentedMessage.textContent = "Không có phòng nào đang thuê.";
-                                   roomListDiv.appendChild(noRentedMessage);
-                               }
+                                if (Array.isArray(data.phongDangThue) && data.phongDangThue.length > 0) {
+                                    data.phongDangThue.forEach(phongDangThue => {
+                                        const roomDiv = document.createElement('div');
+                                        roomDiv.textContent = "Room Name: " + phongDangThue.phongTro.TenPhongTro + ", Price: " + phongDangThue.phongTro.Gia;
+                                        roomListDiv.appendChild(roomDiv);
+                                    });
+                                } else {
+                                    const noRentedMessage = document.createElement('div');
+                                    noRentedMessage.textContent = "Không có phòng nào đang thuê.";
+                                    roomListDiv.appendChild(noRentedMessage);
+                                }
 
-                               // Hiển thị danh sách phòng sắp hết hạn
-                               const nearingExpiryHeader = document.createElement('h4');
-                               nearingExpiryHeader.textContent = "Danh sách phòng sắp hết hạn:";
-                               roomListDiv.appendChild(nearingExpiryHeader);
+                                // Hiển thị danh sách phòng sắp hết hạn
+                                const nearingExpiryHeader = document.createElement('h4');
+                                nearingExpiryHeader.textContent = "Danh sách phòng sắp hết hạn:";
+                                roomListDiv.appendChild(nearingExpiryHeader);
 
-                               if (Array.isArray(data.phongSapHetHan) && data.phongSapHetHan.length > 0) {
-                                   data.phongSapHetHan.forEach(phongSapHetHan => {
-                                       const roomDiv = document.createElement('div');
-                                       roomDiv.textContent = "Room Name: " + phongSapHetHan.phongTro.TenPhongTro + ", Price: " + phongSapHetHan.phongTro.Gia;
-                                       roomListDiv.appendChild(roomDiv);
-                                   });
-                               } else {
-                                   const noExpiringMessage = document.createElement('div');
-                                   noExpiringMessage.textContent = "Không có phòng nào sắp hết hạn.";
-                                   roomListDiv.appendChild(noExpiringMessage);
-                               }
+                                if (Array.isArray(data.phongSapHetHan) && data.phongSapHetHan.length > 0) {
+                                    data.phongSapHetHan.forEach(phongSapHetHan => {
+                                        const roomDiv = document.createElement('div');
+                                        roomDiv.textContent = "Room Name: " + phongSapHetHan.phongTro.TenPhongTro + ", Price: " + phongSapHetHan.phongTro.Gia;
+                                        roomListDiv.appendChild(roomDiv);
+                                    });
+                                } else {
+                                    const noExpiringMessage = document.createElement('div');
+                                    noExpiringMessage.textContent = "Không có phòng nào sắp hết hạn.";
+                                    roomListDiv.appendChild(noExpiringMessage);
+                                }
 
-                               // Hiển thị danh sách phòng trống
-                               const availableHeader = document.createElement('h4');
-                               availableHeader.textContent = "Danh sách phòng trống:";
-                               roomListDiv.appendChild(availableHeader);
+                                // Hiển thị danh sách phòng trống
+                                const availableHeader = document.createElement('h4');
+                                availableHeader.textContent = "Danh sách phòng trống:";
+                                roomListDiv.appendChild(availableHeader);
 
-                               if (Array.isArray(data.phongTrong) && data.phongTrong.length > 0) {
-                                   data.phongTrong.forEach(phongTrong => {
-                                       const roomDiv = document.createElement('div');
-                                       roomDiv.textContent = "Room Name: " + phongTrong.TenPhongTro + ", Price: " + phongTrong.Gia;
-                                       roomListDiv.appendChild(roomDiv);
-                                   });
-                               } else {
-                                   const noAvailableMessage = document.createElement('div');
-                                   noAvailableMessage.textContent = "Không có phòng trống.";
-                                   roomListDiv.appendChild(noAvailableMessage);
-                               }
+                                if (Array.isArray(data.phongTrong) && data.phongTrong.length > 0) {
+                                    data.phongTrong.forEach(phongTrong => {
+                                        const roomDiv = document.createElement('div');
+                                        roomDiv.textContent = "Room Name: " + phongTrong.TenPhongTro + ", Price: " + phongTrong.Gia;
+                                        roomListDiv.appendChild(roomDiv);
+                                    });
+                                } else {
+                                    const noAvailableMessage = document.createElement('div');
+                                    noAvailableMessage.textContent = "Không có phòng trống.";
+                                    roomListDiv.appendChild(noAvailableMessage);
+                                }
 
-                               document.getElementById('roomListModal').style.display = 'block'; // Đảm bảo modal được hiển thị
+                                document.getElementById('roomListModal').style.display = 'block'; // Đảm bảo modal được hiển thị
 
-                           } else {
-                               alert('Dữ liệu không hợp lệ nhận được từ server.');
-                               console.error('Expected an object with arrays, but got:', data);
-                           }
-                       })
-                       .catch(error => {
-                           console.error('Error:', error);
-                           alert('Có lỗi xảy ra khi lấy dữ liệu. Vui lòng kiểm tra console để biết thêm chi tiết.');
-                       });
-           }
+                            } else {
+                                alert('Dữ liệu không hợp lệ nhận được từ server.');
+                                console.error('Expected an object with arrays, but got:', data);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Có lỗi xảy ra khi lấy dữ liệu. Vui lòng kiểm tra console để biết thêm chi tiết.');
+                        });
+            }
+            function addNote(day, event) {
+                event.stopPropagation(); // Ngăn sự kiện lan ra các phần tử cha
+                let note = prompt("Nhập ghi chú cho ngày " + day + ":");
+
+                if (note) {
+                    console.log("Ghi chú cho ngày " + day + ": " + note);
+
+                    // Tạo một đối tượng ngày từ year, month và day
+                    const date = new Date(year, month - 1, day); // month - 1 vì tháng trong JavaScript bắt đầu từ 0
+                    const formattedDate = date.toISOString().split('T')[0]; // Định dạng ngày thành 'yyyy-MM-dd'
+
+                    // Gửi ngày và ghi chú dưới dạng yêu cầu POST đến servlet
+                    fetch('GhiChuByManager', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded' // Đặt kiểu nội dung là URL-encoded
+                        },
+                        body: new URLSearchParams({date: formattedDate, note: note}) // Gửi date đã được định dạng
+                    })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok: ' + response.statusText);
+                                }
+                                return response.text(); // Dự kiến phản hồi văn bản ("success" hoặc "error")
+                            })
+                            .then(data => {
+                                if (data === "success") {
+                                    alert("Ghi chú đã được thêm thành công!");
+                                } else {
+                                    alert("Có lỗi xảy ra khi thêm ghi chú.");
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert("Có lỗi xảy ra. Vui lòng kiểm tra console để biết thêm chi tiết.");
+                            });
+                }
+            }
         </script>
 
     </body>
