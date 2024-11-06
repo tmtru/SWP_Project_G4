@@ -8,29 +8,26 @@ public class Maintainance {
     private byte trang_thai_chap_thuan;
     private byte trang_thai_yeu_cau;
     private Date thoi_gian;
-    private String phan_hoi;
     private int ID_ThietBiPhong;
     private int ID_Phong;
 
     public Maintainance() {
     }
 
-    public Maintainance(int id_bao_tri, String mo_ta, byte trang_thai_chap_thuan, byte trang_thai_yeu_cau, Date thoi_gian, String phan_hoi) {
+    public Maintainance(int id_bao_tri, String mo_ta, byte trang_thai_chap_thuan, byte trang_thai_yeu_cau, Date thoi_gian) {
         this.id_bao_tri = id_bao_tri;
         this.mo_ta = mo_ta;
         this.trang_thai_chap_thuan = trang_thai_chap_thuan;
         this.trang_thai_yeu_cau = trang_thai_yeu_cau;
         this.thoi_gian = thoi_gian;
-        this.phan_hoi = phan_hoi;
     }
 
-    public Maintainance(int id_bao_tri, String mo_ta, byte trang_thai_chap_thuan, byte trang_thai_yeu_cau, Date thoi_gian, String phan_hoi, int ID_ThietBiPhong, int ID_Phong) {
+    public Maintainance(int id_bao_tri, String mo_ta, byte trang_thai_chap_thuan, byte trang_thai_yeu_cau, Date thoi_gian, int ID_ThietBiPhong, int ID_Phong) {
         this.id_bao_tri = id_bao_tri;
         this.mo_ta = mo_ta;
         this.trang_thai_chap_thuan = trang_thai_chap_thuan;
         this.trang_thai_yeu_cau = trang_thai_yeu_cau;
         this.thoi_gian = thoi_gian;
-        this.phan_hoi = phan_hoi;
         this.ID_ThietBiPhong = ID_ThietBiPhong;
         this.ID_Phong = ID_Phong;
     }
@@ -53,10 +50,6 @@ public class Maintainance {
 
     public Date getThoi_gian() {
         return thoi_gian;
-    }
-
-    public String getPhan_hoi() {
-        return phan_hoi;
     }
 
     public int getID_ThietBiPhong() {
@@ -87,10 +80,6 @@ public class Maintainance {
         this.thoi_gian = thoi_gian;
     }
 
-    public void setPhan_hoi(String phan_hoi) {
-        this.phan_hoi = phan_hoi;
-    }
-
     public void setID_ThietBiPhong(int ID_ThietBiPhong) {
         this.ID_ThietBiPhong = ID_ThietBiPhong;
     }
@@ -101,7 +90,7 @@ public class Maintainance {
 
     @Override
     public String toString() {
-        return "Maintainance{" + "id_bao_tri=" + id_bao_tri + ", mo_ta=" + mo_ta + ", trang_thai_chap_thuan=" + trang_thai_chap_thuan + ", trang_thai_yeu_cau=" + trang_thai_yeu_cau + ", thoi_gian=" + thoi_gian + ", phan_hoi=" + phan_hoi + '}';
+        return "Maintainance{" + "id_bao_tri=" + id_bao_tri + ", mo_ta=" + mo_ta + ", trang_thai_chap_thuan=" + trang_thai_chap_thuan + ", trang_thai_yeu_cau=" + trang_thai_yeu_cau + '}';
     }
     
 }
