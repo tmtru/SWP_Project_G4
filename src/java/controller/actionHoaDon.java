@@ -6,6 +6,7 @@ package controller;
 
 import dal.DichVuDAO;
 import dal.HoaDonDAO;
+import dal.PhongDAO;
 import dal.TransactionDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,6 +15,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.sql.Date;
@@ -21,7 +23,12 @@ import java.util.List;
 import model.Account;
 import model.DichVu;
 import model.HoaDon;
+import model.Phong;
 import model.Transaction;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
@@ -94,6 +101,49 @@ public class actionHoaDon extends HttpServlet {
         } else {
             response.sendRedirect("hoadon");
         }
+        if ("exportExcel".equals(action)) {
+            PhongDAO phongDAO = new PhongDAO();
+            List<Phong> listPhong = phongDAO.getAllRooms();
+
+            // Create workbook and sheet
+            Workbook workbook = new XSSFWorkbook();
+            Sheet sheet = workbook.createSheet("Room data");
+
+            // Create header row
+            String[] headerTitles = {"ID_Phong", "TenNhaTro", "TenPhongTro", "ID_LoaiPhong", "Tang", "Dien_Tich", "TenLoaiPhong", "Gia", "Mo_ta", "Trang_thai", "ID_NhaTro"};
+            Row headerRow = sheet.createRow(0);
+            for (int i = 0; i < headerTitles.length; i++) {
+                headerRow.createCell(i).setCellValue(headerTitles[i]);
+            }
+
+            // Populate data rows
+            int rowNum = 1;
+            for (Phong phong : listPhong) {
+                Row row = sheet.createRow(rowNum++);
+                row.createCell(0).setCellValue(phong.getID_Phong());
+                row.createCell(1).setCellValue(phong.getTenNhaTro());
+                row.createCell(2).setCellValue(phong.getTenPhongTro());
+                row.createCell(3).setCellValue(phong.getID_LoaiPhong());
+                row.createCell(4).setCellValue(phong.getTang());
+                row.createCell(5).setCellValue(phong.getDien_tich());
+                row.createCell(6).setCellValue(phong.getTenLoaiPhong());
+                row.createCell(7).setCellValue(phong.getGia());
+                row.createCell(8).setCellValue(phong.getMo_ta());
+                row.createCell(9).setCellValue(phong.getTrang_thai());
+                row.createCell(10).setCellValue(phong.getID_NhaTro());
+            }
+
+            // Set response headers
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            response.setHeader("Content-Disposition", "attachment; filename=roomData.xlsx");
+
+            // Write to response output stream
+            try (OutputStream outputStream = response.getOutputStream()) {
+                workbook.write(outputStream);
+            } finally {
+                workbook.close();
+            }
+        }
     }
 
     /**
@@ -138,18 +188,7 @@ public class actionHoaDon extends HttpServlet {
             try {
                 amount = Integer.parseInt(giaPhong);
             } catch (Exception e) {
-                try (PrintWriter out = response.getWriter()) {
-                    /* TODO output your page here. You may use following sample code. */
-                    out.println("<!DOCTYPE html>");
-                    out.println("<html>");
-                    out.println("<head>");
-                    out.println("<title></title>");
-                    out.println("</head>");
-                    out.println("<body>");
-                    out.println("<h1>Servlet actionHoaDon at " + e + "</h1>");
-                    out.println("</body>");
-                    out.println("</html>");
-                }
+                
             }
 
             // Xử lý danh sách dịch vụ từ form
@@ -162,7 +201,7 @@ public class actionHoaDon extends HttpServlet {
                     DichVu dichVu = dichVuDAO.getDichVuById(dichVuId);
 
                     // Xử lý các dịch vụ có chỉ số cũ và mới (Điện/Nước)
-                    if ("Điện".equals(dichVu.getTenDichVu()) || "Nước".equals(dichVu.getTenDichVu())) {
+                    if (!"Tháng".equals(dichVu.getDon_vi())) {
                         int chiSoCu = Integer.parseInt(request.getParameter("chiSoCu_dichVu_" + dichVuId));
                         int chiSoMoi = Integer.parseInt(request.getParameter("chiSoMoi_dichVu_" + dichVuId));
                         dichVu.setChiSoCu(chiSoCu);
@@ -172,6 +211,7 @@ public class actionHoaDon extends HttpServlet {
                         int dauNguoi = Integer.parseInt(request.getParameter("dauNguoiInput_dichVu_" + dichVuId));
                         dichVu.setDauNguoi(dauNguoi);
                     }
+                    dichVu.setOldPrice(dichVu.getDon_gia());
 
                     // Thêm vào danh sách dịch vụ
                     danhSachDichVu.add(dichVu);
@@ -211,7 +251,7 @@ public class actionHoaDon extends HttpServlet {
     private int calculateTotalPrice(List<DichVu> danhSachDichVu, int amount) {
         int totalPrice = 0;
         for (DichVu dichVu : danhSachDichVu) {
-            if ("Điện".equals(dichVu.getTenDichVu()) || "Nước".equals(dichVu.getTenDichVu())) {
+            if (!"Tháng".equals(dichVu.getDon_vi())) {
                 // Tính tiền cho dịch vụ dựa trên chênh lệch chỉ số cũ và mới
                 int chiSoCu = dichVu.getChiSoCu();
                 int chiSoMoi = dichVu.getChiSoMoi();

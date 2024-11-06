@@ -122,7 +122,7 @@ public class RoleFilterTQAT implements Filter {
                 || uri.equals("/verification") || uri.equals("/sendemail") || uri.equals("/logout") || uri.equals("/profileServlet") || uri.equals("/getMessages") || uri.equals("/getUserList") || uri.equals("/getUnreadMessageCount")
                 || uri.equals("/allrooms") ||  uri.equals("/allrooms.jsp") || uri.equals("/filterrooms" ) ||
                 
-                uri.equals("/home.jsp") || uri.equals("/category.jsp") || uri.equals("/changePassword.jsp") || uri.equals("/confirmverification.jsp")
+                uri.equals("/contactUs_map.jsp") || uri.equals("/category.jsp") || uri.equals("/changePassword.jsp") || uri.equals("/confirmverification.jsp")
                 || uri.equals("/detailHouseHome.jsp") || uri.equals("/header.jsp") || uri.equals("/error.jsp")
                 || uri.equals("/listNhaTroHome.jsp") || uri.equals("/login.jsp") || uri.equals("/profile.jsp") || uri.equals("/register.jsp")
                 || uri.equals("/resetpassword.jsp") || uri.equals("/verification.jsp") || uri.equals("/viewUserContracts.jsp") || uri.equals("/homer")

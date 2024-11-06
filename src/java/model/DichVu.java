@@ -85,6 +85,15 @@ public class DichVu {
     private int ChiSoCu;
     private int ChiSoMoi;
     private int DauNguoi;
+    private int OldPrice;
+
+    public int getOldPrice() {
+        return OldPrice;
+    }
+
+    public void setOldPrice(int OldPrice) {
+        this.OldPrice = OldPrice;
+    }
 
     public int getID_HoaDon() {
         return ID_HoaDon;

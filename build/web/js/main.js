@@ -124,7 +124,68 @@ function loadPage(pageNumber) {
         }
     });
 }
+document.addEventListener("click", function (e) {
+  var myTargetElement = e.target;
+  var selector, mainElement;
+  if (
+    myTargetElement.classList.contains("search-toggle") ||
+    (myTargetElement.parentElement &&
+      myTargetElement.parentElement.classList.contains("search-toggle")) ||
+    (myTargetElement.parentElement &&
+      myTargetElement.parentElement.parentElement &&
+      myTargetElement.parentElement.parentElement.classList.contains(
+        "search-toggle"
+      ))
+  ) {
+    if (myTargetElement.classList.contains("search-toggle")) {
+      selector = myTargetElement.parentElement;
+      mainElement = myTargetElement;
+    } else if (
+      myTargetElement.parentElement.classList.contains("search-toggle")
+    ) {
+      selector = myTargetElement.parentElement.parentElement;
+      mainElement = myTargetElement.parentElement;
+    } else if (
+      myTargetElement.parentElement.parentElement.classList.contains(
+        "search-toggle"
+      )
+    ) {
+      selector = myTargetElement.parentElement.parentElement.parentElement;
+      mainElement = myTargetElement.parentElement.parentElement;
+    }
+    document.querySelectorAll(".navbar-right li").forEach(function (elem) {
+      if (elem !== selector) {
+        elem.classList.remove("iq-show");
+        // elem.querySelector(".search-toggle").classList.remove("active");
+      }
+    });
 
+    if (
+      !mainElement.classList.contains("active") &&
+      document.querySelector(".navbar-list li .active")
+    ) {
+      document.querySelectorAll(".navbar-right li").forEach(function (elem) {
+        elem.classList.remove("iq-show");
+        elem.classList.remove("active");
+      });
+    }
+
+    selector.classList.toggle("iq-show");
+    mainElement.classList.toggle("active");
+    e.preventDefault();
+  } else if (myTargetElement.classList.contains("search-input")) {
+    // Do nothing if clicking on search-input
+  } else {
+    document.querySelectorAll(".navbar-right li").forEach(function (elem) {
+      elem.classList.remove("iq-show");
+    });
+    document
+      .querySelectorAll(".navbar-right li .search-toggle")
+      .forEach(function (elem) {
+        elem.classList.remove("active");
+      });
+  }
+});
 // Tải trang đầu tiên khi mở trang
 $(document).ready(function () {
     loadPage(1); // Tải trang đầu tiên

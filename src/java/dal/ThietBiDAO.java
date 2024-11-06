@@ -282,7 +282,7 @@ public class ThietBiDAO extends DBContext {
                 + "left join thiet_bi tb on tb.ID_ThietBi = tbp.ID_ThietBi "
                 + "left join nha_tro nt on nt.ID_NhaTro = pt.ID_NhaTro "
                 + "left join bao_tri bt on bt.ID_ThietBiPhong = tbp.ID_ThietBiPhong "
-                + "where pt.ID_NhaTro = ? and tbp.Trang_thai = 'CSC' and (? = '' or tb.TenThietBi like ?)";
+                + "where pt.ID_NhaTro = ? and tbp.Trang_thai = 'CSC' and (? = '' or tb.TenThietBi like ?) and bt.trang_thai_yeu_cau = 0";
         if (start != null && recordPerPage != null) {
             sql += " LIMIT ?, ?";
         }

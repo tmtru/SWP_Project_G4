@@ -20,7 +20,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Bootstrap CSS -->
 
-       
+
         <!----======== CSS ======== -->
         <link rel="stylesheet" href="css/styleRoom.css">
         <link rel="stylesheet" href="css/modelDelete.css">
@@ -51,6 +51,20 @@
 
 
     </head>
+    <style>
+        /* Increase checkbox size */
+        #roomSelectionForm .form-check-input {
+            width: 1.5em;
+            height: 1.5em;
+        }
+
+        /* Optional: Increase the label font size for readability */
+        #roomSelectionForm .form-check-label {
+            font-size: 1.1em;
+            margin-left: 0.5em;
+        }
+    </style>
+
     <body>
         <jsp:include page="sidebarHoaDonManagement.jsp"></jsp:include>
             <section class="home">
@@ -110,6 +124,57 @@
                                 <input type="hidden" name="startDate" id="startDate">
                                 <input type="hidden" name="endDate" id="endDate">
                             </form>
+                            <!-- Trigger Button -->
+                            <a href="#" class="btn m-2 add-fast-invoices btn-success" data-bs-toggle="modal" data-bs-target="#roomSelectionModal">
+                                <i class="fa-solid fa-square-plus"></i>
+                                <span>Tạo nhanh hóa đơn hàng tháng</span>
+                            </a>
+
+                            <!-- Room Selection Modal -->
+                            <div class="modal fade" id="roomSelectionModal" tabindex="-1" aria-labelledby="roomSelectionModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="roomSelectionModalLabel">Chọn Phòng Tạo Hóa Đơn</h5>
+                                        </div>
+                                        <form action="addfastinvoice" method="Post" id="roomSelectionForm">
+                                        <div class="modal-body">
+                                            
+                                                <input type="hidden" name="step" value="1">
+                                                <button type="button" class="btn btn-primary mb-2" onclick="toggleSelectAll()">Chọn Tất Cả</button>
+
+                                                <% HoaDonDAO hdd2 = new HoaDonDAO(); %>
+                                                <c:forEach var="rr" items="${sessionScope.Rooms}">
+                                                    <% 
+                                                       int idRoom1 = (Integer) ((Phong) pageContext.getAttribute("rr")).getID_Phong();
+                                                       PhongDAO pd1 = new PhongDAO();
+                                                       boolean isRented1 = pd1.isRentedRoom(idRoom1);
+                                                       request.setAttribute("isRented", isRented1);
+                                                    %>
+                                                    <c:if test="${isRented == true}">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" name="selectedRooms" value="${rr.ID_Phong}" id="room${rr.ID_Phong}">
+                                                            <label class="form-check-label" for="room${rr.ID_Phong}">
+                                                                Phòng ${rr.tenPhongTro}
+                                                            </label>
+                                                        </div>
+                                                    </c:if>
+                                                </c:forEach>
+                                            
+                                        </div>
+
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                            <button type="submit" class="btn btn-primary" ">Xác nhận</button>
+                                        </div>
+                                                </form>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
 
 
                         </div>
@@ -126,7 +191,21 @@
                                         ${errorMessage}
                                     </div>
                                 </c:if>
-                                <a href="TransactionHistory.jsp" class="btn btn-primary mt-2">Lịch sử thanh toán</a>
+                                <div class="row justify-content-between">
+                                    <a href="TransactionHistory.jsp" class="btn btn-primary mt-2 ml-2">Lịch sử thanh toán</a>
+                                    <form action="hoadontheongay" method="get" class="mx-2 mt-2">
+                                        <input type="hidden" name="action" value="exportExcel">
+                                        <input type="hidden" name="startDate" id="startDate" value="${startDate}">
+                                        <input type="hidden" name="endDate" id="endDate" value="${endDate}">
+                                        <button type="submit" class="btn export-to-excel" style="background-color: white">
+                                            <i class="bx bxs-file-export"></i>
+                                            <span>Export Hóa đơn(${startDate} đến ${endDate}) to Excel</span>
+                                        </button>
+
+                                    </form>
+                                </div>
+
+
                             </div>
 
                             <div class="card-body pt-4 p-3">
@@ -162,14 +241,8 @@
                                                 style="border-left: 5px solid ${hd.trang_thai == 1 ? 'green' : 'red'}">
                                                 <div class="d-flex flex-column">
                                                     <% 
-                                                        // Lấy ID hóa đơn từ đối tượng hd bằng cách sử dụng EL
-                                                        int idHoadon = (Integer) ((HoaDon)  pageContext.getAttribute("hd")).getID_HoaDon();
-                
-                                                        // Gọi phương thức để lấy thông tin phòng
-                                                   
+                                                        int idHoadon = (Integer) ((HoaDon)  pageContext.getAttribute("hd")).getID_HoaDon();                             
                                                         Phong room = hdd.getRoomOfHoaDon(idHoadon);
-                
-                                                        // Kiểm tra null trước khi lưu trữ vào request
                                                         if (room != null) {
                                                             request.setAttribute("room", room);
                                                         }
@@ -216,7 +289,7 @@
                                                                 <span class="text-primary ms-sm-2 font-weight-bold">Tên dịch vụ: ${dichVu.tenDichVu}</span> <br/>
 
                                                                 <c:choose>
-                                                                    <c:when test="${dichVu.tenDichVu == 'Điện' || dichVu.tenDichVu == 'Nước'}">
+                                                                    <c:when test="${dichVu.don_vi != 'Tháng'}">
                                                                         <span class="text-dark ms-sm-2">
                                                                             <span class="text-dark ms-sm-2 font-weight-bold">Chỉ số:</span> 
                                                                             ${dichVu.chiSoCu} - ${dichVu.chiSoMoi}
@@ -389,40 +462,23 @@
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
         <script>
-            $("#dpMonths").datepicker({
-                format: "mm-yyyy",
-                viewMode: "months",
-                minViewMode: "months"
-            });
+                                                $("#dpMonths").datepicker({
+                                                    format: "mm-yyyy",
+                                                    viewMode: "months",
+                                                    minViewMode: "months"
+                                                });
         </script>
         <script>
-            const body = document.querySelector('body'),
-                    sidebar = body.querySelector('nav'),
-                    toggle = body.querySelector(".toggle"),
-                    modeSwitch = body.querySelector(".toggle-switch"),
-                    modeText = body.querySelector(".mode-text");
-            // Check if dark mode is enabled on page load
-            if (localStorage.getItem("darkMode") === "disabled") {
-                body.classList.add("light");
-                modeText.innerText = "Light mode";
+            let allSelected = false;
+
+            function toggleSelectAll() {
+                const checkboxes = document.querySelectorAll('#roomSelectionForm .form-check-input');
+                allSelected = !allSelected;
+                checkboxes.forEach((checkbox) => {
+                    checkbox.checked = allSelected;
+                });
             }
 
-            // Sidebar toggle functionality
-            toggle.addEventListener("click", () => {
-                sidebar.classList.toggle("close");
-            });
-            // Dark mode toggle functionality
-            modeSwitch.addEventListener("click", () => {
-                body.classList.toggle("dark");
-                // Update the text for dark mode
-                if (body.classList.contains("dark")) {
-                    modeText.innerText = "Light mode";
-                    localStorage.setItem("darkMode", "enabled");
-                } else {
-                    modeText.innerText = "Dark mode";
-                    localStorage.setItem("darkMode", "disabled");
-                }
-            });
         </script>
 
         <script>
