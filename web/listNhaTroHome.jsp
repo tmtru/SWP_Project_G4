@@ -41,6 +41,7 @@
                 <article class="featured-listing">
                     <a href="allrooms?id=${nt.ID_NhaTro}" >
                         <div class="featured-card">
+                            
                             <c:if test="${not empty imgNhaTro}">
                                 <c:forEach var="anh" items="${imgNhaTro}" varStatus="status">
                                     <c:if test="${status.index == 0}">
@@ -51,7 +52,7 @@
                             <c:if test="${empty imgNhaTro}">
                                 <p>Không có ảnh cho nhà trọ này.</p>
                             </c:if>
-                            <div class="featured-details">
+                            <div class="featured-details houses">
                                 <div class="price-title-wrapper">
                                     <div>
                                         <div class="price-wrapper">
@@ -60,8 +61,7 @@
                                         </div>
                                         <h3 class="listing-title">${nt.tenNhaTro}</h3>
                                     </div>
-                                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/90ea229282d786c2880b0b9f62e1a929d080f8ab2a7374939c5c5341de6a27e6?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
-                                         alt="Property icon" class="listing-icon">
+
                                 </div>
                                 <div class="listing-address">${nt.dia_chi}</div>
                                 <% 
@@ -78,16 +78,6 @@
                                              alt="Bed icon" class="facility-icon">
                                         <span class="facility-text">${rooms.size()} phòng</span>
                                     </div>
-                                    <div class="facility">
-                                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/9231b2dc8c867269a0642952d2e56b1bb47eae017ffe429a8a13c2342805d139?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
-                                             alt="Bath icon" class="facility-icon">
-                                        <span class="facility-text">???</span>
-                                    </div>
-                                    <div class="facility">
-                                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/b386f5e42bcb3e6ff44952904ea0ae16cda92a7ebfd22180c2860cf11135bb36?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
-                                             alt="Dimension icon" class="facility-icon">
-                                        <span class="facility-text">5x7 m²</span>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -103,55 +93,67 @@
                         </button>
                         <div class="slider">
                             <c:forEach items="${rooms}" var="rs">
-                                <article class="listing-card item" >
-                                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/807191b1c5ec9a365e8d960bde1533408c378d956c435939b9c17e77e1cb689b?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
-                                         alt="Room image" class="listing-image">
-                                    <div class="listing-info">
-                                        <div class="listing-details">
-                                            <div class="listing-price">
-                                                <span class="price">${rs.gia/1000000} tr</span>
-                                                <span class="price-period">/tháng</span>
+                                <c:if test="${!rs.trang_thai.equals('D')}">
+                                    <article class="listing-card item" >
+                                        <c:set var="room" value="${rs.ID_Phong}" />
+
+                                <%  
+                                    Integer idRoom = (Integer) pageContext.getAttribute("room");
+                                    PhongDAO pd= new PhongDAO();
+                                    List<String> images= pd.getImagesByPhongId(idRoom);
+                                    request.setAttribute("images", images);
+                                %>
+                                <div id="roomImageCarousel" class="carousel slide" data-ride="carousel">
+                                    <div class="carousel-inner img-detailRoom">
+                                        <c:forEach items="${images}" var="image" varStatus="status">
+                                            <div class="carousel-item ${status.index == 0 ? 'active' : ''}">
+                                                <img src="${image}" class="d-block w-100" alt="${rs.tenPhongTro}" style="aspect-ratio: 16/9;">
                                             </div>
-                                            <h4 class="listing-name">Phòng ${rs.tenPhongTro}</h4>
-                                            <c:if test="${rs.trang_thai.equals('T')}">
-                                                <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Phòng trống" style="color: red">
-                                                    <i class="fa-solid fa-circle-exclamation" style="color: red" disabled></i> Trống
-                                                </span>
-                                            </c:if>
-                                            <c:if test="${rs.trang_thai.equals('D')}">
-                                                <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Phòng trống" style="color: #009933">
-                                                    <i class="fa-solid fa-circle-exclamation" style="color: #009933" disabled></i> Đã thuê
-                                                </span>
-                                            </c:if>
-
-                                        </div>
-                                        <div class="details-button">
-                                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/dca00f6f57a639b42ff911d49af82395b3e490bbba3e80779f4f7169c56fc15a?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
-                                                 alt="Details icon" class="details-icon">
-                                            <span class="details-text">Chi tiết</span>
-                                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/38af489b0b824b4e9a4ca4f97538a5a535b0617bf3be7a86b92c79ae52dfe2c5?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
-                                                 alt="Underline" class="details-underline">
-                                        </div>
+                                        </c:forEach>
                                     </div>
 
-                                    <div class="facilities">
-                                        <div class="facility">
-                                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/91548f776f5f1c44de4afa0b594a698a690aa51b3155ce2280947cf745e5ca4d?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
-                                                 alt="Bed icon" class="facility-icon">
-                                            <span class="facility-text">Bed</span>
+                                </div>
+                                        <div class="listing-info">
+                                            <div class="listing-details">
+                                                <div class="listing-price">
+                                                    <span class="price">${rs.gia/1000000} tr</span>
+                                                    <span class="price-period">/tháng</span>
+                                                </div>
+                                                <h4 class="listing-name">Phòng ${rs.tenPhongTro}</h4>
+                                                <c:if test="${rs.trang_thai.equals('T')}">
+                                                    <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Phòng trống" style="color: red">
+                                                        <i class="fa-solid fa-circle-exclamation" style="color: green" disabled></i> Trống
+                                                    </span>
+                                                </c:if>
+                                                <c:if test="${rs.trang_thai.equals('DT')}">
+                                                    <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Phòng trống" style="color: #009933">
+                                                        <i class="fa-solid fa-circle-exclamation" style="color: red" disabled></i> Trống tháng sau
+                                                    </span>
+                                                </c:if>
+
+                                            </div>
+                                            <div class="details-button">
+                                                <a href="roomdetails?idPhong=${rs.ID_Phong}" class="mt-2">
+
+                                                    <span class="details-text">Chi tiết</span>
+                                                </a>
+                                            </div>
                                         </div>
-                                        <div class="facility">
-                                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/85dbe2fd8f4bec9ea5fd31b994100d3d26b701697786321befe16c9ae5f4a5ec?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
-                                                 alt="Bath icon" class="facility-icon">
-                                            <span class="facility-text">Bathroom</span>
+
+                                        <div class="facilities">
+                                            <div class="facility">
+                                                <i class="fa-solid fa-stairs facility-icon"></i>
+                                                <span class="facility-text">Tầng ${rs.tang}</span>
+                                            </div>
+
+                                            <div class="facility">
+                                                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/18c032977b463fe970eb067104d0c95807cbf310ae9c273e9de01b3d7e27099a?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
+                                                     alt="Dimension icon" class="facility-icon">
+                                                <span class="facility-text">${rs.dien_tich} m²</span>
+                                            </div>
                                         </div>
-                                        <div class="facility">
-                                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/18c032977b463fe970eb067104d0c95807cbf310ae9c273e9de01b3d7e27099a?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
-                                                 alt="Dimension icon" class="facility-icon">
-                                            <span class="facility-text">${rs.dien_tich} m²</span>
-                                        </div>
-                                    </div>
-                                </article>
+                                    </article>
+                                </c:if>
                             </c:forEach>
 
                         </div>
@@ -165,7 +167,7 @@
         </c:forEach>
     </c:if>
 
-    <nav aria-label="Page navigation example d-flex mt-5" class="pagination-nav">
+    <nav aria-label="Page navigation example d-flex mt-5 mb-3" class="pagination-nav">
         <ul class="pagination  justify-content-center">
             <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
                 <span class="page-link" aria-label="Previous" onclick="loadPage(${page-1})">
@@ -185,7 +187,7 @@
         </ul>
 
     </nav>
-
+ 
     <script src="js/main.js"></script>
 </body>
 

@@ -157,7 +157,7 @@
                                                                 <span class="text-primary ms-sm-2 font-weight-bold">Tên dịch vụ: ${dichVu.tenDichVu}</span> <br/>
 
                                                                 <c:choose>
-                                                                    <c:when test="${dichVu.tenDichVu == 'Điện' || dichVu.tenDichVu == 'Nước'}">
+                                                                    <c:when test="${dichVu.don_vi != 'Tháng'}">
                                                                         <span class="text-dark ms-sm-2">
                                                                             <span class="text-dark ms-sm-2 font-weight-bold">Chỉ số:</span> 
                                                                             ${dichVu.chiSoCu} - ${dichVu.chiSoMoi}
