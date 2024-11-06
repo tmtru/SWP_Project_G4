@@ -40,13 +40,13 @@
         <c:set var="a" value="${sessionScope.account}"></c:set>
             <div class="container-fluid bg-light px-0">
                 <div class="row gx-0">
-                    <div class="col-lg-5 bg-light d-none d-lg-block">
+                    <div class="col-lg-4 bg-light d-none d-lg-block">
                         <a href="home.jsp"
                            class="navbar-brand w-100 h-100 m-0 p-0 d-flex align-items-center justify-content-center">
                             <img src="assets/img/Logo_nhatro.png" alt="logo-nhatro" />
                         </a>
                     </div>
-                    <div class="col-lg-7">
+                    <div class="col-lg-8">
 
                         <nav class="navbar navbar-expand-lg bg-light navbar-light p-3 p-lg-0">
                             <a href="home.jsp" class="navbar-brand d-block d-lg-none m-0 p-0">
@@ -65,6 +65,7 @@
 
                                 <a href="about.html" class="nav-item nav-link">About</a>
                                 <a href="contact.html" class="nav-item nav-link">Contact</a>
+                                <a href="new" class="nav-item nav-link">New</a>
                                 <c:if test="${a!=null}">
                                     <c:if test="${a.role.equals('landlord') || a.role.equals('manager')}">
 

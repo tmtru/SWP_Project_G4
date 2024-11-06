@@ -2,6 +2,15 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/ADMIN/Desktop/New%20folder/SWP_Project_G4/src/java/controller/GetMessagesServlet.java</file>
+            <file>file:/C:/Users/ADMIN/Desktop/New%20folder/SWP_Project_G4/web/detailNhaTro.jsp</file>
+            <file>file:/C:/Users/ADMIN/Desktop/New%20folder/SWP_Project_G4/web/detailHouseHome.jsp</file>
+            <file>file:/C:/Users/ADMIN/Desktop/New%20folder/SWP_Project_G4/src/java/filter/RoleFIlter.java</file>
+            <file>file:/C:/Users/ADMIN/Desktop/New%20folder/SWP_Project_G4/src/java/filter/RoleFilterTQAT.java</file>
+            <file>file:/C:/Users/ADMIN/Desktop/New%20folder/SWP_Project_G4/src/java/controller/GetUnreadMessageCountServlet.java</file>
+            <file>file:/C:/Users/ADMIN/Desktop/New%20folder/SWP_Project_G4/src/java/filter/LoginFilter.java</file>
+            <file>file:/C:/Users/ADMIN/Desktop/New%20folder/SWP_Project_G4/src/java/dal/MessageDAO.java</file>
+        </group>
     </open-files>
 </project-private>

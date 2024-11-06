@@ -105,23 +105,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                             </a>
                         </li>
 
-                        <c:if test="${sessionScope.account.role == 'landlord'}">
                         <li class="">
-                            <a href="DanhSachCacHopDongByAdmin">
+                            <a href="#">
                                 <i class='bx bx-id-card icon' ></i>
-                            <span class="text nav-text">Hợp đồng</span>
+                                <span class="text nav-text">Hợp đồng</span>
                             </a>
                         </li>
-                    </c:if>
-                   
-                         <c:if test="${sessionScope.account.role == 'manager'}">
-                        <li class="">
-                            <a href="DanhSachCacHopDongByManager">
-                                <i class='bx bx-id-card icon' ></i>
-                            <span class="text nav-text">Hợp đồng</span>
-                            </a>
-                        </li>
-                    </c:if>
 
                         <li class="">
                             <a href="#">
@@ -171,7 +160,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 <h2>Chi tiết ${s.getTenNhaTro()}</h2>
             </section>
             <div class="container mt-5">
-                 
+
                 <c:if test="${not empty sessionScope.notification}">
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         ${sessionScope.notification}
@@ -233,7 +222,80 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     </div>
                 </div>
             </div>
+            <div id="chat-button" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+                <button onclick="toggleChatBox()" style="background-color: #00bfff; border: none; padding: 15px; border-radius: 50%; position: relative;">
+                    <i class="fas fa-comments" style="color: white; font-size: 24px;"></i>
+                    <span id="unreadCount" style="display: none; position: absolute; top: -5px; right: -5px; background-color: red; color: white; border-radius: 50%; padding: 5px; font-size: 12px;">
+                        0
+                    </span>
+                </button>
+            </div>
+            <section id="chat-box" style="display: none; position: fixed; bottom: 80px; right: 20px; z-index: 1000; width: 70% ; float: right">
+                <div class="container py-5">
+                    <div class="row d-flex justify-content-center">
 
+
+                        <!-- Main container -->
+                        <div class="d-flex">
+                            <c:if test="${account == null}">
+                                <div class="card flex-grow-1" id="chat1" style="border-radius: 15px; margin-left: 15px;">
+                                    <div class="card-header d-flex justify-content-between align-items-center p-3 bg-info text-white border-bottom-0"
+                                         style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                                        <i class="fas fa-angle-left"></i>
+
+                                        <i class="fas fa-times" onclick="toggleChatBox()"></i>
+                                    </div>
+                                    <div class="card-body" style="overflow-y: auto; max-height: 400px; text-align: center" >
+                                        Please <a href="login.jsp">Login </a> to start chatting
+                                    </div>
+                                </div>
+                            </c:if>
+                            <c:if test="${account != null}">
+
+                                <!-- Left card: User list -->
+                                <c:if test="${account.role == 'landlord'}">
+                                    <div class="card" id="userListCard" style="width: 100%; border-radius: 15px;">
+                                        <div class="card-header bg-info text-white" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                                            <p class="mb-0 fw-bold">User List</p>
+                                        </div>
+                                        <div class="card-body" style="overflow-y: auto; max-height: 400px;">
+                                            <ul class="list-group" id="userList">
+                                                <!-- Usernames will be appended here -->
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </c:if>
+
+                                <!-- Right card: Chat messages -->
+                                <div class="card flex-grow-1" id="chat1" style="border-radius: 15px; margin-left: 15px;">
+                                    <div class="card-header d-flex justify-content-between align-items-center p-3 bg-info text-white border-bottom-0"
+                                         style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                                        <i class="fas fa-angle-left"></i>
+                                        <p class="mb-0 fw-bold"></p>
+                                        <i class="fas fa-times" onclick="toggleChatBox()"></i>
+                                    </div>
+                                    <div class="card-body" id="chatMessages" style="overflow-y: auto; max-height: 400px;">
+                                        <!-- Chat messages will be appended here -->
+                                    </div>
+                                    <div data-mdb-input-init class="form-outline">
+                                        <form id="sendMessageForm" class="d-flex align-items-center">
+                                            <input type="hidden" name="receiver_id" />
+                                            <input type="hidden" name="houseId" value="${s.getID_NhaTro()}" />
+                                            <textarea class="form-control bg-body-tertiary me-3" id="textAreaExample" rows="1" name="messageContent" placeholder="Type your message"></textarea>
+                                            <button type="button" class="btn btn-primary" id="sendMessageButton" disabled>
+                                                <i class="fas fa-paper-plane"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+
+
+                            </c:if>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
         </section>
 
         <script>
@@ -305,55 +367,317 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
 
         </script>
 
-        <script type="text/javascript">
-            function openEditModal(idPhong, tenPhongTro, tang, dienTich, gia, trangThai, idNhaTro, idLoaiPhong, images) {
-                // Hiển thị thông tin trong modal
-                document.getElementById('modalIdPhong').value = idPhong;
-                document.getElementById('modalTenPhongTro').value = tenPhongTro;
-                document.getElementById('modalTang').value = tang;
-                document.getElementById('modalDienTich').value = dienTich;
-                document.getElementById('modalGia').value = gia;
-                document.getElementById('modalTrangThai').value = trangThai;
-                document.getElementById('modalIDNhaTro').value = idNhaTro;
-                document.getElementById('modalIDLoaiPhong').value = idLoaiPhong;
 
-
-                // Hiển thị danh sách hình ảnh
-                const imageContainer = document.getElementById('modalImageContainer');
-                imageContainer.innerHTML = ''; // Xóa nội dung trước đó
-
-                images.forEach(image => {
-                    const imgElement = document.createElement('img');
-                    imgElement.src = image; // Đường dẫn tới hình ảnh
-                    imgElement.alt = 'Room Image';
-                    imgElement.style.width = '50px'; // Kích thước hình ảnh
-                    imgElement.style.marginRight = '10px';
-                    imageContainer.appendChild(imgElement);
-                });
-
-                // Mở modal
-                $('#editRoomModal').modal('show'); // Sử dụng jQuery để mở modal
-            }
-            function previewImageOnEditModal(input) {
-                var previewContainer = document.getElementById('modalImageContainer');
-                previewContainer.innerHTML = ''; // Xóa nội dung cũ khi chọn ảnh mới
-
-                if (input.files) {
-                    Array.from(input.files).forEach(file => {
-                        var reader = new FileReader();
-
-                        reader.onload = function (e) {
-                            var img = document.createElement('img');
-                            img.src = e.target.result;
-                            img.className = 'img-preview';
-                            previewContainer.appendChild(img);
-                        }
-
-                        reader.readAsDataURL(file);
-                    });
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            var userRole = "<c:out value='${account.role}' />";
+            function toggleChatBox() {
+                var chatBox = document.getElementById("chat-box");
+                if (chatBox.style.display === "none" || chatBox.style.display === "") {
+                    chatBox.style.display = "block";
+                    fetchMessages(); // Fetch messages when chat box is opened
+                    fetchUnreadMessageCount(); // Update unread count in the icon
+                } else {
+                    chatBox.style.display = "none";
                 }
             }
-        </script>
 
+
+
+            function displayMessages(response, currentUserId) {
+                let chatContent = '';
+                response.forEach(function (msg) {
+                    if (msg.senderId === currentUserId) {
+                        // Outgoing message
+                        chatContent += `
+        <div class="d-flex flex-row justify-content-end mb-4">
+          <div class="p-3 outgoing-message message">
+            <p class="small mb-0">` + msg.content + `</p>
+          </div>
+          <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp" alt="avatar">
+        </div>
+      `;
+                    } else {
+                        // Incoming message
+                        chatContent += `
+        <div class="d-flex flex-row justify-content-start mb-4">
+          <img src="https://cdn.pixabay.com/photo/2020/07/14/13/07/icon-5404125_1280.png" alt="avatar">
+          <div class="p-3 incoming-message message">
+            <p class="small mb-0">` + msg.content + `</p>
+          </div>
+        </div>
+      `;
+                    }
+                });
+                document.getElementById('chatMessages').innerHTML = chatContent;
+                const chatMessagesDiv = document.getElementById('chatMessages');
+                chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+            }
+
+
+            function fetchMessages() {
+                // Directly fetch the updated receiver_id from the hidden input
+                const receiverId = $('input[name="receiver_id"]').val();
+                const houseId = $('input[name="houseId"]').val();
+                const currentUserId = parseInt(${account.getID_Account()});
+
+                // Verify both receiverId and currentUserId for accuracy
+
+                if (!receiverId) {
+                    return; // Exit if no user is selected
+                }
+
+                // Prepare data object
+                var data = {houseId: houseId};
+                if (userRole === 'landlord') {
+                    data.selectedUserId = receiverId;  // Use receiverId for landlord's selected user
+                }
+
+                $.ajax({
+                    url: "getMessages",
+                    method: "GET",
+                    data: data,
+                    dataType: "json",
+                    success: function (response) {
+                        displayMessages(response, currentUserId);
+                    },
+                    error: function () {
+                    }
+                });
+            }
+
+            if (userRole === 'landlord') {
+                $(document).ready(function () {
+                    function fetchUserList() {
+                        $.ajax({
+                            url: "getUserList",
+                            method: "GET",
+                            dataType: "json",
+                            success: function (response) {
+                                let userListContent = '';
+                                response.forEach(function (user) {
+                                    var unreadBadge = '';
+                                    if (user.unreadCount > 0) {
+                                        unreadBadge = `<span class="badge bg-danger ms-2">` + user.unreadCount + ` </span>`;
+                                    }
+
+                                    userListContent += `
+                    <li class="list-group-item d-flex justify-content-between align-items-center" data-user-id="` + user.ID_Account + `" data-username="` + user.username + `" onclick="selectUser(this)">
+                        ` + user.username + unreadBadge + `
+                    </li>
+                `;
+                                });
+                                $('#userList').html(userListContent);
+                            },
+                            error: function () {
+                                console.error('Error fetching user list');
+                            }
+                        });
+                    }
+
+                    setInterval(fetchUserList, 5000);
+
+
+
+                    window.selectUser = function (element) {
+                        const userId = $(element).data('user-id');
+                        const username = $(element).data('username');
+
+                        // Set the selected user ID in the hidden input
+                        $('input[name="receiver_id"]').val(userId);
+                        $('#chatWithName').text('Chat with ' + username);
+
+                        // Highlight the selected user
+                        $('#userList .list-group-item').removeClass('active');
+                        $(element).addClass('active');
+
+                        // Fetch messages with the selected user
+                        fetchMessages();
+
+                        // Reset unread count badge
+                        $(element).find('.badge').remove();
+                    };
+
+
+
+                    fetchUserList();
+                });
+            } else {
+                // If the user is not a landlord, set receiver ID and fetch messages
+                $(document).ready(function () {
+                    $('#receiver_id').val(${ct.account.ID_Account});
+                    fetchMessages();
+                });
+            }
+
+
+            $(document).ready(function () {
+                // Initially disable the Send button if no user is selected
+                $('#sendMessageButton').prop('disabled', true);
+
+                // Enable/disable Send button based on the receiver_id input value
+                function toggleSendButton() {
+                    const receiverId = $('input[name="receiver_id"]').val();
+                    $('#sendMessageButton').prop('disabled', !receiverId);
+                }
+
+                // Run toggleSendButton initially in case receiver_id has a value set automatically
+                toggleSendButton();
+
+                // Update the Send button state whenever a user is selected
+                window.selectUser = function (element) {
+                    const userId = $(element).data('user-id');
+                    const username = $(element).data('username');
+
+                    // Set the selected user ID in the hidden input
+                    $('input[name="receiver_id"]').val(userId);
+                    $('#chatWithName').text('Chat with ' + username);
+
+                    // Highlight the selected user
+                    $('#userList .list-group-item').removeClass('active');
+                    $(element).addClass('active');
+
+                    // Enable the Send button after user selection
+                    toggleSendButton();
+
+                    // Fetch messages with the selected user
+                    fetchMessages();
+
+                    // Reset unread count badge
+                    $(element).find('.badge').remove();
+                };
+
+                // Check the Send button state each time the receiver_id changes
+                $('input[name="receiver_id"]').on('change', toggleSendButton);
+
+                // Handle the Send button click event
+                $('#sendMessageButton').click(function () {
+                    const messageContent = $('#textAreaExample').val();
+                    const receiverId = $('input[name="receiver_id"]').val();
+                    const houseId = $('input[name="houseId"]').val();
+
+                    if (messageContent !== "" && receiverId) {
+                        var data = {
+                            messageContent: messageContent,
+                            houseId: houseId
+                        };
+                        if (userRole === 'landlord') {
+                            data.selectedUserId = receiverId;
+                        } else {
+                            data.receiverId = receiverId;
+                        }
+
+                        $.ajax({
+                            url: "sendMessage",
+                            method: "POST",
+                            data: data,
+                            success: function () {
+                                $('#textAreaExample').val(''); // Clear input on success
+                                fetchMessages(); // Refresh messages
+                            },
+                            error: function () {
+                                alert('Error sending message');
+                            }
+                        });
+                    }
+                });
+            });
+
+
+            function fetchUnreadMessageCount() {
+                $.ajax({
+                    url: 'getUnreadMessageCount',
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function (response) {
+                        var unreadCount = response.unreadCount;
+                        if (unreadCount > 0) {
+                            $('#unreadCount').text(unreadCount);
+                            $('#unreadCount').show();
+                        } else {
+                            $('#unreadCount').hide();
+                        }
+                    },
+                    error: function () {
+                        console.error('Error fetching unread message count');
+                    }
+                });
+            }
+
+            setInterval(fetchUnreadMessageCount, 5000);
+
+            $(document).ready(function () {
+                fetchUnreadMessageCount();
+            });
+
+
+            // If the user is not a landlord, set receiver ID and fetch messages
+            <c:if test="${account.role != 'landlord'}">
+            $(document).ready(function () {
+                $('input[name="receiver_id"]').val(${ct.account.ID_Account});
+                fetchMessages();
+            });
+            </c:if>
+            setInterval(fetchMessages, 5000);
+
+        </script>
+        <style>
+           
+            /* Style for chat messages to wrap long texts */
+            #chatMessages .message {
+                white-space: pre-wrap; /* Preserves newlines and wraps long text */
+                word-wrap: break-word; /* Allows words to break and wrap within container */
+                word-break: break-word; /* Forces line breaks on long unbreakable words */
+                max-width: 100%; /* Prevents message from overflowing container */
+            }
+
+            /* Styling outgoing and incoming messages with consistent width */
+           /* Outgoing message (aligns to the right) */
+#chatMessages .outgoing-message {
+    background-color: #e0f7fa;
+    text-align: left;
+    border-radius: 12px 12px 0 12px;
+    margin: 2px 0 2px auto;
+    align-self: flex-end;
+    max-width: 60%; /* Add this line */
+    word-wrap: break-word; /* Add this line */
+    word-break: break-word; /* Add this line */
+    white-space: normal; /* Add this line */
+}
+
+/* Incoming message (aligns to the left) */
+#chatMessages .incoming-message {
+    background-color: #f1f1f1;
+    text-align: left;
+    border-radius: 12px 12px 12px 0;
+    margin: 2px auto 2px 0;
+    align-self: flex-start;
+    max-width: 60%; /* Add this line */
+    word-wrap: break-word; /* Add this line */
+    word-break: break-word; /* Add this line */
+    white-space: normal; /* Add this line */
+}
+
+            /* Outgoing message styling */
+            #chatMessages .outgoing-message {
+                background-color: #e0f7fa;
+                align-self: flex-end; /* Align outgoing messages to the right */
+            }
+
+            /* Incoming message styling */
+            #chatMessages .incoming-message {
+                background-color: #f1f1f1;
+                align-self: flex-start; /* Align incoming messages to the left */
+            }
+
+            /* Avatar styling for consistent alignment */
+            #chatMessages img {
+                max-width: 45px;
+                max-height: 45px;
+                border-radius: 50%;
+                margin: 5px;
+            }
+
+        </style>
     </body>
 </html>

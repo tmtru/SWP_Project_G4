@@ -111,17 +111,14 @@ public class RoleFilterTQAT implements Filter {
 
         String uri = httpRequest.getServletPath();
 
-        // Lấy role của người dùng
-        String role = (session != null) ? (String) session.getAttribute("role") : null;
+       String role = (session != null) ? (String) session.getAttribute("role") : null;
         boolean isAllowedPage = uri.equals("/home.jsp") || uri.equals("/category.jsp") || uri.equals("/changePassword.jsp") || uri.equals("/confirmverification.jsp")
-                || uri.equals("/detailHouseHome.jsp") || uri.equals("/header.jsp") || uri.equals("/error.jsp")
-                || uri.equals("/listNhaTroHome.jsp") || uri.equals("/login.jsp") || uri.equals("/profile.jsp") || uri.equals("/register.jsp")
+                || uri.equals("/detailHouseHome.jsp") || uri.equals("/header.jsp") || uri.equals("/error.jsp") || uri.equals("/home.jsp")
+                || uri.equals("/listNhaTroHome.jsp") || uri.equals("/login.jsp") || uri.equals("/profile.jsp") || uri.equals("/register.jsp") || uri.equals("/new-detail") || uri.equals("/new")
                 || uri.equals("/resetpassword.jsp") || uri.equals("/verification.jsp") || uri.equals("/viewUserContracts.jsp") || uri.equals("/homer")
-                || uri.equals("/category") || uri.equals("/login") || uri.equals("/register") || uri.equals("/resetpassword") || uri.equals("/logingoogle")
-                || uri.equals("/verification") || uri.equals("/sendemail") || uri.equals("/logout") || uri.equals("/profileServlet")
-                || uri.equals("/allrooms") || uri.equals("/allrooms.jsp") || uri.equals("/filterrooms") || uri.equals("/maintainance.jsp") || uri.equals("/maintainanceServlet")
-                || uri.equals("/viewUserInvoices.jsp") || uri.equals("/requestMaintenance.jsp") || uri.equals("/saveMaintainanceRequestServlet") || uri.equals("/editMaintainanceRequestServlet")
-                || uri.equals("/editMaintainance.jsp") || uri.equals("/cancelMaintainanceRequestServlet") || uri.equals("/feedback") || uri.equals("/roomdetails");
+                || uri.equals("/category") || uri.equals("/login") || uri.equals("/register") || uri.equals("/resetpassword") || uri.equals("/logingoogle") || uri.equals("/manage-new")
+                || uri.equals("/verification") || uri.equals("/sendemail") || uri.equals("/logout") || uri.equals("/profileServlet") || uri.equals("/getMessages") || uri.equals("/getUserList") || uri.equals("/getUnreadMessageCount")
+                || uri.equals("/allrooms") ||  uri.equals("/allrooms.jsp") || uri.equals("/filterrooms" );
         boolean isStaticResource = uri.endsWith(".css") || uri.endsWith(".js") || uri.endsWith(".jpg") || uri.endsWith(".png") || uri.endsWith(".gif");
 
 
