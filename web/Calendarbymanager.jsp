@@ -2,6 +2,8 @@
 <%@ page import="java.util.*" %>
 <%@ page import="model.HopDong" %>
 <%@ page import="model.Phong" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="model.LichGhiChu" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -169,6 +171,59 @@
             .add-note-btn:hover {
                 color: #0056b3;
             }
+            /* Container cho các ghi chú */
+            .notes {
+                margin-top: 8px;
+                padding: 0;
+            }
+
+            .note-item {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                background-color: #f0f0f5;
+                border: 1px solid #ddd;
+                border-radius: 6px;
+                padding: 8px 12px;
+                margin-bottom: 6px;
+                box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+                transition: transform 0.1s ease-in-out;
+            }
+
+            .note-item:hover {
+                transform: translateY(-2px);
+            }
+
+            .note-text {
+                flex-grow: 1;
+                font-size: 14px;
+                color: #333;
+                font-weight: 500;
+                margin-right: 1px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .delete-note-btn {
+                background-color: #e74c3c;
+                color: #fff;
+                border: none;
+                border-radius: 50%;
+                width: 24px;
+                height: 24px;
+                cursor: pointer;
+                font-size: 14px;
+                line-height: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: background-color 0.2s ease;
+            }
+
+            .delete-note-btn:hover {
+                background-color: #c0392b;
+            }
 
         </style>
     </head>
@@ -204,101 +259,93 @@
                 <a href="?month=<%= currentMonth %>&year=<%= currentYear + 1 %>">Next Year</a>
             </div>
 
-            <table>
-                <tr>
-                    <th>Mon</th>
-                    <th>Tue</th>
-                    <th>Wed</th>
-                    <th>Thu</th>
-                    <th>Fri</th>
-                    <th>Sat</th>
-                    <th>Sun</th>
-                </tr>
-                <%
-                    int daysInMonth = (int) request.getAttribute("daysInMonth");
-                    List<HopDong> hopDongList = (List<HopDong>) request.getAttribute("hopDongList");
-                    List<Phong> danhSachPhongTroTrong = (List<Phong>) request.getAttribute("danhSachPhongTroTrong");
-                    Map<Date, List<String>> notesByDate = (Map<Date, List<String>>) request.getAttribute("notesByDate");
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.set(currentYear, currentMonth - 1, 1);
+<table>
+    <tr>
+        <th>Mon</th>
+        <th>Tue</th>
+        <th>Wed</th>
+        <th>Thu</th>
+        <th>Fri</th>
+        <th>Sat</th>
+        <th>Sun</th>
+    </tr>
+    <%
+        int daysInMonth = (int) request.getAttribute("daysInMonth");
+        List<HopDong> hopDongList = (List<HopDong>) request.getAttribute("hopDongList");
+        List<Phong> danhSachPhongTroTrong = (List<Phong>) request.getAttribute("danhSachPhongTroTrong");
+        Map<Date, List<String>> notesByDate = (Map<Date, List<String>>) request.getAttribute("notesByDate");
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(currentYear, currentMonth - 1, 1);
 
-                    int firstDayOfMonth = calendar.get(Calendar.DAY_OF_WEEK) - 1;
-                    int day = 1;
+        int firstDayOfMonth = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+        int day = 1;
 
-                    // Get today's date for comparison
-                    Calendar today = Calendar.getInstance();
-                    int currentDay = today.get(Calendar.DAY_OF_MONTH);
-                    int currentMonthToday = today.get(Calendar.MONTH);
-                    int currentYearToday = today.get(Calendar.YEAR);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-                    for (int week = 0; week < 6; week++) {
-                        out.print("<tr>");
-                        for (int i = 0; i < 7; i++) {
-                            if (week == 0 && i < firstDayOfMonth || day > daysInMonth) {
-                                out.print("<td></td>");
-                            } else {
-                                calendar.set(currentYear, currentMonth - 1, day);
-Date currentDate = new java.sql.Date(calendar.getTime().getTime());
-                                boolean hasYellowDot = false;
-                                boolean hasGreenDot = false;
-                                boolean hasRedDot = false;
-                                
-                                List<String> notes = notesByDate.get(currentDate);
-                                for (HopDong hopDong : hopDongList) {
-                                    Phong phongTro = hopDong.getPhongTro();
-                                    Date ngayHetHan = hopDong.getNgay_het_han();
-                                    String trangThai = phongTro.getTrang_thai();
-                                    Date ngayGiaTri = hopDong.getNgay_gia_tri();
+        Calendar today = Calendar.getInstance();
+        int currentDay = today.get(Calendar.DAY_OF_MONTH);
+        int currentMonthToday = today.get(Calendar.MONTH);
+        int currentYearToday = today.get(Calendar.YEAR);
 
-                                    if (ngayHetHan != null && ngayGiaTri != null) {
-                                        long daysRemaining = (ngayHetHan.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24);
-                                        if (!currentDate.before(ngayGiaTri) && !currentDate.after(ngayHetHan) && daysRemaining <= 20 && daysRemaining > 0) {
-                                            hasYellowDot = true;
-                                        } else if (!currentDate.before(ngayGiaTri) && daysRemaining > 20) {
-                                            hasRedDot = true;
-                                        }
-                                    }
-                                }
-                    
-                                if (danhSachPhongTroTrong != null && !danhSachPhongTroTrong.isEmpty()) {
-                                    hasGreenDot = true;
-                                }
-                    
-                                // Determine if the current day matches
-                                String currentDateClass = (day == currentDay && currentMonthToday == (currentMonth - 1) && currentYearToday == currentYear) ? "current-date" : "";
+        for (int week = 0; week < 6; week++) {
+            out.print("<tr>");
+            for (int i = 0; i < 7; i++) {
+                if (week == 0 && i < firstDayOfMonth || day > daysInMonth) {
+                    out.print("<td></td>");
+                } else {
+                    calendar.set(currentYear, currentMonth - 1, day);
+                    String currentDateStr = dateFormat.format(calendar.getTime());
 
-                                // Thêm sự kiện onclick vào phần tử <td> của ngày
-                                out.print("<td class='" + currentDateClass + "' onclick='showRoomList(" + day + ")'>" + day);
-                                
+                    boolean hasYellowDot = false;
 
-                                if (hasGreenDot) {
-                                    out.print("<span class='dot green-dot' title='Rooms available'></span>");
-                                }
-                                if (hasYellowDot) {
-                                    out.print("<span class='dot yellow-dot' title='Contract is expiring soon'></span>");
-                                }
-                                if (hasRedDot) {
-                                    out.print("<span class='dot red-dot' title='Contract is valid'></span>");
-                                }
-                                out.print("<button class='add-note-btn' onclick='addNote(" + day + ", event)'>+</button>");
-                                if (notes != null && !notes.isEmpty()) {
+                    System.out.println("Checking notes for date: " + currentDateStr);
+                    System.out.println("All notesByDate keys: " + notesByDate.keySet());
+
+                    List<String> notes = notesByDate.get(java.sql.Date.valueOf(currentDateStr));
+
+                    for (HopDong hopDong : hopDongList) {
+                        Phong phongTro = hopDong.getPhongTro();
+                        Date ngayHetHan = hopDong.getNgay_het_han();
+                        Date ngayGiaTri = hopDong.getNgay_gia_tri();
+
+                        if (ngayHetHan != null && ngayGiaTri != null) {
+                            long daysRemaining = (ngayHetHan.getTime() - calendar.getTimeInMillis()) / (1000 * 60 * 60 * 24);
+                            if (!calendar.getTime().before(ngayGiaTri) && !calendar.getTime().after(ngayHetHan) && daysRemaining <= 20 && daysRemaining > 0) {
+                                hasYellowDot = true;
+                            }
+                        }
+                    }
+
+                    String currentDateClass = (day == currentDay && currentMonthToday == (currentMonth - 1) && currentYearToday == currentYear) ? "current-date" : "";
+
+                    out.print("<td class='" + currentDateClass + "' onclick='showRoomList(" + day + ")'>" + day);
+
+                    if (hasYellowDot) {
+                        out.print("<span class='dot yellow-dot' title='Contract is expiring soon'></span>");
+                    }
+
+                    out.print("<button class='add-note-btn' onclick='addNote(" + day + ", event)'>+</button>");
+
+                    if (notes != null && !notes.isEmpty()) {
                         out.print("<div class='notes'>");
-                        for (String note : notes) {
-                            out.print("<p>" + note + "</p>"); // Hiển thị từng ghi chú
+                        for (int j = 0; j < notes.size(); j++) {
+                            out.print("<div class='note-item'>");
+                            out.print("<span class='note-text'>" + notes.get(j) + "</span>");
+                            out.print("<button class='delete-note-btn' onclick='deleteNote(\"" + currentDateStr + "\", " + j + ", event)'>x</button>");
+                            out.print("</div>");
                         }
                         out.print("</div>");
                     }
-                                out.print("</td>");
-                                day++;
-                                
-                            }
-                        }
-                        out.print("</tr>");
-                        if (day > daysInMonth) break;
-                    }
-                %>
-            </table>
 
+                    out.print("</td>");
+                    day++;
+                }
+            }
+            out.print("</tr>");
+            if (day > daysInMonth) break;
+        }
+    %>
+</table>
 
             <div id="roomListModal" >
                 <h3>Danh sách phòng trọ</h3>
@@ -405,26 +452,26 @@ Date currentDate = new java.sql.Date(calendar.getTime().getTime());
                     console.log("Ghi chú cho ngày " + day + ": " + note);
 
                     // Tạo một đối tượng ngày từ year, month và day
-                    const date = new Date(year, month - 1, day); // month - 1 vì tháng trong JavaScript bắt đầu từ 0
+                    const date = new Date(year, month - 1, day + 1); // month - 1 vì tháng trong JavaScript bắt đầu từ 0
                     const formattedDate = date.toISOString().split('T')[0]; // Định dạng ngày thành 'yyyy-MM-dd'
 
-                    // Gửi ngày và ghi chú dưới dạng yêu cầu POST đến servlet
                     fetch('GhiChuByManager', {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded' // Đặt kiểu nội dung là URL-encoded
+                            'Content-Type': 'application/x-www-form-urlencoded' 
                         },
-                        body: new URLSearchParams({date: formattedDate, note: note}) // Gửi date đã được định dạng
+                        body: new URLSearchParams({date: formattedDate, note: note}) 
                     })
                             .then(response => {
                                 if (!response.ok) {
                                     throw new Error('Network response was not ok: ' + response.statusText);
                                 }
-                                return response.text(); // Dự kiến phản hồi văn bản ("success" hoặc "error")
+                                return response.text(); 
                             })
                             .then(data => {
                                 if (data === "success") {
                                     alert("Ghi chú đã được thêm thành công!");
+                                    location.reload(); 
                                 } else {
                                     alert("Có lỗi xảy ra khi thêm ghi chú.");
                                 }
@@ -435,6 +482,40 @@ Date currentDate = new java.sql.Date(calendar.getTime().getTime());
                             });
                 }
             }
+
+            function deleteNote(date, noteIndex, event) {
+                event.stopPropagation();
+
+                if (confirm("Are you sure you want to delete this note?")) {
+                    const noteContent = event.target.closest('.note-item').querySelector('.note-text').textContent;
+
+                    fetch('DeleteGhiChuByManager', {
+                        method: 'POST', // Thay GET bằng POST
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: new URLSearchParams({
+                            date: date,
+                            noteContent: noteContent,
+                            noteIndex: noteIndex
+                        })
+                    })
+                            .then(response => response.text())
+                            .then(data => {
+                                if (data === "success") {
+                                    event.target.closest('.note-item').remove();  // Xóa ghi chú khỏi giao diện
+                                } else {
+                                    alert("Failed to delete note.");
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert("An error occurred. Please try again.");
+                            });
+                }
+            }
+
+
         </script>
 
     </body>
