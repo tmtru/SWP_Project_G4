@@ -1,6 +1,7 @@
 package controller;
 
 import dal.HopDongDAO;
+import dal.QuanLyDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -8,8 +9,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import model.HopDong;
+import model.LichGhiChu;
 import model.Phong;
 
 public class CalendarByManagerController extends HttpServlet {
@@ -19,12 +24,14 @@ public class CalendarByManagerController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         HopDongDAO hopDongDao = new HopDongDAO();
+        QuanLyDAO quanLyDao = new QuanLyDAO();
         HttpSession session = request.getSession(false);
 
         if (session != null) {
             int ID_Account = (int) session.getAttribute("ID_Account");
             List<HopDong> hopDongList = hopDongDao.getHopDongByQuanLyId(ID_Account);
             List<Phong> danhSachPhongTro = hopDongDao.getPhongTroByAccountId(ID_Account);
+
             // Lấy ngày tháng năm hiện tại
             Calendar calendar = Calendar.getInstance();
             int currentYear = calendar.get(Calendar.YEAR);
@@ -41,6 +48,15 @@ public class CalendarByManagerController extends HttpServlet {
 
             calendar.set(currentYear, currentMonth - 1, 1);
             int daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+            Integer Id_QuanLy = quanLyDao.getIDQuanLyByIDAccount(ID_Account);
+            // Lấy danh sách ghi chú theo ID quản lý
+            List<LichGhiChu> ghiChuList = quanLyDao.getGhiChuByIdQuanLy(Id_QuanLy);
+
+            // Tổ chức ghi chú theo ngày
+            Map<Date, List<String>> notesByDate = new HashMap<>();
+            for (LichGhiChu ghiChu : ghiChuList) {
+                notesByDate.computeIfAbsent(ghiChu.getNgay(), k -> new java.util.ArrayList<>()).add(ghiChu.getGhiChu());
+            }
 
             // Gán thuộc tính cho request để truyền sang JSP
             request.setAttribute("currentYear", currentYear);
@@ -48,6 +64,7 @@ public class CalendarByManagerController extends HttpServlet {
             request.setAttribute("daysInMonth", daysInMonth);
             request.setAttribute("hopDongList", hopDongList);
             request.setAttribute("danhSachPhongTroTrong", danhSachPhongTro);
+            request.setAttribute("notesByDate", notesByDate); // Thêm ghi chú vào request
 
             request.getRequestDispatcher("/Calendarbymanager.jsp").forward(request, response);
         } else {

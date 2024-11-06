@@ -191,7 +191,7 @@
                                     String reasonReject = hopDong.getLy_do();
 
                                     // Kiểm tra nếu ngày hết hạn hợp đồng cách ngày hiện tại 20 ngày và trạng thái là "accept"
-                                    if ("accept".equalsIgnoreCase(hopDong.getStatus()) && ngayHetHan != null && hopDong.getPhongTro() != null) {
+                                    if ("active".equalsIgnoreCase(hopDong.getStatus()) && ngayHetHan != null && hopDong.getPhongTro() != null) {
                                         long differenceInMillies = ngayHetHan.getTime() - currentDate.getTime();
                                         long differenceInDays = differenceInMillies / (1000 * 60 * 60 * 24);
 
