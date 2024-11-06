@@ -15,56 +15,56 @@ import model.Phong;
 
 public class HopDongDAO extends DBContext {
 
-      public List<HopDong> getHopDongsByKhachThueID(int ID_KhachThue) {
-    List<HopDong> hopDongs = new ArrayList<>();
-    String sql = "SELECT \n"
-            + "    hd.ID_hopDong,             \n"
-            + "    kt.Ten_khach,              \n"
-            + "    pt.TenPhongTro,           \n"
-            + "    hd.Ngay_gia_tri,          \n"
-            + "    hd.Ngay_het_han,          \n"
-            + "    hd.Tien_Coc,              \n"
-            + "    f.Noi_dung,               \n"
-            + "    f.Danh_gia,               \n" // Thêm dấu phẩy ở đây
-            + "    kt.ID_KhachThue,          \n" // Thêm dấu phẩy ở đây
-            + "    pt.ID_Phong               \n" // Thêm dấu phẩy ở đây
-            + "FROM \n"
-            + "    hop_dong hd \n"
-            + "JOIN \n"
-            + "    khach_thue kt ON hd.ID_KhachThue = kt.ID_KhachThue  \n"
-            + "JOIN \n"
-            + "    phong_tro pt ON hd.ID_Phongtro = pt.ID_Phong       \n"
-            + "LEFT JOIN \n"
-            + "    feedback f ON kt.ID_KhachThue = f.ID_KhachThue AND pt.ID_Phong = f.ID_Phong \n"
-            + "WHERE \n"
-            + "    hd.ID_KhachThue = ?;";
+    public List<HopDong> getHopDongsByKhachThueID(int ID_KhachThue) {
+        List<HopDong> hopDongs = new ArrayList<>();
+        String sql = "SELECT \n"
+                + "    hd.ID_hopDong,             \n"
+                + "    kt.Ten_khach,              \n"
+                + "    pt.TenPhongTro,           \n"
+                + "    hd.Ngay_gia_tri,          \n"
+                + "    hd.Ngay_het_han,          \n"
+                + "    hd.Tien_Coc,              \n"
+                + "    f.Noi_dung,               \n"
+                + "    f.Danh_gia,               \n" // Thêm dấu phẩy ở đây
+                + "    kt.ID_KhachThue,          \n" // Thêm dấu phẩy ở đây
+                + "    pt.ID_Phong               \n" // Thêm dấu phẩy ở đây
+                + "FROM \n"
+                + "    hop_dong hd \n"
+                + "JOIN \n"
+                + "    khach_thue kt ON hd.ID_KhachThue = kt.ID_KhachThue  \n"
+                + "JOIN \n"
+                + "    phong_tro pt ON hd.ID_Phongtro = pt.ID_Phong       \n"
+                + "LEFT JOIN \n"
+                + "    feedback f ON kt.ID_KhachThue = f.ID_KhachThue AND pt.ID_Phong = f.ID_Phong \n"
+                + "WHERE \n"
+                + "    hd.ID_KhachThue = ?;";
 
-    try {
-        PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setInt(1, ID_KhachThue);
-        ResultSet rs = ps.executeQuery();
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, ID_KhachThue);
+            ResultSet rs = ps.executeQuery();
 
-        while (rs.next()) {
-            HopDong hopDong = new HopDong();
-            hopDong.setID_HopDong(rs.getInt("ID_hopDong"));
-            hopDong.setKhach_thue(rs.getString("Ten_khach"));
-            hopDong.setTen_phong(rs.getString("TenPhongTro"));
-            hopDong.setNgay_gia_tri(rs.getDate("Ngay_gia_tri"));
-            hopDong.setNgay_het_han(rs.getDate("Ngay_het_han"));
-            hopDong.setTien_Coc(rs.getInt("Tien_Coc"));
-            hopDong.setNoi_dung(rs.getString("Noi_dung"));
-            hopDong.setDanh_gia(rs.getString("Danh_gia"));
-            hopDong.setID_KhachThue(rs.getInt("ID_KhachThue"));
-            hopDong.setID_Phongtro(rs.getInt("ID_Phong"));
+            while (rs.next()) {
+                HopDong hopDong = new HopDong();
+                hopDong.setID_HopDong(rs.getInt("ID_hopDong"));
+                hopDong.setKhach_thue(rs.getString("Ten_khach"));
+                hopDong.setTen_phong(rs.getString("TenPhongTro"));
+                hopDong.setNgay_gia_tri(rs.getDate("Ngay_gia_tri"));
+                hopDong.setNgay_het_han(rs.getDate("Ngay_het_han"));
+                hopDong.setTien_Coc(rs.getInt("Tien_Coc"));
+                hopDong.setNoi_dung(rs.getString("Noi_dung"));
+                hopDong.setDanh_gia(rs.getString("Danh_gia"));
+                hopDong.setID_KhachThue(rs.getInt("ID_KhachThue"));
+                hopDong.setID_Phongtro(rs.getInt("ID_Phong"));
 
-            hopDongs.add(hopDong);
+                hopDongs.add(hopDong);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace(); // Xử lý lỗi
         }
-    } catch (SQLException ex) {
-        ex.printStackTrace(); // Xử lý lỗi
-    }
 
-    return hopDongs;
-}
+        return hopDongs;
+    }
 
     public List<HopDong> findAll(int offset, int noOfRecords) {
         List<HopDong> hopDongList = new ArrayList<>();
@@ -222,12 +222,13 @@ public class HopDongDAO extends DBContext {
 
     public List<HopDong> getHopDongByChuTro(int idChuTro) {
         List<HopDong> hopDongList = new ArrayList<>();
-        String sql = "SELECT h.ID_HopDong, p.TenPhongTro, h.Ngay_gia_tri, h.Ngay_het_han, h.Trang_thai "
-                + "FROM hop_dong h "
-                + "JOIN phong_tro p ON h.ID_PhongTro = p.ID_Phong "
-                + "JOIN nha_tro nt ON p.ID_NhaTro = nt.ID_NhaTro "
-                + "WHERE nt.ID_ChuTro = ? AND h.Trang_thai IN ('pending', 'accept', 'active', 'reject') "
-                + "ORDER BY h.ID_HopDong DESC";
+        String sql = "SELECT h.ID_HopDong, p.TenPhongTro, h.Ngay_gia_tri, h.Ngay_het_han, h.Trang_thai, kt.Ten_khach\n"
+                + "FROM hop_dong h \n"
+                + "JOIN phong_tro p ON h.ID_PhongTro = p.ID_Phong \n"
+                + "JOIN nha_tro nt ON p.ID_NhaTro = nt.ID_NhaTro \n"
+                + "JOIN khach_thue kt ON h.ID_KhachThue = kt.ID_KhachThue \n"
+                + "WHERE nt.ID_ChuTro = ? AND h.Trang_thai IN ('pending', 'accept', 'active', 'reject', 'expired') \n"
+                + "ORDER BY h.ID_HopDong DESC;";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, idChuTro);
@@ -240,6 +241,7 @@ public class HopDongDAO extends DBContext {
                 hopDong.setNgay_gia_tri(rs.getDate("Ngay_gia_tri"));
                 hopDong.setNgay_het_han(rs.getDate("Ngay_het_han"));
                 hopDong.setStatus(rs.getString("Trang_thai"));
+                hopDong.setTen_khach(rs.getString("Ten_khach"));
                 hopDongList.add(hopDong);
             }
         } catch (SQLException e) {
@@ -394,7 +396,7 @@ public class HopDongDAO extends DBContext {
     }
 
     public void updateHopDongStatus(int hopDongId, String status) {
-        String sql = "UPDATE hop_dong SET Trang_thai = ? WHERE ID_HopDong = ?";
+        String sql = "UPDATE hop_dong SET Trang_thai = ? WHERE ID_HopDong = ? and isActive = 1";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, status);
             ps.setInt(2, hopDongId);
@@ -452,7 +454,6 @@ public class HopDongDAO extends DBContext {
         return hopDong;
     }
 
-
     public boolean ketThucHopDongSom(int hopDongId) {
         String sql = "UPDATE hop_dong SET isActive = 0, Trang_thai = 'expired' WHERE ID_HopDong = ?";
 
@@ -485,7 +486,7 @@ public class HopDongDAO extends DBContext {
         }
         return true; // Room is available for accepting the contract
     }
-                
+
     public List<HopDong> getHopDongKhachCocByApartment(int nhatroId, String search, Integer start, Integer recordPerPage) {
         List<HopDong> hopDongList = new ArrayList<>();
         String query = "select * from hop_dong hd\n"
@@ -536,7 +537,6 @@ public class HopDongDAO extends DBContext {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
 
         return hopDongList;
     }
@@ -597,7 +597,7 @@ public class HopDongDAO extends DBContext {
                 + "JOIN phong_tro pt ON hd.ID_PhongTro = pt.ID_Phong "
                 + "JOIN nha_tro nt ON pt.ID_NhaTro = nt.ID_NhaTro "
                 + "JOIN quan_ly ql ON nt.ID_NhaTro = ql.ID_NhaTro "
-                + "WHERE ql.ID_Account = ? AND hd.Ngay_het_han IS NOT NULL AND hd.Ngay_gia_tri IS NOT NULL AND hd.isActive = 1 "
+                + "WHERE ql.ID_Account = ? AND hd.Ngay_het_han IS NOT NULL AND hd.Ngay_gia_tri IS NOT NULL "
                 + "ORDER BY hd.ID_HopDong DESC";
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -649,7 +649,6 @@ public class HopDongDAO extends DBContext {
                 + "JOIN quan_ly ql ON nt.ID_NhaTro = ql.ID_NhaTro "
                 + "WHERE ql.ID_Account = ? AND hd.Ngay_gia_tri < ? AND hd.Ngay_het_han > ? AND hd.Ngay_het_han IS NOT NULL AND hd.Ngay_gia_tri IS NOT NULL AND hd.isActive = 1";
 
-
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
 
             stmt.setInt(1, ID_Account);
@@ -692,13 +691,13 @@ public class HopDongDAO extends DBContext {
 
     public List<Phong> getPhongTroByAccountId(int idAccount) {
         List<Phong> danhSachPhongTro = new ArrayList<>();
-        
-        String query = "SELECT pt.* " +
-                       "FROM phong_tro pt " +
-                       "JOIN nha_tro nt ON pt.ID_NhaTro = nt.ID_NhaTro " +
-                       "JOIN quan_ly ql ON nt.ID_NhaTro = ql.ID_NhaTro " +
-                       "WHERE pt.Trang_thai = 'T' " +
-                       "AND ql.ID_Account = ?";
+
+        String query = "SELECT pt.* "
+                + "FROM phong_tro pt "
+                + "JOIN nha_tro nt ON pt.ID_NhaTro = nt.ID_NhaTro "
+                + "JOIN quan_ly ql ON nt.ID_NhaTro = ql.ID_NhaTro "
+                + "WHERE pt.Trang_thai = 'T' "
+                + "AND ql.ID_Account = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, idAccount);
@@ -724,8 +723,7 @@ public class HopDongDAO extends DBContext {
 
         return danhSachPhongTro;
     }
-    
-    
+
     public static void main(String[] args) {
         HopDongDAO hopDongDAO = new HopDongDAO();
 

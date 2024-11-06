@@ -24,14 +24,14 @@
         </div>
         <script>
             function validateEmail(email) {
-                const regex = /^[^\s@]+@gmail\.com$/;
+                const regex = /^[a-z0-9]+[a-z0-9]*@fpt\.edu\.vn$|^[^\s@]+@gmail\.com$/;
                 return regex.test(email);
             }
 
             const emailInput = document.querySelector('input[type="email"]');
             emailInput.addEventListener('input', function () {
                 if (!validateEmail(emailInput.value)) {
-                    emailInput.setCustomValidity("Email không hợp lệ!");
+                    emailInput.setCustomValidity("Email không hợp lệ! Định dạng phải là '@fpt.edu.vn' hoặc '@gmail.com'");
                 } else {
                     emailInput.setCustomValidity("");
                 }

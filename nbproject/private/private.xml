@@ -3,6 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/C:/Users/ADMIN/Desktop/New%20folder/SWP_Project_G4/src/java/dal/DBContext.java</file>
             <file>file:/C:/Users/ADMIN/Desktop/New%20folder/SWP_Project_G4/web/detailNhaTro.jsp</file>
             <file>file:/C:/Users/ADMIN/Desktop/New%20folder/SWP_Project_G4/web/detailHouseHome.jsp</file>
@@ -10,6 +11,14 @@
             <file>file:/C:/Users/ADMIN/Desktop/New%20folder/SWP_Project_G4/src/java/filter/RoleFilterTQAT.java</file>
             <file>file:/C:/Users/ADMIN/Desktop/New%20folder/SWP_Project_G4/src/java/filter/LoginFilter.java</file>
             <file>file:/C:/Users/ADMIN/Desktop/New%20folder/SWP_Project_G4/web/NhaTro.jsp</file>
+=======
+            <file>file:/D:/SWP_Project_G4/web/maintainance.jsp</file>
+            <file>file:/D:/SWP_Project_G4/src/java/dal/ThietBiPhongDAO.java</file>
+            <file>file:/D:/SWP_Project_G4/web/WEB-INF/web.xml</file>
+            <file>file:/D:/SWP_Project_G4/web/room.jsp</file>
+            <file>file:/D:/SWP_Project_G4/src/java/controller/HoanThanhSuaTBController.java</file>
+            <file>file:/D:/SWP_Project_G4/web/danh-sach-thiet-bi-can-sua.jsp</file>
+>>>>>>> ed9dd21612dc133e216157cf96e5fc588d650a43
         </group>
     </open-files>
 </project-private>

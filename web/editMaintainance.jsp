@@ -51,8 +51,6 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="mb-0">Thông tin yêu cầu bảo trì</h5>
-                    <%= idThietBiPhongStr %>
-                    
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -71,12 +69,14 @@
 
             <div class="card">
                 <div class="card-body">
-                    <form action="editMaintainanceRequestServlet" method="post">
+                    <form name="editForm" action="editMaintainanceRequestServlet" method="post" onsubmit="return validateForm()">
                         <input type="hidden" name="id" value="<%= maintainance.getId_bao_tri() %>">
                         <div class="mb-3">
                             <label for="moTa" class="form-label">Mô tả vấn đề cần bảo trì</label>
                             <textarea class="form-control" id="moTa" name="moTa" rows="4" required><%= maintainance.getMo_ta() %></textarea>
+                            <div id="error-mota" class="text-danger" style="display:none;">Mô tả không được để trống.</div>
                         </div>
+                        
                         <div class="d-flex gap-2">
                             <button type="submit" class="btn btn-primary">Cập nhật</button>
                             <a href="maintainanceServlet" class="btn btn-secondary">Quay lại</a>
@@ -90,5 +90,20 @@
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            function validateForm() {
+                var moTa = document.forms["editForm"]["moTa"].value;
+                var errorMessage = document.getElementById("error-mota");
+
+                // Kiểm tra xem mô tả có rỗng không
+                if (moTa.trim() == "") {
+                    errorMessage.style.display = "block";
+                    return false; // Ngừng submit nếu không hợp lệ
+                } else {
+                    errorMessage.style.display = "none";
+                    return true; // Cho phép submit nếu hợp lệ
+                }
+            }
+        </script>
     </body>
 </html>

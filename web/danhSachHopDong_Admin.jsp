@@ -88,23 +88,39 @@
                 padding: 5px 10px;
             }
             .pagination {
-                text-align: center;
-                margin: 20px 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                margin-top: 20px;
             }
-            .pagination a {
-                margin: 0 5px;
+
+            .pagination button,
+            .pagination .page-number,
+            .pagination .current-page {
                 padding: 8px 12px;
-                border: 1px solid #007bff;
-                color: #007bff;
+                border: none;
+                background-color: #536DFE;
+                color: #fff;
+                font-size: 16px;
+                cursor: pointer;
                 text-decoration: none;
+                border-radius: 6px;
             }
-            .pagination a:hover {
-                background-color: #007bff;
-                color: white;
+
+            .pagination .current-page {
+                background-color: #3D5AFE;
+                font-weight: bold;
             }
-            .pagination a.active {
-                background-color: #007bff;
-                color: white;
+
+            .pagination button:disabled {
+                opacity: 0.5;
+                cursor: default;
+            }
+
+            .pagination .page-number:hover,
+            .pagination button:not(:disabled):hover {
+                background-color: #3D5AFE;
             }
             .alert {
                 background-color: white;
@@ -152,17 +168,6 @@
                         <option value="expired">expired</option>
                     </select>
                 </div>
-<% 
-                String message = (String) request.getAttribute("message");
-                if (message != null) {
-            %>
-            <div class="alert alert-info" style="color: green; font-weight: bold; margin-top: 10px;">
-                <%= message %>
-            </div>
-            <%
-                }
-            %>
-
 
                 <div class="service-section">
                     <table class="service-table" id="contractTable">
@@ -170,6 +175,7 @@
                             <tr>
                                 <th>ID Hợp Đồng</th>
                                 <th>Tên Phòng Trọ</th>
+                                <th>Tên Khách Thuê</th>
                                 <th>Ngày Bắt Đầu</th>
                                 <th>Ngày Hết Hạn</th>
                                 <th>Trạng Thái</th>
@@ -177,7 +183,7 @@
                             </tr>
                         </thead>
                         <tbody id="contractBody">
-                        <%
+                        <% 
                             List<HopDong> hopDongList = (List<HopDong>) request.getAttribute("hopDongList");
                             if (hopDongList != null && !hopDongList.isEmpty()) {
                                 for (HopDong hopDong : hopDongList) {
@@ -185,6 +191,7 @@
                         <tr>
                             <td><%= hopDong.getID_HopDong() %></td>
                             <td><%= hopDong.getTenPhongTro() %></td>
+                            <td><%= hopDong.getTen_khach() %></td>
                             <td><%= hopDong.getNgay_gia_tri() != null ? hopDong.getNgay_gia_tri() : "N/A" %></td>
                             <td><%= hopDong.getNgay_het_han() != null ? hopDong.getNgay_het_han() : "N/A" %></td>
                             <td><%= hopDong.getStatus() %></td>
@@ -193,7 +200,6 @@
                                     <input type="hidden" name="hopDongId" value="<%= hopDong.getID_HopDong() %>">
                                     <button type="submit">Xem Chi Tiết</button>
                                 </form>
-
                                 <form action="KetThucHopDongSomByAdmin" method="get" style="display:inline;">
                                     <input type="hidden" name="hopDongId" value="<%= hopDong.getID_HopDong() %>">
                                     <button type="submit" onclick="return confirm('Bạn có chắc chắn muốn kết thúc hợp đồng này không?')" style="background: none; border: none; cursor: pointer;">
@@ -202,44 +208,38 @@
                                 </form>
                             </td>
                         </tr>
-                        <%
+                        <% 
                                 }
                             } else {
                         %>
                         <tr>
-                            <td colspan="6">Không có hợp đồng nào.</td>
+                            <td colspan="7">Không có hợp đồng nào.</td>
                         </tr>
-                        <%
-                            }
-                        %>
+                        <% } %>
                     </tbody>
                 </table>
 
                 <div class="pagination">
-                    <button id="prevBtn" onclick="changePage(-1)" disabled>Trước</button>
+                    <button id="prevBtn" onclick="changePage(-1)" disabled><i class="fas fa-chevron-left"></i></button>
                     <span id="pageNum">1</span>
-                    <button id="nextBtn" onclick="changePage(1)">Tiếp</button>
+                    <button id="nextBtn" onclick="changePage(1)"><i class="fas fa-chevron-right"></i></button>
                 </div>
             </div>
         </div>
 
         <script>
-            const itemsPerPage = 6; // Số hợp đồng mỗi trang
-            const itemsPerPage = 7; // Số hợp đồng mỗi trang
+            const itemsPerPage = 6;
             let currentPage = 1;
+            let filteredRows = [];
 
             function paginate() {
-                const rows = document.querySelectorAll("#contractBody tr");
-                const totalPages = Math.ceil(rows.length / itemsPerPage);
-
-                // Ẩn tất cả các hàng
-                rows.forEach((row, index) => {
-                    row.style.display = (index >= (currentPage - 1) * itemsPerPage && index < currentPage * itemsPerPage) ? "" : "none";
-                });
-
-                // Cập nhật trạng thái nút
+                const totalPages = Math.ceil(filteredRows.length / itemsPerPage);
+                document.querySelectorAll("#contractBody tr").forEach(row => row.style.display = "none");
+                const start = (currentPage - 1) * itemsPerPage;
+                const end = currentPage * itemsPerPage;
+                filteredRows.slice(start, end).forEach(row => row.style.display = "");
                 document.getElementById("prevBtn").disabled = currentPage === 1;
-                document.getElementById("nextBtn").disabled = currentPage === totalPages;
+                document.getElementById("nextBtn").disabled = currentPage === totalPages || totalPages === 0;
                 document.getElementById("pageNum").textContent = currentPage;
             }
 
@@ -248,70 +248,57 @@
                 paginate();
             }
 
-            document.addEventListener("DOMContentLoaded", paginate);
             function searchTable() {
                 const input = document.getElementById("searchInput").value.toLowerCase();
-                const rows = document.querySelectorAll("#contractBody tr:not(#noResultRow)");
-                let hasResult = false;
-
-                rows.forEach(row => {
+                const rows = document.querySelectorAll("#contractBody tr");
+                filteredRows = Array.from(rows).filter(row => {
                     const tenPhong = row.querySelector("td:nth-child(2)").textContent.toLowerCase();
-                    if (tenPhong.includes(input)) {
-                        row.style.display = ""; // Hiển thị hàng phù hợp
-                        hasResult = true;
-                    } else {
-                        row.style.display = "none"; // Ẩn hàng không phù hợp
-                    }
+                    return tenPhong.includes(input);
                 });
-
-                checkNoResult(hasResult); // Kiểm tra có kết quả hay không
+                checkNoResult(filteredRows.length > 0);
+                currentPage = 1;
+                paginate();
             }
 
             function filterTable() {
-                const filterTrangThaiPhong = document.getElementById("filterTrangThaiPhong").value;
                 const filterTrangThaiHopDong = document.getElementById("filterTrangThaiHopDong").value;
-                const rows = document.querySelectorAll("#contractBody tr:not(#noResultRow)");
-                let hasResult = false;
+                const allRows = Array.from(document.querySelectorAll("#contractBody tr:not(#noResultRow)"));
 
-                rows.forEach(row => {
-                    const trangThaiPhong = row.querySelector("td:nth-child(5)").textContent;
-                    const trangThaiHopDong = row.querySelector("td:nth-child(5)").textContent;
+                // Kiểm tra nếu trạng thái được chọn thì chỉ lọc theo trạng thái, nếu không hiển thị tất cả hàng
+                if (filterTrangThaiHopDong) {
+                    filteredRows = allRows.filter(row => {
+                        const trangThaiHopDong = row.querySelector("td:nth-child(6)").textContent;
+                        return trangThaiHopDong === filterTrangThaiHopDong;
+                    });
+                } else {
+                    filteredRows = allRows; // Hiển thị tất cả nếu không có bộ lọc
+                }
 
-                    const matchPhong = filterTrangThaiPhong === "" || trangThaiPhong === filterTrangThaiPhong;
-                    const matchHopDong = filterTrangThaiHopDong === "" || trangThaiHopDong === filterTrangThaiHopDong;
-
-                    if (matchPhong && matchHopDong) {
-                        row.style.display = ""; // Hiển thị hàng phù hợp
-                        hasResult = true;
-                    } else {
-                        row.style.display = "none"; // Ẩn hàng không phù hợp
-                    }
-                });
-
-                checkNoResult(hasResult); // Kiểm tra có kết quả hay không
+                checkNoResult(filteredRows.length > 0);
+                currentPage = 1; // Đặt lại trang về 1
+                paginate(); // Phân trang sau khi lọc
             }
 
             function checkNoResult(hasResult) {
-                const rows = document.querySelectorAll("#contractBody tr:not(#noResultRow)");
-                let visibleRows = Array.from(rows).filter(row => row.style.display !== "none");
                 const noResultRow = document.getElementById("noResultRow");
-
-                if (visibleRows.length === 0) {
-                    // Không có kết quả, hiển thị hàng "Không có hợp đồng nào"
+                if (!hasResult) {
                     if (!noResultRow) {
                         const tbody = document.getElementById("contractBody");
                         const tr = document.createElement("tr");
                         tr.id = "noResultRow";
-                        tr.innerHTML = '<td colspan="6" style="text-align: center; vertical-align: middle;">Không có hợp đồng nào.</td>';
+                        tr.innerHTML = '<td colspan="7" style="text-align: center; vertical-align: middle;">Không có hợp đồng nào.</td>';
                         tbody.appendChild(tr);
                     }
                 } else if (noResultRow) {
-                    // Có kết quả, xóa hàng "Không có hợp đồng nào"
                     noResultRow.remove();
                 }
             }
 
+            document.addEventListener("DOMContentLoaded", () => {
+                filteredRows = Array.from(document.querySelectorAll("#contractBody tr"));
+                paginate();
+            });
         </script>
-
     </body>
+</body>
 </html>

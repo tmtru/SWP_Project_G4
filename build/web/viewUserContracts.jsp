@@ -4,44 +4,43 @@
 <%@ page import="model.Account" %>
 <%@ page import="model.ChuTro" %>
 <%@ page import="model.Phong" %>
+<%@ page import="model.KhachThuePhu" %>
 <%@ page import="dal.AccountDAO" %>
 <%@ page import="dal.KhachThueDAO" %>
 <%@ page import="dal.HopDongDAO" %>
 <%@ page import="dal.ChuTroDAO" %>
 <%@ page import="dal.PhongDAO" %>
+<%@ page import="dal.KhachThuePhuDAO" %>
 <%@ page session="true" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 
 <%
-    // Lấy ID_Account từ session
     Integer accountId = (Integer) session.getAttribute("ID_Account");
     if (accountId == null) {
-        // Nếu không có session, chuyển hướng tới trang đăng nhập
         response.sendRedirect("login.jsp");
         return;
     }
 
-    // Khởi tạo DAO để lấy thông tin từ database
     AccountDAO accountDAO = new AccountDAO();
     KhachThueDAO khachThueDAO = new KhachThueDAO();
     ChuTroDAO chutroDAO = new ChuTroDAO();
     HopDongDAO hopDongDAO = new HopDongDAO();
     PhongDAO phongDAO = new PhongDAO();
+    KhachThuePhuDAO ktpDAO = new KhachThuePhuDAO();
 
-    // Lấy thông tin account từ DAO
     Account account = accountDAO.getAccountById(accountId);
 
-    // Lấy thông tin KhachThue
     KhachThue khachThue = khachThueDAO.getKhachThueByAccountId(accountId);
     
-    // Lấy thông tin HopDong của khách thuê
     List<HopDong> hopDongList = hopDongDAO.getHopDongsByKhachThueID(khachThue.getId());
 
-    // Lấy thông tin chủ trọ từ HopDong (Giả sử mỗi khách thuê có ít nhất 1 hợp đồng)
     ChuTro chutro = null;
-    chutro = chutroDAO.getChuTroById(1); // Lấy thông tin chủ trọ qua hợp đồng
+    chutro = chutroDAO.getChuTroById(1); 
     
-    List<Phong> danhSachPhong = phongDAO.getRoomsByKhachThueId(khachThue.getId()); // Sửa đổi ở đây
+    List<Phong> danhSachPhong = phongDAO.getRoomsByKhachThueId(khachThue.getId()); 
+
+    List<KhachThuePhu> ktps = ktpDAO.getKhachThuePhuByKhachThueId(khachThue.getId());
+
 %>
 
 <!DOCTYPE html>
@@ -164,7 +163,24 @@
                     CMND số: <%= khachThue.getCccd() %> <br>
                     Ngày cấp CMND: <%= khachThue.getNgay_cap() %> <br>
                     Nơi cấp CMND: <%= khachThue.getNoi_cap() %><br>
-                    Số điện thoại: <%= khachThue.getPhone() %></p>
+                    Số điện thoại: <%= khachThue.getPhone() %> <br>
+                    <p style="font-size: 25px;"><strong>Thành viên khác: </strong></p>
+                    <% 
+                        int index = 1;
+                        for (KhachThuePhu ktp : ktps) { 
+                    %>
+                            Thành viên <%= index %>: <br>
+                            Tên thành viên: <%= ktp.getTenKhach() %><br>
+                            Sinh ngày: <%= ktp.getNgaySinh() %><br>
+                            Nơi đăng ký HK thường trú: <%= ktp.getHkThuongTru() %><br>
+                            CMND số: <%= ktp.getCccd() %><br>
+                            Số điện thoại: <%= ktp.getSdt() %><br> 
+                            <br>
+                    <%
+                            index++; // Tăng biến đếm lên 1 sau mỗi lần lặp
+                        } 
+                    %>
+                    </p>
                 <p style="font-size: 25px;"><strong>Bên A đồng ý cho bên B thuê 01 phòng ở tại địa chỉ: ${diaChiPhongTro}</strong></p>
 
                 <p style="font-size: 23px;">Giá thuê:</p>

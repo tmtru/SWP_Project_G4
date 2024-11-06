@@ -12,7 +12,7 @@
         <div class="container">
             <h2>Create an account</h2>
 
-            <form action="register" method="post">
+            <form action="register" method="post" onsubmit="return validateForm()">
                 <input type="text" name="username" class="input-field" placeholder="Enter your name" required>
                 <input type="email" name="email" class="input-field" placeholder="Enter your Gmail" required>
                 <input type="password" name="password" class="input-field" placeholder="Create a password" required>
@@ -34,7 +34,7 @@
 
         <script>
             function validateEmail(email) {
-                const regex = /^[^\s@]+@gmail\.com$/; 
+                const regex = /^[a-z0-9]+[a-z0-9]*@fpt\.edu\.vn$|^[^\s@]+@gmail\.com$/;
                 return regex.test(email);
             }
 
@@ -60,6 +60,53 @@
                     passwordInput.setCustomValidity(""); 
                 }
             });
+            
+            function validateForm() {
+                const username = document.querySelector('input[name="username"]').value;
+                const email = document.querySelector('input[name="email"]').value;
+                const password = document.querySelector('input[name="password"]').value;
+                const confirmPassword = document.querySelector('input[name="confirmPassword"]').value;
+
+                if (username.length > 50) {
+                    alert("Username không được quá 50 ký tự!");
+                    return false;
+                }
+
+                if (email.length > 100) {
+                    alert("Email không được quá 100 ký tự!");
+                    return false;
+                }
+
+                if (password.length > 50) {
+                    alert("Mật khẩu không được quá 50 ký tự!");
+                    return false;
+                }
+
+                if (confirmPassword.length > 50) {
+                    alert("Mật khẩu xác nhận không được quá 50 ký tự!");
+                    return false;
+                }
+
+                // Kiểm tra email hợp lệ
+                if (!validateEmail(email)) {
+                    alert("Email không hợp lệ! Vui lòng sử dụng địa chỉ email hợp lệ.");
+                    return false;
+                }
+
+                // Kiểm tra mật khẩu hợp lệ
+                if (!validatePassword(password)) {
+                    alert("Mật khẩu phải có ít nhất 8 ký tự và chứa cả chữ cái và số!");
+                    return false;
+                }
+
+                // Kiểm tra mật khẩu xác nhận có khớp không
+                if (password !== confirmPassword) {
+                    alert("Mật khẩu và mật khẩu xác nhận không khớp!");
+                    return false;
+                }
+
+                return true;
+            }
         </script>
     </body>
 </html>
