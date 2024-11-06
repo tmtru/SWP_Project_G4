@@ -88,7 +88,7 @@ public class DanhSachCacHopDongByManagerController extends HttpServlet {
                 } else if (ngayGiaTri != null && !ngayGiaTri.after(currentDate)) {
                     // If ngayGiaTri is today or a past date, set status to 'active'
                     if (!"active".equalsIgnoreCase(hopDong.getStatus())) {
-                        hopDong.setStatus("active");
+//                        hopDong.setStatus("active");
                         hopDongDao.updateHopDongStatus(hopDong.getID_HopDong(), "active");
                     }
                 }

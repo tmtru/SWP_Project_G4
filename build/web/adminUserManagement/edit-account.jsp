@@ -41,7 +41,7 @@
             <jsp:include page="sidebar.jsp"></jsp:include>
                 <section class="home mx-5">
                     <div class="main-content">
-                        <h2>Edit Account</h2>
+                        <h2>Chỉnh sửa tài khoản</h2>
                         <form action="accountController" method="post">
                             <input type="hidden" name="action" value="update">
                             <input type="hidden" name="id" value="${account.ID_Account}">
@@ -57,6 +57,7 @@
                             <label for="password">Password:</label>
                             <input type="password" id="password" name="password" value="${account.password}" required>
                         </div>
+                        <c:if test="${sessionScope.account.role == 'landlord'}">
                         <div class="form-group">
                             <label for="role">Role:</label>
                             <select id="role" name="role">
@@ -65,6 +66,7 @@
                                 <option value="Manager" ${account.role == 'Manager' ? 'selected' : ''}>Manager</option>
                             </select>
                         </div>
+                    </c:if>
                         <div class="form-group">
                             <label for="isActive">Active:</label>
                             <select id="isActive" name="isActive">
