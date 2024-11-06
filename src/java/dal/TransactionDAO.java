@@ -164,7 +164,9 @@ public class TransactionDAO extends DBContext {
 
     public boolean addTransaction(Transaction transaction) {
         String insertQuery = "INSERT INTO `transaction` (MaGiaoDich, TransactionDate, Amount, PaymentMethod, ID_HoaDon, isActive, MoTa) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        String updateBillQuery = "UPDATE hoa_don SET Trang_thai = ? WHERE ID_HoaDon = ?"; // Cập nhật trạng thái hóa đơn
+        String updateBillQuery = "UPDATE hoa_don \n"
+                + "SET Trang_thai = ?, NgayThanhToan = CURRENT_DATE \n"
+                + "WHERE ID_HoaDon = ?;"; // Cập nhật trạng thái hóa đơn
 
         try (PreparedStatement insertPs = connection.prepareStatement(insertQuery)) {
             insertPs.setString(1, transaction.getMaGiaoDich());
@@ -290,7 +292,5 @@ public class TransactionDAO extends DBContext {
         }
         return false;
     }
-
-
 
 }

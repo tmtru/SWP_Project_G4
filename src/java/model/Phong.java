@@ -18,7 +18,9 @@ public class Phong {
     private String Mo_ta;
     private List<String> images;
     private String diaChiPhongTro;
+
     private boolean isActive;
+
 
     // Updated attributes to hold multiple device details
     private List<String> motathietbi;
@@ -235,6 +237,25 @@ public class Phong {
     public void setImages(List<String> images) {
         this.images = images;
     }
+    private boolean isLiked;
+
+    public boolean isIsLiked() {
+        return isLiked;
+    }
+
+    public void setIsLiked(boolean isLiked) {
+        this.isLiked = isLiked;
+    }
+    private int ChiSo;
+
+    public int getChiSo() {
+        return ChiSo;
+    }
+
+    public void setChiSo(int ChiSo) {
+        this.ChiSo = ChiSo;
+    }
+    
 
 //    @Override
 //    public String toString() {

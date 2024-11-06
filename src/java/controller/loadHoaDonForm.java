@@ -19,6 +19,7 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import model.DichVu;
+import model.HopDong;
 import model.Phong;
 
 /**
@@ -91,6 +92,7 @@ public class loadHoaDonForm extends HttpServlet {
                 request.setAttribute("errorMessage", "ID phòng không hợp lệ.");
             }
         }
+        List<DichVu> dvListOfHopDong = null;
 
         if (roomId > -1) {
             PhongDAO pdao = new PhongDAO();
@@ -101,6 +103,10 @@ public class loadHoaDonForm extends HttpServlet {
                 int amount = room.getGia(); 
                 request.setAttribute("room", room);
                 request.setAttribute("amount", amount);
+                int hdong= hddao.getHopDongHienTaiOfRentedRoom(room.getID_Phong()).get(0);
+                int dauNguoi = hddao.getSoLuongNguoiByContractId(hdong);
+                request.setAttribute("nofpeople", dauNguoi);
+                dvListOfHopDong= hddao.getAllActiveServicesByContractId(hdong);
             } else {
                 request.setAttribute("errorMessage", "Không tìm thấy thông tin phòng.");
             }
@@ -109,6 +115,7 @@ public class loadHoaDonForm extends HttpServlet {
         }
         //load all dich vu
         DichVuDAO dvdao = new DichVuDAO();
+        if (dvListOfHopDong!=null) request.setAttribute("dvListHopDong", dvListOfHopDong);
         List<DichVu> dvlist = dvdao.getAll();
         request.setAttribute("dvList", dvlist);
         request.setAttribute("rentedrooms", rentedPList);

@@ -170,6 +170,18 @@
         <servlet-class>controller.GiaHanHopDongByManagerController</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>contactUs</servlet-name>
+        <servlet-class>controller.contactUs</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>lienhe</servlet-name>
+        <servlet-class>controller.lienhe</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>addFastInvoices</servlet-name>
+        <servlet-class>controller.addFastInvoices</servlet-class>
+    </servlet>
+    <servlet>    
         <servlet-name>saveMaintainanceRequestServlet</servlet-name>
         <servlet-class>controller.saveMaintainanceRequestServlet</servlet-class>
     </servlet>
@@ -216,6 +228,18 @@
     <servlet>
         <servlet-name>CalendarByManagerController</servlet-name>
         <servlet-class>controller.CalendarByManagerController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DanhSachPhongTroCalenderController</servlet-name>
+        <servlet-class>controller.DanhSachPhongTroCalenderController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FeedBackController</servlet-name>
+        <servlet-class>controller.FeedBackController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LoadLikedRooms</servlet-name>
+        <servlet-class>controller.LoadLikedRooms</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>CalendarByManagerController</servlet-name>
@@ -472,6 +496,22 @@
         <url-pattern>/GiaHanHopDongByManager</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>contactUs</servlet-name>
+        <url-pattern>/thongtinlienhe</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>lienhe</servlet-name>
+        <url-pattern>/lienhe</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>addFastInvoices</servlet-name>
+        <url-pattern>/addfastinvoice</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CalendarByManagerController</servlet-name>
+        <url-pattern>/CalendarByManager</url-pattern>
+        </servlet-mapping>
+    <servlet-mapping>    
         <servlet-name>saveMaintainanceRequestServlet</servlet-name>
         <url-pattern>/saveMaintainanceRequestServlet</url-pattern>
     </servlet-mapping>
@@ -510,5 +550,9 @@
     <servlet-mapping>
         <servlet-name>DeleteGhiChuByManagerController</servlet-name>
         <url-pattern>/DeleteGhiChuByManager</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoadLikedRooms</servlet-name>
+        <url-pattern>/LoadLikedRooms</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.List;
 import model.DichVu;
 
 /**
@@ -38,6 +39,7 @@ public class actionDichvu extends HttpServlet {
         String action = request.getParameter("action");
         int idDichVu = Integer.parseInt(request.getParameter("id"));
         DichVuDAO dvDao = new DichVuDAO();
+        String khac;
         if (role.equals("landlord")) {
 
             switch (action) {
@@ -52,9 +54,31 @@ public class actionDichvu extends HttpServlet {
                     DichVu dichVu = dvDao.getDichVuById(idDichVu);
                     dichVu.setTenDichVu(tenDichVu);
                     dichVu.setDon_gia(donGia);
-                    dichVu.setDon_vi(donVi);
+                    if (donVi.equals("Khác")) {
+                        khac = request.getParameter("donviKhac");
+                        dichVu.setDon_vi(khac);
+                    } else {
+                        dichVu.setDon_vi(donVi);
+                    }
+                    dichVu.setMo_ta(moTa);
+
                     dichVu.setMo_ta(moTa);
                     dichVu.setID_DichVu(idDichVu);
+                    List<DichVu> allDichVuList = dvDao.getAll();
+
+                    boolean isDuplicate = false;
+                    for (DichVu existingDichVu : allDichVuList) {
+                        if (existingDichVu.getTenDichVu().equalsIgnoreCase(tenDichVu) && existingDichVu.getID_DichVu() != idDichVu) {
+                            isDuplicate = true;
+                            break;
+                        }
+                    }
+
+                    if (isDuplicate) {
+                        request.setAttribute("errorMessage", "Tên dịch vụ đã tồn tại. Vui lòng nhập tên khác.");
+                        request.getRequestDispatcher("loaddichvu").forward(request, response);
+                        return; // Stop further processing
+                    }
                     dvDao.updateDichVu(dichVu);
                     break;
                 case "update":
