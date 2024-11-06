@@ -92,7 +92,6 @@ public class MaintainanceDAO extends DBContext {
                 maintainance.setTrang_thai_chap_thuan(rs.getByte("trang_thai_chap_thuan"));
                 maintainance.setTrang_thai_yeu_cau(rs.getByte("trang_thai_yeu_cau"));
                 maintainance.setThoi_gian(rs.getDate("thoi_gian"));
-                maintainance.setPhan_hoi(rs.getString("phan_hoi"));
                 maintainance.setID_ThietBiPhong(rs.getInt("ID_ThietBiPhong"));
                 maintainance.setID_Phong(rs.getInt("ID_Phong"));
 
@@ -118,7 +117,6 @@ public class MaintainanceDAO extends DBContext {
                     maintainance.setTrang_thai_chap_thuan(rs.getByte("trang_thai_chap_thuan"));
                     maintainance.setTrang_thai_yeu_cau(rs.getByte("trang_thai_yeu_cau"));
                     maintainance.setThoi_gian(rs.getDate("thoi_gian"));
-                    maintainance.setPhan_hoi(rs.getString("phan_hoi"));
                     maintainance.setID_ThietBiPhong(rs.getInt("ID_ThietBiPhong"));
                     maintainance.setID_Phong(rs.getInt("ID_Phong"));
                 }
@@ -143,7 +141,6 @@ public class MaintainanceDAO extends DBContext {
                     maintainance.setTrang_thai_chap_thuan(rs.getByte("trang_thai_chap_thuan"));
                     maintainance.setTrang_thai_yeu_cau(rs.getByte("trang_thai_yeu_cau"));
                     maintainance.setThoi_gian(rs.getDate("thoi_gian"));
-                    maintainance.setPhan_hoi(rs.getString("phan_hoi"));
                     maintainance.setID_ThietBiPhong(rs.getInt("ID_ThietBiPhong"));
                     maintainance.setID_Phong(rs.getInt("ID_Phong"));
                 }
@@ -157,7 +154,7 @@ public class MaintainanceDAO extends DBContext {
     public static void main(String[] args) {
         MaintainanceDAO mtDAO = new MaintainanceDAO();
 
-        System.out.println(mtDAO.getMaintainanceByIdThietBiPhong(1));
+        System.out.println(mtDAO.getMaintainanceById(1));
     }
 
 }
