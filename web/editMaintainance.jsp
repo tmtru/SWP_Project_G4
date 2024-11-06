@@ -71,7 +71,7 @@
 
             <div class="card">
                 <div class="card-body">
-                    <form action="editMaintainanceRequest" method="post">
+                    <form action="editMaintainanceRequestServlet" method="post">
                         <input type="hidden" name="id" value="<%= maintainance.getId_bao_tri() %>">
                         <div class="mb-3">
                             <label for="moTa" class="form-label">Mô tả vấn đề cần bảo trì</label>
