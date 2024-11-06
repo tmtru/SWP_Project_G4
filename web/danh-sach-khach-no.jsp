@@ -43,21 +43,16 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
 
 
         <style>
-            .dropdown {
-                position: relative; /* Để vị trí dropdown có thể được căn chỉnh */
-            }
-
             .dropdown-menu {
-                display: none; /* Ẩn menu theo mặc định */
-                position: absolute; /* Để nó hiển thị bên dưới menu cha */
-                background-color: white; /* Màu nền */
-                border: 1px solid #ccc; /* Đường viền */
-                padding: 10px; /* Khoảng cách bên trong */
-                z-index: 1000; /* Để đảm bảo nó nằm trên các phần tử khác */
+                display: none;
+                list-style: none;
+                padding: 0px 27px;
+                margin: 0px ;
             }
 
-            .dropdown:hover .dropdown-menu {
-                display: block; /* Hiển thị menu khi di chuột vào mục cha */
+            /* Khi li có class active, hiển thị dropdown */
+            .dropdown.active .dropdown-menu {
+                display: block;
             }
 
 
@@ -217,36 +212,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                             <span class="text nav-text">Dashboard</span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li>
-                                <a href="statistic-room">
-                                    <span class="text nav-text">Room Statistic</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="statistic-revenue">
-                                    <span class="text nav-text">Revenue Statistic</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="khach-no">
-                                    <span class="text nav-text">Danh sách khách nợ</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="statistic-revenue">
-                                    <span class="text nav-text">Danh sách khách cọc</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="khach-sap-het-han">
-                                    <span class="text nav-text">Danh sách khách sắp hết hạn hợp đồng</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="thiet-bi">
-                                    <span class="text nav-text">Thiết bị</span>
-                                </a>
-                            </li>
+                            <li><a href="statistic-room"><span class="text nav-text" style="margin-left: 30px">Phòng trống</span></a></li>
+                            <li><a href="statistic-revenue"><span class="text nav-text" style="margin-left: 30px">Doanh thu</span></a></li>
+                            <li><a href="khach-no"><span class="text nav-text" style="margin-left: 30px">Khách nợ</span></a></li>
+                            <li><a href="khach-coc"><span class="text nav-text" style="margin-left: 30px">Khách cọc</span></a></li>
+                            <li><a href="khach-sap-het-han"><span class="text nav-text">Sắp hết hạn hợp đồng</span></a></li>
+                            <li><a href="thiet-bi"><span class="text nav-text" style="margin-left: 25px">Thiết bị cần sửa</span></a></li>
                         </ul>
                     </li>
 
@@ -322,17 +293,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         </a>
                     </li>
 
-                    <li class="mode">
-                        <div class="sun-moon">
-                            <i class='bx bx-moon icon moon'></i>
-                            <i class='bx bx-sun icon sun'></i>
-                        </div>
-                        <span class="mode-text text">Dark mode</span>
-
-                        <div class="toggle-switch">
-                            <span class="switch"></span>
-                        </div>
-                    </li>
+                    
 
                 </div>
             </div>
@@ -494,6 +455,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         <script
             src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
         </script>
-
+ <script>
+            function toggleDropdown() {
+                var dropdown = document.querySelector('.dropdown');
+                dropdown.classList.toggle('active'); // Thêm/xóa class 'active' khi nhấn
+            }
+        </script>
     </body>
 </html>

@@ -39,24 +39,17 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <style>
-            .dropdown {
-                position: relative; /* Để vị trí dropdown có thể được căn chỉnh */
-            }
-
             .dropdown-menu {
-                display: none; /* Ẩn menu theo mặc định */
-                position: absolute; /* Để nó hiển thị bên dưới menu cha */
-                background-color: white; /* Màu nền */
-                border: 1px solid #ccc; /* Đường viền */
-                padding: 10px; /* Khoảng cách bên trong */
-                z-index: 1000; /* Để đảm bảo nó nằm trên các phần tử khác */
+                display: none;
+                list-style: none;
+                padding: 0px 27px;
+                margin: 0px ;
             }
 
-            .dropdown:hover .dropdown-menu {
-                display: block; /* Hiển thị menu khi di chuột vào mục cha */
+            /* Khi li có class active, hiển thị dropdown */
+            .dropdown.active .dropdown-menu {
+                display: block;
             }
-
-
 
             .img-preview {
                 width: 50px;
@@ -278,39 +271,15 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     <li class="dropdown">
                         <a href="statistic-room" class="dropdown-toggle active">
                             <i class='bx bx-cog icon'></i>
-                            <span class="text nav-text">Dashboard</span>
+                            <span class="text nav-text">Báo cáo</span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li>
-                                <a href="statistic-room">
-                                    <span class="text nav-text">Phòng trống</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="statistic-revenue">
-                                    <span class="text nav-text">Doanh thu</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="khach-no">
-                                    <span class="text nav-text">Khách nợ</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="khach-coc">
-                                    <span class="text nav-text">Khách đã cọc</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="khach-sap-het-han">
-                                    <span class="text nav-text">Khách sắp hết hạn hợp đồng</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="thiet-bi">
-                                    <span class="text nav-text">Thiết bị cần sửa</span>
-                                </a>
-                            </li>
+                            <li><a href="statistic-room"><span class="text nav-text" style="margin-left: 30px">Phòng trống</span></a></li>
+                            <li><a href="statistic-revenue"><span class="text nav-text" style="margin-left: 30px">Doanh thu</span></a></li>
+                            <li><a href="khach-no"><span class="text nav-text" style="margin-left: 30px">Khách nợ</span></a></li>
+                            <li><a href="khach-coc"><span class="text nav-text" style="margin-left: 30px">Khách cọc</span></a></li>
+                            <li><a href="khach-sap-het-han"><span class="text nav-text">Sắp hết hạn hợp đồng</span></a></li>
+                            <li><a href="thiet-bi"><span class="text nav-text" style="margin-left: 25px">Thiết bị cần sửa</span></a></li>
                         </ul>
                     </li>
 
@@ -612,6 +581,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 }
             });
 
+        </script>
+        <script>
+            function toggleDropdown() {
+                var dropdown = document.querySelector('.dropdown');
+                dropdown.classList.toggle('active'); // Thêm/xóa class 'active' khi nhấn
+            }
         </script>
     </body>
 </html>

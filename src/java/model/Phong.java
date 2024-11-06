@@ -18,6 +18,7 @@ public class Phong {
     private String Mo_ta;
     private List<String> images;
     private String diaChiPhongTro;
+    private boolean isActive;
 
     // Updated attributes to hold multiple device details
     private List<String> motathietbi;
@@ -28,6 +29,35 @@ public class Phong {
         this.Trang_thai = Trang_thai;
         this.Gia = Gia;
         this.diaChiPhongTro = diaChiPhongTro;
+    }
+
+    public boolean isIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public Phong(int ID_Phong, int ID_LoaiPhong, String TenPhongTro, int ID_NhaTro, String TenLoaiPhong, String TenNhaTro, int Tang, String Trang_thai, float Dien_tich, String URL_AnhPhongTro, int Gia, String Mo_ta, List<String> images, String diaChiPhongTro, boolean isActive, List<String> motathietbi, List<Integer> soluongthietbi, List<String> trangthaithietbi) {
+        this.ID_Phong = ID_Phong;
+        this.ID_LoaiPhong = ID_LoaiPhong;
+        this.TenPhongTro = TenPhongTro;
+        this.ID_NhaTro = ID_NhaTro;
+        this.TenLoaiPhong = TenLoaiPhong;
+        this.TenNhaTro = TenNhaTro;
+        this.Tang = Tang;
+        this.Trang_thai = Trang_thai;
+        this.Dien_tich = Dien_tich;
+        this.URL_AnhPhongTro = URL_AnhPhongTro;
+        this.Gia = Gia;
+        this.Mo_ta = Mo_ta;
+        this.images = images;
+        this.diaChiPhongTro = diaChiPhongTro;
+        this.isActive = isActive;
+        this.motathietbi = motathietbi;
+        this.soluongthietbi = soluongthietbi;
+        this.trangthaithietbi = trangthaithietbi;
     }
 
     public List<String> getMotathietbi() {
