@@ -15,6 +15,8 @@ import java.sql.Statement;
 import java.text.ParseException;
 import java.util.List;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
 import model.DichVu;
 import model.HoaDon;
 import model.HopDong;
@@ -686,5 +688,102 @@ public class HoaDonDAO extends DBContext {
         return sum;
     }
 
+//    public List<HoaDon> getHoaDonByKhachThueId(int idKhachThue) {
+//        List<HoaDon> hoaDons = new ArrayList<>();
+//        String query = "SELECT hd.ID_HoaDon, hd.ID_HopDong, hd.Ngay, hd.Trang_thai, "
+//                + "hd.Tong_gia_tien, hd.NgayThanhToan, hd.NguoiTao, hd.MoTa "
+//                + "FROM hoa_don hd "
+//                + "JOIN hop_dong h ON hd.ID_HopDong = h.ID_HopDong "
+//                + "WHERE h.ID_KhachThue = ?";
+//
+//        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+//
+//            pstmt.setInt(1, idKhachThue);
+//            ResultSet rs = pstmt.executeQuery();
+//
+//            while (rs.next()) {
+//                HoaDon hoaDon = new HoaDon();
+//                hoaDon.setID_HoaDon(rs.getInt("ID_HoaDon"));
+//                hoaDon.setID_HopDong(rs.getInt("ID_HopDong"));
+//                hoaDon.setNgay(rs.getDate("Ngay"));
+//                hoaDon.setTrang_thai(rs.getByte("Trang_thai"));
+//                hoaDon.setTong_gia_tien(rs.getInt("Tong_gia_tien"));
+//                hoaDon.setNgayThanhToan(rs.getDate("NgayThanhToan"));
+//                hoaDon.setNguoiTao(rs.getString("NguoiTao"));
+//                hoaDon.setMoTa(rs.getString("MoTa"));
+//
+//                hoaDons.add(hoaDon);
+//            }
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace(); 
+//        }
+//        return hoaDons;
+//    }
+    
+    public List<HoaDon> getHoaDonByKhachThueId(int idKhachThue) {
+    List<HoaDon> hoaDons = new ArrayList<>();
+    String query = "SELECT hd.ID_HoaDon, hd.ID_HopDong, hd.Ngay, hd.Trang_thai, "
+            + "hd.Tong_gia_tien, hd.NgayThanhToan, hd.NguoiTao, hd.MoTa, "
+            + "dv.ID_DichVu, dv.TenDichVu, dv.Don_gia, dv.Don_vi "
+            + "FROM hoa_don hd "
+            + "JOIN hop_dong h ON hd.ID_HopDong = h.ID_HopDong "
+            + "LEFT JOIN hoa_don_dich_vu hdv ON hd.ID_HoaDon = hdv.ID_HoaDon "
+            + "LEFT JOIN dich_vu dv ON hdv.ID_DichVu = dv.ID_DichVu "
+            + "WHERE h.ID_KhachThue = ?";
 
+    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+        pstmt.setInt(1, idKhachThue);
+        ResultSet rs = pstmt.executeQuery();
+
+        Map<Integer, HoaDon> hoaDonMap = new HashMap<>();
+
+        while (rs.next()) {
+            int idHoaDon = rs.getInt("ID_HoaDon");
+
+            HoaDon hoaDon = hoaDonMap.get(idHoaDon);
+            if (hoaDon == null) {
+                hoaDon = new HoaDon();
+                hoaDon.setID_HoaDon(idHoaDon);
+                hoaDon.setID_HopDong(rs.getInt("ID_HopDong"));
+                hoaDon.setNgay(rs.getDate("Ngay"));
+                hoaDon.setTrang_thai(rs.getByte("Trang_thai"));
+                hoaDon.setTong_gia_tien(rs.getInt("Tong_gia_tien"));
+                hoaDon.setNgayThanhToan(rs.getDate("NgayThanhToan"));
+                hoaDon.setNguoiTao(rs.getString("NguoiTao"));
+                hoaDon.setMoTa(rs.getString("MoTa"));
+                hoaDon.setDichVus(new ArrayList<>());
+                hoaDonMap.put(idHoaDon, hoaDon);
+            }
+
+            // Lấy thông tin dịch vụ nếu có
+            int idDichVu = rs.getInt("ID_DichVu");
+            if (idDichVu > 0) { // Chỉ thêm dịch vụ nếu ID hợp lệ
+                DichVu dichVu = new DichVu();
+                dichVu.setID_DichVu(idDichVu);
+                dichVu.setTenDichVu(rs.getString("TenDichVu"));
+                dichVu.setDon_gia(rs.getInt("Don_gia"));
+                dichVu.setDon_vi(rs.getString("Don_vi"));
+                hoaDon.getDichVus().add(dichVu);
+            }
+        }
+
+        hoaDons.addAll(hoaDonMap.values());
+
+    } catch (SQLException e) {
+        e.printStackTrace(); 
+    }
+    return hoaDons;
+}
+
+    
+    public static void main(String[] arg){
+        HoaDonDAO hdd = new HoaDonDAO();
+        
+        List<HoaDon> hoaDons = hdd.getHoaDonByKhachThueId(1);
+        
+        for(HoaDon hd : hoaDons){
+            System.out.println(hd);
+        }
+    }
 }

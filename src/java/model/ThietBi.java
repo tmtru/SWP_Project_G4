@@ -1,15 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
-/**
- *
- * @author hihihihaha
- */
-public class ThietBi {
+import java.sql.Date;
 
+public class ThietBi {
     private int ID_ThietBi;
     private String TenThietBi;
     private int Gia_tien;
@@ -17,7 +10,8 @@ public class ThietBi {
     private String So_luong;
     private int so_luong_con_lai;
     private int so_luong_da_them;
-    
+    private Date thoiGianBaoTri;
+    private String moTaBaoTri;
     private Phong phong;
     private int ID_ThietBiPhong;
     private String tenNhaTro;
@@ -31,6 +25,30 @@ public class ThietBi {
         this.Gia_tien = Gia_tien;
         this.Mo_ta = Mo_ta;
         this.So_luong = So_luong;
+    }
+
+    public Phong getPhong() {
+        return phong;
+    }
+
+    public int getID_ThietBiPhong() {
+        return ID_ThietBiPhong;
+    }
+
+    public String getTenNhaTro() {
+        return tenNhaTro;
+    }
+
+    public void setPhong(Phong phong) {
+        this.phong = phong;
+    }
+
+    public void setID_ThietBiPhong(int ID_ThietBiPhong) {
+        this.ID_ThietBiPhong = ID_ThietBiPhong;
+    }
+
+    public void setTenNhaTro(String tenNhaTro) {
+        this.tenNhaTro = tenNhaTro;
     }
 
     public int getID_ThietBi() {
@@ -89,33 +107,24 @@ public class ThietBi {
         this.so_luong_da_them = so_luong_da_them;
     }
 
-    public Phong getPhong() {
-        return phong;
+    public Date getThoiGianBaoTri() {
+        return thoiGianBaoTri;
     }
 
-    public void setPhong(Phong phong) {
-        this.phong = phong;
+    public void setThoiGianBaoTri(Date thoiGianBaoTri) {
+        this.thoiGianBaoTri = thoiGianBaoTri;
     }
 
-    public int getID_ThietBiPhong() {
-        return ID_ThietBiPhong;
+    public String getMoTaBaoTri() {
+        return moTaBaoTri;
     }
 
-    public void setID_ThietBiPhong(int ID_ThietBiPhong) {
-        this.ID_ThietBiPhong = ID_ThietBiPhong;
-    }
-
-    public String getTenNhaTro() {
-        return tenNhaTro;
-    }
-
-    public void setTenNhaTro(String tenNhaTro) {
-        this.tenNhaTro = tenNhaTro;
+    public void setMoTaBaoTri(String moTaBaoTri) {
+        this.moTaBaoTri = moTaBaoTri;
     }
 
     @Override
     public String toString() {
-        return "ThietBi{" + "ID_ThietBi=" + ID_ThietBi + ", TenThietBi=" + TenThietBi + ", Gia_tien=" + Gia_tien + ", Mo_ta=" + Mo_ta + ", So_luong=" + So_luong + '}';
+        return "ThietBi{" + "ID_ThietBi=" + ID_ThietBi + ", TenThietBi=" + TenThietBi + ", Gia_tien=" + Gia_tien + ", Mo_ta=" + Mo_ta + ", So_luong=" + So_luong + ", thoiGianBaoTri=" + thoiGianBaoTri + ", moTaBaoTri=" + moTaBaoTri + '}';
     }
-
 }
