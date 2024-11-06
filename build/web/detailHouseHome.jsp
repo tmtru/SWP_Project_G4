@@ -337,6 +337,7 @@
 
                                     </div>
 
+
                                     <div class="details-button">
                                         <button class="icons like" data-room-id="${rs.ID_Phong}">
                                             <i class="fa-regular fa-heart unlike"></i>
@@ -432,6 +433,302 @@
                 </div>
 
             </div>
+            <!-- Chat Button -->
+
+            <!-- Chat Button -->
+            <c:if  test="${account.role == 'tenant' or account.role == 'guest'}"  >
+
+                <div id="chat-button" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+                    <button onclick="toggleChatBox()" style="background-color: #00bfff; border: none; padding: 15px; border-radius: 50%; position: relative;">
+                        <i class="fas fa-comments" style="color: white; font-size: 24px;"></i>
+                        <span id="unreadCount" style="display: none; position: absolute; top: -5px; right: -5px; background-color: red; color: white; border-radius: 50%; padding: 5px; font-size: 12px;">
+                            0
+                        </span>
+                    </button>
+                </div>
+            </c:if>
+
+            <section id="chat-box" style="display: none; position: fixed; bottom: 80px; right: 20px; z-index: 1000; width: 70% ; float: right">
+                <div class="container py-5">
+                    <div class="row d-flex justify-content-center">
+
+
+                        <!-- Main container -->
+                        <div class="d-flex">
+                            <c:if test="${account == null}">
+                                <div class="card flex-grow-1" id="chat1" style="border-radius: 15px; margin-left: 15px;">
+                                    <div class="card-header d-flex justify-content-between align-items-center p-3 bg-info text-white border-bottom-0"
+                                         style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                                        <i class="fas fa-angle-left"></i>
+
+                                        <i class="fas fa-times" onclick="toggleChatBox()"></i>
+                                    </div>
+                                    <div class="card-body" style="overflow-y: auto; max-height: 400px; text-align: center" >
+                                        Please <a href="login.jsp">Login </a> to start chatting
+                                    </div>
+                                </div>
+                            </c:if>
+                            <c:if test="${account != null}">
+
+                                <!-- Left card: User list -->
+
+
+                                <!-- Right card: Chat messages -->
+                                <div class="card flex-grow-1" id="chat1" style="border-radius: 15px; margin-left: 15px;">
+                                    <div class="card-header d-flex justify-content-between align-items-center p-3 bg-info text-white border-bottom-0"
+                                         style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                                        <i class="fas fa-angle-left"></i>
+                                        <p class="mb-0 fw-bold">${ct.name}</p>
+                                        <i class="fas fa-times" onclick="toggleChatBox()"></i>
+                                    </div>
+                                    <div class="card-body" id="chatMessages" style="overflow-y: auto; max-height: 400px;">
+                                        <!-- Chat messages will be appended here -->
+                                    </div>
+                                    <div data-mdb-input-init class="form-outline">
+                                        <form id="sendMessageForm" class="d-flex align-items-center">
+                                            <input type="hidden" name="receiver_id" value="${ct.account.getID_Account()}" />
+                                            <input type="hidden" name="houseId" value="${currenthouse.getID_NhaTro()}" />
+                                            <textarea class="form-control bg-body-tertiary me-3" id="textAreaExample" rows="1" name="messageContent" placeholder="Type your message"></textarea>
+                                            <button type="button" class="btn btn-primary" id="sendMessageButton">
+                                                <i class="fas fa-paper-plane"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+
+
+                            </c:if>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- Add JavaScript to toggle the chat box -->
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script>
+                                            var userRole = "<c:out value='${account.role}' />";
+                                            function toggleChatBox() {
+                                                var chatBox = document.getElementById("chat-box");
+                                                if (chatBox.style.display === "none" || chatBox.style.display === "") {
+                                                    chatBox.style.display = "block";
+                                                    fetchMessages(); // Fetch messages when chat box is opened
+                                                    fetchUnreadMessageCount(); // Update unread count in the icon
+                                                } else {
+                                                    chatBox.style.display = "none";
+                                                }
+                                            }
+
+
+
+                                            function displayMessages(response, currentUserId) {
+                                                let chatContent = '';
+                                                response.forEach(function (msg) {
+                                                    if (msg.senderId === currentUserId) {
+                                                        // Outgoing message
+                                                        chatContent += `
+        <div class="d-flex flex-row justify-content-end mb-4">
+          <div class="p-3 outgoing-message message">
+            <p class="small mb-0">` + msg.content + `</p>
+          </div>
+          <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp" alt="avatar">
+        </div>
+      `;
+                                                    } else {
+                                                        // Incoming message
+                                                        chatContent += `
+        <div class="d-flex flex-row justify-content-start mb-4">
+          <img src="https://cdn.pixabay.com/photo/2020/07/14/13/07/icon-5404125_1280.png" alt="avatar">
+          <div class="p-3 incoming-message message">
+            <p class="small mb-0">` + msg.content + `</p>
+          </div>
+        </div>
+      `;
+                                                    }
+                                                });
+                                                document.getElementById('chatMessages').innerHTML = chatContent;
+                                                const chatMessagesDiv = document.getElementById('chatMessages');
+                                                chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+                                            }
+
+                                            function fetchMessages() {
+                                                // Directly fetch the updated receiver_id from the hidden input
+                                                const receiverId = $('input[name="receiver_id"]').val();
+                                                const houseId = $('input[name="houseId"]').val();
+                                                const currentUserId = parseInt(${account.getID_Account()});
+
+                                                // Verify both receiverId and currentUserId for accuracy
+
+                                                if (!receiverId) {
+                                                    return; // Exit if no user is selected
+                                                }
+
+                                                // Prepare data object
+                                                var data = {houseId: houseId};
+                                                if (userRole === 'landlord') {
+                                                    data.selectedUserId = receiverId;  // Use receiverId for landlord's selected user
+                                                } else {
+                                                    data.receiverId = receiverId;  // Use receiverId for tenant role
+                                                }
+
+                                                // Confirm data object content
+                                                $.ajax({
+                                                    url: "getMessages",
+                                                    method: "GET",
+                                                    data: data,
+                                                    dataType: "json",
+                                                    success: function (response) {
+                                                        displayMessages(response, currentUserId);
+                                                    },
+                                                    error: function () {
+                                                    }
+                                                });
+                                            }
+
+                                            if (userRole === 'landlord') {
+                                                $(document).ready(function () {
+                                                    function fetchUserList() {
+                                                        $.ajax({
+                                                            url: "getUserList",
+                                                            method: "GET",
+                                                            dataType: "json",
+                                                            success: function (response) {
+                                                                let userListContent = '';
+                                                                response.forEach(function (user) {
+                                                                    var unreadBadge = '';
+                                                                    if (user.unreadCount > 0) {
+                                                                        unreadBadge = `<span class="badge bg-danger ms-2">` + user.unreadCount + ` </span>`;
+                                                                    }
+
+                                                                    userListContent += `
+                    <li class="list-group-item d-flex justify-content-between align-items-center" data-user-id="` + user.ID_Account + `" data-username="` + user.username + `" onclick="selectUser(this)">
+                        ` + user.username + unreadBadge + `
+                    </li>
+                `;
+                                                                });
+                                                                $('#userList').html(userListContent);
+                                                            },
+                                                            error: function () {
+                                                                console.error('Error fetching user list');
+                                                            }
+                                                        });
+                                                    }
+
+                                                    setInterval(fetchUserList, 5000);
+
+
+
+                                                    window.selectUser = function (element) {
+                                                        const userId = $(element).data('user-id');
+                                                        const username = $(element).data('username');
+
+                                                        // Set the selected user ID in the hidden input
+                                                        $('input[name="receiver_id"]').val(userId);
+                                                        $('#chatWithName').text('Chat with ' + username);
+
+                                                        // Highlight the selected user
+                                                        $('#userList .list-group-item').removeClass('active');
+                                                        $(element).addClass('active');
+
+                                                        // Fetch messages with the selected user
+                                                        fetchMessages();
+
+                                                        // Reset unread count badge
+                                                        $(element).find('.badge').remove();
+                                                    };
+
+
+
+                                                    fetchUserList();
+                                                });
+                                            } else {
+                                                // If the user is not a landlord, set receiver ID and fetch messages
+                                                $(document).ready(function () {
+                                                    $('#receiver_id').val(${ct.account.ID_Account});
+                                                    fetchMessages();
+                                                });
+                                            }
+
+
+                                            $(document).ready(function () {
+                                                $('#sendMessageButton').click(function () {
+                                                    const messageContent = $('#textAreaExample').val();
+                                                    const receiverId = $('input[name="receiver_id"]').val();
+                                                    const houseId = $('input[name="houseId"]').val();
+
+
+
+                                                    if (messageContent !== "" && receiverId) {
+                                                        var data = {
+                                                            messageContent: messageContent,
+                                                            houseId: houseId
+                                                        };
+                                                        if (userRole === 'landlord') {
+                                                            data.selectedUserId = receiverId;
+                                                        } else {
+                                                            data.receiverId = receiverId;
+                                                        }
+
+                                                        $.ajax({
+                                                            url: "sendMessage",
+                                                            method: "POST",
+                                                            data: data,
+                                                            success: function () {
+                                                                $('#textAreaExample').val(''); // Clear input on success
+                                                                fetchMessages(); // Refresh messages
+                                                            },
+                                                            error: function () {
+                                                                alert('Error sending message');
+                                                            }
+                                                        });
+                                                    } else {
+                                                    }
+                                                });
+                                            });
+
+                                            function fetchUnreadMessageCount() {
+                                                $.ajax({
+                                                    url: 'getUnreadMessageCount',
+                                                    method: 'GET',
+                                                    dataType: 'json',
+                                                    success: function (response) {
+                                                        var unreadCount = response.unreadCount;
+                                                        if (unreadCount > 0) {
+                                                            $('#unreadCount').text(unreadCount);
+                                                            $('#unreadCount').show();
+                                                        } else {
+                                                            $('#unreadCount').hide();
+                                                        }
+                                                    },
+                                                    error: function () {
+                                                        console.error('Error fetching unread message count');
+                                                    }
+                                                });
+                                            }
+
+// Call this function periodically
+                                            setInterval(fetchUnreadMessageCount, 5000);
+
+// Also call it on page load
+                                            $(document).ready(function () {
+                                                fetchUnreadMessageCount();
+                                            });
+
+
+                                            // If the user is not a landlord, set receiver ID and fetch messages
+                <c:if test="${account.role != 'landlord'}">
+                                            $(document).ready(function () {
+                                                $('input[name="receiver_id"]').val(${ct.account.ID_Account});
+                                                fetchMessages();
+                                            });
+                </c:if>
+                                            setInterval(fetchMessages, 5000);
+
+            </script>
+            <!-- Font Awesome for chat icon -->
+            <script src="https://kit.fontawesome.com/aab0c35bef.js" crossorigin="anonymous"></script>
+
 
             <!-- Footer End -->
 
@@ -592,10 +889,76 @@ String tenNhaTro = nt.getTenNhaTro();
             <script src="https://kit.fontawesome.com/aab0c35bef.js" crossorigin="anonymous"></script>
             <!--AOS lib-->
             <script>
-                AOS.init();
+                                            AOS.init();
             </script>
 
     </body>
+    <style>
+
+
+        /* Outgoing message (aligns to the right) */
+        /* Outgoing message (aligns to the right) */
+        #chatMessages .outgoing-message {
+            background-color: #e0f7fa;
+            text-align: left;
+            border-radius: 12px 12px 0 12px;
+            margin: 2px 0 2px auto;
+            align-self: flex-end;
+            max-width: 60%; /* Add this line */
+            word-wrap: break-word; /* Add this line */
+            word-break: break-word; /* Add this line */
+            white-space: normal; /* Add this line */
+        }
+
+        /* Incoming message (aligns to the left) */
+        #chatMessages .incoming-message {
+            background-color: #f1f1f1;
+            text-align: left;
+            border-radius: 12px 12px 12px 0;
+            margin: 2px auto 2px 0;
+            align-self: flex-start;
+            max-width: 60%; /* Add this line */
+            word-wrap: break-word; /* Add this line */
+            word-break: break-word; /* Add this line */
+            white-space: normal; /* Add this line */
+        }
+
+
+        /* Avatar styling for alignment with message */
+        #chatMessages img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin: 0; /* Removes extra margin around avatar */
+        }
+
+        /* Container for each message with alignment adjustments */
+        .message-container {
+            display: flex;
+            align-items: center; /* Center-aligns avatar and message bubble vertically */
+            gap: 6px; /* Space between avatar and message */
+            margin: 2px 0; /* Reduces space between messages */
+        }
+
+        /* Outgoing and Incoming containers */
+        .message-container.outgoing {
+            justify-content: flex-end;
+        }
+
+        .message-container.incoming {
+            justify-content: flex-start;
+        }
+
+        /* Chat box styling */
+        #chatMessages {
+            overflow-y: auto;
+            max-height: 400px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+    </style>
 
 </html>
 

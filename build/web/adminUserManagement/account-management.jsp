@@ -58,11 +58,10 @@
                             Quản lý tài khoản
                         </h2>
                         <div class="filters">
-                            <button onclick="window.location.href = 'accountController?action=add'">+ Thêm tài khoản</button>
                             <form action="accountController" method="get" style="display: flex; align-items: center;">
-                                <input name="searchTerm" placeholder="Search by name" type="text" value="${param.searchTerm}"/>
+                                <input name="searchTerm" placeholder="Tìm kiếm theo username" type="text" value="${param.searchTerm}"/>
                             <button type="submit">
-                                Search
+                                Tìm kiếm
                             </button>
                         </form>
                     </div>

@@ -70,4 +70,44 @@ public class KhachThuePhuDAO extends DBContext {
         }
         return khachThuePhuList;
     }
+    
+    public List<KhachThuePhu> getKhachThuePhuByKhachThueId(int khachThueId) {
+        List<KhachThuePhu> khachThuePhuList = new ArrayList<>();
+        
+        String query = """
+                SELECT ktp.ID_KhachThuePhu, ktp.ID_HopDong, ktp.Ngay_sinh, ktp.CCCD, 
+                       ktp.email, ktp.SDT, ktp.HK_thuong_tru, ktp.Ten_khach, 
+                       ktp.Gioi_tinh, ktp.isActive
+                FROM khach_thue_phu ktp
+                JOIN hop_dong hd ON ktp.ID_HopDong = hd.ID_HopDong
+                WHERE hd.ID_KhachThue = ?;
+                """;
+        
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+             
+            preparedStatement.setInt(1, khachThueId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            
+            while (resultSet.next()) {
+                KhachThuePhu khachThuePhu = new KhachThuePhu();
+                khachThuePhu.setIdKhachThuePhu(resultSet.getInt("ID_KhachThuePhu"));
+                khachThuePhu.setIdHopDong(resultSet.getInt("ID_HopDong"));
+                khachThuePhu.setNgaySinh(resultSet.getDate("Ngay_sinh"));
+                khachThuePhu.setCccd(resultSet.getString("CCCD"));
+                khachThuePhu.setEmail(resultSet.getString("email"));
+                khachThuePhu.setSdt(resultSet.getString("SDT"));
+                khachThuePhu.setHkThuongTru(resultSet.getString("HK_thuong_tru"));
+                khachThuePhu.setTenKhach(resultSet.getString("Ten_khach"));
+                khachThuePhu.setGioiTinh(resultSet.getInt("Gioi_tinh"));
+                khachThuePhu.setIsActive(resultSet.getInt("isActive"));
+                
+                khachThuePhuList.add(khachThuePhu);
+            }
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return khachThuePhuList;
+    }
 }

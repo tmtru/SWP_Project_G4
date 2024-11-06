@@ -84,4 +84,14 @@ public class Account {
                 ", isActive=" + isActive +
                 '}';
     }
+    // for chat
+    private int unreadCount;
+
+    public int getUnreadCount() {
+        return unreadCount;
+    }
+
+    public void setUnreadCount(int unreadCount) {
+        this.unreadCount = unreadCount;
+    }
 }

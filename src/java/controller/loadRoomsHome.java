@@ -5,6 +5,8 @@
 package controller;
 
 import dal.AnhNhaTroDAO;
+import dal.ChuTroDAO;
+import dal.MessageDAO;
 import dal.NhaTroDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,7 +17,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
+import model.Account;
 import model.AnhNhaTro;
+import model.ChuTro;
+import model.Message;
 import model.NhaTro;
 import model.Phong;
 
@@ -79,6 +85,12 @@ public class loadRoomsHome extends HttpServlet {
         request.setAttribute("rooms", rooms);
         session.setAttribute("currenthouse", nt);
         request.setAttribute("imgNhaTro", anhNhaTroList);
+        
+        // chat
+        ChuTroDAO ctdao = new ChuTroDAO();
+        ChuTro ct = ctdao.getChuTroById(nt.getID_ChuTro());
+        request.setAttribute("ct", ct);
+        request.setAttribute("IdnhaTro", idNhaTro);
         request.getRequestDispatcher("detailHouseHome.jsp").forward(request, response);
 
     }

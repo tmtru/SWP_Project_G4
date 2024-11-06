@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
-    <!--For home page-->
+    <!--For home-->
     <filter>
         <filter-name>RoleFilterTQAT</filter-name>
         <filter-class>filter.RoleFilterTQAT</filter-class>
@@ -72,10 +72,6 @@
     <servlet>
         <servlet-name>loadHoaDonNhaTro</servlet-name>
         <servlet-class>controller.loadHoaDonNhaTro</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>profileServlet</servlet-name>
-        <servlet-class>controller.profileServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ChangePassword</servlet-name>
@@ -185,6 +181,50 @@
         <servlet-name>addFastInvoices</servlet-name>
         <servlet-class>controller.addFastInvoices</servlet-class>
     </servlet>
+    <servlet>    
+        <servlet-name>saveMaintainanceRequestServlet</servlet-name>
+        <servlet-class>controller.saveMaintainanceRequestServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>maintainanceServlet</servlet-name>
+        <servlet-class>controller.maintainanceServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>editMaintainanceRequestServlet</servlet-name>
+        <servlet-class>controller.editMaintainanceRequestServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>cancelMaintainanceRequestServlet</servlet-name>
+        <servlet-class>controller.cancelMaintainanceRequestServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>adminMaintainanceServlet</servlet-name>
+        <servlet-class>controller.adminMaintainanceServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>viewUserInvoicesServlet</servlet-name>
+        <servlet-class>controller.viewUserInvoicesServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TuChoiSuaTBController</servlet-name>
+        <servlet-class>controller.TuChoiSuaTBController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ChapNhanTBController</servlet-name>
+        <servlet-class>controller.ChapNhanTBController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ThongTinKhachThuePhongController</servlet-name>
+        <servlet-class>controller.ThongTinKhachThuePhongController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>KetThucHopDongSomByAdminController</servlet-name>
+        <servlet-class>controller.KetThucHopDongSomByAdminController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteGhiChuByManagerController</servlet-name>
+        <servlet-class>controller.DeleteGhiChuByManagerController</servlet-class>
+    </servlet>
     <servlet>
         <servlet-name>CalendarByManagerController</servlet-name>
         <servlet-class>controller.CalendarByManagerController</servlet-class>
@@ -201,6 +241,18 @@
         <servlet-name>LoadLikedRooms</servlet-name>
         <servlet-class>controller.LoadLikedRooms</servlet-class>
     </servlet>
+    <servlet-mapping>
+        <servlet-name>CalendarByManagerController</servlet-name>
+        <url-pattern>/CalendarByManager</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>KetThucHopDongSomByAdminController</servlet-name>
+        <url-pattern>/KetThucHopDongSomByAdmin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ThongTinKhachThuePhongController</servlet-name>
+        <url-pattern>/ThongTinKhachThuePhong</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>homeRooms</servlet-name>
         <url-pattern>/homer</url-pattern>
@@ -237,6 +289,10 @@
     <servlet>
         <servlet-name>AccountControllerServlet</servlet-name>
         <servlet-class>controller.AccountControllerServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GhiChuByManagerController</servlet-name>
+        <servlet-class>controller.GhiChuByManagerController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>AddRoomServlet</servlet-name>
@@ -348,10 +404,6 @@
         <url-pattern>/hoadon</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>profileServlet</servlet-name>
-        <url-pattern>/profileServlet</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>actionHoaDon</servlet-name>
         <url-pattern>/actionhoadon</url-pattern>
     </servlet-mapping>
@@ -458,14 +510,46 @@
     <servlet-mapping>
         <servlet-name>CalendarByManagerController</servlet-name>
         <url-pattern>/CalendarByManager</url-pattern>
+        </servlet-mapping>
+    <servlet-mapping>    
+        <servlet-name>saveMaintainanceRequestServlet</servlet-name>
+        <url-pattern>/saveMaintainanceRequestServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>DanhSachPhongTroCalenderController</servlet-name>
-        <url-pattern>/DanhSachPhongTroCalender</url-pattern>
+        <servlet-name>maintainanceServlet</servlet-name>
+        <url-pattern>/maintainanceServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>FeedBackController</servlet-name>
-        <url-pattern>/feedback</url-pattern>
+        <servlet-name>editMaintainanceRequestServlet</servlet-name>
+        <url-pattern>/editMaintainanceRequestServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>cancelMaintainanceRequestServlet</servlet-name>
+        <url-pattern>/cancelMaintainanceRequestServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>adminMaintainanceServlet</servlet-name>
+        <url-pattern>/adminMaintainanceServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>viewUserInvoicesServlet</servlet-name>
+        <url-pattern>/viewUserInvoicesServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TuChoiSuaTBController</servlet-name>
+        <url-pattern>/tu-choi-sua</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChapNhanTBController</servlet-name>
+        <url-pattern>/chap-nhan</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GhiChuByManagerController</servlet-name>
+        <url-pattern>/GhiChuByManager</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteGhiChuByManagerController</servlet-name>
+        <url-pattern>/DeleteGhiChuByManager</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LoadLikedRooms</servlet-name>

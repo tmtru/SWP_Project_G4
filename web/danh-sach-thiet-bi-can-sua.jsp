@@ -261,7 +261,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                             <li><a href="khach-no"><span class="text nav-text" style="margin-left: 30px">Khách nợ</span></a></li>
                             <li><a href="khach-coc"><span class="text nav-text" style="margin-left: 30px">Khách cọc</span></a></li>
                             <li><a href="khach-sap-het-han"><span class="text nav-text">Sắp hết hạn hợp đồng</span></a></li>
-                            <li><a href="thiet-bi"><span class="text nav-text" style="margin-left: 33px">Thiết bị</span></a></li>
+                            <li><a href="thiet-bi"><span class="text nav-text" style="margin-left: 25px">Thiết bị cần sửa</span></a></li>
                         </ul>
                     </li>
 
@@ -443,7 +443,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                            Thiết bị đã sửa</div>
+                                            Thiết bị hoạt động bình thường</div>
                                         <div class="h5 mb-0 font-weight-bold text-gray-800">${normalEquipment}</div>
                                     </div>
                                     <div class="col-auto">
@@ -484,21 +484,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     <table class="account-table table">
                         <thead>
                             <tr>
-                                <th>
-                                    Tên phòng
-                                </th>
-                                <th>
-                                    Tên thiết bị
-                                </th>
-                                <th>
-                                    Số lượng
-                                </th>
-                                <th>
-                                    Mô tả
-                                </th>
-                                <th>
-                                    Hành động
-                                </th>
+                                <th>Tên phòng</th>
+                                <th>Tên thiết bị</th>
+                                <th>Số lượng</th>
+                                <th>Mô tả</th>
+                                <th>Thời gian gửi</th>
+                                <th>Mô tả bảo trì</th>
+                                <th>Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -508,17 +500,17 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                     <td>${h.getTenThietBi()}</td>
                                     <td>${h.getSo_luong()}</td>
                                     <td>${h.getMo_ta()}</td>
-
-                                    <td><a class="btn edit" href="hoan-thanh?tbpId=${h.getID_ThietBiPhong()}">Hoàn Thành</a></td>
-
-
+                                    <td><fmt:formatDate value="${h.getThoiGianBaoTri()}" pattern="yyyy-MM-dd"/></td>
+                                    <td>${h.getMoTaBaoTri()}</td>
+                                    <td>
+                                        <a class="btn edit accept-btn" href="hoan-thanh?tbpId=${h.getID_ThietBiPhong()}">Hoàn thành</a>
+                                        <a class="btn edit reject-btn" href="tu-choi-sua?tbpId=${h.getID_ThietBiPhong()}">Từ chối</a>
+                                        
+                                    </td>
                                 </tr>
                             </c:forEach>
                         </tbody>
                     </table>
-
-
-
                 </div>
                 <div class="pagination">
                     <c:if test="${currentPage > 1}">
@@ -590,5 +582,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 dropdown.classList.toggle('active'); // Thêm/xóa class 'active' khi nhấn
             }
         </script>
+        
     </body>
 </html>

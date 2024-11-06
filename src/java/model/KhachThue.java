@@ -16,7 +16,7 @@ public class KhachThue {
     private String email;
     private String noi_sinh;
     private String noi_cap;
-    private String ngay_cap;
+    private Date ngay_cap;
 
     public String getNoi_cap() {
         return noi_cap;
@@ -26,11 +26,11 @@ public class KhachThue {
         this.noi_cap = noi_cap;
     }
 
-    public String getNgay_cap() {
+    public Date getNgay_cap() {
         return ngay_cap;
     }
 
-    public void setNgay_cap(String ngay_cap) {
+    public void setNgay_cap(Date ngay_cap) {
         this.ngay_cap = ngay_cap;
     }
     
@@ -145,6 +145,20 @@ public class KhachThue {
         this.email = email;
         this.noi_sinh = noi_sinh;
     }
+
+    public KhachThue(int id, String name, String cccd, Date dob, String phone, String hk_thuong_tru, Account account, String job, String noi_cap, Date ngay_cap) {
+        this.id = id;
+        this.name = name;
+        this.cccd = cccd;
+        this.dob = dob;
+        this.phone = phone;
+        this.hk_thuong_tru = hk_thuong_tru;
+        this.account = account;
+        this.job = job;
+        this.noi_cap = noi_cap;
+        this.ngay_cap = ngay_cap;
+    }
+    
 
     public String getEmail() {
         return email;

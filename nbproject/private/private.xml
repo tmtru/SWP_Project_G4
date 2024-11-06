@@ -10,9 +10,12 @@
             <file>file:/E:/PRJCode/NhaTroTQAT/web/sidebarHoaDonManagement.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/Step2AddFastInvoices.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/AllRoomDetails.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/nbproject/build-impl.xml</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/room.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/dal/AccountDAO.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/actionHoaDon.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/editThietBi.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/web/css/styleResetPassword.css</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/filter/LoginFilter.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/likedRooms.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/model/Phong.java</file>
@@ -20,10 +23,13 @@
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/detailNhaTroServlet.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/model/Account.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/DashboardRoomController.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/dal/HoaDonDAO.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/header.jsp</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/addFastInvoices.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/js/hoadonForm.js</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/index.html</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/detailHouseHome.jsp</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/web/Calendarbymanager.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/LoadLikedRooms.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/LoadHoaDonByDate.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/hoaDonForm.jsp</file>
@@ -35,10 +41,13 @@
             <file>file:/E:/PRJCode/NhaTroTQAT/web/css/style.css</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/css/styleHomeCatagory.css</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/EditRoomServlet.java</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/web/NhaTro.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/detailRoom.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/src/java/filter/RoleFilterTQAT.java</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/listNhaTroHome.jsp</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/web/hoaDonManagement.jsp</file>
             <file>file:/E:/PRJCode/NhaTroTQAT/web/contactUs_map.jsp</file>
+            <file>file:/E:/PRJCode/NhaTroTQAT/src/java/controller/loadHoaDonNhaTro.java</file>
         </group>
     </open-files>
 </project-private>

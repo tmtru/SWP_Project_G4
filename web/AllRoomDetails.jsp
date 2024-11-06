@@ -73,6 +73,7 @@
                 color: #666;
             }
 
+
             .room-info {
                 padding-left: 10px; /* Spacing between image and text */
             }
@@ -205,6 +206,7 @@
                                 <p class="card-text"><strong>Địa chỉ :</strong> ${room.diaChiPhongTro}</p>
                                 <p class="card-text"><strong>Thiết bị :</strong> ${room.motathietbi}</p>
                             </div>
+
                         </div>
                     </div>
                 </div>

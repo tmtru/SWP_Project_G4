@@ -13,7 +13,7 @@ public class DBContext {
     public DBContext() {
         try {
             String user = "root";
-            String pass = "123";
+            String pass = "12345";
             String url = "jdbc:mysql://localhost:3306/QuanLyNhaTroDB";
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(url, user, pass);

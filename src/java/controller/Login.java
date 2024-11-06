@@ -1,6 +1,7 @@
-package controller;
+package controller; 
 
 import dal.AccountDAO;
+import dal.KhachThueDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,10 +13,14 @@ import model.Account;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
+import model.KhachThue;
 
 public class Login extends HttpServlet {
 
-    private static final String SECRET_KEY = "1234567890123456"; // 16 bytes key for AES
+    KhachThue khachthue = new KhachThue();
+    KhachThueDAO ktdao = new KhachThueDAO();
+
+    private static final String SECRET_KEY = "1234567890123456";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -44,29 +49,33 @@ public class Login extends HttpServlet {
             throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        //String remember = request.getParameter("remember");
+
+        // Validate input before proceeding
+        if (!validateInput(username, password)) {
+            request.setAttribute("errorMessage", "Invalid username or password format.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        }
 
         AccountDAO userdao = new AccountDAO();
         String encryptedPassword = encryptPassword(password);
         HttpSession session = request.getSession();
-        // Thay �?i �? s? d?ng m?t kh?u �? m? h�a cho vi?c x�c th?c
+
         Account acc = userdao.getAccount(username, encryptedPassword);
-        
-        if (acc != null) {
+
+        if (acc != null) { 
             int ID_Account = acc.getID_Account();
-//            String email= acc.getEmail();
-//            
-//            Account acc1=new Account();
-//            acc1.setEmail(email);
-//            acc1.setUsername(username);
+            khachthue = ktdao.getKhachThueByAccountId(ID_Account);
+
             session.setAttribute("account", acc);
             session.setAttribute("role", acc.getRole());
-                    
-
             session.setAttribute("ID_Account", ID_Account);
 
+            if ("tenant".equals(acc.getRole())) {
+                session.setAttribute("ID_KhachThue", khachthue.getId());
+            }
             response.sendRedirect("home.jsp");
-        } else {
+        } else { 
             request.setAttribute("errorMessage", "Invalid email or password");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
@@ -82,12 +91,26 @@ public class Login extends HttpServlet {
             return Base64.getEncoder().encodeToString(encryptedData);
         } catch (Exception e) {
             e.printStackTrace(); // Log error
-            return null; // Tr? v? null n?u c� l?i
+            return null; // Trả về null nếu có lỗi
         }
+    }
+
+    private boolean validateInput(String username, String password) {
+        // Validate username (only allows letters, numbers, and spaces)
+        if (username == null || username.trim().isEmpty() || !username.matches("[a-zA-ZÀ-ÿ0-9\\s]+")) {
+            return false; // Username is invalid
+        }
+
+        // Validate password (only allows letters, numbers, and some special characters)
+        if (password == null || password.trim().isEmpty() || !password.matches("[a-zA-Z0-9!@#$%^&*()_+=-]+")) {
+            return false; // Password is invalid
+        }
+
+        return true; // Input is valid
     }
 
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Login servlet that handles user authentication.";
     }
 }
