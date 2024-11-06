@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Phong {
 
-   private int ID_Phong;
+    private int ID_Phong;
     private int ID_LoaiPhong;
     private String TenPhongTro;
     private int ID_NhaTro;
@@ -64,13 +64,12 @@ public class Phong {
         return motathietbi;
     }
 
-
     public List<Integer> getSoluongthietbi() {
         return soluongthietbi;
     }
 
-    public List<String> getTrangthaithietbi() {
-        return trangthaithietbi;
+    public String getMotathietbiAsString() {
+        return String.join(", ", motathietbi);
     }
 
     public void setMotathietbi(List<String> motathietbi) {
@@ -241,7 +240,6 @@ public class Phong {
 //    public String toString() {
 //        return "Room{" + "ID_Phong=" + ID_Phong + ", ID_LoaiPhong=" + ID_LoaiPhong + ", TenPhongTro=" + TenPhongTro + ", ID_NhaTro=" + ID_NhaTro + ", TenLoaiPhong=" + TenLoaiPhong + ", TenNhaTro=" + TenNhaTro + ", Tang=" + Tang + ", Trang_thai=" + Trang_thai + ", Dien_tich=" + Dien_tich + ", URL_AnhPhongTro=" + URL_AnhPhongTro + ", Gia=" + Gia + ", Mo_ta=" + Mo_ta + '}';
 //    }
-
     @Override
     public String toString() {
         return "Phong{" + "ID_Phong=" + ID_Phong + ", ID_LoaiPhong=" + ID_LoaiPhong + ", TenPhongTro=" + TenPhongTro + ", ID_NhaTro=" + ID_NhaTro + ", TenLoaiPhong=" + TenLoaiPhong + ", TenNhaTro=" + TenNhaTro + ", Tang=" + Tang + ", Trang_thai=" + Trang_thai + ", Dien_tich=" + Dien_tich + ", URL_AnhPhongTro=" + URL_AnhPhongTro + ", Gia=" + Gia + ", Mo_ta=" + Mo_ta + ", images=" + images + ", diaChiPhongTro=" + diaChiPhongTro + '}';
