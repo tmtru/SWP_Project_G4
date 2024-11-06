@@ -25,7 +25,7 @@
             </button>
             <p>OR</p>
 
-            <form action="login" method="post">
+            <form action="login" method="post"onsubmit="return validateForm()">
                 <input type="text" class="input-field" name="username" placeholder="User name" required>
                 <input type="password" class="input-field" name="password" placeholder="Password" required>
                 <button type="submit" class="login">Log in</button>
@@ -46,6 +46,25 @@
                 <p>Don't have an account? <a href="register.jsp">Sign up</a></p>
             </footer>
         </div>
+            
+            <script>
+                function validateForm() {
+                const username = document.querySelector('input[name="username"]').value;
+                const password = document.querySelector('input[name="password"]').value;
+
+                if (username.length > 50) {
+                    alert("Username không được quá 50 ký tự!");
+                    return false;
+                }
+
+
+                if (password.length > 50) {
+                    alert("Mật khẩu không được quá 50 ký tự!");
+                    return false;
+                }
+                return true;
+            }
+            </script>
     </body>
 </html>
 

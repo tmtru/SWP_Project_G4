@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 public class saveMaintainanceRequestServlet extends HttpServlet {
+    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -17,6 +18,13 @@ public class saveMaintainanceRequestServlet extends HttpServlet {
             String moTa = request.getParameter("moTa");
             int idThietBiPhong = Integer.parseInt(request.getParameter("idThietBiPhong"));
             int idPhong = Integer.parseInt(request.getParameter("idPhong"));
+            
+            // Validate the input description
+            if (!validateMoTa(moTa)) {
+                request.setAttribute("errorMessage", "Mô tả không hợp lệ. Không được chỉ chứa khoảng trắng và không quá 255 chữ cái.");
+                request.getRequestDispatcher("requestMaintenance.jsp").forward(request, response);
+                return;
+            }
 
             // Save maintenance request
             MaintainanceDAO maintainanceDAO = new MaintainanceDAO();
@@ -31,5 +39,19 @@ public class saveMaintainanceRequestServlet extends HttpServlet {
             e.printStackTrace();
             response.sendRedirect("maintainanceServlet");
         }
+    }
+
+    // Validate the maintenance description
+    private boolean validateMoTa(String moTa) {
+        // Trim leading and trailing spaces and check if the description is empty
+        if (moTa == null || moTa.trim().isEmpty()) {
+            return false;
+        }
+
+        // Remove multiple spaces between words and count the number of words
+        String[] words = moTa.trim().split("\\s+");
+        
+        // Check if the number of words is less than or equal to 255
+        return words.length <= 255;
     }
 }
