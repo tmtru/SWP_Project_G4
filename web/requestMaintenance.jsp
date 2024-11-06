@@ -1,9 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@page import="model.ThietBiPhong"%>
-<%@page import="model.Phong"%>
-<%@page import="dal.ThietBiPhongDAO"%>
-<%@page import="dal.PhongDAO"%>
-<%@page session="true" %>
+<%@ page import="model.ThietBiPhong"%>
+<%@ page import="model.Phong"%>
+<%@ page import="dal.ThietBiPhongDAO"%>
+<%@ page import="dal.PhongDAO"%>
+<%@ page session="true" %>
 <%
     // Lấy ID từ parameters
     String idThietBiPhongStr = request.getParameter("idThietBiPhong");
@@ -34,7 +34,7 @@
 <body>
     <div class="container mt-5">
         <h2 class="mb-4">Yêu cầu bảo trì thiết bị</h2>
-        
+
         <% if(thietBi != null && phong != null) { %>
             <div class="card mb-4">
                 <div class="card-header">
@@ -66,6 +66,13 @@
                         <textarea class="form-control" id="moTa" name="moTa" rows="4" required 
                                 placeholder="Vui lòng mô tả chi tiết vấn đề của thiết bị..."></textarea>
                     </div>
+
+                    <% if(request.getAttribute("errorMessage") != null) { %>
+                        <div class="alert alert-danger">
+                            <%= request.getAttribute("errorMessage") %>
+                        </div>
+                    <% } %>
+
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary">Gửi yêu cầu</button>
                         <a href="maintainanceServlet?selectedRoom=<%= idPhongStr %>" 

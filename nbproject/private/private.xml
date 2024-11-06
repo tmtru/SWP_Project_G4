@@ -5,6 +5,7 @@
         <group>
             <file>file:/D:/SWP_Project_G4/web/maintainance.jsp</file>
             <file>file:/D:/SWP_Project_G4/src/java/dal/ThietBiPhongDAO.java</file>
+            <file>file:/D:/SWP_Project_G4/web/WEB-INF/web.xml</file>
             <file>file:/D:/SWP_Project_G4/web/room.jsp</file>
             <file>file:/D:/SWP_Project_G4/src/java/controller/HoanThanhSuaTBController.java</file>
             <file>file:/D:/SWP_Project_G4/web/danh-sach-thiet-bi-can-sua.jsp</file>

@@ -113,7 +113,7 @@ public class RoleFilterTQAT implements Filter {
 
         // Lấy role của người dùng
         String role = (session != null) ? (String) session.getAttribute("role") : null;
-        boolean isAllowedPage = uri.equals("/home.jsp") || uri.equals("/category.jsp") || uri.equals("/changePassword.jsp") || uri.equals("/confirmverification.jsp")
+        boolean isAllowedPage = uri.equals("/home.jsp") || uri.equals("/category.jsp") || uri.equals("/changePassword.jsp") || uri.equals("/confirmverification.jsp") || uri.equals("/changepassword")
                 || uri.equals("/detailHouseHome.jsp") || uri.equals("/header.jsp") || uri.equals("/error.jsp")
                 || uri.equals("/listNhaTroHome.jsp") || uri.equals("/login.jsp") || uri.equals("/profile.jsp") || uri.equals("/register.jsp")
                 || uri.equals("/resetpassword.jsp") || uri.equals("/verification.jsp") || uri.equals("/viewUserContracts.jsp") || uri.equals("/homer")

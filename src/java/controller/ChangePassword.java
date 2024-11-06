@@ -13,6 +13,21 @@ import jakarta.servlet.annotation.WebServlet;
 @WebServlet(name = "ChangePassword", urlPatterns = {"/changepassword"})
 public class ChangePassword extends HttpServlet {
 
+    private String validatePassword(String password) {
+        // Kiểm tra mật khẩu có chứa khoảng trắng hay không
+        if (password.contains(" ")) {
+            return "Mật khẩu không được chứa khoảng trắng.";
+        }
+
+        // Kiểm tra mật khẩu có chứa ký tự đặc biệt không hợp lệ
+        String regex = "^[a-zA-Z0-9]*$";
+        if (!password.matches(regex)) {
+            return "Mật khẩu chỉ được chứa chữ cái và số.";
+        }
+
+        return null; // Mật khẩu hợp lệ
+    }
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -33,6 +48,14 @@ public class ChangePassword extends HttpServlet {
 
         if (account == null) {
             request.setAttribute("error", "Không thể tải dữ liệu tài khoản.");
+            request.getRequestDispatcher("changePassword.jsp").forward(request, response);
+            return;
+        }
+
+        // Validate mật khẩu mới và mật khẩu hiện tại
+        String passwordValidationMessage = validatePassword(newPassword);
+        if (passwordValidationMessage != null) {
+            request.setAttribute("error", passwordValidationMessage);
             request.getRequestDispatcher("changePassword.jsp").forward(request, response);
             return;
         }
