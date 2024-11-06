@@ -270,7 +270,8 @@ public class NhaTroDAO extends DBContext {
         }
         return nhaTro;
     }
-    public List<NhaTro> getAllNhaTroForManager( int mId) {
+
+    public List<NhaTro> getAllNhaTroForManager(int mId) {
         List<NhaTro> nhaTro = new ArrayList<>();
         List<Object> list = new ArrayList<>();
         ChuTroDAO ctdao = new ChuTroDAO();
@@ -280,7 +281,6 @@ public class NhaTroDAO extends DBContext {
             query.append("select n.* ,  COUNT(pt.ID_Phong) AS roomNumber from nha_tro n join quan_ly ql on ql.ID_NhaTro = n.ID_NhaTro ")
                     .append("LEFT JOIN phong_tro pt ON n.ID_NhaTro = pt.ID_NhaTro ")
                     .append("WHERE ql.ID_QuanLy  = ? ");
-                    
 
             query.append("ORDER BY n.ID_NhaTro ASC");
             list.add(mId);
@@ -311,7 +311,6 @@ public class NhaTroDAO extends DBContext {
         }
         return nhaTro;
     }
-
 
     public void saveImages(int nhaTroId, List<String> imageUrls) {
         try {
@@ -511,7 +510,6 @@ public class NhaTroDAO extends DBContext {
         }
         return false;
     }
-    
 
     public void deleteAnhNhaTro(int nhaTroId) throws SQLException {
         String query = "DELETE FROM anh_nha_tro WHERE ID_NhaTro = ?";
@@ -520,7 +518,8 @@ public class NhaTroDAO extends DBContext {
             ps.executeUpdate();
         }
     }
- public NhaTro getNhaTroByPhongTroId(int phongTroId) {
+
+    public NhaTro getNhaTroByPhongTroId(int phongTroId) {
         NhaTro nhaTro = null;
         String sql = "SELECT nt.* FROM nha_tro nt "
                 + "JOIN phong_tro pt ON nt.ID_NhaTro = pt.ID_NhaTro "
@@ -544,53 +543,61 @@ public class NhaTroDAO extends DBContext {
 
         return nhaTro;
     }
-    
- public Phong getRoomDetailsByHopDongId(int idHopDong) {
-    Phong roomDetails = null; // Đối tượng chứa thông tin phòng
-    String sql = "SELECT n.Dia_chi, p.Gia, h.Trang_thai " +
-                 "FROM hop_dong h " +
-                 "JOIN phong_tro p ON h.ID_PhongTro = p.ID_Phong " +
-                 "JOIN nha_tro n ON p.ID_NhaTro = n.ID_NhaTro " +
-                 "WHERE h.ID_HopDong = ?";
 
-    try (PreparedStatement statement = connection.prepareStatement(sql)) {
-        statement.setInt(1, idHopDong);
-        ResultSet resultSet = statement.executeQuery();
+    public NhaTro getNhaTroOfKhach(int id_khach) {
+        NhaTro nhaTro = null;
+        String sql = """
+                      select  nt.tennhatro, nt.ID_nhatro from hop_dong hd JOIN Khach_thue kt 
+                      on kt.ID_KhachThue = hd.ID_KhachThue
+                      JOIN phong_tro pt on pt.ID_Phong = hd.ID_PhongTro
+                      JOIN nha_tro nt on nt.ID_NhaTro = pt.ID_nhatro
+                      where ID_hopdong = ?  order by ID_HopDong desc limit 1""";
 
-        if (resultSet.next()) {
-            String diaChiPhongTro = resultSet.getString("Dia_chi");
-            int Gia = resultSet.getInt("Gia");
-            String Trang_thai = resultSet.getString("Trang_thai");
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, id_khach);
+            ResultSet rs = ps.executeQuery();
 
-            roomDetails = new Phong(Trang_thai, Gia, diaChiPhongTro); // Gán đối tượng mới cho biến roomDetails
+            if (rs.next()) {
+                nhaTro = new NhaTro();
+                nhaTro.setID_NhaTro(rs.getInt("ID_nhatro"));
+                nhaTro.setTenNhaTro(rs.getNString("tennhatro"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace(); // Log exception or handle it as needed
+
+        return nhaTro;
     }
 
-    return roomDetails; // Trả về đối tượng roomDetails
-}
+    public Phong getRoomDetailsByHopDongId(int idHopDong) {
+        Phong roomDetails = null; // Đối tượng chứa thông tin phòng
+        String sql = "SELECT n.Dia_chi, p.Gia, h.Trang_thai "
+                + "FROM hop_dong h "
+                + "JOIN phong_tro p ON h.ID_PhongTro = p.ID_Phong "
+                + "JOIN nha_tro n ON p.ID_NhaTro = n.ID_NhaTro "
+                + "WHERE h.ID_HopDong = ?";
 
- 
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, idHopDong);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                String diaChiPhongTro = resultSet.getString("Dia_chi");
+                int Gia = resultSet.getInt("Gia");
+                String Trang_thai = resultSet.getString("Trang_thai");
+
+                roomDetails = new Phong(Trang_thai, Gia, diaChiPhongTro); // Gán đối tượng mới cho biến roomDetails
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Log exception or handle it as needed
+        }
+
+        return roomDetails; // Trả về đối tượng roomDetails
+    }
+
     public static void main(String[] args) {
         NhaTroDAO dAO = new NhaTroDAO();
-        int sampleHopDongId = 1; // Change this ID based on your test data
-    Phong roomDetails = dAO.getRoomDetailsByHopDongId(sampleHopDongId);
-
-    // Print the room details
-    if (roomDetails != null) {
-        System.out.println("Address: " + roomDetails.getDiaChiPhongTro());
-        System.out.println("Price: " + roomDetails.getGia());
-        System.out.println("Status: " + roomDetails.getTrang_thai());
-    } else {
-        System.out.println("No room details found for Hop Dong ID: " + sampleHopDongId);
-    }
-
-        List<NhaTro> list = dAO.getAllNhaTroForManager(2);
-        for (NhaTro string : list) {
-            System.out.println(string);
-        }
-
+        System.out.println(dAO.getNhaTroOfKhach(1));
 
 //        // Kiểm tra phương thức getAll
 //        System.out.println("Danh sách nhà trọ:");
