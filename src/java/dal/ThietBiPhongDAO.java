@@ -192,8 +192,8 @@ public class ThietBiPhongDAO extends DBContext {
         return device;
     }
 
-    public void updateTrangThaiAbnormalByIdThietBiPhong(int ID_ThietBiPhong) {
-        String sql = "UPDATE thiet_bi_phong SET Trang_thai = 'Abnormal' WHERE ID_ThietBiPhong = ?";
+    public void updateTrangThaiCSCByIdThietBiPhong(int ID_ThietBiPhong) {
+        String sql = "UPDATE thiet_bi_phong SET Trang_thai = 'CSC' WHERE ID_ThietBiPhong = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, ID_ThietBiPhong);
             stmt.executeUpdate();
@@ -202,8 +202,8 @@ public class ThietBiPhongDAO extends DBContext {
         }
     }
 
-    public void updateTrangThaiNormalByIdThietBiPhong(int ID_ThietBiPhong) {
-        String sql = "UPDATE thiet_bi_phong SET Trang_thai = 'Normal' WHERE ID_ThietBiPhong = ?";
+    public void updateTrangThaiTByIdThietBiPhong(int ID_ThietBiPhong) {
+        String sql = "UPDATE thiet_bi_phong SET Trang_thai = 'T' WHERE ID_ThietBiPhong = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, ID_ThietBiPhong);
             stmt.executeUpdate();
@@ -274,5 +274,13 @@ public class ThietBiPhongDAO extends DBContext {
         return true;
     }
     
-    
+    public static void main(String[] arg) {
+        ThietBiPhongDAO tbpd = new ThietBiPhongDAO();
+        
+        List<ThietBiPhong> list = tbpd.getAllThietBiPhong();
+        
+        for(ThietBiPhong tbp : list){
+            System.out.println(tbp);
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package controller;
 
 import dal.MaintainanceDAO;
+import dal.ThietBiPhongDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -20,6 +21,9 @@ public class saveMaintainanceRequestServlet extends HttpServlet {
             // Save maintenance request
             MaintainanceDAO maintainanceDAO = new MaintainanceDAO();
             maintainanceDAO.addMaintainanceRequest(moTa, idThietBiPhong, idPhong);
+            
+            ThietBiPhongDAO tbpd = new ThietBiPhongDAO();
+            tbpd.updateTrangThaiCSCByIdThietBiPhong(idThietBiPhong);
 
             // Redirect back to maintenance page with the selected room
             response.sendRedirect("maintainanceServlet?selectedRoom=" + idPhong);

@@ -1,6 +1,7 @@
 package controller;
 
 import dal.MaintainanceDAO;
+import dal.ThietBiPhongDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ public class cancelMaintainanceRequestServlet extends HttpServlet {
     throws ServletException, IOException {
         // Lấy ID yêu cầu bảo trì từ request
         String idStr = request.getParameter("id");
+        int idThietBiPhong = Integer.parseInt(request.getParameter("idThietBiPhong"));
         
         if (idStr != null) {
             try {
@@ -22,6 +24,9 @@ public class cancelMaintainanceRequestServlet extends HttpServlet {
                 // Gọi DAO để cập nhật trạng thái yêu cầu bảo trì thành "Đã hủy" (2)
                 MaintainanceDAO maintainanceDAO = new MaintainanceDAO();
                 maintainanceDAO.cancelMaintainanceRequest(id);
+                
+                ThietBiPhongDAO tbpd = new ThietBiPhongDAO();
+                tbpd.updateTrangThaiTByIdThietBiPhong(idThietBiPhong);
 
                 // Sau khi cập nhật thành công, chuyển hướng về trang quản lý
                 response.sendRedirect("maintainanceServlet");

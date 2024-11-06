@@ -165,9 +165,27 @@
                         <td><%= device.getTenThietBi() %></td>
                         <td><%= device.getMo_ta() %></td>
                         <td><%= device.getSo_luong() %></td>
-                        <td><%= device.getTrang_thai() %></td>
                         <td>
-                            <% if (!"Abnormal".equals(device.getTrang_thai())) { %>
+                            <%
+                                String trangThaiThietBi = device.getTrang_thai();
+                                String trangThaiTB;
+
+                                switch (trangThaiThietBi) {
+                                    case "T":
+                                        trangThaiTB = "Tốt";
+                                        break;
+                                    case "CSC":
+                                        trangThaiTB = "Cần sửa chữa";
+                                        break;
+                                    default:
+                                        trangThaiTB = "Không xác định"; 
+                                        break;
+                                }
+                            %>
+                            <%= trangThaiTB %>
+                        </td>
+                        <td>
+                            <% if (!"CSC".equals(device.getTrang_thai())) { %>
                             <form action="requestMaintenance.jsp" method="get">
                                 <input type="hidden" name="idThietBiPhong" value="<%= device.getID_ThietBiPhong() %>">
                                 <input type="hidden" name="idPhong" value="<%= device.getID_Phong() %>">
@@ -265,6 +283,7 @@
                             </form>
                             <form action="cancelMaintainanceRequestServlet" method="post" style="display:inline;">
                                 <input type="hidden" name="id" value="<%= mt.getId_bao_tri() %>">
+                                <input type="hidden" name="idThietBiPhong" value="<%= device.getID_ThietBiPhong() %>">
                                 <button type="submit" class="btn btn-danger" value="cancel">Hủy</button>
                             </form>
                             <% } else if (trangThaiChapThuan == 1) { %>
