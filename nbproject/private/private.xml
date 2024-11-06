@@ -2,12 +2,12 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-<<<<<<< HEAD
         <group>
-            <file>file:/D:/SWP/SWP/swp%20contract/swp%20contract/swp%20contract/SWP_Project_G4/web/WEB-INF/web.xml</file>
+            <file>file:/D:/SWP_Project_G4/web/maintainance.jsp</file>
+            <file>file:/D:/SWP_Project_G4/src/java/dal/ThietBiPhongDAO.java</file>
+            <file>file:/D:/SWP_Project_G4/web/room.jsp</file>
+            <file>file:/D:/SWP_Project_G4/src/java/controller/HoanThanhSuaTBController.java</file>
+            <file>file:/D:/SWP_Project_G4/web/danh-sach-thiet-bi-can-sua.jsp</file>
         </group>
-=======
-        <group/>
->>>>>>> 1b193fb667357fd1b7ba50d5d07c7400f2715f6d
     </open-files>
 </project-private>
