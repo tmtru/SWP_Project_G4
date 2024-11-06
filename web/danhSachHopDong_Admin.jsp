@@ -262,14 +262,21 @@
 
             function filterTable() {
                 const filterTrangThaiHopDong = document.getElementById("filterTrangThaiHopDong").value;
-                const rows = document.querySelectorAll("#contractBody tr");
-                filteredRows = Array.from(rows).filter(row => {
-                    const trangThaiHopDong = row.querySelector("td:nth-child(6)").textContent;
-                    return filterTrangThaiHopDong === "" || trangThaiHopDong === filterTrangThaiHopDong;
-                });
+                const allRows = Array.from(document.querySelectorAll("#contractBody tr:not(#noResultRow)"));
+
+                // Kiểm tra nếu trạng thái được chọn thì chỉ lọc theo trạng thái, nếu không hiển thị tất cả hàng
+                if (filterTrangThaiHopDong) {
+                    filteredRows = allRows.filter(row => {
+                        const trangThaiHopDong = row.querySelector("td:nth-child(6)").textContent;
+                        return trangThaiHopDong === filterTrangThaiHopDong;
+                    });
+                } else {
+                    filteredRows = allRows; // Hiển thị tất cả nếu không có bộ lọc
+                }
+
                 checkNoResult(filteredRows.length > 0);
-                currentPage = 1;
-                paginate();
+                currentPage = 1; // Đặt lại trang về 1
+                paginate(); // Phân trang sau khi lọc
             }
 
             function checkNoResult(hasResult) {

@@ -209,6 +209,18 @@
         <servlet-name>KetThucHopDongSomByAdminController</servlet-name>
         <servlet-class>controller.KetThucHopDongSomByAdminController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DeleteGhiChuByManagerController</servlet-name>
+        <servlet-class>controller.DeleteGhiChuByManagerController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CalendarByManagerController</servlet-name>
+        <servlet-class>controller.CalendarByManagerController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CalendarByManagerController</servlet-name>
+        <url-pattern>/CalendarByManager</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>KetThucHopDongSomByAdminController</servlet-name>
         <url-pattern>/KetThucHopDongSomByAdmin</url-pattern>
@@ -494,5 +506,9 @@
     <servlet-mapping>
         <servlet-name>GhiChuByManagerController</servlet-name>
         <url-pattern>/GhiChuByManager</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteGhiChuByManagerController</servlet-name>
+        <url-pattern>/DeleteGhiChuByManager</url-pattern>
     </servlet-mapping>
 </web-app>

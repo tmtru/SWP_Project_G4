@@ -196,6 +196,41 @@ public class QuanLyDAO extends DBContext {
         return ghiChuList;
     }
 
+    public int getIdByGhiChuDateAndQuanLy(String ghiChu, String ngay, int idQuanLy) {
+        int idGhiChu = -1; 
+        String sql = "SELECT ID_GhiChu FROM lich_ghi_chu WHERE GhiChu = ? AND Ngay = ? AND ID_QuanLy = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, ghiChu);   
+            statement.setString(2, ngay);     
+            statement.setInt(3, idQuanLy);   
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                idGhiChu = resultSet.getInt("ID_GhiChu"); 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return idGhiChu; 
+    }
+    
+    public boolean deleteNoteById(int idGhiChu) {
+        String sql = "DELETE FROM lich_ghi_chu WHERE ID_GhiChu = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, idGhiChu);
+
+            int rowsAffected = statement.executeUpdate();
+            return rowsAffected > 0; 
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false; 
+        }
+    }
+    
     public static void main(String[] args) {
         QuanLyDAO quanLyDAO = new QuanLyDAO();
         List<QuanLy> list = quanLyDAO.getQuanLyByNhaTro(1);

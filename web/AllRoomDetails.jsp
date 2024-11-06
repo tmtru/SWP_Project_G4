@@ -147,7 +147,7 @@
                             <p class="card-text"><strong>Giá :</strong> ${room.gia} VND</p>
                             <p class="card-text"><strong>Diện tích :</strong> ${room.dien_tich} m²</p>
                             <p class="card-text"><strong>Địa chỉ :</strong> ${room.diaChiPhongTro}</p>
-                            <p class="card-text"><strong>Thiết bị :</strong> ${room.motathietbi}</p>
+                            <p class="card-text"><strong>Thiết bị :</strong> ${room.getMotathietbiAsString()}</p>
                         </div>
                     </div>
                 </div>
