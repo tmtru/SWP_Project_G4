@@ -18,15 +18,14 @@
 
 
 
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        
         <!-- Font familiy-->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
               rel="stylesheet">
 
-        <!--Libarary animate-->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
 
         <!--AOS lib to reveal web when scroll-->
         <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
@@ -36,33 +35,28 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script>
             $(document).ready(function () {
-                // Hàm để lấy giá trị của cookie theo tên
                 function getCookie(name) {
                     let cookieArr = document.cookie.split(";");
                     for (let i = 0; i < cookieArr.length; i++) {
                         let cookiePair = cookieArr[i].trim();
-                        // Kiểm tra cookie có tên yêu cầu
                         if (cookiePair.startsWith(name + "=")) {
-                            return cookiePair.split("=")[1]; // Trả về giá trị của cookie
+                            return cookiePair.split("=")[1]; 
                         }
                     }
-                    return null; // Nếu không tìm thấy cookie
+                    return null; 
                 }
 
-                // Lấy giá trị cookie likedRooms theo userId
-                let userId = '${sessionScope.account.getID_Account()}'; // Giả sử bạn đã lưu userId trong session
+                let userId = '${sessionScope.account.getID_Account()}'; 
                 let likedRoomsCookie = getCookie("likedRooms_" + userId);
 
                 if (likedRoomsCookie) {
-                    let likedRoomsArray = likedRoomsCookie.split(","); // Chia tách giá trị cookie thành mảng
-
-                    // Gửi danh sách ID phòng về server
+                    let likedRoomsArray = likedRoomsCookie.split(","); 
                     $.ajax({
                         type: "POST",
-                        url: "likedRooms.jsp", // Thay đổi thành URL của servlet hoặc JSP xử lý
-                        data: {likedRooms: likedRoomsArray.join(",")}, // Chuyển đổi mảng thành chuỗi
+                        url: "likedRooms.jsp",
+                        data: {likedRooms: likedRoomsArray.join(",")},
                         success: function (response) {
-                            $('#likedRoomsContainer').html(response); // Cập nhật nội dung từ response
+                            $('#likedRoomsContainer').html(response); 
                         },
                         error: function () {
                             $('#likedRoomsContainer').html('<div>Có lỗi xảy ra.</div>');
@@ -135,7 +129,7 @@
                                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0 profile-menu"> 
                                     <li class="nav-item nav-icon">
                                         <a href="#" class="search-toggle" data-toggle="search-toggle">
-                                            <i class="fa-solid fa-heart-circle-exclamation" style="font-size: 25px; color: #cc33ff"></i>
+                                            <i class="fa-solid fa-heart-circle-exclamation" style="font-size: 25px; color: #ad78ff"></i>
                                             <span class="bg-danger dots"></span>
                                         </a>
                                         <div class="iq-sub-dropdown iq-notify-dropdown" style="
@@ -155,8 +149,6 @@
                                             <div class="profile-pic">
                                                 <img src="assets/img/user.png" alt="Profile Picture" class="img-fuild">
                                             </div>
-                                            <!-- You can also use icon as follows: -->
-                                            <!--  <i class="fas fa-user"></i> -->
                                         </a>
                                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                             <li><a class="dropdown-item" href="profile.jsp"><i class="fas fa-sliders-h fa-fw"></i> Tài khoản</a></li>
@@ -177,7 +169,7 @@
         </div>
         <!-- Header End -->
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+      
 
 
 

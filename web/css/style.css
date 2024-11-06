@@ -2191,7 +2191,7 @@ ul {
 .image-column {
     display: flex;
     flex-direction: column;
-    width: 29%;
+    width: 50%;
     margin-left: 20px;
 }
 #map {

@@ -41,6 +41,7 @@
                 <article class="featured-listing">
                     <a href="allrooms?id=${nt.ID_NhaTro}" >
                         <div class="featured-card">
+                            
                             <c:if test="${not empty imgNhaTro}">
                                 <c:forEach var="anh" items="${imgNhaTro}" varStatus="status">
                                     <c:if test="${status.index == 0}">
@@ -94,8 +95,24 @@
                             <c:forEach items="${rooms}" var="rs">
                                 <c:if test="${!rs.trang_thai.equals('D')}">
                                     <article class="listing-card item" >
-                                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/807191b1c5ec9a365e8d960bde1533408c378d956c435939b9c17e77e1cb689b?placeholderIfAbsent=true&apiKey=3ed7f71bf41b4da6a6357316a7fb8826"
-                                             alt="Room image" class="listing-image">
+                                        <c:set var="room" value="${rs.ID_Phong}" />
+
+                                <%  
+                                    Integer idRoom = (Integer) pageContext.getAttribute("room");
+                                    PhongDAO pd= new PhongDAO();
+                                    List<String> images= pd.getImagesByPhongId(idRoom);
+                                    request.setAttribute("images", images);
+                                %>
+                                <div id="roomImageCarousel" class="carousel slide" data-ride="carousel">
+                                    <div class="carousel-inner img-detailRoom">
+                                        <c:forEach items="${images}" var="image" varStatus="status">
+                                            <div class="carousel-item ${status.index == 0 ? 'active' : ''}">
+                                                <img src="${image}" class="d-block w-100" alt="${rs.tenPhongTro}" style="aspect-ratio: 16/9;">
+                                            </div>
+                                        </c:forEach>
+                                    </div>
+
+                                </div>
                                         <div class="listing-info">
                                             <div class="listing-details">
                                                 <div class="listing-price">
@@ -170,7 +187,7 @@
         </ul>
 
     </nav>
-
+ 
     <script src="js/main.js"></script>
 </body>
 

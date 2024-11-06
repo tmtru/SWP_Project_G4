@@ -130,17 +130,14 @@
                                 <div class="p-4">
                                     <i class="fa fa-hotel fa-2x hightlight mb-2"></i>
                                     <h2 class="mb-1" data-toggle="counter-up">Giá cả hợp lí</h2>
-                                    <p class="mb-0">Not sure what you should be charging for your property?
-                                        No need to worry, let us do the numbers for you.</p>
+                                    <p class="mb-0">Tại Khu trọ TQAT, chúng tôi cam kết mang đến cho bạn những lựa chọn phòng trọ với giá cả cạnh tranh, minh bạch, và phong phú nhất. Chúng tôi hiểu rằng việc cân đối chi phí thuê trọ là một trong những yếu tố quan trọng hàng đầu khi bạn lựa chọn nơi ở. </p>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="p-4">
                                     <i class="fa fa-users-cog fa-2x hightlight mb-2"></i>
-                                    <h2 class="mb-1" data-toggle="counter-up">Giá cả hợp lí</h2>
-                                    <p class="mb-0">Not sure what you should be charging for your property? No need to
-                                        worry,
-                                        let us do the numbers for you.</p>
+                                    <h2 class="mb-1" data-toggle="counter-up">Tiện ích đầy đủ</h2>
+                                    <p class="mb-0">Với tiêu chí "Giá tốt, chất lượng cao," mỗi phòng trọ đều được thiết kế nhằm tối ưu hóa không gian và trang bị đầy đủ các tiện ích cần thiết cho cuộc sống hàng ngày.</p>
                                 </div>
                             </div>
                         </div>
@@ -148,19 +145,15 @@
                             <div class="col-sm-6">
                                 <div class="p-4">
                                     <i class="fa fa-hotel fa-2x hightlight mb-2"></i>
-                                    <h2 class="mb-1" data-toggle="counter-up">1234</h2>
-                                    <p class="mb-0">Not sure what you should be charging for your property? No need to
-                                        worry,
-                                        let us do the numbers for you.</p>
+                                    <h2 class="mb-1" data-toggle="counter-up">Tiện ích đa dạng</h2>
+                                    <p class="mb-0">Phòng trọ được trang bị sẵn tiện ích như internet tốc độ cao, chỗ để xe, an ninh 24/7, khu vực bếp và nhà vệ sinh sạch sẽ – tất cả nhằm đáp ứng nhu cầu sống hiện đại và thoải mái nhất.</p>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="p-4">
                                     <i class="fa fa-users-cog fa-2x hightlight mb-2"></i>
-                                    <h2 class="mb-1" data-toggle="counter-up">1234</h2>
-                                    <p class="mb-0">Not sure what you should be charging for your property? No need to
-                                        worry,
-                                        let us do the numbers for you.</p>
+                                    <h2 class="mb-1" data-toggle="counter-up">Hỗ Trợ Linh Hoạt - Dễ Dàng Quản Lý Thông Tin</h2>
+                                    <p class="mb-0">Tại Khu trọ TQAT, chúng tôi mang đến cho bạn một trải nghiệm trực tuyến tiện lợi ngay trên trang web. Với hệ thống quản lý hiện đại, bạn có thể dễ dàng xem thông tin cá nhân, hóa đơn, và theo dõi lịch sử giao dịch một cách nhanh chóng và chính xác.</p>
                                 </div>
                             </div>
                         </div>
@@ -351,7 +344,7 @@
 
         </script>
         <!-- JavaScript Libraries -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+
         <!--font awasome-->
         <script src="https://kit.fontawesome.com/aab0c35bef.js" crossorigin="anonymous"></script>
         <!--AOS lib-->
@@ -361,9 +354,7 @@
         </script>
         <!--jquery-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-        <script>
-
-        </script>
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     </body>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  
 </html>

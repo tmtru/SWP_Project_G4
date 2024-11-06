@@ -23,7 +23,7 @@ function toggleServiceInputs(serviceName, donvi, servicePrice, checkbox) {
 
             invoiceTable.appendChild(serviceRow);
         }
-        updateInvoiceService(serviceName,donvi, servicePrice, checkbox.id);
+        updateInvoiceService(serviceName, donvi, servicePrice, checkbox.id);
     } else {
 
         clearInvoiceService(checkbox.id);
@@ -96,7 +96,7 @@ function updateInvoiceService(serviceName, donvi, servicePrice, inputElement) {
 
     // Tính toán giá trị cho dịch vụ dựa vào loại dịch vụ
     if (donvi === 'Tháng') {
-                console.log(serviceName);
+        console.log(serviceName);
         var dauNguoi = document.getElementById("dauNguoiInput_" + inputElement).value;
         if (dauNguoi && !isNaN(dauNguoi)) {
             var soTien = dauNguoi * servicePrice;
@@ -160,44 +160,81 @@ function updateInvoiceOnRoomChange() {
 //valid data form
 function validateForm12() {
     const dichVuCheckboxes = document.querySelectorAll('input[name="dichVuId"]');
-    let isValid = true; 
+    let isValid = true; // Khởi tạo là true
     let errorMessage = "";
 
     dichVuCheckboxes.forEach((checkbox) => {
         if (checkbox.checked) {
             const dichVuId = checkbox.value;
 
+            // Khai báo biến
+            let chiSoCu, chiSoMoi, dauNguoi;
             const chiSoCuInput = document.getElementById(`chiSoCu_dichVu_${dichVuId}`);
             const chiSoMoiInput = document.getElementById(`chiSoMoi_dichVu_${dichVuId}`);
+            const dauNguoiInput = document.getElementById(`dauNguoiInput_dichVu_${dichVuId}`);
 
-            const chiSoCu = parseFloat(chiSoCuInput.value) || 0;
-            const chiSoMoi = parseFloat(chiSoMoiInput.value) || 0;
+            // Kiểm tra chỉ số cũ và chỉ số mới
+            if (chiSoCuInput !== null) {
+                if (chiSoCuInput.value !== "") {
+                    chiSoCu = parseFloat(chiSoCuInput.value);
+                } else {
+                    isValid = false; // Nếu không có giá trị, không hợp lệ
+                    chiSoCuInput.classList.add("is-invalid");
+                }
 
-            if (chiSoCu > chiSoMoi) {
-                errorMessage += `Chỉ số cũ không được lớn hơn chỉ số mới cho dịch vụ ${dichVuId}!\n`;
-                isValid = false;
-                chiSoCuInput.classList.add("is-invalid");
-                chiSoMoiInput.classList.add("is-invalid");
+                if (chiSoMoiInput.value !== "") {
+                    chiSoMoi = parseFloat(chiSoMoiInput.value);
+                } else {
+                    isValid = false; // Nếu không có giá trị, không hợp lệ
+                    chiSoMoiInput.classList.add("is-invalid");
+                }
+
+                // Kiểm tra nếu chỉ số cũ lớn hơn chỉ số mới
+                if (chiSoCu > chiSoMoi) {
+                    errorMessage += `Chỉ số cũ không được lớn hơn chỉ số mới cho dịch vụ ${dichVuId}!\n`;
+                    isValid = false;
+                    chiSoCuInput.classList.add("is-invalid");
+                    chiSoMoiInput.classList.add("is-invalid");
+                } else {
+                    chiSoCuInput.classList.remove("is-invalid");
+                    chiSoMoiInput.classList.remove("is-invalid");
+                }
             } else {
-                chiSoCuInput.classList.remove("is-invalid");
-                chiSoMoiInput.classList.remove("is-invalid");
-            }
+                // Nếu không có trường chỉ số cũ và mới, kiểm tra đầu người
+                if (dauNguoiInput !== null) {
+                    if (dauNguoiInput.value !== "") {
+                        dauNguoi = parseFloat(dauNguoiInput.value);
+                    } else {
+                        isValid = false; // Nếu không có giá trị, không hợp lệ
+                        dauNguoiInput.classList.add("is-invalid");
+                    }
+                }
 
-            if (chiSoCu === 0 || chiSoMoi === 0) {
-                errorMessage += `Bạn phải nhập cả chỉ số cũ và chỉ số mới cho dịch vụ ${dichVuId}!\n`;
-                isValid = false;
+                // Kiểm tra đầu người phải lớn hơn 0
+                if (dauNguoi <= 0) {
+                    errorMessage += `Đầu người phải lớn hơn 0 cho dịch vụ ${dichVuId}!\n`;
+                    isValid = false;
+                    dauNguoiInput.classList.add("is-invalid");
+                } else {
+                    dauNguoiInput.classList.remove("is-invalid");
+                }
             }
         }
     });
 
+    // Hiển thị thông báo nếu có lỗi
     const notification = document.getElementById("notification");
     if (!isValid) {
         notification.innerText = errorMessage;
-        notification.style.display = "block"; 
+        notification.style.display = "block";
     } else {
         notification.style.display = "none";
     }
 
-    return isValid;
+    return isValid; // Trả về giá trị của isValid
 }
+
+
+
+
 

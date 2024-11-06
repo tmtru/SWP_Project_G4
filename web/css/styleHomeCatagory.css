@@ -10,10 +10,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 
 
 .rental-property {
+    gap:150px;
     display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    margin: 10px 0;
 }
 
 .property-image {
@@ -23,7 +21,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     width: 100%;
 }
 .property-image img{
-    max-height: 200px;
+    max-height: 250px;
 }
 .price-section {
     display: flex;

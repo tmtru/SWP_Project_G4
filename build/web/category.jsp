@@ -345,7 +345,7 @@
 
 
         <!-- JavaScript Libraries -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+
         <!--font awasome-->
         <script src="https://kit.fontawesome.com/aab0c35bef.js" crossorigin="anonymous"></script>
         <!--AOS lib-->

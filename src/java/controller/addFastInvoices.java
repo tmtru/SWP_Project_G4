@@ -100,6 +100,9 @@ public class addFastInvoices extends HttpServlet {
 
                 request.setAttribute("selectedRooms", room);
                 request.getRequestDispatcher("Step2AddFastInvoices.jsp").forward(request, response);
+            } else {
+                request.setAttribute("errorMessage", "Xin vui lòng chọn ít nhất một phòng để tạo hóa đơn!");
+                request.getRequestDispatcher("hoadon").forward(request, response);
             }
         } else if (step.equals("2")) {
 
