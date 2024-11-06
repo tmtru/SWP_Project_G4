@@ -177,6 +177,9 @@
                                     case "CSC":
                                         trangThaiTB = "Cần sửa chữa";
                                         break;
+                                    case "BT":
+                                        trangThaiTB = "Bình thường";
+                                        break;
                                     default:
                                         trangThaiTB = "Không xác định"; 
                                         break;
@@ -212,7 +215,7 @@
                         <th>Mô tả bảo trì</th>
                         <th>Ngày gửi</th>
                         <th>Trạng thái yêu cầu</th>
-                        <th>Chấp thuận</th>
+                        <th>Trạng thái bảo trì</th>
                         <th>Tác vụ</th>
                     </tr>
                 </thead>
@@ -261,7 +264,7 @@
                                         trangThaiCT = "Đang chờ";
                                         break;
                                     case 1:
-                                        trangThaiCT = "Chấp thuận";
+                                        trangThaiCT = "Hoàn Thành";
                                         break;
                                     case 2:
                                         trangThaiCT = "Từ chối";
