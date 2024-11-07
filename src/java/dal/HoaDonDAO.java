@@ -568,7 +568,7 @@ public class HoaDonDAO extends DBContext {
                 + "FROM hop_dong h "
                 + "WHERE h.ID_PhongTro = ? "
                 + "AND h.Ngay_gia_tri <= CURDATE() "
-                + "AND h.Ngay_het_han >= CURDATE()"; // Kiểm tra hợp đồng có hiệu lực hiện tại
+                + "AND h.Ngay_het_han >= CURDATE() AND h.isActive=1 AND h.Trang_thai='active'"; // Kiểm tra hợp đồng có hiệu lực hiện tại
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, idRoom); // Đặt giá trị idRoom vào truy vấn
