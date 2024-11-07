@@ -165,10 +165,6 @@
             <a href="viewUserInvoices.jsp" class="menu-item">Xem hóa đơn</a>
             <a href="maintainanceServlet" class="menu-item">Yêu cầu bảo trì</a>
             <% } %>
-            
-            <% if (isManager) { %>
-            <a href="adminMaintainanceServlet" class="menu-item">Xem yêu cầu bảo trì</a>
-            <% } %>
 
             <a href="home.jsp" class="menu-item">Về trang chủ</a>
         </nav>

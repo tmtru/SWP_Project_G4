@@ -186,10 +186,6 @@
         <servlet-class>controller.cancelMaintainanceRequestServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>adminMaintainanceServlet</servlet-name>
-        <servlet-class>controller.adminMaintainanceServlet</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>viewUserInvoicesServlet</servlet-name>
         <servlet-class>controller.viewUserInvoicesServlet</servlet-class>
     </servlet>
@@ -486,10 +482,6 @@
     <servlet-mapping>
         <servlet-name>cancelMaintainanceRequestServlet</servlet-name>
         <url-pattern>/cancelMaintainanceRequestServlet</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>adminMaintainanceServlet</servlet-name>
-        <url-pattern>/adminMaintainanceServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>viewUserInvoicesServlet</servlet-name>

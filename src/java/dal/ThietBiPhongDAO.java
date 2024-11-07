@@ -256,7 +256,7 @@ public class ThietBiPhongDAO extends DBContext {
         }
 
         // Update maintenance request status in bao_tri table
-        String updateMaintenanceSQL = "UPDATE bao_tri SET trang_thai_yeu_cau = 1, trang_thai_chap_thuan = 2 WHERE ID_ThietBiPhong = ?";
+        String updateMaintenanceSQL = "UPDATE bao_tri SET trang_thai_yeu_cau = 2, trang_thai_chap_thuan = 2 WHERE ID_ThietBiPhong = ?";
         try (PreparedStatement maintenancePS = connection.prepareStatement(updateMaintenanceSQL)) {
             maintenancePS.setInt(1, id);
             maintenancePS.executeUpdate();
