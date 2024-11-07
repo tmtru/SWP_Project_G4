@@ -149,12 +149,12 @@
                 </select>
                 <select id="filterTrangThaiHopDong" onchange="filterTable()">
                     <option value="">Tất cả trạng thái hợp đồng</option>
-                    <option value="waiting">waiting</option>
-                    <option value="pending">pending</option>
-                    <option value="accept">accept</option>
-                    <option value="active">active</option>
-                    <option value="reject">reject</option>
-                    <option value="expired">expired</option>
+                    <option value="waiting">Chờ xử lí</option>
+                    <option value="pending">Chưa gửi</option>
+                    <option value="accept">Chấp nhận</option>
+                    <option value="active">Đang hoạt động</option>
+                    <option value="reject">Từ chối</option>
+                    <option value="expired">Hết hạn</option>
                 </select>
                 <div class="Calender">
                     <a href="CalendarByManager" class="tab active">Lịch Quản Lý</a>
