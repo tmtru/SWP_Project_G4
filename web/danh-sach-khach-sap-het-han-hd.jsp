@@ -224,7 +224,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                             <span class="text nav-text">Nhà trọ</span>
                         </a>
                     </li>
-                    
+                    <c:if test="${sessionScope.account.role == 'landlord'}">
+                     <li class="">
+                            <a href="manage-new" class="">
+                                <i class='bx bx-bell icon ' ></i>
+                                <span class="text nav-text">Thông báo</span>
+                            </a>                      
+                     </li>
+                    </c:if>
                     
 
                     <li class="">
