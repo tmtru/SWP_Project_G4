@@ -7,6 +7,19 @@
     <meta charset="UTF-8">
     <title>Sửa Nhà Trọ</title>
     <style>
+        
+            .dropdown-menu {
+                display: none;
+                list-style: none;
+                padding: 0px 27px;
+                margin: 0px ;
+            }
+
+            /* Khi li có class active, hiển thị dropdown */
+            .dropdown.active .dropdown-menu {
+                display: block;
+            }
+
         body {
             font-family: Arial, sans-serif;
             background-color: #f8f8f8;

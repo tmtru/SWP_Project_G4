@@ -116,7 +116,14 @@
                             <span class="text nav-text">Nhà trọ</span>
                         </a>
                     </li>
-
+                    <c:if test="${sessionScope.account.role == 'landlord'}">
+                     <li class="">
+                            <a href="manage-new" class="">
+                                <i class='bx bx-bell icon ' ></i>
+                                <span class="text nav-text">Thông báo</span>
+                            </a>                      
+                     </li>
+                    </c:if>
                     <li class="">
                         <a href="room" >
                             <i class='bx bx-bar-chart-alt-2 icon active' ></i>

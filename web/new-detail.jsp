@@ -20,8 +20,8 @@
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <!-- Bootstrap CSS -->
-           <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-           
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
             <!----======== CSS ======== -->
             <link rel="stylesheet" href="css/styleRoom.css">
             <!-- Them font awesome -->
@@ -37,6 +37,17 @@
             <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
             <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
             <style>
+                  .dropdown-menu {
+                display: none;
+                list-style: none;
+                padding: 0px 27px;
+                margin: 0px ;
+            }
+
+            /* Khi li có class active, hiển thị dropdown */
+            .dropdown.active .dropdown-menu {
+                display: block;
+            }
                 .require{
                     color: red;
                 }
@@ -95,7 +106,7 @@
             <nav class="sidebar">
                 <header>
                     <div class="image-text">
-                        <a href="homer">
+                        <a href="home.jsp">
                             <span class="image">
                                 <img src="assets/img/Logo_nhatro.png" alt="alt" style="margin-top: 15px; width: 100%; margin-left:10px"/>
                                 <!--<img src="logo.png" alt="">-->
@@ -110,68 +121,93 @@
 
                 <div class="menu-bar">
                     <div class="menu">
-                        <ul class="menu-links">
-                            <li class="">
-                                <a href="#">
-                                    <i class='bx bx-home-alt icon' ></i>
-                                    <span class="text nav-text">Trang chủ</span>
-                                </a>
-                            </li>
-                            <li class="">
-                                <a href="nhatro" class="">
-                                    <i class='bx bxs-home icon active' ></i>
-                                    <span class="text nav-text">Nhà trọ</span>
-                                </a>
-                            </li>
+                        <!-- 
+                        <li class="search-box">
+                            <i class='bx bx-search icon'></i>
+                            <input type="text" placeholder="Search...">
+                        </li>
+                        -->
+
+
+                        <li class="">
+                            <a href="#">
+                                <i class='bx bx-home-alt icon' ></i>
+                                <span class="text nav-text">Trang chủ</span>
+                            </a>
+                        </li>
+
+                        <li class="dropdown">
+                            <a href="javascript:void(0);" class="dropdown-toggle" onclick="toggleDropdown()">
+                                <i class='bx bx-cog icon'></i>
+                                <span class="text nav-text">Báo cáo</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="statistic-room"><span class="text nav-text" style="margin-left: 30px">Phòng trống</span></a></li>
+                                <li><a href="statistic-revenue"><span class="text nav-text" style="margin-left: 30px">Doanh thu</span></a></li>
+                                <li><a href="khach-no"><span class="text nav-text" style="margin-left: 30px">Khách nợ</span></a></li>
+                                <li><a href="khach-coc"><span class="text nav-text" style="margin-left: 30px">Khách cọc</span></a></li>
+                                <li><a href="khach-sap-het-han"><span class="text nav-text">Sắp hết hạn hợp đồng</span></a></li>
+                                <li><a href="thiet-bi"><span class="text nav-text" style="margin-left: 33px">Thiết bị</span></a></li>
+                            </ul>
+                        </li>
+
+
+                        <li class="">
+                            <a href="nhatro">
+                                <i class='bx bxs-home icon' ></i>
+                                <span class="text nav-text">Nhà trọ</span>
+                            </a>
+                        </li>
+                        <c:if test="${sessionScope.account.role == 'landlord'}">
                             <li class="">
                                 <a href="manage-new" class="active">
-                                    <i class='bx bx-bell icon' ></i>
+                                    <i class='bx bx-bell icon ' ></i>
                                     <span class="text nav-text">Thông báo</span>
-                                </a>
+                                </a>                      
                             </li>
+                        </c:if>
+                        <li class="">
+                            <a href="room" >
+                                <i class='bx bx-bar-chart-alt-2 icon active' ></i>
+                                <span class="text nav-text">Phòng trọ</span>
+                            </a>
+                        </li>
 
+                        <li class="">
+                            <a href="accountController">
+                                <i class='bx bx-face icon' ></i>
+                                <span class="text nav-text">Người dùng</span>
+                            </a>
+                        </li>
+
+                        <li class="s">
+                            <a href="loaddichvu" >
+                                <i class='bx bx-bell icon'></i>
+                                <span class="text nav-text">Dịch vụ</span>
+                            </a>
+                        </li>
+
+                        <li class="">
+                            <a href="hop-dong">
+                                <i class='bx bx-id-card icon' ></i>
+                                <span class="text nav-text">Hợp đồng</span>
+                            </a>
+                        </li>
+
+                        <li class="">
+                            <a href="hoadon" >
+                                <i class='bx bx-wallet icon' ></i>
+                                <span class="text nav-text">Hóa đơn</span>
+                            </a>
+                        </li>
+                        <c:if test="${sessionScope.account.role == 'landlord'}">
                             <li class="">
-                                <a href="room">
-                                    <i class='bx bx-bar-chart-alt-2 icon ' ></i>
-                                    <span class="text nav-text">Phòng trọ</span>
-                                </a>
-                            </li>
-
-                            <li class="">
-                                <a href="accountController">
-                                    <i class='bx bx-face icon' ></i>
-                                    <span class="text nav-text">Người dùng</span>
-                                </a>
-                            </li>
-
-                            <li class="s">
-                                <a href="loaddichvu">
-                                    <i class='bx bx-bell icon'></i>
-                                    <span class="text nav-text">Dịch vụ</span>
-                                </a>
-                            </li>
-
-                            <li class="">
-                                <a href="#">
-                                    <i class='bx bx-id-card icon' ></i>
-                                    <span class="text nav-text">Hợp đồng</span>
-                                </a>
-                            </li>
-
-                            <li class="">
-                                <a href="#">
-                                    <i class='bx bx-wallet icon' ></i>
-                                    <span class="text nav-text">Hóa đơn</span>
-                                </a>
-                            </li>
-
-                            <li class="">
-                                <a href="#">
+                                <a href="loadThietBi">
                                     <i class='bx bx-devices icon' ></i>
                                     <span class="text nav-text">Thiết bị</span>
                                 </a>
                             </li>
-
+                        </c:if>
 
                         </ul>
                     </div>
@@ -184,17 +220,6 @@
                             </a>
                         </li>
 
-                        <li class="mode">
-                            <div class="sun-moon">
-                                <i class='bx bx-moon icon moon'></i>
-                                <i class='bx bx-sun icon sun'></i>
-                            </div>
-                            <span class="mode-text text">Dark mode</span>
-
-                            <div class="toggle-switch">
-                                <span class="switch"></span>
-                            </div>
-                        </li>
 
                     </div>
                 </div>
@@ -213,8 +238,8 @@
                     <div style="background-color: whitesmoke">
                         <c:out value="${n.content}" escapeXml="false" />
                     </div>
-                      <button style="color: wheat" onclick="window.location.href='manage-new'" class="btn btn-info btn-sm">Back</button>
-             
+                    <button style="color: wheat" onclick="window.location.href = 'manage-new'" class="btn btn-info btn-sm">Back</button>
+
                 </div>
             </section>
             <script src="https://cdn.ckeditor.com/4.20.2/standard/ckeditor.js"></script>
@@ -233,7 +258,7 @@
             <script src="https://kit.fontawesome.com/aab0c35bef.js" crossorigin="anonymous"></script>
             <title>Chi tiết thông báo</title>
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
             <!-- Font familiy-->
             <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -285,7 +310,7 @@
                         <c:out value="${n.content}" escapeXml="false" />
                     </div>
                 </section>
-                    <button style="color: wheat" onclick="window.location.href='new'" class="btn btn-info btn-sm">Back</button>
+                <button style="color: wheat" onclick="window.location.href = 'new'" class="btn btn-info btn-sm">Back</button>
                 <!-- Footer Start -->
                 <div class="container-fluid bg-light text-dark footer">
                     <div class="container pb-5">
@@ -345,6 +370,12 @@
             <script src="https://kit.fontawesome.com/aab0c35bef.js" crossorigin="anonymous"></script>
             <!--AOS lib-->
 
+            <script>
+                        function toggleDropdown() {
+                            var dropdown = document.querySelector('.dropdown');
+                            dropdown.classList.toggle('active'); // Thêm/xóa class 'active' khi nhấn
+                        }
+            </script>
         </body>
     </html>
 </c:if>

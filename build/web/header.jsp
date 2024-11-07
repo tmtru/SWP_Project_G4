@@ -106,7 +106,7 @@
                                 <c:if test="${a!=null}">
                                     <c:if test="${a.role.equals('landlord') || a.role.equals('manager')}">
 
-                                        <a href="loaddashboardbyrole" class="nav-item nav-link" style="color: red">Trang quản lí</a>
+                                        <a href="loaddashboardbyrole" class="nav-item nav-link" style="color: #7065f0">Trang quản lí</a>
                                     </c:if>
 
                                 </c:if>

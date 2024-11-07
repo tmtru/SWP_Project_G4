@@ -51,8 +51,7 @@
 
     </head>
     <body>
-        <jsp:include page="sidebarHoaDonManagement.jsp"></jsp:include>
-
+        <jsp:include page="adminUserManagement/sidebar.jsp"></jsp:include>
 
             <section class="ftco-section">
 
