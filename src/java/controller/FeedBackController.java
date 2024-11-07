@@ -37,7 +37,7 @@ public class FeedBackController extends HttpServlet {
             idKhachThue = Integer.parseInt(idKhachThueStr);
         } catch (NumberFormatException e) {
             request.setAttribute("message", "Invalid KhachThue ID format.");
-            request.getRequestDispatcher("profileServlet?action=viewContracts").forward(request, response);
+            request.getRequestDispatcher("viewUserContracts.jsp").forward(request, response);
             return;
         }
 
@@ -45,7 +45,7 @@ public class FeedBackController extends HttpServlet {
             idPhong = Integer.parseInt(idPhongStr);
         } catch (NumberFormatException e) {
             request.setAttribute("message", "Invalid Phong ID format.");
-            request.getRequestDispatcher("profileServlet?action=viewContracts").forward(request, response);
+            request.getRequestDispatcher("viewUserContracts.jsp").forward(request, response);
             return;
         }
 
@@ -56,10 +56,10 @@ public class FeedBackController extends HttpServlet {
         boolean success = feedbackDAO.addFeedBack(feedback);
         if (success) {
             request.setAttribute("message", "Feedback submitted successfully.");
-            request.getRequestDispatcher("profileServlet?action=viewContracts").forward(request, response);
+            request.getRequestDispatcher("viewUserContracts.jsp").forward(request, response);
         } else {
             request.setAttribute("message", "Failed to submit feedback.");
-            request.getRequestDispatcher("profileServlet?action=viewContracts").forward(request, response);
+            request.getRequestDispatcher("viewUserContracts.jsp").forward(request, response);
         }
     }
 

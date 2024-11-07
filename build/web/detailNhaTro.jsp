@@ -55,7 +55,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         <nav class="sidebar">
             <header>
                 <div class="image-text">
-                    <a href="homer">
+                    <a href="home.jsp">
                         <span class="image">
                             <img src="assets/img/Logo_nhatro.png" alt="alt" style="margin-top: 15px; width: 100%; margin-left:10px"/>
                             <!--<img src="logo.png" alt="">-->
@@ -267,14 +267,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                 </c:if>
 
                                 <!-- Right card: Chat messages -->
-                                <div class="card flex-grow-1" id="chat1" style="border-radius: 15px; margin-left: 15px;">
+                                <div class="card flex-grow-1" id="chat1" style="border-radius: 15px; margin-left: 15px;width: 500px;">
                                     <div class="card-header d-flex justify-content-between align-items-center p-3 bg-info text-white border-bottom-0"
                                          style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
                                         <i class="fas fa-angle-left"></i>
                                         <p class="mb-0 fw-bold"></p>
                                         <i class="fas fa-times" onclick="toggleChatBox()"></i>
                                     </div>
-                                    <div class="card-body" id="chatMessages" style="overflow-y: auto; max-height: 400px;">
+                                    <div class="card-body" id="chatMessages" style="overflow-y: auto; min-height: 250px;">
                                         <!-- Chat messages will be appended here -->
                                     </div>
                                     <div data-mdb-input-init class="form-outline">
