@@ -127,7 +127,53 @@ public class loadHoaDonNhaTro extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        HttpSession session = request.getSession();
+        PhongDAO pdao = new PhongDAO();
+        TransactionDAO trdao= new TransactionDAO();
+
+        List<NhaTro> houses = (List<NhaTro>) session.getAttribute("housesByRole");
+        int choseHouse = -1;
+        if (request.getParameter("idHouse") != null && !request.getParameter("idHouse").equals("")) {
+            choseHouse = Integer.parseInt(request.getParameter("idHouse"));
+        } else
+        if (session.getAttribute("currentHouse") != null) {
+            choseHouse = (int) session.getAttribute("currentHouse");
+        }
+         HoaDonDAO hddao = new HoaDonDAO();
+        List<HoaDon> listhd = null;
+        List<Phong> rentedRooms = null;
+        LocalDate today = LocalDate.now(); 
+        LocalDate startDate = today.withDayOfMonth(1); 
+        LocalDate endDate = today.withDayOfMonth(today.lengthOfMonth()); 
+        List<Transaction> transactionHistory= null;
+        if (houses != null && !houses.isEmpty()) {
+            //neu chua duoc chon bat ki nha tro nào sẽ tự động lấy nahf trọ đầu tiên
+            if (choseHouse == -1) {
+                choseHouse = houses.get(0).getID_NhaTro();
+                session.setAttribute("currentHouse", choseHouse);
+
+            } else {
+                session.setAttribute("currentHouse", choseHouse);
+
+            }
+
+            listhd = hddao.getHoaDonByDateRange(startDate, endDate, choseHouse);
+            //load danh sach phong voi thong tin ve hoa don
+            rentedRooms = pdao.getRoomsByNhaTro(choseHouse);
+            //load transaction mới nhất của nahf trọ
+            transactionHistory= trdao.getAllTransactionsByNhaTroId(choseHouse);
+
+        }
+
+        request.setAttribute("startDate", startDate);
+        request.setAttribute("endDate", endDate);
+        request.setAttribute("invoices", listhd);
+
+        session.setAttribute("Rooms", rentedRooms);
+       session.setAttribute("transactions", transactionHistory);
+        request.getRequestDispatcher("hoaDonManagement.jsp").forward(request, response);
     }
 
     /**

@@ -147,6 +147,23 @@ public class actionTransaction extends HttpServlet {
                     if (isAdded) {
                         request.setAttribute("id", idHoaDon);
                         request.setAttribute("successMessage", "Thêm giao dịch thành công.");
+                        String to = "manhtrung2502@gmail.com";
+                        String subject = "Thông báo Giao dịch mới Nhà Trọ TQAT";
+                        StringBuilder message = new StringBuilder();
+                        message.append("<html>");
+                        message.append("<body style='font-family: Arial, sans-serif; font-size: 14px; color: #333;'>");
+                        message.append("<h2 style='color: #4CAF50;'>Chúc mừng bạn!</h2>");
+                        message.append("<p>Bạn đã chuyển thành công số tiền <strong style='color: #4CAF50;'>").append(amount).append(" VNĐ</strong>.</p>");
+                        message.append("<p><strong>Mã Giao dịch:</strong> ").append(maGiaoDich).append("</p>");
+                        message.append("<p><strong>Phương thức thanh toán:</strong> ").append(paymentMethod).append("</p>");
+                        message.append("<p><strong>Ngày giao dịch:</strong> ").append(sdf.format(transactionDate)).append("</p>");
+                        message.append("<p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!</p>");
+                        message.append("</body>");
+                        message.append("</html>");
+
+                        // Sending the email
+                        IJavaMail emailService = new EmailService();
+                        emailService.send(to, subject, message.toString());
                         request.getRequestDispatcher("TransactionForm.jsp").forward(request, response);
                     } else {
                         request.setAttribute("id", idHoaDon);

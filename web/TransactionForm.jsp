@@ -50,16 +50,16 @@
 
     </head>
     <body>
-         <jsp:include page="sidebarHoaDonManagement.jsp"></jsp:include>
-        <section class="home">
-            <section class="property-management">
-                <div class="header">
-                    <h2>Danh sách hóa đơn nhà trọ</h2>
+        <jsp:include page="sidebarHoaDonManagement.jsp"></jsp:include>
+            <section class="home">
+                <section class="property-management">
+                    <div class="header">
+                        <h2>Danh sách hóa đơn nhà trọ</h2>
 
-                </div>
+                    </div>
 
-                <nav>
-                    <div class="warpper">
+                    <nav>
+                        <div class="warpper">
                         <c:forEach var="nt" items="${sessionScope.housesByRole}">
                             <a href="hoadon?id=${nt.ID_NhaTro}">
                                 <div class="tab <c:if test="${nt.ID_NhaTro == sessionScope.currentHouse}">active</c:if>" id="tab-${nt.ID_NhaTro}" >
@@ -157,7 +157,7 @@
                                             <span class="text-primary ms-sm-2 font-weight-bold">Tên dịch vụ: ${dichVu.tenDichVu}</span> <br/>
 
                                             <c:choose>
-                                                <c:when test="${dichVu.tenDichVu == 'Điện' || dichVu.tenDichVu == 'Nước'}">
+                                                <c:when test="${dichVu.don_vi != 'Tháng'}">
                                                     <span class="text-dark ms-sm-2">
                                                         <span class="text-dark ms-sm-2 font-weight-bold">Chỉ số:</span> 
                                                         ${dichVu.chiSoCu} - ${dichVu.chiSoMoi}
@@ -251,7 +251,7 @@
                             </div>
                         </c:if>
 
-                        <form action="actionTransaction?action=add" method="POST" class="col-5 p-3 bg-gray-100 mt-3 ml-5" id="transactionForm">
+                        <form action="actionTransaction?action=add" method="POST" class="col-5 p-3 bg-gray-100 mt-3 ml-5" id="transactionForm" onsubmit="return validateForm()">
                             <div class="mb-3">
                                 <label for="maGiaoDich" class="form-label">Mã Giao Dịch</label>
                                 <input type="text" class="form-control" id="maGiaoDich" name="maGiaoDich" required>
@@ -262,12 +262,12 @@
                             </div>
                             <div class="mb-3">
                                 <label for="amount" class="form-label">Số Tiền</label>
-                                <input type="text" class="form-control" id="amount" name="amount" step="0.01" required>
+                                <input type="number" class="form-control" id="amount" name="amount" step="0.01" required>
                                 <div class="invalid-feedback" id="amountError" style="display: none;">Số tiền phải lớn hơn 0 và hợp lệ.</div>
                             </div>
                             <div class="mb-3">
                                 <label for="paymentMethod" class="form-label">Phương Thức Thanh Toán</label>
-                                <select class="form-select" id="paymentMethod" name="paymentMethod" required>
+                                <select class="form-select" id="paymentMethod" name="paymentMethod" required onchange="updateTransactionIdField()">
                                     <option value="" disabled selected>Chọn phương thức</option>
                                     <option value="Tiền mặt">Tiền mặt</option>
                                     <option value="Chuyển khoản">Chuyển khoản</option>
@@ -282,9 +282,11 @@
                                 <label for="idHoaDon" class="form-label">ID Hóa Đơn</label>
                                 <input type="number" class="form-control" id="idHoaDon" name="idHoaDon" value="<%= idHoaDon %>" readonly>
                             </div>
-
                             <button type="submit" class="btn btn-primary">Thêm Giao Dịch</button>
                         </form>
+
+
+
                     </div>
 
 
@@ -310,32 +312,54 @@
         <script>
             document.getElementById('amount').addEventListener('input', function (e) {
                 var value = e.target.value;
-
-                // Loại bỏ dấu chấm hiện tại
                 value = value.replace(/\./g, '');
-
-                // Định dạng lại thành 1.000.000
                 var formattedValue = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-
-                // Cập nhật lại giá trị vào ô input
                 e.target.value = formattedValue;
             });
 
             // Kiểm tra trước khi gửi form
             document.getElementById('transactionForm').addEventListener('submit', function (e) {
                 var amountInput = document.getElementById('amount');
-                var amountValue = amountInput.value.replace(/\./g, ''); // Lấy giá trị không chứa dấu chấm
+                var amountValue = amountInput.value.replace(/\./g, '');
                 var amountError = document.getElementById('amountError');
 
-                // Kiểm tra số tiền có lớn hơn 0 hay không
                 if (parseFloat(amountValue) <= 0 || isNaN(parseFloat(amountValue))) {
-                    e.preventDefault(); // Ngăn form gửi đi
-                    amountError.style.display = 'block'; // Hiển thị lỗi
+                    e.preventDefault(); 
+                    amountError.style.display = 'block';
                 } else {
-                    amountError.style.display = 'none'; // Ẩn lỗi
-                    // Loại bỏ dấu chấm trước khi gửi form
+                    amountError.style.display = 'none';
                     amountInput.value = amountValue;
                 }
+            });
+        </script>
+        <script>
+            function updateTransactionIdField() {
+                const paymentMethodSelect = document.getElementById('paymentMethod');
+                const transactionIdField = document.getElementById('maGiaoDich');
+
+                if (paymentMethodSelect.value === 'Tiền mặt') {
+                    transactionIdField.value = '';
+                    transactionIdField.disabled = true;
+                } else {
+                    transactionIdField.disabled = false;
+                }
+            }
+
+            function validateForm() {
+                const amountField = document.getElementById('amount');
+                const amountError = document.getElementById('amountError');
+
+                if (parseFloat(amountField.value) <= 0) {
+                    amountError.style.display = 'block';
+                    return false;
+                } else {
+                    amountError.style.display = 'none';
+                }
+                return true;
+            }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                updateTransactionIdField();
             });
         </script>
         <script>

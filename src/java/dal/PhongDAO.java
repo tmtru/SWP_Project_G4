@@ -495,7 +495,7 @@ public class PhongDAO extends DBContext {
                 + "JOIN nha_tro n ON p.ID_NhaTro = n.ID_NhaTro "
                 + "JOIN loai_phong l ON p.ID_LoaiPhong = l.ID_LoaiPhong "
                 + "JOIN hop_dong h ON p.ID_Phong = h.ID_PhongTro "
-                + "WHERE h.Ngay_gia_tri <= ? AND h.Ngay_het_han >= ? AND p.ID_Phong = ?";
+                + "WHERE h.Ngay_gia_tri <= ? AND h.Ngay_het_han >= ? AND p.ID_Phong = ? AND h.isActive=1 AND h.Trang_thai='active'";
 
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setDate(1, Date.valueOf(today)); // Ngày hiện tại cho Ngay_gia_tri

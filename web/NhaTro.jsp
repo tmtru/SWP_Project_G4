@@ -83,6 +83,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                 <span class="text nav-text">Nhà trọ</span>
                             </a>
                         </li>
+                        
+                          <li class="">
+                            <a href="manage-new" class="">
+                                <i class='bx bx-bell icon ' ></i>
+                                <span class="text nav-text">Thông báo</span>
+                            </a>
+                        </li>
 
                         <li class="">
                             <a href="room">
@@ -172,11 +179,17 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 <h2>Danh sách nhà trọ</h2>
 
                 <div class="action-buttons" style="margin-bottom: 20px">
+                    
                     <button class="btn add-property" data-toggle="modal" data-target="#addRoomModal">+ Thêm nhà trọ</button>
-
+                    
                     <form action="nhatro" method="get" class="filters">
                         <input type="text" name="search" value="${param.search}" placeholder="Search..">
                         <button type="submit"><i class='bx bx-search icon'></i></button>
+                        
+                        
+                           
+                   
+                        
                     </form>
                 </div>
                 <c:if test="${not empty sessionScope.notification}">
@@ -207,11 +220,17 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
+                                
                                 <h5 class="modal-title" id="addRoomModalLabel">Thêm nhà trọ</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
+                               
                             </div>
+                             
+                                    
+                            
+                                
                             <div class="modal-body">
                                 <form id="addRoomForm" action="nhatro" method="post" enctype="multipart/form-data">
                                     <input type="hidden" name="action" value="add">
@@ -491,5 +510,5 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             }
         </script>
 
-    </body>
+    </body>  
 </html>

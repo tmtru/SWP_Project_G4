@@ -36,7 +36,7 @@ public class HoaDonDAO extends DBContext {
                 + "hd.Tong_gia_tien, hd.NgayThanhToan, hd.MoTa, "
                 + "hd.NguoiTao,  "
                 + "dv.ID_DichVu, dv.TenDichVu, dv.Don_gia, dv.Don_vi, dv.Mo_ta, "
-                + "hdv.ChiSo_Cu, hdv.ChiSo_Moi, hdv.DauNguoi "
+                + "hdv.ChiSo_Cu, hdv.ChiSo_Moi, hdv.DauNguoi, hdv.CurrentPrice "
                 + "FROM hoa_don hd "
                 + "INNER JOIN hop_dong h ON hd.ID_HopDong = h.ID_HopDong "
                 + "INNER JOIN phong_tro pt ON h.ID_PhongTro = pt.ID_Phong "
@@ -77,6 +77,7 @@ public class HoaDonDAO extends DBContext {
                         dichVu.setChiSoCu(rs.getInt("ChiSo_Cu"));
                         dichVu.setChiSoMoi(rs.getInt("ChiSo_Moi"));
                         dichVu.setDauNguoi(rs.getInt("DauNguoi"));
+                        dichVu.setOldPrice(rs.getInt("CurrentPrice"));
                         hoaDon.getDichVus().add(dichVu); // Thêm dịch vụ vào danh sách
                     }
                 }
@@ -94,7 +95,7 @@ public class HoaDonDAO extends DBContext {
                 + "hd.Tong_gia_tien, hd.NgayThanhToan, hd.MoTa, "
                 + "hd.NguoiTao, "
                 + "dv.ID_DichVu, dv.TenDichVu, dv.Don_gia, dv.Don_vi, dv.Mo_ta, "
-                + "hdv.ChiSo_Cu, hdv.ChiSo_Moi, hdv.DauNguoi "
+                + "hdv.ChiSo_Cu, hdv.ChiSo_Moi, hdv.DauNguoi, hdv.CurrentPrice "
                 + "FROM hoa_don hd "
                 + "LEFT JOIN hoa_don_dich_vu hdv ON hd.ID_HoaDon = hdv.ID_HoaDon "
                 + "LEFT JOIN dich_vu dv ON hdv.ID_DichVu = dv.ID_DichVu "
@@ -103,22 +104,24 @@ public class HoaDonDAO extends DBContext {
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, idHoaDon);
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    // Tạo đối tượng HoaDon
-                    hoaDon = new HoaDon();
-                    hoaDon.setID_HoaDon(rs.getInt("ID_HoaDon"));
-                    hoaDon.setID_HopDong(rs.getInt("ID_HopDong"));
-                    hoaDon.setNgay(rs.getDate("Ngay"));
-                    hoaDon.setTrang_thai(rs.getInt("Trang_thai"));
-                    hoaDon.setTong_gia_tien(rs.getInt("Tong_gia_tien"));
-                    hoaDon.setNgayThanhToan(rs.getDate("NgayThanhToan"));
-                    hoaDon.setNguoiTao(rs.getString("NguoiTao"));
-                    hoaDon.setMoTa(rs.getNString("MoTa"));
-                    hoaDon.setDichVus(new ArrayList<>()); // Khởi tạo danh sách dịch vụ
+                List<DichVu> dichVus = new ArrayList<>();
 
-                    // Thêm dịch vụ vào danh sách dịch vụ của hóa đơn
+                while (rs.next()) {
+                    if (hoaDon == null) {
+                        hoaDon = new HoaDon();
+                        hoaDon.setID_HoaDon(rs.getInt("ID_HoaDon"));
+                        hoaDon.setID_HopDong(rs.getInt("ID_HopDong"));
+                        hoaDon.setNgay(rs.getDate("Ngay"));
+                        hoaDon.setTrang_thai(rs.getInt("Trang_thai"));
+                        hoaDon.setTong_gia_tien(rs.getInt("Tong_gia_tien"));
+                        hoaDon.setNgayThanhToan(rs.getDate("NgayThanhToan"));
+                        hoaDon.setNguoiTao(rs.getString("NguoiTao"));
+                        hoaDon.setMoTa(rs.getNString("MoTa"));
+                        hoaDon.setDichVus(dichVus);
+                    }
+
                     int idDichVu = rs.getInt("ID_DichVu");
-                    if (idDichVu != 0) { // Nếu có dịch vụ
+                    if (idDichVu != 0) {
                         DichVu dichVu = new DichVu();
                         dichVu.setID_DichVu(idDichVu);
                         dichVu.setTenDichVu(rs.getString("TenDichVu"));
@@ -128,14 +131,15 @@ public class HoaDonDAO extends DBContext {
                         dichVu.setChiSoCu(rs.getInt("ChiSo_Cu"));
                         dichVu.setChiSoMoi(rs.getInt("ChiSo_Moi"));
                         dichVu.setDauNguoi(rs.getInt("DauNguoi"));
-                        hoaDon.getDichVus().add(dichVu); // Thêm dịch vụ vào danh sách
+                        dichVu.setOldPrice(rs.getInt("CurrentPrice"));
+                        dichVus.add(dichVu);
                     }
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return hoaDon; // Trả về đối tượng HoaDon, có thể là null nếu không tìm thấy
+        return hoaDon; // Return HoaDon object, which may be null if not found
     }
 
 // Phương thức tìm hóa đơn trong danh sách theo ID
@@ -151,7 +155,7 @@ public class HoaDonDAO extends DBContext {
     public List<DichVu> getChiTietDichVuByHoaDonID(int idHoaDon) {
         List<DichVu> dichVus = new ArrayList<>();
         String sql = "SELECT dv.ID_DichVu, dv.TenDichVu, dv.Don_gia, dv.Don_vi, dv.Mo_ta, "
-                + "hdv.ChiSo_Cu, hdv.ChiSo_Moi, hdv.DauNguoi "
+                + "hdv.ChiSo_Cu, hdv.ChiSo_Moi, hdv.DauNguoi , hdv.CurrentPrice "
                 + "FROM hoa_don_dich_vu hdv "
                 + "INNER JOIN dich_vu dv ON hdv.ID_DichVu = dv.ID_DichVu "
                 + "WHERE hdv.ID_HoaDon = ?";
@@ -178,6 +182,7 @@ public class HoaDonDAO extends DBContext {
                     dichVu.setChiSoMoi(chiSoMoi);
                     dichVu.setDauNguoi(dauNguoi);
                     dichVu.setID_HoaDon(idHoaDon);
+                    dichVu.setOldPrice(rs.getInt("CurrentPrice"));
 
                     dichVus.add(dichVu);
                 }
@@ -239,7 +244,7 @@ public class HoaDonDAO extends DBContext {
                 + "hd.Tong_gia_tien, hd.NgayThanhToan, hd.MoTa, "
                 + "hd.NguoiTao,  "
                 + "dv.ID_DichVu, dv.TenDichVu, dv.Don_gia, dv.Don_vi, dv.Mo_ta, "
-                + "hdv.ChiSo_Cu, hdv.ChiSo_Moi, hdv.DauNguoi "
+                + "hdv.ChiSo_Cu, hdv.ChiSo_Moi, hdv.DauNguoi, hdv.CurrentPrice "
                 + "FROM hoa_don hd "
                 + "INNER JOIN hop_dong h ON hd.ID_HopDong = h.ID_HopDong "
                 + "INNER JOIN phong_tro pt ON h.ID_PhongTro = pt.ID_Phong "
@@ -283,6 +288,7 @@ public class HoaDonDAO extends DBContext {
                         dichVu.setChiSoCu(rs.getInt("ChiSo_Cu"));
                         dichVu.setChiSoMoi(rs.getInt("ChiSo_Moi"));
                         dichVu.setDauNguoi(rs.getInt("DauNguoi"));
+                        dichVu.setOldPrice(rs.getInt("CurrentPrice"));
                         hoaDon.getDichVus().add(dichVu);
                     }
                 }
@@ -302,7 +308,7 @@ public class HoaDonDAO extends DBContext {
                 + "hd.Tong_gia_tien, hd.NgayThanhToan, hd.MoTa, "
                 + "hd.NguoiTao, "
                 + "dv.ID_DichVu, dv.TenDichVu, dv.Don_gia, dv.Don_vi, dv.Mo_ta, "
-                + "hdv.ChiSo_Cu, hdv.ChiSo_Moi, hdv.DauNguoi "
+                + "hdv.ChiSo_Cu, hdv.ChiSo_Moi, hdv.DauNguoi, hdv.CurrentPrice "
                 + "FROM hoa_don hd "
                 + "INNER JOIN hop_dong h ON hd.ID_HopDong = h.ID_HopDong "
                 + "LEFT JOIN hoa_don_dich_vu hdv ON hd.ID_HoaDon = hdv.ID_HoaDon "
@@ -343,6 +349,7 @@ public class HoaDonDAO extends DBContext {
                         dichVu.setChiSoCu(rs.getInt("ChiSo_Cu"));
                         dichVu.setChiSoMoi(rs.getInt("ChiSo_Moi"));
                         dichVu.setDauNguoi(rs.getInt("DauNguoi"));
+                        dichVu.setOldPrice(rs.getInt("CurrentPrice"));
                         hoaDon.getDichVus().add(dichVu); // Thêm dịch vụ vào danh sách
                     }
                 }
@@ -361,7 +368,7 @@ public class HoaDonDAO extends DBContext {
                 + "hd.Tong_gia_tien, hd.NgayThanhToan, hd.MoTa,"
                 + "hd.NguoiTao, "
                 + "dv.ID_DichVu, dv.TenDichVu, dv.Don_gia, dv.Don_vi, dv.Mo_ta, "
-                + "hdv.ChiSo_Cu, hdv.ChiSo_Moi, hdv.DauNguoi "
+                + "hdv.ChiSo_Cu, hdv.ChiSo_Moi, hdv.DauNguoi, hdv.CurrentPrice "
                 + "FROM hoa_don hd "
                 + "INNER JOIN hop_dong h ON hd.ID_HopDong = h.ID_HopDong "
                 + "LEFT JOIN hoa_don_dich_vu hdv ON hd.ID_HoaDon = hdv.ID_HoaDon "
@@ -404,6 +411,7 @@ public class HoaDonDAO extends DBContext {
                         dichVu.setChiSoCu(rs.getInt("ChiSo_Cu"));
                         dichVu.setChiSoMoi(rs.getInt("ChiSo_Moi"));
                         dichVu.setDauNguoi(rs.getInt("DauNguoi"));
+                        dichVu.setOldPrice(rs.getInt("CurrentPrice"));
                         hoaDon.getDichVus().add(dichVu); // Thêm dịch vụ vào danh sách
                     }
                 }
@@ -420,7 +428,7 @@ public class HoaDonDAO extends DBContext {
         String sql = "SELECT hd.ID_HoaDon, hd.ID_HopDong, hd.Ngay, hd.Trang_thai, "
                 + "hd.Tong_gia_tien, hd.NgayThanhToan, hd.NguoiTao, hd.MoTa, "
                 + "dv.ID_DichVu, dv.TenDichVu, dv.Don_gia, dv.Don_vi, dv.Mo_ta, "
-                + "hdv.ChiSo_Cu, hdv.ChiSo_Moi, hdv.DauNguoi "
+                + "hdv.ChiSo_Cu, hdv.ChiSo_Moi, hdv.DauNguoi, hdv.CurrentPrice "
                 + "FROM hoa_don hd "
                 + "LEFT JOIN hoa_don_dich_vu hdv ON hd.ID_HoaDon = hdv.ID_HoaDon "
                 + "LEFT JOIN dich_vu dv ON hdv.ID_DichVu = dv.ID_DichVu "
@@ -459,6 +467,7 @@ public class HoaDonDAO extends DBContext {
                     dichVu.setMo_ta(rs.getString("Mo_ta"));
                     dichVu.setChiSoCu(rs.getInt("ChiSo_Cu"));
                     dichVu.setChiSoMoi(rs.getInt("ChiSo_Moi"));
+                    dichVu.setOldPrice(rs.getInt("CurrentPrice"));
                     dichVu.setDauNguoi(rs.getInt("DauNguoi"));
                     hoaDon.getDichVus().add(dichVu); // Thêm dịch vụ vào danh sách
                 }
@@ -476,7 +485,7 @@ public class HoaDonDAO extends DBContext {
         String sql = "SELECT hd.ID_HoaDon, hd.ID_HopDong, hd.Ngay, hd.Trang_thai, "
                 + "hd.Tong_gia_tien, hd.NgayThanhToan, hd.NguoiTao, hd.MoTa, "
                 + "dv.ID_DichVu, dv.TenDichVu, dv.Don_gia, dv.Don_vi, dv.Mo_ta, "
-                + "hdv.ChiSo_Cu, hdv.ChiSo_Moi, hdv.DauNguoi "
+                + "hdv.ChiSo_Cu, hdv.ChiSo_Moi, hdv.DauNguoi, hdv.CurrentPrice "
                 + "FROM hoa_don hd "
                 + "LEFT JOIN hoa_don_dich_vu hdv ON hd.ID_HoaDon = hdv.ID_HoaDon "
                 + "LEFT JOIN dich_vu dv ON hdv.ID_DichVu = dv.ID_DichVu "
@@ -519,6 +528,7 @@ public class HoaDonDAO extends DBContext {
                     dichVu.setChiSoCu(rs.getInt("ChiSo_Cu"));
                     dichVu.setChiSoMoi(rs.getInt("ChiSo_Moi"));
                     dichVu.setDauNguoi(rs.getInt("DauNguoi"));
+                    dichVu.setOldPrice(rs.getInt("CurrentPrice"));
                     hoaDon.getDichVus().add(dichVu); // Thêm dịch vụ vào danh sách
                 }
             }
@@ -558,7 +568,7 @@ public class HoaDonDAO extends DBContext {
                 + "FROM hop_dong h "
                 + "WHERE h.ID_PhongTro = ? "
                 + "AND h.Ngay_gia_tri <= CURDATE() "
-                + "AND h.Ngay_het_han >= CURDATE()"; // Kiểm tra hợp đồng có hiệu lực hiện tại
+                + "AND h.Ngay_het_han >= CURDATE() AND h.isActive=1 AND h.Trang_thai='active'"; // Kiểm tra hợp đồng có hiệu lực hiện tại
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, idRoom); // Đặt giá trị idRoom vào truy vấn
@@ -583,9 +593,9 @@ public class HoaDonDAO extends DBContext {
             ps.setDate(2, new Date(hoaDon.getNgay().getTime()));
             ps.setInt(3, 0);
             ps.setInt(4, hoaDon.getTong_gia_tien());
-            ps.setString(5, nguoiTao); // ID của người tạo hóa đơn
+            ps.setString(5, nguoiTao);
             ps.setNString(6, hoaDon.getMoTa());
-            ps.setInt(7, 1); // Giả sử bạn muốn đặt isActive = 1 khi thêm hóa đơn mới
+            ps.setInt(7, 1);
 
             int affectedRows = ps.executeUpdate();
             if (affectedRows > 0) {
@@ -596,14 +606,15 @@ public class HoaDonDAO extends DBContext {
                         System.out.println("Hóa đơn đã được thêm thành công với ID: " + idHoaDon);
 
                         // Thêm các dịch vụ vào bảng hoa_don_dich_vu
-                        String sqlDichVu = "INSERT INTO hoa_don_dich_vu (ID_HoaDon, ID_DichVu, ChiSo_Cu, ChiSo_Moi, DauNguoi) VALUES (?, ?, ?, ?, ?)";
+                        String sqlDichVu = "INSERT INTO hoa_don_dich_vu (ID_HoaDon, ID_DichVu, ChiSo_Cu, ChiSo_Moi, DauNguoi, CurrentPrice) VALUES (?, ?, ?, ?, ?,?)";
                         try (PreparedStatement psDichVu = connection.prepareStatement(sqlDichVu)) {
                             for (DichVu dichVu : danhSachDichVu) {
-                                psDichVu.setLong(1, idHoaDon); // ID hóa đơn
-                                psDichVu.setInt(2, dichVu.getID_DichVu()); // ID dịch vụ
-                                psDichVu.setInt(3, dichVu.getChiSoCu()); // Chỉ số cũ (nếu có)
-                                psDichVu.setInt(4, dichVu.getChiSoMoi()); // Chỉ số mới
-                                psDichVu.setInt(5, dichVu.getDauNguoi()); // ID đầu người (nếu có)
+                                psDichVu.setLong(1, idHoaDon);
+                                psDichVu.setInt(2, dichVu.getID_DichVu());
+                                psDichVu.setInt(3, dichVu.getChiSoCu());
+                                psDichVu.setInt(4, dichVu.getChiSoMoi());
+                                psDichVu.setInt(5, dichVu.getDauNguoi());
+                                psDichVu.setInt(6, dichVu.getOldPrice());
 
                                 psDichVu.executeUpdate();
                             }
@@ -618,6 +629,7 @@ public class HoaDonDAO extends DBContext {
         }
     }
 
+    
     public List<HoaDon> getKhachNo(int nhatroId, String search, Integer start, Integer recordPerPage) {
         List<HoaDon> l = new ArrayList<>();
         String query = "select a.Ten_khach,a.email, h.* from hop_dong hd\n"
@@ -684,9 +696,104 @@ public class HoaDonDAO extends DBContext {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return sum;
     }
+
+//lấy chỉ số điện mới cho từng phong
+    public int getLatestElectricityReadingByPhongID(int idPhong) {
+        Integer latestReading = null; // Initialize to null to represent no reading found
+        String sql = "SELECT MAX(hdv.ChiSo_Moi) AS ChiSo_Moi "
+                + "FROM phong_tro pt "
+                + "LEFT JOIN hop_dong h ON pt.ID_Phong = h.ID_PhongTro "
+                + "LEFT JOIN hoa_don hd ON h.ID_HopDong = hd.ID_HopDong "
+                + "LEFT JOIN hoa_don_dich_vu hdv ON hd.ID_HoaDon = hdv.ID_HoaDon "
+                + "WHERE pt.ID_Phong = ? AND hd.isActive = 1 "
+                + "AND hdv.ID_DichVu = (SELECT ID_DichVu FROM dich_vu WHERE TenDichVu = 'Điện')";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, idPhong);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    latestReading = rs.getInt("ChiSo_Moi"); // Get the maximum reading
+                }
+                            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return latestReading; // Return the latest reading or null if not found
+    }
+
+    public List<DichVu> getAllActiveServicesByContractId(int contractId) {
+        List<DichVu> activeServices = new ArrayList<>();
+        String sql = "SELECT dv.ID_DichVu, dv.TenDichVu, dv.Don_gia, dv.Don_vi "
+                + "FROM dich_vu dv "
+                + "JOIN dich_vu_hop_dong dvhd ON dv.ID_DichVu = dvhd.ID_DichVu "
+                + "JOIN hop_dong hd ON dvhd.ID_HopDong = hd.ID_HopDong "
+                + "WHERE hd.ID_HopDong = ? AND dv.isActive = 1";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, contractId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    DichVu service = new DichVu();
+                    service.setID_DichVu(rs.getInt("ID_DichVu"));
+                    service.setTenDichVu(rs.getString("TenDichVu"));
+                    service.setDon_gia(rs.getInt("Don_gia"));
+                    service.setDon_vi(rs.getString("Don_vi"));
+                    activeServices.add(service);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle exceptions appropriately
+        }
+        return activeServices;
+    }
+
+    public int getSoLuongNguoiByContractId(int contractId) {
+        int soNguoi = 0; // Default value if not found
+        String sql = "SELECT So_nguoi FROM hop_dong WHERE ID_HopDong = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, contractId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    soNguoi = rs.getInt("So_nguoi");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle exceptions appropriately
+        }
+        return soNguoi; // Returns 0 if not found
+    }
+
+    public static void main(String[] args) {
+        // Create an instance of HoaDonDAO
+        HoaDonDAO hoaDonDAO = new HoaDonDAO();
+
+        // Specify the ID of the room you want to check
+        // Replace with a valid contract ID to test
+        int contractId = 3;
+
+        // Call the method to get all active services for the contract
+        List<DichVu> activeServices = hoaDonDAO.getAllActiveServicesByContractId(contractId);
+
+        // Print the results
+        if (activeServices != null && !activeServices.isEmpty()) {
+            for (DichVu service : activeServices) {
+                System.out.println("Service ID: " + service.getID_DichVu()
+                        + ", Name: " + service.getTenDichVu()
+                        + ", Price: " + service.getDon_gia()
+                        + ", Unit: " + service.getDon_vi());
+            }
+        }
+        System.out.println(hoaDonDAO.getHoaDonById(4).getDichVus().size());
+
+    }
+
+
 
 //    public List<HoaDon> getHoaDonByKhachThueId(int idKhachThue) {
 //        List<HoaDon> hoaDons = new ArrayList<>();
@@ -777,13 +884,13 @@ public class HoaDonDAO extends DBContext {
 }
 
     
-    public static void main(String[] arg){
-        HoaDonDAO hdd = new HoaDonDAO();
-        
-        List<HoaDon> hoaDons = hdd.getHoaDonByKhachThueId(1);
-        
-        for(HoaDon hd : hoaDons){
-            System.out.println(hd);
-        }
-    }
+//    public static void main(String[] arg){
+//        HoaDonDAO hdd = new HoaDonDAO();
+//        
+//        List<HoaDon> hoaDons = hdd.getHoaDonByKhachThueId(1);
+//        
+//        for(HoaDon hd : hoaDons){
+//            System.out.println(hd);
+//        }
+//    }
 }
