@@ -239,10 +239,10 @@
 
                                 switch (trangThaiYeuCau) {
                                     case 0:
-                                        trangThaiYC = "Đang chờ";
+                                        trangThaiYC = "Đang chờ gọi thợ";
                                         break;
                                     case 1:
-                                        trangThaiYC = "Đã xem";
+                                        trangThaiYC = "Đã xong";
                                         break;
                                     case 2:
                                         trangThaiYC = "Đã hủy";
@@ -261,7 +261,7 @@
 
                                 switch (trangThaiChapThuan) {
                                     case 0:
-                                        trangThaiCT = "Đang chờ";
+                                        trangThaiCT = "Chưa xong";
                                         break;
                                     case 1:
                                         trangThaiCT = "Hoàn Thành";
@@ -277,7 +277,7 @@
                             <%= trangThaiCT %>
                         </td>
                         <td>
-                            <% if (trangThaiChapThuan == 0) { %>
+                            <% if (trangThaiChapThuan == 0 && trangThaiYeuCau != 2) { %>
                             <form action="editMaintainance.jsp" method="get" style="display:inline;">
                                 <input type="hidden" name="id" value="<%= mt.getId_bao_tri() %>">
                                 <input type="hidden" name="idThietBiPhong" value="<%= device.getID_ThietBiPhong() %>">

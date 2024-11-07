@@ -470,19 +470,4 @@ public class ThietBiDAO extends DBContext {
         }
         return 0;
     }
-
-    public static void main(String[] args) {
-        ThietBiDAO thietBiDAO = new ThietBiDAO();
-
-        List<ThietBi> thietBis = thietBiDAO.getAllThietBiCanSua();
-
-        for (ThietBi thietBi : thietBis) {
-            System.out.println("Tên thiết bị: " + thietBi.getTenThietBi());
-            System.out.println("Tên phòng: " + thietBi.getPhong().getTenPhongTro());
-            System.out.println("Tên nhà trọ: " + thietBi.getTenNhaTro());
-            System.out.println("Thời gian bảo trì: " + thietBi.getThoiGianBaoTri());
-            System.out.println("Mô tả bảo trì: " + thietBi.getMoTaBaoTri());
-            System.out.println("-----------------------");
-        }
-    }
 }
