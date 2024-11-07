@@ -209,7 +209,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
     <body>
         <!--Room manegement dash board-->
 
-        <nav class="sidebar">
+       <nav class="sidebar">
             <header>
                 <div class="image-text">
                     <a href="home.jsp">
@@ -235,9 +235,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     -->
 
 
-
-
-
                     <li class="">
                         <a href="#">
                             <i class='bx bx-home-alt icon' ></i>
@@ -246,7 +243,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     </li>
 
                     <li class="dropdown">
-                        <a href="statistic-room" class="dropdown-toggle active">
+                        <a href="javascript:void(0);" class="dropdown-toggle active" onclick="toggleDropdown()">
                             <i class='bx bx-cog icon'></i>
                             <span class="text nav-text">Báo cáo</span>
                         </a>
@@ -256,7 +253,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                             <li><a href="khach-no"><span class="text nav-text" style="margin-left: 30px">Khách nợ</span></a></li>
                             <li><a href="khach-coc"><span class="text nav-text" style="margin-left: 30px">Khách cọc</span></a></li>
                             <li><a href="khach-sap-het-han"><span class="text nav-text">Sắp hết hạn hợp đồng</span></a></li>
-                            <li><a href="thiet-bi"><span class="text nav-text" style="margin-left: 25px">Thiết bị cần sửa</span></a></li>
+                            <li><a href="thiet-bi"><span class="text nav-text" style="margin-left: 33px">Thiết bị</span></a></li>
                         </ul>
                     </li>
 
@@ -267,9 +264,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                             <span class="text nav-text">Nhà trọ</span>
                         </a>
                     </li>
+                    
+                    
 
                     <li class="">
-                        <a href="room">
+                        <a href="room" >
                             <i class='bx bx-bar-chart-alt-2 icon active' ></i>
                             <span class="text nav-text">Phòng trọ</span>
                         </a>
@@ -293,19 +292,20 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         <li class="">
                             <a href="DanhSachCacHopDongByAdmin">
                                 <i class='bx bx-id-card icon' ></i>
-                                <span class="text nav-text">Hợp đồng</span>
+                            <span class="text nav-text">Hợp đồng</span>
+                            </a>
+                        </li>
+                    </c:if>
+                   
+                         <c:if test="${sessionScope.account.role == 'manager'}">
+                        <li class="">
+                            <a href="DanhSachCacHopDongByManager">
+                                <i class='bx bx-id-card icon' ></i>
+                            <span class="text nav-text">Hợp đồng</span>
                             </a>
                         </li>
                     </c:if>
 
-                    <c:if test="${sessionScope.account.role == 'manager'}">
-                        <li class="">
-                            <a href="DanhSachCacHopDongByManager">
-                                <i class='bx bx-id-card icon' ></i>
-                                <span class="text nav-text">Hợp đồng</span>
-                            </a>
-                        </li>
-                    </c:if>
                     <li class="">
                         <a href="hoadon">
                             <i class='bx bx-wallet icon' ></i>
@@ -332,17 +332,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         </a>
                     </li>
 
-                    <li class="mode">
-                        <div class="sun-moon">
-                            <i class='bx bx-moon icon moon'></i>
-                            <i class='bx bx-sun icon sun'></i>
-                        </div>
-                        <span class="mode-text text">Dark mode</span>
-
-                        <div class="toggle-switch">
-                            <span class="switch"></span>
-                        </div>
-                    </li>
 
                 </div>
             </div>

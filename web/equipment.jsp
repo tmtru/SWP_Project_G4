@@ -38,6 +38,19 @@
         textarea {
             resize: none;
         }
+        
+            .dropdown-menu {
+                display: none;
+                list-style: none;
+                padding: 0px 27px;
+                margin: 0px ;
+            }
+
+            /* Khi li có class active, hiển thị dropdown */
+            .dropdown.active .dropdown-menu {
+                display: block;
+            }
+
         .custom-alert {
             position: fixed;
             top: 20px;
@@ -81,6 +94,8 @@
                             <!--<img src="logo.png" alt="">-->
                         </span>
                     </a>
+
+
                 </div>
 
                 <i class='bx bx-chevron-right toggle'></i>
@@ -95,73 +110,86 @@
                     </li>
                     -->
 
-                    <ul class="menu-links">
-                        <li class="">
-                            <a href="#">
-                                <i class='bx bx-home-alt icon' ></i>
-                                <span class="text nav-text">Trang chủ</span>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a href="nhatro">
-                                <i class='bx bxs-home icon' ></i>
-                                <span class="text nav-text">Nhà trọ</span>
-                            </a>
-                        </li>
 
-                        <li class="">
-                            <a href="room" >
-                                <i class='bx bx-bar-chart-alt-2 icon active' ></i>
-                                <span class="text nav-text">Phòng trọ</span>
-                            </a>
-                        </li>
+                    <li class="">
+                        <a href="#">
+                            <i class='bx bx-home-alt icon' ></i>
+                            <span class="text nav-text">Trang chủ</span>
+                        </a>
+                    </li>
 
-                        <li class="">
-                            <a href="accountController">
-                                <i class='bx bx-face icon' ></i>
-                                <span class="text nav-text">Người dùng</span>
-                            </a>
-                        </li>
+                    <li class="dropdown">
+                        <a href="javascript:void(0);" class="dropdown-toggle" onclick="toggleDropdown()">
+                            <i class='bx bx-cog icon'></i>
+                            <span class="text nav-text">Báo cáo</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="statistic-room"><span class="text nav-text" style="margin-left: 30px">Phòng trống</span></a></li>
+                            <li><a href="statistic-revenue"><span class="text nav-text" style="margin-left: 30px">Doanh thu</span></a></li>
+                            <li><a href="khach-no"><span class="text nav-text" style="margin-left: 30px">Khách nợ</span></a></li>
+                            <li><a href="khach-coc"><span class="text nav-text" style="margin-left: 30px">Khách cọc</span></a></li>
+                            <li><a href="khach-sap-het-han"><span class="text nav-text">Sắp hết hạn hợp đồng</span></a></li>
+                            <li><a href="thiet-bi"><span class="text nav-text" style="margin-left: 33px">Thiết bị</span></a></li>
+                        </ul>
+                    </li>
 
-                        <li class="s">
-                            <a href="loaddichvu" >
-                                <i class='bx bx-bell icon'></i>
-                                <span class="text nav-text">Dịch vụ</span>
-                            </a>
-                        </li>
 
-                        <c:if test="${sessionScope.account.role == 'landlord'}">
-                        <li class="">
-                            <a href="DanhSachCacHopDongByAdmin">
-                                <i class='bx bx-id-card icon' ></i>
-                            <span class="text nav-text">Hợp đồng</span>
-                            </a>
-                        </li>
+                    <li class="">
+                        <a href="nhatro">
+                            <i class='bx bxs-home icon' ></i>
+                            <span class="text nav-text">Nhà trọ</span>
+                        </a>
+                    </li>
+                    <c:if test="${sessionScope.account.role == 'landlord'}">
+                     <li class="">
+                            <a href="manage-new" class="">
+                                <i class='bx bx-bell icon ' ></i>
+                                <span class="text nav-text">Thông báo</span>
+                            </a>                      
+                     </li>
                     </c:if>
-                   
-                         <c:if test="${sessionScope.account.role == 'manager'}">
-                        <li class="">
-                            <a href="DanhSachCacHopDongByManager">
-                                <i class='bx bx-id-card icon' ></i>
+                    <li class="">
+                        <a href="room" >
+                            <i class='bx bx-bar-chart-alt-2 icon active' ></i>
+                            <span class="text nav-text">Phòng trọ</span>
+                        </a>
+                    </li>
+
+                    <li class="">
+                        <a href="accountController">
+                            <i class='bx bx-face icon' ></i>
+                            <span class="text nav-text">Người dùng</span>
+                        </a>
+                    </li>
+
+                    <li class="s">
+                        <a href="loaddichvu" >
+                            <i class='bx bx-bell icon'></i>
+                            <span class="text nav-text">Dịch vụ</span>
+                        </a>
+                    </li>
+
+                    <li class="">
+                        <a href="hop-dong">
+                            <i class='bx bx-id-card icon' ></i>
                             <span class="text nav-text">Hợp đồng</span>
-                            </a>
-                        </li>
-                    </c:if>
+                        </a>
+                    </li>
 
-                        <li class="">
-                            <a href="hoadon">
-                                <i class='bx bx-wallet icon' ></i>
-                                <span class="text nav-text">Hóa đơn</span>
-                            </a>
-                        </li>
-
+                    <li class="">
+                        <a href="hoadon" >
+                            <i class='bx bx-wallet icon' ></i>
+                            <span class="text nav-text">Hóa đơn</span>
+                        </a>
+                    </li>
+                    <c:if test="${sessionScope.account.role == 'landlord'}">
                         <li class="">
                             <a href="loadThietBi" class="active">
                                 <i class='bx bx-devices icon' ></i>
                                 <span class="text nav-text">Thiết bị</span>
                             </a>
                         </li>
-
+                    </c:if>
 
                     </ul>
                 </div>
@@ -174,22 +202,12 @@
                         </a>
                     </li>
 
-                    <li class="mode">
-                        <div class="sun-moon">
-                            <i class='bx bx-moon icon moon'></i>
-                            <i class='bx bx-sun icon sun'></i>
-                        </div>
-                        <span class="mode-text text">Dark mode</span>
-
-                        <div class="toggle-switch">
-                            <span class="switch"></span>
-                        </div>
-                    </li>
 
                 </div>
             </div>
 
         </nav>
+
 
         <section class="home">
             <section class="property-management">
@@ -401,7 +419,12 @@
                 }
             });
         </script>
-
+    <script>
+            function toggleDropdown() {
+                var dropdown = document.querySelector('.dropdown');
+                dropdown.classList.toggle('active'); // Thêm/xóa class 'active' khi nhấn
+            }
+        </script>
 
 
 
