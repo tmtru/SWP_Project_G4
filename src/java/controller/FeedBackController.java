@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.FeedBack; // Import the FeedBack model
-import dal.FeedbackDAO; // Import the FeedbackDAO
+import dal.FeedBackDAO; // Import the FeedbackDAO
 
 public class FeedBackController extends HttpServlet {
 
@@ -51,7 +51,7 @@ public class FeedBackController extends HttpServlet {
 
         FeedBack feedback = new FeedBack(idKhachThue, idPhong, noiDung, danhGia);
 
-        FeedbackDAO feedbackDAO = new FeedbackDAO();
+        FeedBackDAO feedbackDAO = new FeedBackDAO();
 
         boolean success = feedbackDAO.addFeedBack(feedback);
         if (success) {

@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FeedbackDAO extends DBContext {
+public class FeedBackDAO extends DBContext {
 
     public boolean addFeedBack(FeedBack feedback) {
         String sql = "INSERT INTO feedback (ID_KhachThue, ID_Phong, Noi_dung, Danh_gia) VALUES ( ?, ?, ?, ?)";
@@ -31,7 +31,7 @@ public class FeedbackDAO extends DBContext {
   
      public static void main(String[] args) {
         // Khởi tạo FeedbackDAO
-        FeedbackDAO feedbackDAO = new FeedbackDAO();
+        FeedBackDAO feedbackDAO = new FeedBackDAO();
         
         // Tạo đối tượng FeedBack với dữ liệu test
         int idKhachThue = 2; // Giả định ID Khách Thuê là 1
