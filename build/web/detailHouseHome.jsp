@@ -448,22 +448,23 @@
                 </div>
             </c:if>
 
-            <section id="chat-box" style="display: none; position: fixed; bottom: 80px; right: 20px; z-index: 1000; width: 70% ; float: right">
-                <div class="container py-5">
+            <section id="chat-box" style="display: none; position: fixed; bottom: 80px; right: 20px; z-index: 1000;  float: right">
+                <div class="container py-5" style="
+    max-width: 550px;">
                     <div class="row d-flex justify-content-center">
 
 
                         <!-- Main container -->
                         <div class="d-flex">
                             <c:if test="${account == null}">
-                                <div class="card flex-grow-1" id="chat1" style="border-radius: 15px; margin-left: 15px;">
+                                <div class="card flex-grow-1" id="chat1" style="border-radius: 15px; margin-left: 15px; min-width: 450px;">
                                     <div class="card-header d-flex justify-content-between align-items-center p-3 bg-info text-white border-bottom-0"
                                          style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
                                         <i class="fas fa-angle-left"></i>
 
                                         <i class="fas fa-times" onclick="toggleChatBox()"></i>
                                     </div>
-                                    <div class="card-body" style="overflow-y: auto; max-height: 400px; text-align: center" >
+                                    <div class="card-body" style="overflow-y: auto; min-height: 250px; text-align: center">
                                         Please <a href="login.jsp">Login </a> to start chatting
                                     </div>
                                 </div>
@@ -481,7 +482,7 @@
                                         <p class="mb-0 fw-bold">${ct.name}</p>
                                         <i class="fas fa-times" onclick="toggleChatBox()"></i>
                                     </div>
-                                    <div class="card-body" id="chatMessages" style="overflow-y: auto; max-height: 400px;">
+                                    <div class="card-body" id="chatMessages" style="overflow-y: auto; min-height: 250px;">
                                         <!-- Chat messages will be appended here -->
                                     </div>
                                     <div data-mdb-input-init class="form-outline">

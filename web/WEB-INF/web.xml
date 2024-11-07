@@ -233,6 +233,11 @@
         <servlet-name>LoadLikedRooms</servlet-name>
         <servlet-class>controller.LoadLikedRooms</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ContactUs</servlet-name>
+        <servlet-class>controller.ContactUs</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>CalendarByManagerController</servlet-name>
         <url-pattern>/CalendarByManager</url-pattern>
@@ -543,4 +548,22 @@
         <servlet-name>LoadLikedRooms</servlet-name>
         <url-pattern>/LoadLikedRooms</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>DanhSachPhongTroCalenderController</servlet-name>
+        <servlet-class>controller.DanhSachPhongTroCalenderController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DanhSachPhongTroCalenderController</servlet-name>
+        <url-pattern>/DanhSachPhongTroCalender</url-pattern>
+    </servlet-mapping>
+        <servlet>
+        <servlet-name>FeedBackController</servlet-name>
+        <servlet-class>controller.FeedBackController</servlet-class>
+    </servlet>
+<servlet-mapping>
+        <servlet-name>FeedBackController</servlet-name>
+        <url-pattern>/feedback</url-pattern>
+    </servlet-mapping>
+
+     
 </web-app>
