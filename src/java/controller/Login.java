@@ -1,4 +1,4 @@
-package controller; 
+package controller;
 
 import dal.AccountDAO;
 import dal.KhachThueDAO;
@@ -63,19 +63,24 @@ public class Login extends HttpServlet {
 
         Account acc = userdao.getAccount(username, encryptedPassword);
 
-        if (acc != null && !acc.isActive()) { 
-            int ID_Account = acc.getID_Account();
-            khachthue = ktdao.getKhachThueByAccountId(ID_Account);
+        if (acc != null) {
+            if (acc.isActive() == true) {
+                int ID_Account = acc.getID_Account();
+                khachthue = ktdao.getKhachThueByAccountId(ID_Account);
 
-            session.setAttribute("account", acc);
-            session.setAttribute("role", acc.getRole());
-            session.setAttribute("ID_Account", ID_Account);
+                session.setAttribute("account", acc);
+                session.setAttribute("role", acc.getRole());
+                session.setAttribute("ID_Account", ID_Account);
 
-            if ("tenant".equals(acc.getRole())) {
-                session.setAttribute("ID_KhachThue", khachthue.getId());
+                if ("tenant".equals(acc.getRole())) {
+                    session.setAttribute("ID_KhachThue", khachthue.getId());
+                }
+                response.sendRedirect("home.jsp");
+            } else {
+                request.setAttribute("errorMessage", "This account is inactive!");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
             }
-            response.sendRedirect("home.jsp");
-        } else { 
+        } else {
             request.setAttribute("errorMessage", "Invalid email or password");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
