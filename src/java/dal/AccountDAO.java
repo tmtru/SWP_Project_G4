@@ -788,5 +788,20 @@ public class AccountDAO extends DBContext {
         }
     }
 
+public List<String> getEmailsByRole() {
+        List<String> emails = new ArrayList<>();
+        String sql = "SELECT Email FROM account WHERE Role IN ('guest', 'tenant')";
 
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                emails.add(rs.getString("Email"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return emails;
+    }
 }

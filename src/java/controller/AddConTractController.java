@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dal.AccountDAO;
 import dal.KhachThueDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 
 /**
  *
@@ -138,9 +140,14 @@ public class AddConTractController extends HttpServlet {
             throws ServletException, IOException {
         String IdPhongTro = request.getParameter("roomId");
         int IDPhongTro = Integer.parseInt(IdPhongTro);
+        AccountDAO accountDao = new AccountDAO();
         KhachThueDAO khachThueDAO = new KhachThueDAO();
+
         String tenPhongTro = khachThueDAO.getTenPhongTroById(IDPhongTro);
+        List<String> emails = accountDao.getEmailsByRole();
+
         request.setAttribute("SoPhong", tenPhongTro);
+        request.setAttribute("emails", emails); // Set emails list as request attribute
 
         // Chuyển tiếp request và response sang trang JSP
         request.getRequestDispatcher("ThemKhachThuePhong.jsp").forward(request, response);
