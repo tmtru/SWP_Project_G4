@@ -199,7 +199,7 @@
                 font-size: 14px;
                 color: #333;
                 font-weight: 500;
-                margin-right: 1px;
+                margin-right: 10px;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;

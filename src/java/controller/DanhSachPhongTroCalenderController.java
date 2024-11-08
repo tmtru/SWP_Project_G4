@@ -68,9 +68,9 @@ public class DanhSachPhongTroCalenderController extends HttpServlet {
             Date ngayGiaTri = hopDong.getNgay_gia_tri();
             String trangThai = hopDong.getPhongTro().getTrang_thai();
 
-            long daysRemaining = (ngayHetHan.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24);
+            long daysRemaining = (ngayHetHan.getTime() - selectedDate.getTime()) / (1000 * 60 * 60 * 24);
 
-            if (!currentDate.before(ngayGiaTri) && !currentDate.after(ngayHetHan) && daysRemaining <= 20 && daysRemaining > 0) {
+            if (!selectedDate.before(ngayGiaTri) && !selectedDate.after(ngayHetHan) && daysRemaining <= 20 && daysRemaining > 0) {
                 phongSapHetHan.add(hopDong);
             } else if (!currentDate.before(ngayGiaTri) && daysRemaining > 20) {
                 phongDangThue.add(hopDong);
