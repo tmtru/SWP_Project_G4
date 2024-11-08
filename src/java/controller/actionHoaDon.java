@@ -176,7 +176,7 @@ public class actionHoaDon extends HttpServlet {
             // Lấy thông tin từ form
             int idPhong = Integer.parseInt(request.getParameter("idPhong"));
             String ngayHoaDonStr = request.getParameter("ngayHoaDon");
-            String moTa = request.getParameter("moTa");
+            String moTa = request.getParameter("moTa").trim();
             HoaDonDAO hddao = new HoaDonDAO();
 
             // Chuyển đổi định dạng ngày tháng
