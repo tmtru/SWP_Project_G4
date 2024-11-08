@@ -170,7 +170,7 @@ DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
                             <div class="col-md-4">
                                 <p><strong>Tổng tiền:</strong> <%= decimalFormat.format(hoaDon.getTong_gia_tien()) %> VND</p>
                                 <p><strong>Người tạo:</strong> <%= hoaDon.getNguoiTao() %></p>
-                                <p><strong>Ngày tạo:</strong> <%= hoaDon.getNgay() %></p>
+                                <p><strong>Phòng:</strong> <%= tenPhongTro %></p>
                             </div>
                             <div class="col-md-4">
                                 <p><strong>Dịch vụ sử dụng:</strong> 

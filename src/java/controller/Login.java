@@ -63,7 +63,7 @@ public class Login extends HttpServlet {
 
         Account acc = userdao.getAccount(username, encryptedPassword);
 
-        if (acc != null) { 
+        if (acc != null && !acc.isActive()) { 
             int ID_Account = acc.getID_Account();
             khachthue = ktdao.getKhachThueByAccountId(ID_Account);
 
@@ -97,7 +97,7 @@ public class Login extends HttpServlet {
 
     private boolean validateInput(String username, String password) {
         // Validate username (only allows letters, numbers, and spaces)
-        if (username == null || username.trim().isEmpty() || !username.matches("[a-zA-ZÀ-ÿ0-9\\s]+")) {
+        if (username == null || username.trim().isEmpty()) {
             return false; // Username is invalid
         }
 
