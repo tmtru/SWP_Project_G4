@@ -112,7 +112,7 @@
                     </li>
 
                     <li class="">
-                        <a href="accountController" >
+                        <a href="accountController" id="userLink" >
                             <i class='bx bx-face icon' ></i>
                             <span class="text nav-text">Người dùng</span>
                         </a>
@@ -128,7 +128,7 @@
                     
                     <c:if test="${sessionScope.account.role == 'landlord'}">
                         <li class="">
-                            <a href="DanhSachCacHopDongByAdmin" class="active">
+                            <a href="DanhSachCacHopDongByAdmin" id = "hopDongLink">
                                 <i class='bx bx-id-card icon' ></i>
                             <span class="text nav-text">Hợp đồng</span>
                             </a>
@@ -137,7 +137,7 @@
                    
                          <c:if test="${sessionScope.account.role == 'manager'}">
                         <li class="">
-                            <a href="DanhSachCacHopDongByManager" class="active">
+                            <a href="DanhSachCacHopDongByManager" id = "hopDongLink">
                                 <i class='bx bx-id-card icon' ></i>
                             <span class="text nav-text">Hợp đồng</span>
                             </a>
@@ -187,17 +187,26 @@
 
             // Kiểm tra xem trang hiện tại có phải là /HopDong.jsp không
             const currentPath = window.location.pathname;
-
-            if (currentPath.includes('/ThemKhachThuePhong.jsp') || currentPath.includes('/DangKyDichVuPhongTro') || currentPath.includes('/HopDongThuePhong.jsp')) {
-                // Xóa class 'active' khỏi tất cả các nút đang active
+            
+            if (currentPath.includes('accountController')) {
                 const activeLinks = document.querySelectorAll('.menu-links a.active');
                 activeLinks.forEach(link => link.classList.remove('active'));
 
-                // Tìm nút "Hợp đồng" và thêm class 'active'
-                const hopDongLink = document.querySelector('a[href="#"] i.bx-id-card').parentElement;
-                hopDongLink.classList.add('active');
+                const userLink = document.querySelector('#userLink');
+                userLink.classList.add('active');
+            }
+            else if (currentPath.includes('DanhSachCacHopDongByAdmin') || currentPath.includes('DanhSachCacHopDongByManager')) {
+                const activeLinks = document.querySelectorAll('.menu-links a.active');
+                activeLinks.forEach(link => link.classList.remove('active'));
+
+                const hopDongLink = document.querySelector('a[href="DanhSachCacHopDongByAdmin"]') ||
+                        document.querySelector('a[href="DanhSachCacHopDongByManager"]');
+                if (hopDongLink) {
+                    hopDongLink.classList.add('active');
+                }
             }
 
+           
             // Check if dark mode is enabled on page load
             if (localStorage.getItem("darkMode") === "disabled") {
                 body.classList.add("light");

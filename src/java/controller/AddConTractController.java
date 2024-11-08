@@ -34,7 +34,7 @@ public class AddConTractController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
+        AccountDAO accountDao = new AccountDAO();
         // Khởi tạo biến
         KhachThueDAO khachThueDAO = new KhachThueDAO();
         String Hovaten = request.getParameter("name");
@@ -67,7 +67,9 @@ public class AddConTractController extends HttpServlet {
         request.setAttribute("MatSau", MatSau);
         request.setAttribute("SoPhong", SoPhong);
         request.setAttribute("Nghenghiep", Nghenghiep);
+        List<String> emails = accountDao.getEmailsByRole();
 
+        request.setAttribute("emails", emails);
         // Kiểm tra tính hợp lệ của ngày sinh và ngày cấp
         boolean isValid = true; // Biến để kiểm tra tính hợp lệ
 
