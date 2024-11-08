@@ -147,23 +147,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                             </a>
                         </li>
 
-                        <c:if test="${sessionScope.account.role == 'landlord'}">
                         <li class="">
-                            <a href="DanhSachCacHopDongByAdmin">
+                            <a href="#">
                                 <i class='bx bx-id-card icon' ></i>
-                            <span class="text nav-text">Hợp đồng</span>
+                                <span class="text nav-text">Hợp đồng</span>
                             </a>
                         </li>
-                    </c:if>
-                   
-                         <c:if test="${sessionScope.account.role == 'manager'}">
-                        <li class="">
-                            <a href="DanhSachCacHopDongByManager">
-                                <i class='bx bx-id-card icon' ></i>
-                            <span class="text nav-text">Hợp đồng</span>
-                            </a>
-                        </li>
-                    </c:if>
 
                         <li class="">
                             <a href="#">
@@ -239,104 +228,108 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                             session.removeAttribute("notificationErr");
                         %>
                     </c:if>
-                    <form action="" method="post">
+                    <form action="quanly-account-nha-tro" method="post"  onsubmit="return validateForm()">
                         <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label for="tenPhong">Chọn người dùng <span class="require">*</span></label>
-                                <div class="col-md-12 row">
-                                    <select class="form-control" id="account" name="account" required onchange="goToAccountPage(this)">
-                                        <option value="" >Select an account</option>
-                                        <c:forEach items="${accounts}" var="r">
-                                            <!-- If the account ID matches the aid parameter, mark it as selected -->
-                                            <option value="${r.getID_Account()}" data-url="quanly-account-nha-tro?id=${nhatro.ID_NhaTro}&aid=${r.getID_Account()}"
-                                                    <c:if test="${param.aid == r.getID_Account()}">selected</c:if>>
-                                                ${r.username}
-                                            </option>
-                                        </c:forEach>
-                                    </select>
-                                    <small id="accountError" class="text-danger error-message"></small> <!-- Account error message -->
-                                </div>
-                                <script>
-                                    function goToAccountPage(selectElement) {
-                                        // Get the selected option's data-url attribute
-                                        var url = selectElement.options[selectElement.selectedIndex].getAttribute('data-url');
-                                        if (url) {
-                                            // Redirect to the corresponding page
-                                            window.location.href = url;
-                                        }
-                                    }
-                                </script>
-                            </div>
+
                             <div class="form-group col-md-3">
                                 <div class="col-md-12 row">
-
                                     <label for="name">Tên <span class="require">*</span></label>
-                                    <input type="text" class="form-control" id="name" name="name" value="${quanLy.name}"  <c:if test="${quanLy != null}">disabled</c:if>> 
-                                        <input type="hidden" class="form-control"  name="action" value="add"> 
-                                        <small id="nameError" class="text-danger error-message"></small> <!-- Name error message -->
-
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <div class="col-md-12 row">
-
-                                        <label for="phone">SDT <span class="require">*</span></label>
-                                        <input type="text" class="form-control" id="phone" value="${quanLy.phone}" name="phone"  <c:if test="${quanLy != null}">disabled</c:if>>
-                                        <small id="phoneError" class="text-danger error-message"></small> <!-- Phone error message -->
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <div class="col-md-12 row">
-
-                                        <label for="dob">Ngày sinh <span class="require">*</span></label>
-                                        <input type="date" class="form-control" id="dob" value="${quanLy.dob}" name="dob"  <c:if test="${quanLy != null}">disabled</c:if>>
-                                        <small id="dobError" class="text-danger error-message"></small> <!-- DOB error message -->
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <div class="col-md-12 row">
-
-                                        <label for="dob">CCCD <span class="require">*</span></label>
-                                        <input type="text" class="form-control" value="${quanLy.cccd}"id="cccd" name="cccd"  <c:if test="${quanLy != null}">disabled</c:if>>
-                                        <small id="cccdError" class="text-danger error-message"></small> <!-- CCCD error message -->
-                                    </div>
+                                    <input type="text" class="form-control" id="name" name="name" value="${name}">
+                                    <input type="hidden" class="form-control" name="action" value="add">
+                                    <input type="hidden" class="form-control" name="id" value="${param.id}">
+                                    <small id="nameError" class="text-danger error-message"></small>
                                 </div>
                             </div>
 
-                            <div class="form-row">
-                                <div class="col-md-12">
-                                    <button type="submit" class="btn btn-primary" id="saveButton" >Lưu</button>
-                                    <a href="nhatro" class="btn btn-warning">Quay về</a>
+                            <!-- Username Field -->
+                            <div class="form-group col-md-3">
+                                <div class="col-md-12 row">
+                                    <label for="username">Tên đăng nhập <span class="require">*</span></label>
+                                    <input type="text" class="form-control" id="username" name="username" value="${username}">
+                                    <small id="usernameError" class="text-danger error-message"></small>
                                 </div>
                             </div>
 
-                        </form>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>
-                                        Tên
-                                    </th>
-                                    <th>
-                                        Username
-                                    </th>
-                                    <th>
-                                        Ngày sinh
-                                    </th>
-                                    <th>
-                                        SDT
-                                    </th>
-                                    <th>
-                                        CCCD
-                                    </th>
-                                    <th>
-                                        Hành động
-                                    </th>
+                            <!-- Email Field -->
+                            <div class="form-group col-md-3">
+                                <div class="col-md-12 row">
+                                    <label for="email">Email <span class="require">*</span></label>
+                                    <input type="text" class="form-control" id="email" name="email" value="${email}">
+                                    <small id="emailError" class="text-danger error-message"></small>
+                                </div>
+                            </div>
 
-                                </tr>
-                            </thead>
-                            <h3 style="margin-top: 20px; text-align: center">Danh sách quản lý</h3>
-                            <tbody>
+                            <!-- Password Field -->
+                            <div class="form-group col-md-3">
+                                <div class="col-md-12 row">
+                                    <label for="password">Mật khẩu <span class="require">*</span></label>
+                                    <input type="password" class="form-control" id="password" name="password" value="${password}">
+                                    <small id="passwordError" class="text-danger error-message"></small>
+                                </div>
+                            </div>
+
+                            <!-- Phone Field -->
+                            <div class="form-group col-md-4">
+                                <div class="col-md-12 row">
+                                    <label for="phone">SDT <span class="require">*</span></label>
+                                    <input type="text" class="form-control" id="phone" name="phone" value="${phone}">
+                                    <small id="phoneError" class="text-danger error-message"></small>
+                                </div>
+                            </div>
+
+                            <!-- Date of Birth Field -->
+                            <div class="form-group col-md-4">
+                                <div class="col-md-12 row">
+                                    <label for="dob">Ngày sinh <span class="require">*</span></label>
+                                    <input type="date" class="form-control" id="dob" name="dob"  value="${dob}">
+                                    <small id="dobError" class="text-danger error-message"></small>
+                                </div>
+                            </div>
+
+                            <!-- CCCD Field -->
+                            <div class="form-group col-md-4">
+                                <div class="col-md-12 row">
+                                    <label for="cccd">CCCD <span class="require">*</span></label>
+                                    <input type="text" class="form-control" id="cccd" name="cccd" value="${cccd}">
+                                    <small id="cccdError" class="text-danger error-message"></small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-primary" id="saveButton" >Lưu</button>
+                                <a href="nhatro" class="btn btn-warning">Quay về</a>
+                            </div>
+                        </div>
+
+                    </form>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    Tên
+                                </th>
+                                <th>
+                                    Username
+                                </th>
+                                <th>
+                                    Ngày sinh
+                                </th>
+                                <th>
+                                    SDT
+                                </th>
+                                <th>
+                                    CCCD
+                                </th>
+                                <th>
+                                    Hành động
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <h3 style="margin-top: 20px; text-align: center">Danh sách quản lý</h3>
+                        <tbody>
                             <c:forEach var="l" items="${quanlys}">
                                 <tr>
                                     <td>${l.name}</td>
@@ -529,65 +522,91 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    function validateForm() {
+        let isValid = true;
 
-        <script>
-                                                function validateForm() {
-                                                    let isValid = true;
+        // Username validation
+        const username = document.getElementById("username").value.trim();
+        const usernameError = document.getElementById("usernameError");
+        const usernameRegex = /^[a-zA-Z0-9]+$/;
+        if (!username || !usernameRegex.test(username)) {
+            usernameError.textContent = "Username cannot be empty and must not contain special characters.";
+            isValid = false;
+        } else {
+            usernameError.textContent = "";
+        }
 
-                                                    // Clear previous error messages
-                                                    document.querySelectorAll('.error-message').forEach(el => el.textContent = "");
+        // Name validation
+        const name = document.getElementById("name").value.trim();
+        const nameError = document.getElementById("nameError");
+        const nameRegex = /^[a-zA-Z\s]+$/;
+        if (!name || !nameRegex.test(name) || name.trim() === "") {
+            nameError.textContent = "Name must contain only letters and spaces and cannot be empty or only spaces.";
+            isValid = false;
+        } else {
+            nameError.textContent = "";
+        }
 
-                                                    // Name validation (only letters and Vietnamese characters allowed)
-                                                    const nameInput = document.getElementById('name');
-                                                    const namePattern = /^[a-zA-ZÀ-ỹ\s]+$/;  // Supports Vietnamese characters
-                                                    if (!namePattern.test(nameInput.value)) {
-                                                        document.getElementById('nameError').textContent = "Tên chỉ chứa chữ cái.";
-                                                        isValid = false;
-                                                    }
+        // Email validation
+        const email = document.getElementById("email").value.trim();
+        const emailError = document.getElementById("emailError");
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email || !emailRegex.test(email)) {
+            emailError.textContent = "Please enter a valid email address.";
+            isValid = false;
+        } else {
+            emailError.textContent = "";
+        }
 
-                                                    // Phone validation (must not be null and digits only)
-                                                    const phoneInput = document.getElementById('phone');
-                                                    const phonePattern = /^\d+$/;  // Digits only
-                                                    if (phoneInput.value === "" || !phonePattern.test(phoneInput.value)) {
-                                                        document.getElementById('phoneError').textContent = "SDT phải là số và không được để trống.";
-                                                        isValid = false;
-                                                    }
+        // Password validation
+        const password = document.getElementById("password").value;
+        const passwordError = document.getElementById("passwordError");
+        if (!password || password.length < 6) {
+            passwordError.textContent = "Password must be at least 6 characters long.";
+            isValid = false;
+        } else {
+            passwordError.textContent = "";
+        }
 
-                                                    // Date of birth validation (must not be null and must be in the past)
-                                                    const dobInput = document.getElementById('dob');
-                                                    const dobValue = new Date(dobInput.value);
-                                                    const currentDate = new Date();
-                                                    if (dobInput.value === "" || dobValue >= currentDate) {
-                                                        document.getElementById('dobError').textContent = "Ngày sinh phải là ngày trong quá khứ.";
-                                                        isValid = false;
-                                                    }
+        // Phone validation
+        const phone = document.getElementById("phone").value.trim();
+        const phoneError = document.getElementById("phoneError");
+        const phoneRegex = /^0\d{9}$/;
+        if (!phone || !phoneRegex.test(phone)) {
+            phoneError.textContent = "Phone must start with 0 and have exactly 10 digits.";
+            isValid = false;
+        } else {
+            phoneError.textContent = "";
+        }
 
-                                                    // CCCD validation (must not be null and digits only)
-                                                    const cccdInput = document.getElementById('cccd');
-                                                    if (cccdInput.value === "" || !phonePattern.test(cccdInput.value)) {
-                                                        document.getElementById('cccdError').textContent = "CCCD phải là số và không được để trống.";
-                                                        isValid = false;
-                                                    }
+        // DOB validation
+        const dob = document.getElementById("dob").value;
+        const dobError = document.getElementById("dobError");
+        const currentDate = new Date();
+        const dobDate = new Date(dob);
+        if (!dob || dobDate >= currentDate) {
+            dobError.textContent = "Date of Birth must be earlier than the current date.";
+            isValid = false;
+        } else {
+            dobError.textContent = "";
+        }
 
-                                                    // Account selection validation
-                                                    const accountSelect = document.getElementById('account');
-                                                    if (accountSelect.value === "") {
-                                                        document.getElementById('accountError').textContent = "Chọn người dùng *";
-                                                        isValid = false;
-                                                    }
+        // CCCD validation
+        const cccd = document.getElementById("cccd").value.trim();
+        const cccdError = document.getElementById("cccdError");
+        const cccdRegex = /^\d+$/;
+        if (!cccd || !cccdRegex.test(cccd)) {
+            cccdError.textContent = "CCCD must contain digits only.";
+            isValid = false;
+        } else {
+            cccdError.textContent = "";
+        }
 
-                                                    // Enable or disable the submit button based on form validity
-//                                    document.getElementById('saveButton').disabled = !isValid;
-                                                    return isValid;
-                                                }
-
-                                                // Attach the validateForm function to the form's submit event
-                                                document.querySelector('form').addEventListener('submit', function (event) {
-                                                    if (!validateForm()) {
-                                                        event.preventDefault();  // Prevent form submission if validation fails
-                                                    }
-                                                });
-        </script>
+        // Prevent form submission if validation fails
+        return isValid;
+    }
+</script>
 
     </body>
 </html>

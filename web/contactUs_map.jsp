@@ -146,16 +146,13 @@
                     <div class="col-lg-5 col-md-12">
                         <div class="row gy-5 g-4">
                             <div class="col-md-6">
-                                <h6 class="section-title text-start text-primary text-uppercase mb-4">Company</h6>
-                                <a class="btn btn-link" href="">About Us</a>
-                                <a class="btn btn-link" href="">Contact Us</a>
+                                <h6 class="section-title text-start text-primary text-uppercase mb-4">Nhà trọ</h6>
+                                <a class="btn btn-link" href="thongtinlienhe">Liên hệ</a>
+                                <a class="btn btn-link" href="category">Danh sách nhà trọ</a>
                                 <a class="btn btn-link" href="">Privacy Policy</a>
-                                <a class="btn btn-link" href="">Terms & Condition</a>
-                                <a class="btn btn-link" href="">Support</a>
                             </div>
                             <div class="col-md-6">
-                                <h6 class="section-title text-start text-primary text-uppercase mb-4">Services</h6>
-                                <a class="btn btn-link" href="">???</a>
+                                
 
                             </div>
                         </div>
