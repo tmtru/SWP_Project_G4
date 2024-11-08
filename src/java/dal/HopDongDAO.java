@@ -454,15 +454,15 @@ public class HopDongDAO extends DBContext {
         return hopDong;
     }
 
-    public boolean ketThucHopDongSom(int hopDongId) {
-        String sql = "UPDATE hop_dong SET isActive = 0, Trang_thai = 'expired' WHERE ID_HopDong = ?";
+    public boolean ketThucHopDongSom(int hopDongId, String ngayHetHan) {
+        String sql = "UPDATE hop_dong SET isActive = 0, Trang_thai = 'expired', Ngay_het_han = ? WHERE ID_HopDong = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, ngayHetHan);      
+            ps.setInt(2, hopDongId);         
 
-            ps.setInt(1, hopDongId);
             int rowsUpdated = ps.executeUpdate();
-
-            return rowsUpdated > 0;
+            return rowsUpdated > 0;          
 
         } catch (SQLException e) {
             e.printStackTrace();
