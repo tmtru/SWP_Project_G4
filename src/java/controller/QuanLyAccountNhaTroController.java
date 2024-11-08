@@ -114,55 +114,94 @@ public class QuanLyAccountNhaTroController extends HttpServlet {
             if (action.equals("add")) {
                 try {
                     // Retrieve form data
-                    int accountId = Integer.parseInt(request.getParameter("account"));
                     int idNhaTro = Integer.parseInt(request.getParameter("id"));
 
-                    // Check if the selected account already exists as a manager (QuanLy)
-                    QuanLy existingQuanLy = quanLyDAO.getChuTroByAccountId(accountId);
-                    System.out.println(existingQuanLy);
-                    if (existingQuanLy != null) {
-                        // If the account is already a QuanLy
-                        if (existingQuanLy.getId_nhaTro() == idNhaTro) {
-                            // Already managing the current NhaTro, nothing to do, return success
-                            session.setAttribute("notificationErr", "Người dùng đã là quản lý của nhà trọ này.");
-                            response.sendRedirect("quanly-account-nha-tro?id=" + idNhaTro);
-                        } else if (existingQuanLy.getId_nhaTro() == 0) {
-                            System.out.println(existingQuanLy);
-                            QuanLy quanLy = new QuanLy();
-                            quanLy.setId_nhaTro(idNhaTro);
-                            quanLy.setId(existingQuanLy.getId());
-                            boolean isUpdate = quanLyDAO.updateQuanLy(quanLy);
-                            if (isUpdate) {
-                                Account account2 = accountDAO.getAccountById2(accountId);
-                                account2.setRole("Quản lý");
-                                accountDAO.updateAccount(account2);
-                                session.setAttribute("notification", "Quản lý mới đã được thêm thành công.");
-                            }
-                            response.sendRedirect("quanly-account-nha-tro?id=" + idNhaTro);
-                        } else {
-                            // Managing a different NhaTro, return error
-                            session.setAttribute("notificationErr", "Người dùng này đang quản lý nhà trọ khác.");
-                            response.sendRedirect("quanly-account-nha-tro?id=" + idNhaTro);
-                        }
-                    } else {
-                        String name = request.getParameter("name");
-                        String sdt = request.getParameter("phone");
-                        String cccd = request.getParameter("cccd");
-
+                    String username = request.getParameter("username");
+                    String password = request.getParameter("password");
+                    String email = request.getParameter("email");
+                    String name = request.getParameter("name");
+                    String sdt = request.getParameter("phone");
+                    String cccd = request.getParameter("cccd");
+                    if (accountDAO.isEmailExist(email)) {
+                        session.setAttribute("username", username);
+                        session.setAttribute("password", password);
+                        session.setAttribute("email", email);
+                        session.setAttribute("name", name);
+                        session.setAttribute("phone", sdt);
+                        session.setAttribute("cccd", cccd);
+                        session.setAttribute("notificationErr", "Email đã tồn tại trong hệ thống! Vui lòng lại với email khác");
+                        response.sendRedirect("quanly-account-nha-tro?id=" + idNhaTro);
+                        return;
+                    }
+                    if (accountDAO.isUsernameExist(username)) {
+                        session.setAttribute("username", username);
+                        session.setAttribute("password", password);
+                        session.setAttribute("email", email);
+                        session.setAttribute("name", name);
+                        session.setAttribute("phone", sdt);
+                        session.setAttribute("cccd", cccd);
+                        session.setAttribute("notificationErr", "Tên đăng nhập đã tồn tại trong hệ thống! Vui lòng lại với tên khác khác");
+                        response.sendRedirect("quanly-account-nha-tro?id=" + idNhaTro);
+                        return;
+                    }
+                    if (accountDAO.isPhoneExist(sdt)) {
+                        session.setAttribute("username", username);
+                        session.setAttribute("password", password);
+                        session.setAttribute("email", email);
+                        session.setAttribute("name", name);
+                        session.setAttribute("phone", sdt);
+                        session.setAttribute("cccd", cccd);
+                        session.setAttribute("notificationErr", "Số điện đã tồn tại trong hệ thống! Vui lòng lại với tên khác khác");
+                        response.sendRedirect("quanly-account-nha-tro?id=" + idNhaTro);
+                        return;
+                    }
+                    if (accountDAO.isCCCDExist(cccd)) {
+                        session.setAttribute("username", username);
+                        session.setAttribute("password", password);
+                        session.setAttribute("email", email);
+                        session.setAttribute("name", name);
+                        session.setAttribute("phone", sdt);
+                        session.setAttribute("cccd", cccd);
+                        session.setAttribute("notificationErr", "Số CCCD đã tồn tại trong hệ thống! Vui lòng lại với tên khác khác");
+                        response.sendRedirect("quanly-account-nha-tro?id=" + idNhaTro);
+                        return;
+                    }
+                    Account newAccount = new Account();
+                    newAccount.setUsername(username);
+                    newAccount.setPassword(password);
+                    newAccount.setEmail(email);
+                    newAccount.setRole("manager");
+                    boolean isAdded = accountDAO.addManager(newAccount);
+                    if (isAdded) {
                         Date dob = Date.valueOf(request.getParameter("dob"));
-                        // Account is not a QuanLy yet, insert new QuanLy entry
+
                         QuanLy newQuanLy = new QuanLy();
-                        Account account2 = accountDAO.getAccountById2(accountId);
-                        newQuanLy.setAccount(account2);
+                        int accountID = accountDAO.getAccountIdByEmail(email);
+                        Account newAccount2 = accountDAO.getAccountById2(accountID);
+                        newQuanLy.setAccount(newAccount2);
                         newQuanLy.setId_nhaTro(idNhaTro);
                         newQuanLy.setName(name);
                         newQuanLy.setPhone(sdt);
                         newQuanLy.setCccd(cccd);
                         newQuanLy.setDob(dob);
-                        account2.setRole("Quản lý");
-                        quanLyDAO.insertQuanLy(newQuanLy);
-                        accountDAO.updateAccount(account2);
-                        session.setAttribute("notification", "Quản lý mới đã được thêm thành công.");
+
+                        boolean isAddQuanLy = quanLyDAO.insertQuanLy(newQuanLy);
+                        if (!isAddQuanLy) {
+                            session.setAttribute("notificationErr", "Thêm quản lý thất bại.");
+                            response.sendRedirect("quanly-account-nha-tro?id=" + idNhaTro);
+                        } else {
+                            session.setAttribute("notification", "Quản lý mới đã được thêm thành công.");
+                            session.removeAttribute("username");
+                            session.removeAttribute("password");
+                            session.removeAttribute("email");
+                            session.removeAttribute("name");
+                            session.removeAttribute("phone");
+                            session.removeAttribute("cccd");
+                            response.sendRedirect("quanly-account-nha-tro?id=" + idNhaTro);
+                        }
+
+                    } else {
+                        session.setAttribute("notificationErr", "Thêm quản lý thất bại.");
                         response.sendRedirect("quanly-account-nha-tro?id=" + idNhaTro);
                     }
 

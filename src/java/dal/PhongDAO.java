@@ -1150,4 +1150,18 @@ public class PhongDAO extends DBContext {
 
     }
 
+    public boolean updateTrangThaiPhongToT(int idPhong) {
+        String sql = "UPDATE phong_tro SET Trang_thai = 'T' WHERE ID_Phong = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            
+            pstmt.setInt(1, idPhong);
+            
+            int rowsUpdated = pstmt.executeUpdate();
+            return rowsUpdated > 0; // Trả về true nếu cập nhật thành công
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

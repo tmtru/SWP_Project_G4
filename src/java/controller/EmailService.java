@@ -1,9 +1,14 @@
 package controller;
 
+import java.io.UnsupportedEncodingException;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeUtility;
 
 public class EmailService implements IJavaMail {
 
@@ -28,9 +33,18 @@ public class EmailService implements IJavaMail {
         try {
             MimeMessage message = new MimeMessage(session);
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
-            message.setSubject(subject);
-            message.setText(messageContent);
+            try {
+                message.setSubject(MimeUtility.encodeText(subject, "UTF-8", "B"));
+            } catch (UnsupportedEncodingException ex) {
+                Logger.getLogger(EmailService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            MimeBodyPart messageBodyPart = new MimeBodyPart();
+            messageBodyPart.setContent(messageContent, "text/html; charset=UTF-8"); // Set content type and encoding
+            
 
+            Multipart multipart = new javax.mail.internet.MimeMultipart();
+            multipart.addBodyPart(messageBodyPart);
+            message.setContent(multipart);
             // send message
             Transport.send(message);
 
@@ -44,9 +58,9 @@ public class EmailService implements IJavaMail {
 
     public static void main(String[] args) {
         EmailService sv = new EmailService();
-        String to = "toanthhe181060@fpt.edu.vn";
-        String subject = "Hello world";
-        String message = "hi";
+        String to = "manhtrung2502@gmail.com";
+        String subject = "Hello: \n world";
+        String message = "Hello: \n world";
         IJavaMail emailService = new EmailService();
         emailService.send(to, subject, message);
     }
