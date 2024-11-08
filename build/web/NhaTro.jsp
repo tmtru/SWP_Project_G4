@@ -148,12 +148,23 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         </a>
                     </li>
 
-                    <li class="">
-                        <a href="hop-dong">
-                            <i class='bx bx-id-card icon' ></i>
+                    <c:if test="${sessionScope.account.role == 'landlord'}">
+                        <li class="">
+                            <a href="DanhSachCacHopDongByAdmin">
+                                <i class='bx bx-id-card icon' ></i>
                             <span class="text nav-text">Hợp đồng</span>
-                        </a>
-                    </li>
+                            </a>
+                        </li>
+                    </c:if>
+                   
+                         <c:if test="${sessionScope.account.role == 'manager'}">
+                        <li class="">
+                            <a href="DanhSachCacHopDongByManager">
+                                <i class='bx bx-id-card icon' ></i>
+                            <span class="text nav-text">Hợp đồng</span>
+                            </a>
+                        </li>
+                    </c:if>
 
                     <li class="">
                         <a href="hoadon" >

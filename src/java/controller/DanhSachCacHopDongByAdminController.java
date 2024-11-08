@@ -2,13 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package controller;
 
 import dal.ChuTroDAO;
 import dal.DichVuDAO;
 import dal.HopDongDAO;
 import dal.KhachThueDAO;
+import dal.KhachThuePhuDAO;
 import dal.NhaTroDAO;
 import dal.PhongDAO;
 import java.io.IOException;
@@ -23,6 +23,7 @@ import model.ChuTro;
 import model.DichVu;
 import model.HopDong;
 import model.KhachThue;
+import model.KhachThuePhu;
 import model.Phong;
 
 /**
@@ -30,34 +31,37 @@ import model.Phong;
  * @author Admin
  */
 public class DanhSachCacHopDongByAdminController extends HttpServlet {
-   
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet DanhSachCacHopDongByAdminController</title>");  
+            out.println("<title>Servlet DanhSachCacHopDongByAdminController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet DanhSachCacHopDongByAdminController at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet DanhSachCacHopDongByAdminController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
-    } 
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
+    /**
      * Handles the HTTP <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -65,37 +69,41 @@ public class DanhSachCacHopDongByAdminController extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         HopDongDAO hopDongDao = new HopDongDAO();
         PhongDAO phongDao = new PhongDAO();
         int idChuTro = 1;
         List<HopDong> hopDongList = hopDongDao.getHopDongByChuTro(idChuTro);
         Date currentDate = new Date();
         for (HopDong hopDong : hopDongList) {
-                Date ngayGiaTri = hopDong.getNgay_gia_tri();
-                Date ngayHetHan = hopDong.getNgay_het_han();
-                int ID_PhongTro = hopDong.getID_Phongtro();
-                if (ngayHetHan != null && ngayHetHan.before(currentDate)) {
-                    phongDao.updateTrangThaiPhongToT(ID_PhongTro);
-                    if (!"expired".equalsIgnoreCase(hopDong.getStatus())) {
-                        hopDong.setStatus("expired");
-                        hopDongDao.updateHopDongStatus(hopDong.getID_HopDong(), "expired");
-                        
-                    }
-                } else if (ngayGiaTri != null && !ngayGiaTri.after(currentDate)) {
-                    // If ngayGiaTri is today or a past date, set status to 'active'
-                    if (!"active".equalsIgnoreCase(hopDong.getStatus())) {
-                        hopDong.setStatus("active");
-                        hopDongDao.updateHopDongStatus(hopDong.getID_HopDong(), "active");
-                    }
+            Date ngayGiaTri = hopDong.getNgay_gia_tri();
+            Date ngayHetHan = hopDong.getNgay_het_han();
+            int ID_PhongTro = hopDong.getID_Phongtro();
+            if (ngayHetHan != null && ngayHetHan.before(currentDate)) {
+                phongDao.updateTrangThaiPhongToT(ID_PhongTro);
+                if (!"expired".equalsIgnoreCase(hopDong.getStatus())) {
+                    hopDong.setStatus("expired");
+                    hopDongDao.updateHopDongStatus(hopDong.getID_HopDong(), "expired");
+
+                }
+            } else if (ngayGiaTri != null && !ngayGiaTri.after(currentDate)) {
+                phongDao.updateTrangThaiPhongToD(ID_PhongTro);
+                if (!"active".equalsIgnoreCase(hopDong.getStatus())) {
+                hopDongDao.updateHopDongStatus1(hopDong.getID_HopDong(), "active");
                 }
             }
-        request.setAttribute("hopDongList", hopDongList);
-        request.getRequestDispatcher("/danhSachHopDong_Admin.jsp").forward(request, response);
-    } 
 
-    /** 
+        }
+
+        request.setAttribute(
+                "hopDongList", hopDongList);
+        request.getRequestDispatcher(
+                "/danhSachHopDong_Admin.jsp").forward(request, response);
+    }
+
+    /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -103,32 +111,36 @@ public class DanhSachCacHopDongByAdminController extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         String hopDongIdStr = request.getParameter("hopDongId");
         int hopDongId = Integer.parseInt(hopDongIdStr);
-        ChuTroDAO chuTroDAO = new ChuTroDAO(); 
+        ChuTroDAO chuTroDAO = new ChuTroDAO();
         KhachThueDAO khachThueDAO = new KhachThueDAO();
         DichVuDAO dichVuDAO = new DichVuDAO();
         HopDongDAO hopDongDAO = new HopDongDAO();
+        KhachThuePhuDAO khachThuePhuDao = new KhachThuePhuDAO();
         NhaTroDAO nhaTroDao = new NhaTroDAO();
         ChuTro chuTro = chuTroDAO.getChuTroByHopDongId(hopDongId);
-            KhachThue khachThue = khachThueDAO.getKhachThueByHopDongId(hopDongId);
-            List<DichVu> dichVuList = dichVuDAO.getDichVuByHopDongId(hopDongId);
-            Phong roomDetails = nhaTroDao.getRoomDetailsByHopDongId(hopDongId);
-            HopDong hopDong = hopDongDAO.getHopDongById(hopDongId);
-            request.setAttribute("hopDongId", hopDongId);
-            request.setAttribute("chuTro", chuTro);
-            request.setAttribute("khachThue", khachThue);
-            request.setAttribute("dichVuList", dichVuList);
-            request.setAttribute("giaPhong", roomDetails.getGia());
-            request.setAttribute("diaChiPhongTro", roomDetails.getDiaChiPhongTro());
-            request.setAttribute("trangThai", roomDetails.getTrang_thai());
-            request.setAttribute("hopDong", hopDong);
-            request.getRequestDispatcher("/ChiTietHopDongDaDangKy_Admin.jsp").forward(request, response);
+        KhachThue khachThue = khachThueDAO.getKhachThueByHopDongId(hopDongId);
+        List<DichVu> dichVuList = dichVuDAO.getDichVuByHopDongId(hopDongId);
+        Phong roomDetails = nhaTroDao.getRoomDetailsByHopDongId(hopDongId);
+        HopDong hopDong = hopDongDAO.getHopDongById(hopDongId);
+        List<KhachThuePhu> khachThuePhuList = khachThuePhuDao.getKhachThuePhuByHopDongId(hopDongId);
+        request.setAttribute("hopDongId", hopDongId);
+        request.setAttribute("chuTro", chuTro);
+        request.setAttribute("khachThue", khachThue);
+        request.setAttribute("dichVuList", dichVuList);
+        request.setAttribute("giaPhong", roomDetails.getGia());
+        request.setAttribute("diaChiPhongTro", roomDetails.getDiaChiPhongTro());
+        request.setAttribute("trangThai", roomDetails.getTrang_thai());
+        request.setAttribute("hopDong", hopDong);
+        request.setAttribute("khachThuePhuList", khachThuePhuList);
+        request.getRequestDispatcher("/ChiTietHopDongDaDangKy_Admin.jsp").forward(request, response);
     }
 
-    /** 
+    /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override
