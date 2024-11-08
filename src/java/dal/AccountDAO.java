@@ -6,6 +6,9 @@ import model.Account;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Base64;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 
 public class AccountDAO extends DBContext {
 
@@ -697,11 +700,93 @@ public class AccountDAO extends DBContext {
         }
         return 0;
     }
+    private static String encryptPassword(String password) {
+        try {
+            String SECRET_KEY = "1234567890123456";
+            SecretKeySpec secretKey = new SecretKeySpec(SECRET_KEY.getBytes(), "AES");
+            Cipher cipher = Cipher.getInstance("AES");
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            byte[] encryptedData = cipher.doFinal(password.getBytes());
 
-    public static void main(String[] args) {
-        AccountDAO dao = new AccountDAO();
-
-        System.out.println(dao.getAccount("minhanh", "123"));
+            return Base64.getEncoder().encodeToString(encryptedData);
+        } catch (Exception e) {
+            e.printStackTrace(); // Log error
+            return null; // Tr? v? null n?u c� l?i
+        }
     }
+    public static void main(String[] args) {
+        AccountDAO accountDAO = new AccountDAO();
+        System.out.println(encryptPassword("ok"));
+    }
+    public int getAccountIdByEmail(String email) {
+        String sql = "SELECT ID_Account FROM account WHERE Email = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("ID_Account");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1; // Trả về -1 nếu không tìm thấy hoặc có lỗi
+    }
+    public boolean addManager(Account account) {
+        String sql = "INSERT INTO account (Email, Username, Password, Role, isActive) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setString(1, account.getEmail());
+            stmt.setString(2, account.getUsername());
+            stmt.setString(3, encryptPassword(account.getPassword()));
+            stmt.setString(4, account.getRole());
+            stmt.setBoolean(5, true);
+
+            int affectedRows = stmt.executeUpdate();
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean isPhoneExist(String phone) {
+        String sql = "SELECT * FROM quan_ly WHERE SDT = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+
+            st.setString(1, phone);
+            ResultSet rs = st.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public boolean isCCCDExist(String CCCD) {
+        String sql = "SELECT * FROM ACCOUNT WHERE CCCD = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+
+            st.setString(1, CCCD);
+            ResultSet rs = st.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean isUsernameExist(String username) {
+        String sql = "SELECT * FROM ACCOUNT WHERE username = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+
+            st.setString(1, username);
+            ResultSet rs = st.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
 }

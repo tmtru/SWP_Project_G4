@@ -4,9 +4,12 @@
  */
 package controller;
 
+import dal.ActionHistoryDAO;
 import dal.DichVuDAO;
 import dal.HoaDonDAO;
+import dal.NhaTroDAO;
 import dal.PhongDAO;
+import dal.QuanLyDAO;
 import dal.TransactionDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,9 +24,12 @@ import java.util.ArrayList;
 import java.sql.Date;
 import java.util.List;
 import model.Account;
+import model.ActionHistory;
 import model.DichVu;
 import model.HoaDon;
+import model.NhaTro;
 import model.Phong;
+import model.QuanLy;
 import model.Transaction;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -218,14 +224,34 @@ public class actionHoaDon extends HttpServlet {
                 }
             }
 
-            // Tính tổng giá tiền dựa trên các dịch vụ đã chọn
+           
             int tongGiaTien = calculateTotalPrice(danhSachDichVu, amount);
             hoaDon.setTong_gia_tien(tongGiaTien);
 
-            // Gọi hàm addHoaDon từ DAO
+           
             HttpSession session = request.getSession();
             Account acc = (Account) session.getAttribute("account");
             hoaDonDAO.addHoaDon(hoaDon, danhSachDichVu, acc.getUsername());
+            NhaTroDAO ntdao = new NhaTroDAO();
+            
+            PhongDAO pdao= new PhongDAO();
+            Phong phong = pdao.getRoomById(idPhong);
+            NhaTro nhaTro = ntdao.getNhaTroByPhongTroId(phong.getID_Phong());
+
+            Account account = (Account) session.getAttribute("account");
+            if (account.getRole().equals("manager")) {
+                ActionHistoryDAO ahdao = new ActionHistoryDAO();
+                ActionHistory history = new ActionHistory();
+
+                history.setNhaTro(nhaTro);
+
+                QuanLyDAO qldao = new QuanLyDAO();
+                QuanLy quanLy = qldao.getChuTroByAccountId(account.getID_Account());
+                history.setQuanLy(quanLy);
+                history.setTitle("Thêm hoa đơn");
+                history.setContent("Thêm hóa đơn phòng " + phong.getTenPhongTro() + " của " + nhaTro.getTenNhaTro());
+                ahdao.insertActionHistory(history);
+            }
 
             // Chuyển hướng về trang danh sách hóa đơn hoặc hiển thị thành công
             session.setAttribute("currentRoom", idPhong);
