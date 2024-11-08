@@ -8,6 +8,7 @@ import dal.AnhNhaTroDAO;
 import dal.ChuTroDAO;
 import dal.MessageDAO;
 import dal.NhaTroDAO;
+import dal.QuanLyDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -24,6 +25,7 @@ import model.ChuTro;
 import model.Message;
 import model.NhaTro;
 import model.Phong;
+import model.QuanLy;
 
 /**
  *
@@ -78,6 +80,12 @@ public class loadRoomsHome extends HttpServlet {
         DecimalFormat df = new DecimalFormat("#.##");
         String formattedAvePrice = df.format(avePrice / 1000000);
         HttpSession session = request.getSession();
+                QuanLyDAO qldao=new QuanLyDAO();
+        List<QuanLy> qls=qldao.getQuanLyByNhaTro(nt.getID_NhaTro());
+        if (qls.size()>=1) {
+            QuanLy ql= qls.get(0);
+            request.setAttribute("ql", ql);
+        }
 
         // Set các giá trị vào request để truyền sang phần hiển thị
         session.setAttribute("avePrice", formattedAvePrice);

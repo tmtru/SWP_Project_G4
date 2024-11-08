@@ -216,6 +216,7 @@ public class AccountDAO extends DBContext {
                 String retrievedUsername = rs.getString("Username");
                 String retrievedPassword = rs.getString("Password");
                 String email = rs.getString("Email");
+                boolean isActive = rs.getBoolean("isActive");
 
                 Account account = new Account();
                 account.setID_Account(idAccount);
@@ -223,6 +224,7 @@ public class AccountDAO extends DBContext {
                 account.setPassword(retrievedPassword);
                 account.setEmail(email);
                 account.setRole(rs.getString("Role"));
+                account.setActive(isActive);
                 return account;
             }
         } catch (SQLException e) {
@@ -714,10 +716,15 @@ public class AccountDAO extends DBContext {
             return null; // Tr? v? null n?u c� l?i
         }
     }
+    
     public static void main(String[] args) {
         AccountDAO accountDAO = new AccountDAO();
-        System.out.println(encryptPassword("ok"));
+        List<Account> accl = accountDAO.getAllAccounts();
+        for(Account acc : accl){
+            System.out.println(acc);
+        }
     }
+    
     public int getAccountIdByEmail(String email) {
         String sql = "SELECT ID_Account FROM account WHERE Email = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -804,4 +811,5 @@ public List<String> getEmailsByRole() {
 
         return emails;
     }
+
 }

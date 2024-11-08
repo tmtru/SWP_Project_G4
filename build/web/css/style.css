@@ -2158,13 +2158,12 @@ ul {
     align-self: stretch;
     display: flex;
     flex-direction: column;
-    width: 240px;
+
     margin: auto 0;
     padding: 0 42px;
 }
 
 .stat-value {
-    font-size: 40px;
     font-weight: 700;
     line-height: 1.4;
     letter-spacing: -0.4px;

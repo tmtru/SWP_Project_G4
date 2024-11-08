@@ -30,17 +30,17 @@
 
     </head>
     <style>
-          .dropdown-menu {
-                display: none;
-                list-style: none;
-                padding: 0px 27px;
-                margin: 0px ;
-            }
+        .dropdown-menu {
+            display: none;
+            list-style: none;
+            padding: 0px 27px;
+            margin: 0px ;
+        }
 
-            /* Khi li có class active, hiển thị dropdown */
-            .dropdown.active .dropdown-menu {
-                display: block;
-            }
+        /* Khi li có class active, hiển thị dropdown */
+        .dropdown.active .dropdown-menu {
+            display: block;
+        }
 
 
         textarea {
@@ -104,12 +104,12 @@
                         </a>
                     </li>
                     <c:if test="${sessionScope.account.role == 'landlord'}">
-                     <li class="">
+                        <li class="">
                             <a href="manage-new" class="">
                                 <i class='bx bx-bell icon ' ></i>
                                 <span class="text nav-text">Thông báo</span>
                             </a>                      
-                     </li>
+                        </li>
                     </c:if>
                     <li class="">
                         <a href="room" >
@@ -132,12 +132,23 @@
                         </a>
                     </li>
 
-                    <li class="">
-                        <a href="hop-dong">
-                            <i class='bx bx-id-card icon' ></i>
-                            <span class="text nav-text">Hợp đồng</span>
-                        </a>
-                    </li>
+                    <c:if test="${sessionScope.account.role == 'landlord'}">
+                        <li class="">
+                            <a href="DanhSachCacHopDongByAdmin">
+                                <i class='bx bx-id-card icon' ></i>
+                                <span class="text nav-text">Hợp đồng</span>
+                            </a>
+                        </li>
+                    </c:if>
+
+                    <c:if test="${sessionScope.account.role == 'manager'}">
+                        <li class="">
+                            <a href="DanhSachCacHopDongByManager">
+                                <i class='bx bx-id-card icon' ></i>
+                                <span class="text nav-text">Hợp đồng</span>
+                            </a>
+                        </li>
+                    </c:if>
 
                     <li class="">
                         <a href="hoadon" >
@@ -170,7 +181,7 @@
             </div>
 
         </nav>
-       
+
 
         <!-- Bootstrap JS and dependencies -->
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -181,35 +192,35 @@
 
 
         <script>
-            const body = document.querySelector('body'),
-                    sidebar = body.querySelector('nav'),
-                    toggle = body.querySelector(".toggle"),
-                    modeSwitch = body.querySelector(".toggle-switch"),
-                    modeText = body.querySelector(".mode-text");
-            // Check if dark mode is enabled on page load
-            if (localStorage.getItem("darkMode") === "disabled") {
-                body.classList.add("light");
-                modeText.innerText = "Light mode";
-            }
+                            const body = document.querySelector('body'),
+                                    sidebar = body.querySelector('nav'),
+                                    toggle = body.querySelector(".toggle"),
+                                    modeSwitch = body.querySelector(".toggle-switch"),
+                                    modeText = body.querySelector(".mode-text");
+                            // Check if dark mode is enabled on page load
+                            if (localStorage.getItem("darkMode") === "disabled") {
+                                body.classList.add("light");
+                                modeText.innerText = "Light mode";
+                            }
 
-            // Sidebar toggle functionality
-            toggle.addEventListener("click", () => {
-                sidebar.classList.toggle("close");
-            });
-            // Dark mode toggle functionality
-            modeSwitch.addEventListener("click", () => {
-                body.classList.toggle("dark");
-                // Update the text for dark mode
-                if (body.classList.contains("dark")) {
-                    modeText.innerText = "Light mode";
-                    localStorage.setItem("darkMode", "enabled");
-                } else {
-                    modeText.innerText = "Dark mode";
-                    localStorage.setItem("darkMode", "disabled");
-                }
-            });
+                            // Sidebar toggle functionality
+                            toggle.addEventListener("click", () => {
+                                sidebar.classList.toggle("close");
+                            });
+                            // Dark mode toggle functionality
+                            modeSwitch.addEventListener("click", () => {
+                                body.classList.toggle("dark");
+                                // Update the text for dark mode
+                                if (body.classList.contains("dark")) {
+                                    modeText.innerText = "Light mode";
+                                    localStorage.setItem("darkMode", "enabled");
+                                } else {
+                                    modeText.innerText = "Dark mode";
+                                    localStorage.setItem("darkMode", "disabled");
+                                }
+                            });
         </script>
- <script>
+        <script>
             function toggleDropdown() {
                 var dropdown = document.querySelector('.dropdown');
                 dropdown.classList.toggle('active'); // Thêm/xóa class 'active' khi nhấn

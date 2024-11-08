@@ -45,10 +45,10 @@ public class actionDichvu extends HttpServlet {
                     dvDao.deactivateDichVu(idDichVu);
                     break;
                 case "edit":
-                    String tenDichVu = request.getParameter("tendichvu");
+                    String tenDichVu = request.getParameter("tendichvu").trim();
                     int donGia = Integer.parseInt(request.getParameter("donGia"));
                     String donVi = request.getParameter("donvi");
-                    String moTa = request.getParameter("mota");
+                    String moTa = request.getParameter("mota").trim();
                     DichVu dichVu = dvDao.getDichVuById(idDichVu);
                     dichVu.setTenDichVu(tenDichVu);
                     dichVu.setDon_gia(donGia);

@@ -4,7 +4,10 @@
  */
 package controller;
 
+import dal.AccountDAO;
 import dal.HoaDonDAO;
+import dal.HopDongDAO;
+import dal.KhachThueDAO;
 import dal.TransactionDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -19,6 +22,8 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.HoaDon;
+import model.KhachThue;
 
 /**
  *
@@ -105,14 +110,18 @@ public class actionTransaction extends HttpServlet {
         TransactionDAO transactionDao = new TransactionDAO();
         String action = request.getParameter("action");
         HttpSession session = request.getSession();
+        HoaDonDAO hdao=new HoaDonDAO();
+        HopDongDAO hddao = new HopDongDAO();
+        KhachThueDAO ktdao= new KhachThueDAO();
+        AccountDAO accdao= new AccountDAO();
 
         if ("add".equals(action)) {
-            String maGiaoDich = request.getParameter("maGiaoDich");
+            String maGiaoDich = request.getParameter("maGiaoDich").trim();
             float amount = Float.parseFloat(request.getParameter("amount"));
             String paymentMethod = request.getParameter("paymentMethod");
             int idHoaDon = Integer.parseInt(request.getParameter("idHoaDon"));
             String transactionDateStr = request.getParameter("transactionDate");
-            String mota = request.getParameter("moTa");
+            String mota = request.getParameter("moTa").trim();
             Date transactionDate = null;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             try {
@@ -142,12 +151,15 @@ public class actionTransaction extends HttpServlet {
                     transaction.setID_HoaDon(idHoaDon);
                     transaction.setTransaction(transactionDate);
                     transaction.setMoTa(mota);
+                    HoaDon h1= hdao.getHoaDonById(idHoaDon);
+                    KhachThue kt1= ktdao.getKhachThueByHopDongId(h1.getID_HopDong());
 
                     boolean isAdded = transactionDao.addTransaction(transaction);
-                    if (isAdded) {
+                    if (isAdded && kt1.getEmail()!=null) {
                         request.setAttribute("id", idHoaDon);
                         request.setAttribute("successMessage", "Thêm giao dịch thành công.");
-                        String to = "manhtrung2502@gmail.com";
+                        
+                        String to = kt1.getEmail();
                         String subject = "Thông báo Giao dịch mới Nhà Trọ TQAT";
                         StringBuilder message = new StringBuilder();
                         message.append("<html>");

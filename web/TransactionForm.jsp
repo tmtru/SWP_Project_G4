@@ -125,6 +125,7 @@
                                     request.setAttribute("transactions", transactions);
                                 %>
                                 <div class="d-flex header-invoice">
+                                    <h6 class="mb-3 text-sm"> Mã hóa đơn: ${hd.ID_HoaDon}</h6>
                                     <span class="badge
                                           ${hd.trang_thai == 1 ? 'badge-success' : 'badge-danger'}" 
                                           >
@@ -262,7 +263,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="amount" class="form-label">Số Tiền</label>
-                                <input type="number" class="form-control" id="amount" name="amount" step="0.01" required>
+                                <input type="text" class="form-control" id="amount" name="amount" step="0.01" required>
                                 <div class="invalid-feedback" id="amountError" style="display: none;">Số tiền phải lớn hơn 0 và hợp lệ.</div>
                             </div>
                             <div class="mb-3">

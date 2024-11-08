@@ -75,9 +75,17 @@ public class loadThietBi extends HttpServlet {
             }
         }
 
+        // Get search term and trim it
+        String searchTerm = request.getParameter("searchTerm");
+        if (searchTerm != null) {
+            searchTerm = searchTerm.trim();
+        } else {
+            searchTerm = "";
+        }
+
         // Get paginated list and total records
-        List<ThietBi> thietBiList = thietBiDAO.getAllThietBiWithDetailsPaging(page, recordsPerPage);
-        int totalRecords = thietBiDAO.getTotalThietBi();
+        List<ThietBi> thietBiList = thietBiDAO.getAllThietBiWithDetailsPaging(searchTerm, page, recordsPerPage);
+        int totalRecords = thietBiDAO.getTotalThietBi(searchTerm);
 
         // Calculate total pages
         int totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
@@ -87,9 +95,11 @@ public class loadThietBi extends HttpServlet {
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("recordsPerPage", recordsPerPage);
+        request.setAttribute("searchTerm", searchTerm);
 
         // Forward to JSP page
         request.getRequestDispatcher("equipment.jsp").forward(request, response);
+
         // In the loadThietBi servlet's doGet method
         HttpSession session = request.getSession();
         session.removeAttribute("addThietBiError");

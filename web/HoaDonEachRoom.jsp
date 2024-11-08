@@ -19,7 +19,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Bootstrap CSS -->
 
-
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <!----======== CSS ======== -->
         <link rel="stylesheet" href="css/styleRoom.css">
         <link rel="stylesheet" href="css/modelDelete.css">
@@ -125,6 +125,7 @@
                                                         request.setAttribute("transactions", transactions);
                                                     %>
                                                     <div class="d-flex header-invoice">
+                                                        <h6 class="mb-3 text-sm"> Mã hóa đơn: ${hd.ID_HoaDon}</h6>
                                                         <span class="badge
                                                               ${hd.trang_thai == 1 ? 'badge-success' : 'badge-danger'}" 
                                                               >
@@ -280,7 +281,9 @@
         </section>
 
         <!-- Bootstrap JS and dependencies -->
-
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <!--Date Range Picker-->
         <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
