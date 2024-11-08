@@ -67,9 +67,38 @@ public class ThietBiPhongDAO extends DBContext {
     public boolean addThietBiToPhong(int idPhong, int idThietBi, int soLuong, String trangThai, String moTa) throws SQLException {
         ThietBiDAO thietBiDAO = new ThietBiDAO();
 
-        // Check and update quantity in ThietBi table
-        if (!thietBiDAO.checkAndUpdateQuantity(idThietBi, soLuong)) {
-            return false; // Not enough quantity or ThietBi not found
+        // Check if the equipment is already assigned to the room
+        String checkExistenceSql = "SELECT COUNT(*) FROM THIET_BI_PHONG WHERE ID_Phong = ? AND ID_ThietBi = ?";
+        try (PreparedStatement checkExistencePs = connection.prepareStatement(checkExistenceSql)) {
+            checkExistencePs.setInt(1, idPhong);
+            checkExistencePs.setInt(2, idThietBi);
+            try (ResultSet rs = checkExistencePs.executeQuery()) {
+                if (rs.next() && rs.getInt(1) > 0) {
+                    throw new IllegalArgumentException("Thiết bị đã tồn tại trong phòng.");
+                }
+            }
+        }
+
+        // Check the current total quantity and remaining quantity
+        String checkSql = "SELECT tb.So_luong, COALESCE(SUM(tbp.So_luong), 0) as so_luong_da_them "
+                + "FROM thiet_bi tb "
+                + "LEFT JOIN thiet_bi_phong tbp ON tb.ID_ThietBi = tbp.ID_ThietBi "
+                + "WHERE tb.ID_ThietBi = ? "
+                + "GROUP BY tb.So_luong";
+        try (PreparedStatement checkPs = connection.prepareStatement(checkSql)) {
+            checkPs.setInt(1, idThietBi);
+            try (ResultSet rs = checkPs.executeQuery()) {
+                if (rs.next()) {
+                    int totalQuantity = rs.getInt("So_luong");
+                    int quantityAdded = rs.getInt("so_luong_da_them");
+                    int currentQuantity = totalQuantity - quantityAdded;
+                    if (currentQuantity < soLuong) {
+                        return false; // Not enough quantity
+                    }
+                } else {
+                    return false; // ThietBi not found
+                }
+            }
         }
 
         // If quantity check passed, proceed with adding to THIET_BI_PHONG
@@ -82,89 +111,76 @@ public class ThietBiPhongDAO extends DBContext {
             ps.setString(5, moTa);
             ps.executeUpdate();
         }
+
         return true;
     }
 
     public boolean deleteThietBiFromPhong(int idThietBiPhong) throws SQLException {
-        // Get the equipment details
-        String getDetailsSql = "SELECT ID_ThietBi, So_luong FROM THIET_BI_PHONG WHERE ID_ThietBiPhong = ?";
-        try (PreparedStatement ps = connection.prepareStatement(getDetailsSql)) {
-            ps.setInt(1, idThietBiPhong);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    int idThietBi = rs.getInt("ID_ThietBi");
-                    int soLuong = rs.getInt("So_luong");
-
-                    // Update the quantity in THIET_BI table
-                    String updateThietBiSql = "UPDATE THIET_BI SET So_luong = So_luong + ? WHERE ID_ThietBi = ?";
-                    try (PreparedStatement updatePs = connection.prepareStatement(updateThietBiSql)) {
-                        updatePs.setInt(1, soLuong);
-                        updatePs.setInt(2, idThietBi);
-                        updatePs.executeUpdate();
-                    }
-
-                    // Delete from THIET_BI_PHONG
-                    String deleteThietBiPhongSql = "DELETE FROM THIET_BI_PHONG WHERE ID_ThietBiPhong = ?";
-                    try (PreparedStatement deletePs = connection.prepareStatement(deleteThietBiPhongSql)) {
-                        deletePs.setInt(1, idThietBiPhong);
-                        deletePs.executeUpdate();
-                    }
-
-                    return true;
+    // Get the equipment details
+    String getDetailsSql = "SELECT ID_ThietBi, So_luong FROM THIET_BI_PHONG WHERE ID_ThietBiPhong = ?";
+    try (PreparedStatement ps = connection.prepareStatement(getDetailsSql)) {
+        ps.setInt(1, idThietBiPhong);
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                // Delete from THIET_BI_PHONG
+                String deleteThietBiPhongSql = "DELETE FROM THIET_BI_PHONG WHERE ID_ThietBiPhong = ?";
+                try (PreparedStatement deletePs = connection.prepareStatement(deleteThietBiPhongSql)) {
+                    deletePs.setInt(1, idThietBiPhong);
+                    deletePs.executeUpdate();
                 }
+                return true;
             }
         }
-        return false;
     }
+    return false;
+}
 
-    public boolean updateThietBiInPhong(int idThietBiPhong, int newSoLuong, String trangThai, String moTa) throws SQLException {
-        // Get current details
-        String getDetailsSql = "SELECT ID_ThietBi, So_luong FROM THIET_BI_PHONG WHERE ID_ThietBiPhong = ?";
-        try (PreparedStatement ps = connection.prepareStatement(getDetailsSql)) {
-            ps.setInt(1, idThietBiPhong);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    int idThietBi = rs.getInt("ID_ThietBi");
-                    int currentSoLuong = rs.getInt("So_luong");
-                    int difference = newSoLuong - currentSoLuong;
-
-                    // Check if there's enough quantity in THIET_BI
-                    String checkQuantitySql = "SELECT So_luong FROM THIET_BI WHERE ID_ThietBi = ?";
-                    try (PreparedStatement checkPs = connection.prepareStatement(checkQuantitySql)) {
-                        checkPs.setInt(1, idThietBi);
-                        try (ResultSet checkRs = checkPs.executeQuery()) {
-                            if (checkRs.next()) {
-                                int availableQuantity = checkRs.getInt("So_luong");
-                                if (availableQuantity < difference) {
-                                    return false; // Not enough quantity
-                                }
-
-                                // Update THIET_BI quantity
-                                String updateThietBiSql = "UPDATE THIET_BI SET So_luong = So_luong - ? WHERE ID_ThietBi = ?";
-                                try (PreparedStatement updateThietBiPs = connection.prepareStatement(updateThietBiSql)) {
-                                    updateThietBiPs.setInt(1, difference);
-                                    updateThietBiPs.setInt(2, idThietBi);
-                                    updateThietBiPs.executeUpdate();
-                                }
-
-                                // Update THIET_BI_PHONG
-                                String updateThietBiPhongSql = "UPDATE THIET_BI_PHONG SET So_luong = ?, Trang_thai = ?, Mo_ta = ? WHERE ID_ThietBiPhong = ?";
-                                try (PreparedStatement updateThietBiPhongPs = connection.prepareStatement(updateThietBiPhongSql)) {
-                                    updateThietBiPhongPs.setInt(1, newSoLuong);
-                                    updateThietBiPhongPs.setString(2, trangThai);
-                                    updateThietBiPhongPs.setString(3, moTa);
-                                    updateThietBiPhongPs.setInt(4, idThietBiPhong);
-                                    updateThietBiPhongPs.executeUpdate();
-                                }
-
-                                return true;
-                            }
-                        }
-                    }
+    public boolean updateThietBiInPhong(int idThietBiPhong, int soLuong, String trangThai, String moTa) throws SQLException {
+        // Check if the equipment is already assigned to the room
+        String checkExistenceSql = "SELECT COUNT(*) FROM THIET_BI_PHONG WHERE ID_ThietBiPhong = ?";
+        try (PreparedStatement checkExistencePs = connection.prepareStatement(checkExistenceSql)) {
+            checkExistencePs.setInt(1, idThietBiPhong);
+            try (ResultSet rs = checkExistencePs.executeQuery()) {
+                if (!rs.next() || rs.getInt(1) == 0) {
+                    return false; // Equipment not found
                 }
             }
         }
-        return false;
+
+        // Check the current total quantity and remaining quantity
+        String checkSql = "SELECT tbp.ID_ThietBi, tb.So_luong, COALESCE(SUM(tbp.So_luong), 0) as so_luong_da_them "
+                + "FROM thiet_bi_phong tbp "
+                + "JOIN thiet_bi tb ON tbp.ID_ThietBi = tb.ID_ThietBi "
+                + "WHERE tbp.ID_ThietBiPhong = ? "
+                + "GROUP BY tbp.ID_ThietBi, tb.So_luong";
+        try (PreparedStatement checkPs = connection.prepareStatement(checkSql)) {
+            checkPs.setInt(1, idThietBiPhong);
+            try (ResultSet rs = checkPs.executeQuery()) {
+                if (rs.next()) {
+                    int idThietBi = rs.getInt("ID_ThietBi");
+                    int totalQuantity = rs.getInt("So_luong");
+                    int quantityAdded = rs.getInt("so_luong_da_them");
+                    int currentQuantity = totalQuantity - quantityAdded;
+                    if (currentQuantity < soLuong) {
+                        return false; // Not enough quantity
+                    }
+                } else {
+                    return false; // Equipment not found
+                }
+            }
+        }
+
+        // If quantity check passed, proceed with updating THIET_BI_PHONG
+        String sql = "UPDATE THIET_BI_PHONG SET So_luong = ?, Trang_thai = ?, Mo_ta = ? WHERE ID_ThietBiPhong = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, soLuong);
+            ps.setString(2, trangThai);
+            ps.setString(3, moTa);
+            ps.setInt(4, idThietBiPhong);
+            ps.executeUpdate();
+        }
+
+        return true;
     }
 
     public ThietBiPhong getThietBiPhongById(int id) {
@@ -247,7 +263,8 @@ public class ThietBiPhongDAO extends DBContext {
         }
         return true;
     }
-        public boolean updateStatusThietBiToPhongTuchoi(int id) throws SQLException {
+
+    public boolean updateStatusThietBiToPhongTuchoi(int id) throws SQLException {
         // Update device status in thiet_bi_phong table
         String updateDeviceSQL = "UPDATE thiet_bi_phong SET Trang_thai = 'BT' WHERE ID_ThietBiPhong = ?";
         try (PreparedStatement devicePS = connection.prepareStatement(updateDeviceSQL)) {
@@ -263,8 +280,9 @@ public class ThietBiPhongDAO extends DBContext {
         }
         return true;
     }
-       public boolean updateStatusThietBiToPhongChapNhan(int id) throws SQLException {
-        
+
+    public boolean updateStatusThietBiToPhongChapNhan(int id) throws SQLException {
+
         // Update maintenance request status in bao_tri table
         String updateMaintenanceSQL = "UPDATE bao_tri SET trang_thai_yeu_cau = 1 WHERE ID_ThietBiPhong = ?";
         try (PreparedStatement maintenancePS = connection.prepareStatement(updateMaintenanceSQL)) {
@@ -273,13 +291,13 @@ public class ThietBiPhongDAO extends DBContext {
         }
         return true;
     }
-    
+
     public static void main(String[] arg) {
         ThietBiPhongDAO tbpd = new ThietBiPhongDAO();
-        
+
         List<ThietBiPhong> list = tbpd.getAllThietBiPhong();
-        
-        for(ThietBiPhong tbp : list){
+
+        for (ThietBiPhong tbp : list) {
             System.out.println(tbp);
         }
     }
