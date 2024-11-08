@@ -378,12 +378,14 @@ public List<String> getImagesByPhongId(int idPhong) {
 
     public int saveNhaTro(NhaTro nhaTro) {
         try {
-            String query = "INSERT INTO nha_tro (TenNhaTro, Dia_chi, Mo_ta, ID_ChuTro) VALUES (?, ?, ?, ?)";
+            String query = "INSERT INTO nha_tro (TenNhaTro, Dia_chi, Mo_ta, ID_ChuTro, lat,lon) VALUES (?, ?, ?, ?,?,?)";
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setString(1, nhaTro.getTenNhaTro());
             ps.setString(2, nhaTro.getDia_chi());
             ps.setString(3, nhaTro.getMo_ta());
             ps.setInt(4, nhaTro.getID_ChuTro());
+            ps.setDouble(5, nhaTro.getLat());
+             ps.setDouble(6, nhaTro.getLon());
 
             ps.executeUpdate();
 
@@ -479,12 +481,14 @@ public List<String> getImagesByPhongId(int idPhong) {
 
     public void updateNhaTro2(NhaTro nhaTro) {
         try {
-            String query = "UPDATE nha_tro SET TenNhaTro = ?, Dia_chi = ?, Mo_ta = ? WHERE ID_NhaTro = ?";
+            String query = "UPDATE nha_tro SET TenNhaTro = ?, Dia_chi = ?, Mo_ta = ?, lat = ?, lon = ? WHERE ID_NhaTro = ?";
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setString(1, nhaTro.getTenNhaTro());
             ps.setString(2, nhaTro.getDia_chi());
             ps.setString(3, nhaTro.getMo_ta());
-            ps.setInt(4, nhaTro.getID_NhaTro());
+            ps.setInt(6, nhaTro.getID_NhaTro());
+            ps.setDouble(4, nhaTro.getLat());
+             ps.setDouble(5, nhaTro.getLon());
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

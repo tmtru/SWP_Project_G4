@@ -121,10 +121,10 @@
                         <span class="highlight">Địa chỉ:</span> ${currenthouse.dia_chi}
                     </p>
                     <p class="property-info">
-                        <span class="highlight">Quản lí:</span> Trần Mạnh Trung
+                        <span class="highlight">Quản lí:</span> ${ql.name}
                     </p>
                     <p class="property-info">
-                        <span class="highlight">Số điện thoại liên lạc:</span> 0231545554
+                        <span class="highlight">Số điện thoại liên lạc:</span> ${ql.phone}
                     </p>
 
                     <div class="facilities">

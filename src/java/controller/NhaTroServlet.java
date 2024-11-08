@@ -16,8 +16,10 @@ import jakarta.servlet.http.Part;
 import java.io.File;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import model.Account;
 import model.ChuTro;
@@ -55,10 +57,10 @@ public class NhaTroServlet extends HttpServlet {
             if (isOwwer) {
                 ChuTro chuTro = chuTroDAO.getChuTroByAccountId(currentAccount.getID_Account());
                 listNhaTro = nhaTroDAO.getAllNhaTroWithParam(searchParam, chuTro.getId());
-            }else{
+            } else {
                 QuanLyDAO qldao = new QuanLyDAO();
                 QuanLy quanLy = qldao.getChuTroByAccountId(currentAccount.getID_Account());
-                 listNhaTro = nhaTroDAO.getAllNhaTroForManager(quanLy.getId());
+                listNhaTro = nhaTroDAO.getAllNhaTroForManager(quanLy.getId());
             }
             List<NhaTro> pagingNhaTro = nhaTroDAO.Paging(listNhaTro, page, pageSize);
 
@@ -84,14 +86,23 @@ public class NhaTroServlet extends HttpServlet {
         if (account != null) {
             if ("add".equals(action)) {
                 String tenNhaTro = request.getParameter("tenNhaTro");
-                String diaChi = request.getParameter("diaChi");
+                String diaChi = request.getParameter("address");
                 String moTa = request.getParameter("moTa");
+
+                String lat = request.getParameter("lat");
+                String lon = request.getParameter("lon");
+                NhaTroDAO nhaTroDAO = new NhaTroDAO();
+
                 ChuTro chuTro = chuTroDAO.getChuTroByAccountId(account.getID_Account());
                 // Create new NhaTro object
                 NhaTro newNhaTro = new NhaTro();
                 newNhaTro.setTenNhaTro(tenNhaTro);
                 newNhaTro.setDia_chi(diaChi);
                 newNhaTro.setMo_ta(moTa);
+                if (lat != null && lon != null) {
+                    newNhaTro.setLat(Double.parseDouble(lat));
+                    newNhaTro.setLon(Double.parseDouble(lon));
+                }
                 newNhaTro.setID_ChuTro(chuTro.getId());
                 // Save the NhaTro to the database and get the generated ID
                 int nhaTroId = nhaTroDAO.saveNhaTro(newNhaTro);
@@ -131,50 +142,57 @@ public class NhaTroServlet extends HttpServlet {
                 nhaTroDAO.saveImages(nhaTroId, imageUrls);
                 session.setAttribute("notification", "Add successfully!");
 
-        Account acc = (Account) session.getAttribute("account");
-        NhaTroDAO housesDao = new NhaTroDAO();
-        //list nha tro ma account duoc quyen truy cap
-        List<NhaTro> houses = null;
+                Account acc = (Account) session.getAttribute("account");
+                NhaTroDAO housesDao = new NhaTroDAO();
+                //list nha tro ma account duoc quyen truy cap
+                List<NhaTro> houses = null;
 
-            String role = acc.getRole(); // Lưu giá trị role vào biến
-            if (role != null) { // Kiểm tra xem role có phải là null không
-                if (role.equals("landlord")) {
-                    houses = housesDao.getAll();
-                } else if (role.equals("manager")) {
-                    QuanLiDAO qlDao = new QuanLiDAO();
-                    QuanLi ql = qlDao.getQuanLiByIDAccount(acc.getID_Account());
-                    if (ql != null) { // Kiểm tra ql có phải là null không
-                        houses = qlDao.getNhaTroByManagerId(ql.getID_QuanLy());
+                String role = acc.getRole(); // Lưu giá trị role vào biến
+                if (role != null) { // Kiểm tra xem role có phải là null không
+                    if (role.equals("landlord")) {
+                        houses = housesDao.getAll();
+                    } else if (role.equals("manager")) {
+                        QuanLiDAO qlDao = new QuanLiDAO();
+                        QuanLi ql = qlDao.getQuanLiByIDAccount(acc.getID_Account());
+                        if (ql != null) { // Kiểm tra ql có phải là null không
+                            houses = qlDao.getNhaTroByManagerId(ql.getID_QuanLy());
+                        }
                     }
+                } else {
+                    // Xử lý trường hợp role là null
+                    session.setAttribute("errorMessByRole", true);
                 }
-            } else {
-                // Xử lý trường hợp role là null
-                session.setAttribute("errorMessByRole", true);
-            }
 
-            if (houses == null) {
-                session.setAttribute("errorMessByRole", true);
-            } else {
-                // Nha tro ma dc phep truy cap bang role
-                session.setAttribute("housesByRole", houses);
-            }
-            // Role cua tai khoan dg truy cap
-            session.setAttribute("role", role); // Sử dụng biến role đã lưu
+                if (houses == null) {
+                    session.setAttribute("errorMessByRole", true);
+                } else {
+                    // Nha tro ma dc phep truy cap bang role
+                    session.setAttribute("housesByRole", houses);
+                }
+                // Role cua tai khoan dg truy cap
 
                 // Redirect to NhaTro list
-                response.sendRedirect("nhatro-detail?id="+nhaTroId);
+                response.sendRedirect("nhatro-detail?id=" + nhaTroId);
             } else if ("edit".equals(action)) {
                 // Get NhaTro ID
                 int nhaTroId = Integer.parseInt(request.getParameter("nhaTroId"));
                 String tenNhaTro = request.getParameter("tenNhaTro");
-                String diaChi = request.getParameter("diaChi");
+                String diaChi = request.getParameter("address");
                 String moTa = request.getParameter("moTa");
+
+                String lat = request.getParameter("lat");
+                String lon = request.getParameter("lon");
 
                 // Update NhaTro details
                 NhaTro updatedNhaTro = nhaTroDAO.getNhaTroById(nhaTroId); // Assuming this method exists
                 updatedNhaTro.setTenNhaTro(tenNhaTro);
                 updatedNhaTro.setDia_chi(diaChi);
                 updatedNhaTro.setMo_ta(moTa);
+                if (lat != null && lon != null && !lat.equals("") && !lon.equals("")) {
+                    updatedNhaTro.setLat(Double.parseDouble(lat));
+                    updatedNhaTro.setLon(Double.parseDouble(lon));
+                }
+
                 nhaTroDAO.updateNhaTro2(updatedNhaTro);
 
                 // Handle existing images removal
@@ -214,9 +232,36 @@ public class NhaTroServlet extends HttpServlet {
                         }
                     }
                 }
-                
+                Account acc = (Account) session.getAttribute("account");
+                NhaTroDAO housesDao = new NhaTroDAO();
+                //list nha tro ma account duoc quyen truy cap
+                List<NhaTro> houses = null;
+
+                String role = acc.getRole(); // Lưu giá trị role vào biến
+                if (role != null) { // Kiểm tra xem role có phải là null không
+                    if (role.equals("landlord")) {
+                        houses = housesDao.getAll();
+                    } else if (role.equals("manager")) {
+                        QuanLiDAO qlDao = new QuanLiDAO();
+                        QuanLi ql = qlDao.getQuanLiByIDAccount(acc.getID_Account());
+                        if (ql != null) { // Kiểm tra ql có phải là null không
+                            houses = qlDao.getNhaTroByManagerId(ql.getID_QuanLy());
+                        }
+                    }
+                } else {
+                    // Xử lý trường hợp role là null
+                    session.setAttribute("errorMessByRole", true);
+                }
+
+                if (houses == null) {
+                    session.setAttribute("errorMessByRole", true);
+                } else {
+                    // Nha tro ma dc phep truy cap bang role
+                    session.setAttribute("housesByRole", houses);
+                }
+
                 session.setAttribute("notification", "Update successfully!");
-               response.sendRedirect("nhatro-detail?id="+nhaTroId);
+                response.sendRedirect("nhatro-detail?id=" + nhaTroId);
             } else if ("delete".equals(action)) {
                 // Get NhaTro ID to delete
                 int nhaTroId = Integer.parseInt(request.getParameter("nhaTroId"));
@@ -232,6 +277,33 @@ public class NhaTroServlet extends HttpServlet {
                         // Then, delete the NhaTro
                         nhaTroDAO.deleteNhaTro(nhaTroId);
                         session.setAttribute("notification", "Delete successfully!");
+                        Account acc = (Account) session.getAttribute("account");
+                        NhaTroDAO housesDao = new NhaTroDAO();
+                        //list nha tro ma account duoc quyen truy cap
+                        List<NhaTro> houses = null;
+
+                        String role = acc.getRole(); // Lưu giá trị role vào biến
+                        if (role != null) { // Kiểm tra xem role có phải là null không
+                            if (role.equals("landlord")) {
+                                houses = housesDao.getAll();
+                            } else if (role.equals("manager")) {
+                                QuanLiDAO qlDao = new QuanLiDAO();
+                                QuanLi ql = qlDao.getQuanLiByIDAccount(acc.getID_Account());
+                                if (ql != null) { // Kiểm tra ql có phải là null không
+                                    houses = qlDao.getNhaTroByManagerId(ql.getID_QuanLy());
+                                }
+                            }
+                        } else {
+                            // Xử lý trường hợp role là null
+                            session.setAttribute("errorMessByRole", true);
+                        }
+
+                        if (houses == null) {
+                            session.setAttribute("errorMessByRole", true);
+                        } else {
+                            // Nha tro ma dc phep truy cap bang role
+                            session.setAttribute("housesByRole", houses);
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

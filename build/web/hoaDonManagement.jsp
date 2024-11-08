@@ -253,7 +253,7 @@
                                                     <div class="d-flex header-invoice">
                                                         <h6 class="mb-3 text-sm">Phòng: 
                                                             <c:if test="${room != null}">
-                                                                ${room.tenPhongTro}
+                                                                ${room.tenPhongTro} - Mã hóa đơn: ${hd.ID_HoaDon}
                                                             </c:if>
                                                             <c:if test="${room == null}">
                                                                 Không có thông tin phòng

@@ -75,11 +75,11 @@ public class addDichVu extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         DichVuDAO dichVuDAO = new DichVuDAO();
-        String tenDichVu = request.getParameter("tendichvu");
+        String tenDichVu = request.getParameter("tendichvu").trim();
         int donGia = Integer.parseInt(request.getParameter("donGia"));
         String donVi = request.getParameter("donvi");
         String khac;
-        String moTa = request.getParameter("mota");
+        String moTa = request.getParameter("mota").trim();
         List<DichVu> dvs = dichVuDAO.getAll();
 
         boolean isDuplicate = dvs.stream().anyMatch(dv -> dv.getTenDichVu().equalsIgnoreCase(tenDichVu));
