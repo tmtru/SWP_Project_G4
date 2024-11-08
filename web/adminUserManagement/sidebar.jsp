@@ -112,7 +112,7 @@
                     </li>
 
                     <li class="">
-                        <a href="accountController">
+                        <a href="accountController" >
                             <i class='bx bx-face icon' ></i>
                             <span class="text nav-text">Người dùng</span>
                         </a>
@@ -128,7 +128,7 @@
                     
                     <c:if test="${sessionScope.account.role == 'landlord'}">
                         <li class="">
-                            <a href="DanhSachCacHopDongByAdmin">
+                            <a href="DanhSachCacHopDongByAdmin" class="active">
                                 <i class='bx bx-id-card icon' ></i>
                             <span class="text nav-text">Hợp đồng</span>
                             </a>
@@ -137,7 +137,7 @@
                    
                          <c:if test="${sessionScope.account.role == 'manager'}">
                         <li class="">
-                            <a href="DanhSachCacHopDongByManager">
+                            <a href="DanhSachCacHopDongByManager" class="active">
                                 <i class='bx bx-id-card icon' ></i>
                             <span class="text nav-text">Hợp đồng</span>
                             </a>

@@ -10,12 +10,14 @@ import dal.DichVuDAO;
 import dal.HopDongDAO;
 import dal.KhachThueDAO;
 import dal.NhaTroDAO;
+import dal.PhongDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.List;
 import model.ChuTro;
 import model.DichVu;
@@ -65,8 +67,29 @@ public class DanhSachCacHopDongByAdminController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         HopDongDAO hopDongDao = new HopDongDAO();
+        PhongDAO phongDao = new PhongDAO();
         int idChuTro = 1;
         List<HopDong> hopDongList = hopDongDao.getHopDongByChuTro(idChuTro);
+        Date currentDate = new Date();
+        for (HopDong hopDong : hopDongList) {
+                Date ngayGiaTri = hopDong.getNgay_gia_tri();
+                Date ngayHetHan = hopDong.getNgay_het_han();
+                int ID_PhongTro = hopDong.getID_Phongtro();
+                if (ngayHetHan != null && ngayHetHan.before(currentDate)) {
+                    phongDao.updateTrangThaiPhongToT(ID_PhongTro);
+                    if (!"expired".equalsIgnoreCase(hopDong.getStatus())) {
+                        hopDong.setStatus("expired");
+                        hopDongDao.updateHopDongStatus(hopDong.getID_HopDong(), "expired");
+                        
+                    }
+                } else if (ngayGiaTri != null && !ngayGiaTri.after(currentDate)) {
+                    // If ngayGiaTri is today or a past date, set status to 'active'
+                    if (!"active".equalsIgnoreCase(hopDong.getStatus())) {
+                        hopDong.setStatus("active");
+                        hopDongDao.updateHopDongStatus(hopDong.getID_HopDong(), "active");
+                    }
+                }
+            }
         request.setAttribute("hopDongList", hopDongList);
         request.getRequestDispatcher("/danhSachHopDong_Admin.jsp").forward(request, response);
     } 

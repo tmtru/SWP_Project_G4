@@ -1,4 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 
 <html lang="en">
@@ -28,7 +30,7 @@
                 </div>
                 <div class="form">
                     <div class="tabs">
-                        <a style="text-decoration: none;" href="addContract" class="tab active">Thông tin người đại diện thuê phòng</a>
+                        <a style="text-decoration: none;" class="tab active">Thông tin người đại diện thuê phòng</a>
                     <% 
                                 String message = (String) request.getAttribute("message");
                                 if (message != null) {
@@ -45,7 +47,7 @@
                     <div class="alert alert-info" style="color: green; font-weight: bold; margin-top: 10px;">
                         <%= message %>
                     </div>
-                   
+
                     <%
                         }
                     %>
@@ -94,8 +96,14 @@
                         </div>
                         <div class="form-group">
                             <label for="email">Email:</label>
-                            <input type="email" name="email" id="email" placeholder="Email" value="${Email}" required> 
+                            <select name="email" id="email" required>
+                                <option value="">Chọn email</option>
+                                <c:forEach var="email" items="${emails}">
+                                    <option value="${email}">${email}</option>
+                                </c:forEach>
+                            </select>
                         </div>
+
 
                     </div>
 

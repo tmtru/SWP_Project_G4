@@ -239,7 +239,7 @@
                     <div class="col-md-6 col-lg-4">
                         <div class="rounded p-4">
                             <a href="index.html">
-                                <img src="assets/img/Logo_nhatro.png" alt="Logo">
+                                <img src="assets/img/Logo_nhatro.png" />
                             </a>
                         </div>
                     </div>
@@ -258,21 +258,20 @@
                     <div class="col-lg-5 col-md-12">
                         <div class="row gy-5 g-4">
                             <div class="col-md-6">
-                                <h6 class="section-title text-start text-primary text-uppercase mb-4">Services</h6>
-                                <p><i class="fa fa-angle-right me-2"></i>Phòng ở</p>
-                                <p><i class="fa fa-angle-right me-2"></i>Dịch vụ</p>
-                                <p><i class="fa fa-angle-right me-2"></i>Giải trí</p>
+                                <h6 class="section-title text-start text-primary text-uppercase mb-4">Nhà trọ</h6>
+                                <a class="btn btn-link" href="thongtinlienhe">Liên hệ</a>
+                                <a class="btn btn-link" href="category">Danh sách nhà trọ</a>
+                                <a class="btn btn-link" href="">Privacy Policy</a>
                             </div>
                             <div class="col-md-6">
-                                <h6 class="section-title text-start text-primary text-uppercase mb-4">Quick Links</h6>
-                                <p><i class="fa fa-angle-right me-2"></i>Về chúng tôi</p>
-                                <p><i class="fa fa-angle-right me-2"></i>Liên hệ</p>
-                                <p><i class="fa fa-angle-right me-2"></i>Đăng nhập</p>
+
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
 
         <!-- Bootstrap JS -->

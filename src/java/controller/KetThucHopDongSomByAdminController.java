@@ -5,12 +5,15 @@
 package controller;
 
 import dal.HopDongDAO;
+import dal.PhongDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import model.HopDong;
 
@@ -60,10 +63,15 @@ public class KetThucHopDongSomByAdminController extends HttpServlet {
             throws ServletException, IOException {
         String hopDongIdStr = request.getParameter("hopDongId");
         HopDongDAO hopDongDAO = new HopDongDAO();
-
+        PhongDAO phongDao = new PhongDAO();
         if (hopDongIdStr != null) {
             int hopDongId = Integer.parseInt(hopDongIdStr);
-            boolean isEnded = hopDongDAO.ketThucHopDongSom(hopDongId);
+            HopDong hopDong = hopDongDAO.getHopDongById(hopDongId);
+            int ID_PhongTro = hopDong.getID_Phongtro();
+            phongDao.updateTrangThaiPhongToT(ID_PhongTro);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    String ngayHetHan = dateFormat.format(new Date());
+            boolean isEnded = hopDongDAO.ketThucHopDongSom(hopDongId, ngayHetHan);
 
             if (isEnded) {
                 request.setAttribute("message", "Hợp đồng với ID là " + hopDongId + " đã được kết thúc thành công.");

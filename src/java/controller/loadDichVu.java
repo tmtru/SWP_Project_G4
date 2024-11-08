@@ -78,7 +78,15 @@ public class loadDichVu extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        DichVuDAO dichVuDAO = new DichVuDAO();
+        
+        // Lấy danh sách dịch vụ từ DAO
+        List<DichVu> dichVuList = dichVuDAO.getAll();
+        
+        request.setAttribute("dichVuList", dichVuList);
+        request.getRequestDispatcher("DichVuDashBoard.jsp").forward(request, response);
     }
 
     /** 

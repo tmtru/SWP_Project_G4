@@ -6,6 +6,9 @@ import model.Account;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Base64;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 
 public class AccountDAO extends DBContext {
 
@@ -499,7 +502,7 @@ public class AccountDAO extends DBContext {
 
     public List<Account> getAccountsByIdHouse(int idHouse, int start, int accountsPerPage) {
         List<Account> accountsByIdHouses = new ArrayList<>();
-        String sql = "SELECT \n"
+        String sql = "SELECT DISTINCT \n"
                 + "    tenant_account.ID_Account AS Tenant_Account_ID,\n"
                 + "    tenant_account.Email AS Tenant_Email,\n"
                 + "    tenant_account.Username AS Tenant_Username,\n"
@@ -697,11 +700,108 @@ public class AccountDAO extends DBContext {
         }
         return 0;
     }
+    private static String encryptPassword(String password) {
+        try {
+            String SECRET_KEY = "1234567890123456";
+            SecretKeySpec secretKey = new SecretKeySpec(SECRET_KEY.getBytes(), "AES");
+            Cipher cipher = Cipher.getInstance("AES");
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            byte[] encryptedData = cipher.doFinal(password.getBytes());
 
+            return Base64.getEncoder().encodeToString(encryptedData);
+        } catch (Exception e) {
+            e.printStackTrace(); // Log error
+            return null; // Tr? v? null n?u c� l?i
+        }
+    }
     public static void main(String[] args) {
-        AccountDAO dao = new AccountDAO();
+        AccountDAO accountDAO = new AccountDAO();
+        System.out.println(encryptPassword("ok"));
+    }
+    public int getAccountIdByEmail(String email) {
+        String sql = "SELECT ID_Account FROM account WHERE Email = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("ID_Account");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1; // Trả về -1 nếu không tìm thấy hoặc có lỗi
+    }
+    public boolean addManager(Account account) {
+        String sql = "INSERT INTO account (Email, Username, Password, Role, isActive) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 
-        System.out.println(dao.getAccount("minhanh", "123"));
+            stmt.setString(1, account.getEmail());
+            stmt.setString(2, account.getUsername());
+            stmt.setString(3, encryptPassword(account.getPassword()));
+            stmt.setString(4, account.getRole());
+            stmt.setBoolean(5, true);
+
+            int affectedRows = stmt.executeUpdate();
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
+    public boolean isPhoneExist(String phone) {
+        String sql = "SELECT * FROM quan_ly WHERE SDT = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+
+            st.setString(1, phone);
+            ResultSet rs = st.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public boolean isCCCDExist(String CCCD) {
+        String sql = "SELECT * FROM ACCOUNT WHERE CCCD = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+
+            st.setString(1, CCCD);
+            ResultSet rs = st.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean isUsernameExist(String username) {
+        String sql = "SELECT * FROM ACCOUNT WHERE username = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+
+            st.setString(1, username);
+            ResultSet rs = st.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+public List<String> getEmailsByRole() {
+        List<String> emails = new ArrayList<>();
+        String sql = "SELECT Email FROM account WHERE Role IN ('guest', 'tenant')";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                emails.add(rs.getString("Email"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return emails;
+    }
 }

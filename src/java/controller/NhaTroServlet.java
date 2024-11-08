@@ -3,6 +3,7 @@ package controller;
 import dal.AccountDAO;
 import dal.ChuTroDAO;
 import dal.NhaTroDAO;
+import dal.QuanLiDAO;
 import dal.QuanLyDAO;
 import model.NhaTro;
 import jakarta.servlet.ServletException;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import model.Account;
 import model.ChuTro;
+import model.QuanLi;
 import model.QuanLy;
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
@@ -129,6 +131,36 @@ public class NhaTroServlet extends HttpServlet {
                 nhaTroDAO.saveImages(nhaTroId, imageUrls);
                 session.setAttribute("notification", "Add successfully!");
 
+        Account acc = (Account) session.getAttribute("account");
+        NhaTroDAO housesDao = new NhaTroDAO();
+        //list nha tro ma account duoc quyen truy cap
+        List<NhaTro> houses = null;
+
+            String role = acc.getRole(); // Lưu giá trị role vào biến
+            if (role != null) { // Kiểm tra xem role có phải là null không
+                if (role.equals("landlord")) {
+                    houses = housesDao.getAll();
+                } else if (role.equals("manager")) {
+                    QuanLiDAO qlDao = new QuanLiDAO();
+                    QuanLi ql = qlDao.getQuanLiByIDAccount(acc.getID_Account());
+                    if (ql != null) { // Kiểm tra ql có phải là null không
+                        houses = qlDao.getNhaTroByManagerId(ql.getID_QuanLy());
+                    }
+                }
+            } else {
+                // Xử lý trường hợp role là null
+                session.setAttribute("errorMessByRole", true);
+            }
+
+            if (houses == null) {
+                session.setAttribute("errorMessByRole", true);
+            } else {
+                // Nha tro ma dc phep truy cap bang role
+                session.setAttribute("housesByRole", houses);
+            }
+            // Role cua tai khoan dg truy cap
+            session.setAttribute("role", role); // Sử dụng biến role đã lưu
+
                 // Redirect to NhaTro list
                 response.sendRedirect("nhatro-detail?id="+nhaTroId);
             } else if ("edit".equals(action)) {
@@ -182,6 +214,7 @@ public class NhaTroServlet extends HttpServlet {
                         }
                     }
                 }
+                
                 session.setAttribute("notification", "Update successfully!");
                response.sendRedirect("nhatro-detail?id="+nhaTroId);
             } else if ("delete".equals(action)) {
