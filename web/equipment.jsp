@@ -38,18 +38,18 @@
         textarea {
             resize: none;
         }
-        
-            .dropdown-menu {
-                display: none;
-                list-style: none;
-                padding: 0px 27px;
-                margin: 0px ;
-            }
 
-            /* Khi li có class active, hiển thị dropdown */
-            .dropdown.active .dropdown-menu {
-                display: block;
-            }
+        .dropdown-menu {
+            display: none;
+            list-style: none;
+            padding: 0px 27px;
+            margin: 0px ;
+        }
+
+        /* Khi li có class active, hiển thị dropdown */
+        .dropdown.active .dropdown-menu {
+            display: block;
+        }
 
         .custom-alert {
             position: fixed;
@@ -141,12 +141,12 @@
                         </a>
                     </li>
                     <c:if test="${sessionScope.account.role == 'landlord'}">
-                     <li class="">
+                        <li class="">
                             <a href="manage-new" class="">
                                 <i class='bx bx-bell icon ' ></i>
                                 <span class="text nav-text">Thông báo</span>
                             </a>                      
-                     </li>
+                        </li>
                     </c:if>
                     <li class="">
                         <a href="room" >
@@ -285,10 +285,12 @@
                             </div>
                         </div>
                     </div>
-                    <form action="searchThietBi" method="get">
-                        <input type="text" name="search" placeholder="Tìm kiếm..." value="${searchTerm}" />
-                        <button type="submit" class="btn btn-primary" style="background-color: #5a67d8"><i class='bx bx-search'></i></button>
+                    <div class="search-container">
+                    <form action="loadThietBi" method="get">
+                        <input type="text" name="searchTerm" value="${searchTerm}" placeholder="Tìm kiếm thiết bị...">
+                        <button type="submit"><i class='bx bx-search'></i></button>
                     </form>
+                    </div>
                 </div>
             </section>
 
@@ -391,35 +393,35 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
         <script>
-            const body = document.querySelector('body'),
-                    sidebar = body.querySelector('nav'),
-                    toggle = body.querySelector(".toggle"),
-                    modeSwitch = body.querySelector(".toggle-switch"),
-                    modeText = body.querySelector(".mode-text");
-            // Check if dark mode is enabled on page load
-            if (localStorage.getItem("darkMode") === "disabled") {
-                body.classList.add("light");
-                modeText.innerText = "Light mode";
-            }
+                            const body = document.querySelector('body'),
+                                    sidebar = body.querySelector('nav'),
+                                    toggle = body.querySelector(".toggle"),
+                                    modeSwitch = body.querySelector(".toggle-switch"),
+                                    modeText = body.querySelector(".mode-text");
+                            // Check if dark mode is enabled on page load
+                            if (localStorage.getItem("darkMode") === "disabled") {
+                                body.classList.add("light");
+                                modeText.innerText = "Light mode";
+                            }
 
-            // Sidebar toggle functionality
-            toggle.addEventListener("click", () => {
-                sidebar.classList.toggle("close");
-            });
-            // Dark mode toggle functionality
-            modeSwitch.addEventListener("click", () => {
-                body.classList.toggle("dark");
-                // Update the text for dark mode
-                if (body.classList.contains("dark")) {
-                    modeText.innerText = "Light mode";
-                    localStorage.setItem("darkMode", "enabled");
-                } else {
-                    modeText.innerText = "Dark mode";
-                    localStorage.setItem("darkMode", "disabled");
-                }
-            });
+                            // Sidebar toggle functionality
+                            toggle.addEventListener("click", () => {
+                                sidebar.classList.toggle("close");
+                            });
+                            // Dark mode toggle functionality
+                            modeSwitch.addEventListener("click", () => {
+                                body.classList.toggle("dark");
+                                // Update the text for dark mode
+                                if (body.classList.contains("dark")) {
+                                    modeText.innerText = "Light mode";
+                                    localStorage.setItem("darkMode", "enabled");
+                                } else {
+                                    modeText.innerText = "Dark mode";
+                                    localStorage.setItem("darkMode", "disabled");
+                                }
+                            });
         </script>
-    <script>
+        <script>
             function toggleDropdown() {
                 var dropdown = document.querySelector('.dropdown');
                 dropdown.classList.toggle('active'); // Thêm/xóa class 'active' khi nhấn
