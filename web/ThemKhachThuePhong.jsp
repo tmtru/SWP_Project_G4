@@ -30,7 +30,7 @@
                 </div>
                 <div class="form">
                     <div class="tabs">
-                        <a style="text-decoration: none;" href="addContract" class="tab active">Thông tin người đại diện thuê phòng</a>
+                        <a style="text-decoration: none;" class="tab active">Thông tin người đại diện thuê phòng</a>
                     <% 
                                 String message = (String) request.getAttribute("message");
                                 if (message != null) {

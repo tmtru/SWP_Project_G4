@@ -502,7 +502,7 @@ public class AccountDAO extends DBContext {
 
     public List<Account> getAccountsByIdHouse(int idHouse, int start, int accountsPerPage) {
         List<Account> accountsByIdHouses = new ArrayList<>();
-        String sql = "SELECT \n"
+        String sql = "SELECT DISTINCT \n"
                 + "    tenant_account.ID_Account AS Tenant_Account_ID,\n"
                 + "    tenant_account.Email AS Tenant_Email,\n"
                 + "    tenant_account.Username AS Tenant_Username,\n"

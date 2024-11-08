@@ -609,7 +609,7 @@ public class HopDongDAO extends DBContext {
                 + "JOIN phong_tro pt ON hd.ID_PhongTro = pt.ID_Phong "
                 + "JOIN nha_tro nt ON pt.ID_NhaTro = nt.ID_NhaTro "
                 + "JOIN quan_ly ql ON nt.ID_NhaTro = ql.ID_NhaTro "
-                + "WHERE ql.ID_Account = ? AND hd.Ngay_het_han IS NOT NULL AND hd.Ngay_gia_tri IS NOT NULL "
+                + "WHERE ql.ID_Account = ? AND hd.Ngay_het_han IS NOT NULL AND hd.Ngay_gia_tri IS NOT NULL AND hd.isActive = 1 "
                 + "ORDER BY hd.ID_HopDong DESC";
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
