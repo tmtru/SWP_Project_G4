@@ -103,6 +103,13 @@ public class loadHoaDonForm extends HttpServlet {
                 int amount = room.getGia(); 
                 request.setAttribute("room", room);
                 request.setAttribute("amount", amount);
+                if (hddao.getHopDongHienTaiOfRentedRoom(room.getID_Phong()).isEmpty()){
+                    request.setAttribute("errorMessage", "Phòng không đang hoạt động.");
+                            request.setAttribute("invoices", session.getAttribute("listInvoicesOfCurrentRoom"));
+        request.setAttribute("currentRoomOfHoaDon", room);
+                    request.getRequestDispatcher("HoaDonEachRoom.jsp").forward(request, response);
+                    return;
+                }
                 int hdong= hddao.getHopDongHienTaiOfRentedRoom(room.getID_Phong()).get(0);
                 int dauNguoi = hddao.getSoLuongNguoiByContractId(hdong);
                 request.setAttribute("nofpeople", dauNguoi);
