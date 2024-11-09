@@ -8,6 +8,7 @@
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/profile.jsp</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/controller/addDichVu.java</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/dal/TransactionDAO.java</file>
+            <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/controller/loadHoaDonByRoom.java</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/js/filter.js</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/dal/DBContext.java</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/hoaDonForm.jsp</file>
@@ -15,6 +16,7 @@
             <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/controller/loadRoomsHome.java</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/TransactionForm.jsp</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/model/NhaTro.java</file>
+            <file>file:/E:/clone%20SWP/SWP_Project_G4/web/quanly-account-nha-tro.jsp</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/model/QuanLy.java</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/Step2AddFastInvoices.jsp</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/controller/actionDichvu.java</file>
@@ -46,6 +48,7 @@
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/detailHouseHome.jsp</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/css/styleHomeCatagory.css</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/controller/loadHoaDonNhaTro.java</file>
+            <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/controller/searchRoomByName.java</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/contactUs_map.jsp</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/controller/FeedBackController.java</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/adminUserManagement/sidebar.jsp</file>
@@ -62,6 +65,7 @@
             <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/dal/NhaTroDAO.java</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/controller/DanhSachPhongTroCalenderController.java</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/model/HoaDon.java</file>
+            <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/controller/searchHoaDon.java</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/model/DichVu.java</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/detailRoom.jsp</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/sidebarHoaDonManagement.jsp</file>

@@ -220,36 +220,7 @@ public class HopDongDAO extends DBContext {
         return false;
     }
 
-    public List<HopDong> getHopDongByChuTro(int idChuTro) {
-        List<HopDong> hopDongList = new ArrayList<>();
-        String sql = "SELECT h.ID_HopDong, h.ID_PhongTro, p.TenPhongTro, h.Ngay_gia_tri, h.Ngay_het_han, h.Trang_thai, kt.Ten_khach\n"
-                + "FROM hop_dong h \n"
-                + "JOIN phong_tro p ON h.ID_PhongTro = p.ID_Phong \n"
-                + "JOIN nha_tro nt ON p.ID_NhaTro = nt.ID_NhaTro \n"
-                + "JOIN khach_thue kt ON h.ID_KhachThue = kt.ID_KhachThue \n"
-                + "WHERE nt.ID_ChuTro = ? AND h.Trang_thai IN ('pending', 'accept', 'active', 'reject', 'expired') \n"
-                + "ORDER BY h.ID_HopDong DESC;";
-
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, idChuTro);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                HopDong hopDong = new HopDong();
-                hopDong.setID_HopDong(rs.getInt("ID_HopDong"));
-                hopDong.setID_Phongtro(rs.getInt("ID_PhongTro"));
-                hopDong.setTenPhongTro(rs.getString("TenPhongTro"));
-                hopDong.setNgay_gia_tri(rs.getDate("Ngay_gia_tri"));
-                hopDong.setNgay_het_han(rs.getDate("Ngay_het_han"));
-                hopDong.setStatus(rs.getString("Trang_thai"));
-                hopDong.setTen_khach(rs.getString("Ten_khach"));
-                hopDongList.add(hopDong);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace(); // Xử lý lỗi
-        }
-        return hopDongList;
-    }
+    
 
     public boolean acceptHopDong(int hopDongId, int khachThueId, int phongTroId) {
         String updateContractSql = "UPDATE hop_dong SET Trang_thai = 'accept' WHERE ID_HopDong = ?";
@@ -387,13 +358,44 @@ public class HopDongDAO extends DBContext {
                 + "WHERE ID_Phong IN (SELECT ID_PhongTro FROM hop_dong WHERE ID_HopDong = ?)";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, idHopDong);
+           statement.setInt(1, idHopDong);
             int rowsUpdated = statement.executeUpdate();
             return rowsUpdated > 0; // Trả về true nếu có ít nhất một bản ghi được cập nhật
         } catch (SQLException e) {
             e.printStackTrace(); // Xử lý lỗi nếu cần thiết
             return false;
         }
+    }
+    public List<HopDong> getHopDongByChuTro(int idChuTro) {
+        List<HopDong> hopDongList = new ArrayList<>();
+        String sql = "SELECT h.ID_HopDong, h.ID_PhongTro, p.TenPhongTro, h.Ngay_gia_tri, h.Ngay_het_han, h.Trang_thai, kt.Ten_khach\n"
+                + "FROM hop_dong h\n"
+                + "LEFT JOIN phong_tro p ON h.ID_PhongTro = p.ID_Phong\n"
+                + "LEFT JOIN nha_tro nt ON p.ID_NhaTro = nt.ID_NhaTro\n"
+                + "LEFT JOIN khach_thue kt ON h.ID_KhachThue = kt.ID_KhachThue\n"
+                + "WHERE nt.ID_ChuTro = ? \n"
+                + "AND h.Trang_thai IN ('pending', 'accept', 'active', 'reject', 'expired')\n"
+                + "ORDER BY h.ID_HopDong DESC;";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, idChuTro);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                HopDong hopDong = new HopDong();
+                hopDong.setID_HopDong(rs.getInt("ID_HopDong"));
+                hopDong.setID_Phongtro(rs.getInt("ID_PhongTro"));
+                hopDong.setTenPhongTro(rs.getString("TenPhongTro"));
+                hopDong.setNgay_gia_tri(rs.getDate("Ngay_gia_tri"));
+                hopDong.setNgay_het_han(rs.getDate("Ngay_het_han"));
+                hopDong.setStatus(rs.getString("Trang_thai"));
+                hopDong.setTen_khach(rs.getString("Ten_khach"));
+                hopDongList.add(hopDong);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Xử lý lỗi
+        }
+        return hopDongList;
     }
 
     public void updateHopDongStatus(int hopDongId, String status) {
