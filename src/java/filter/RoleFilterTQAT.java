@@ -120,7 +120,7 @@ public class RoleFilterTQAT implements Filter {
                 || uri.equals("/resetpassword.jsp") || uri.equals("/verification.jsp") || uri.equals("/viewUserContracts.jsp") || uri.equals("/homer")
                 || uri.equals("/category") || uri.equals("/login") || uri.equals("/register") || uri.equals("/resetpassword") || uri.equals("/logingoogle") || uri.equals("/manage-new") || uri.equals("/new-detail") || uri.equals("/new")|| uri.equals("/new-detail.jsp") ||
                  uri.equals("/verification") || uri.equals("/sendemail") || uri.equals("/logout") || uri.equals("/profileServlet") || uri.equals("/getMessages") || uri.equals("/getUserList") || uri.equals("/getUnreadMessageCount")
-                || uri.equals("/allrooms") ||  uri.equals("/allrooms.jsp") || uri.equals("/filterrooms" ) ||
+                || uri.equals("/allrooms") ||  uri.equals("/allrooms.jsp") || uri.equals("/filterrooms" ) || 
                 
                 uri.equals("/contactUs_map.jsp") || uri.equals("/thongtinlienhe") || uri.equals("/changePassword.jsp") || uri.equals("/confirmverification.jsp")
                 || uri.equals("/detailHouseHome.jsp") || uri.equals("/header.jsp") || uri.equals("/error.jsp")
