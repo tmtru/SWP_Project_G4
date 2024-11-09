@@ -223,8 +223,11 @@ DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
                     <div class="modal-body">
                         <img id="qrCodeImage" src="" alt="QR Code" class="img-fluid" />
                         <p><strong>Số tiền cần phải trả:</strong> <span id="amountToPay"></span></p>
-                        <p><strong>Nội dung chuyển khoản:</strong> [Tên phòng + Tháng]</p>
-                        <p class="text-danger"><strong>Cảnh báo:</strong> Yêu cầu điền nội dung và chuyển khoản đúng quy định</p>
+                        <p><strong>Nội dung chuyển khoản:</strong> [Mã hóa đơn + Tên phòng + Tháng]</p>
+                        <p><strong>Ví dụ:</strong> Hóa đơn:1 Phòng:C102 Tháng:11</p>
+                        <p class="text-danger">
+                            <strong>Cảnh báo:</strong> 
+                            Yêu cầu điền nội dung và chuyển khoản đúng quy định</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
