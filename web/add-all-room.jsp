@@ -153,14 +153,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                             <span class="text nav-text">Hóa đơn</span>
                         </a>
                     </li>
-                    <c:if test="${sessionScope.account.role == 'landlord'}">
-                        <li class="">
+                    <%--<c:if test="${sessionScope.account.role == 'landlord'}">--%>
+<!--                        <li class="">
                             <a href="loadThietBi">
                                 <i class='bx bx-devices icon' ></i>
                                 <span class="text nav-text">Thiết bị</span>
                             </a>
-                        </li>
-                    </c:if>
+                        </li>-->
+                    <%--</c:if>--%>
 
                     </ul>
                 </div>
@@ -189,27 +189,21 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                
                 <form action="add-all-room" method="post"enctype="multipart/form-data">
                     <div class="form-row">
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6">
                             <label for="tenPhong">Từ phòng <span class="require">*</span></label>
                             <div class="col-md-12 row">
                                 <input type="number" step="1" min="1" class="form-control" id="tenPhong" name="tuPhong" required>
                                 <input type="hidden"  name="nhatroId" value="${r}">
                             </div>
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6">
                             <div class="col-md-12 row">
 
                                 <label for="den">Đến <span class="require">*</span></label>
                                 <input type="number" class="form-control" id="den" name="denPhong" min="0">
                             </div>
                         </div>
-                        <div class="form-group col-md-4  " >
-                            <label for="donGia">Đơn giá  <span class="require">*</span></label>
-                            <div class="col-md-12 row">
-                                <input type="number" class="form-control col-md-10" id="donGia" name="donGia" required>
-                                <input type="text" class="form-control col-md-2" readonly value="VND">
-                            </div>
-                        </div>
+                       
 
                     </div>
 
@@ -261,36 +255,43 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                 </select>
                             </div>
                         </div>
+                         <div class="form-group col-md-6  " >
+                            <label for="donGia">Đơn giá  <span class="require">*</span></label>
+                            <div class="col-md-12 row">
+                                <input type="number" class="form-control col-md-10" id="donGia" name="donGia" required>
+                                <input type="text" class="form-control col-md-2" readonly value="VND">
+                            </div>
+                        </div>
 
-                        <div class="form-group col-md-6">
+<!--                        <div class="form-group col-md-6">
                             <label for="thietBi">Thiết bị <span class="require">*</span></label>
                             <div class="col-md-12 row">
-                                <!-- Dropdown button for selecting devices -->
+                                 Dropdown button for selecting devices 
                                 <div class="dropdown">
                                     <button class="btn btn-secondary dropdown-toggle" type="button" id="thietBiDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Chọn thiết bị
                                     </button>
                                     <div class="dropdown-menu p-3" aria-labelledby="thietBiDropdown" style="width: 300px">
-                                        <!-- Loop through the list of devices -->
-                                        <c:forEach var="device" items="${devices}">
+                                         Loop through the list of devices 
+                                        <%--<c:forEach var="device" items="${devices}">--%>
                                             <div class="form-check dropdown-item">
                                                 <input class="form-check-input" type="checkbox" id="thietBi${device.id}" name="thietBi[]" value="${device.name}">
                                                 <label class="form-check-label" for="thietBi${device.id}"> ${device.name} </label>
                                                 <input type="number" class="form-control form-control-sm mt-1 quantity-input" name="soLuong${device.name}" placeholder="Số lượng" min="0" style="width: 100px;">
                                                 <small class="error-message text-danger"></small>
                                             </div>
-                                        </c:forEach>
+                                        <%--</c:forEach>--%>
 
-                                        <!-- OK Button inside dropdown -->
+                                         OK Button inside dropdown 
                                         <div class="dropdown-item text-center">
                                             <button type="button" class="btn btn-success" onclick="validateSelection()">OK</button>
                                         </div>
-                                        <small id="generalError" class="text-danger"></small> <!-- General error message -->
+                                        <small id="generalError" class="text-danger"></small>  General error message 
                                     </div>
                                     <div id="selectedDevices" class="mt-3"></div>
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
 
 
                         <!-- Div to show the selected items -->
