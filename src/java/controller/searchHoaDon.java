@@ -65,15 +65,15 @@ public class searchHoaDon extends HttpServlet {
         HoaDonDAO hoaDonDAO = new HoaDonDAO();
         HttpSession session = request.getSession();
         List<HoaDon> invoices = new ArrayList<>();
-
         Phong p = (Phong) session.getAttribute("roomForSearchCode");
 
         if (searchId != null && !searchId.isEmpty()) {
             try {
                 int id = Integer.parseInt(searchId);
-                HoaDon hd = hoaDonDAO.getHoaDonById(id);
-                if (hd != null) {
-                    invoices.add(hd);
+                List<HoaDon> hd = hoaDonDAO.searchHoaDonByIdInRoom(p.getID_Phong(), id);
+
+                if (hd != null && !hd.isEmpty()) {
+                    invoices = hd; // Nếu có hóa đơn tìm được, gán cho invoices
                 } else {
                     request.setAttribute("errorMessage1", "Không tìm thấy hóa đơn với mã đã nhập.");
                 }
@@ -85,6 +85,7 @@ public class searchHoaDon extends HttpServlet {
         }
 
         request.setAttribute("invoices", invoices);
+        request.setAttribute("currentRoomOfHoaDon", p);
         request.getRequestDispatcher("HoaDonEachRoom.jsp").forward(request, response);
 
     }

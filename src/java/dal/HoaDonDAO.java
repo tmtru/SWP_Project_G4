@@ -629,7 +629,6 @@ public class HoaDonDAO extends DBContext {
         }
     }
 
-    
     public List<HoaDon> getKhachNo(int nhatroId, String search, Integer start, Integer recordPerPage) {
         List<HoaDon> l = new ArrayList<>();
         String query = "select a.Ten_khach,a.email, h.* from hop_dong hd\n"
@@ -716,7 +715,7 @@ public class HoaDonDAO extends DBContext {
                 if (rs.next()) {
                     latestReading = rs.getInt("ChiSo_Moi"); // Get the maximum reading
                 }
-                            }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -793,8 +792,6 @@ public class HoaDonDAO extends DBContext {
 
     }
 
-
-
 //    public List<HoaDon> getHoaDonByKhachThueId(int idKhachThue) {
 //        List<HoaDon> hoaDons = new ArrayList<>();
 //        String query = "SELECT hd.ID_HoaDon, hd.ID_HopDong, hd.Ngay, hd.Trang_thai, "
@@ -827,63 +824,61 @@ public class HoaDonDAO extends DBContext {
 //        }
 //        return hoaDons;
 //    }
-    
     public List<HoaDon> getHoaDonByKhachThueId(int idKhachThue) {
-    List<HoaDon> hoaDons = new ArrayList<>();
-    String query = "SELECT hd.ID_HoaDon, hd.ID_HopDong, hd.Ngay, hd.Trang_thai, "
-            + "hd.Tong_gia_tien, hd.NgayThanhToan, hd.NguoiTao, hd.MoTa, "
-            + "dv.ID_DichVu, dv.TenDichVu, dv.Don_gia, dv.Don_vi "
-            + "FROM hoa_don hd "
-            + "JOIN hop_dong h ON hd.ID_HopDong = h.ID_HopDong "
-            + "LEFT JOIN hoa_don_dich_vu hdv ON hd.ID_HoaDon = hdv.ID_HoaDon "
-            + "LEFT JOIN dich_vu dv ON hdv.ID_DichVu = dv.ID_DichVu "
-            + "WHERE h.ID_KhachThue = ?";
+        List<HoaDon> hoaDons = new ArrayList<>();
+        String query = "SELECT hd.ID_HoaDon, hd.ID_HopDong, hd.Ngay, hd.Trang_thai, "
+                + "hd.Tong_gia_tien, hd.NgayThanhToan, hd.NguoiTao, hd.MoTa, "
+                + "dv.ID_DichVu, dv.TenDichVu, dv.Don_gia, dv.Don_vi "
+                + "FROM hoa_don hd "
+                + "JOIN hop_dong h ON hd.ID_HopDong = h.ID_HopDong "
+                + "LEFT JOIN hoa_don_dich_vu hdv ON hd.ID_HoaDon = hdv.ID_HoaDon "
+                + "LEFT JOIN dich_vu dv ON hdv.ID_DichVu = dv.ID_DichVu "
+                + "WHERE h.ID_KhachThue = ?";
 
-    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-        pstmt.setInt(1, idKhachThue);
-        ResultSet rs = pstmt.executeQuery();
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, idKhachThue);
+            ResultSet rs = pstmt.executeQuery();
 
-        Map<Integer, HoaDon> hoaDonMap = new HashMap<>();
+            Map<Integer, HoaDon> hoaDonMap = new HashMap<>();
 
-        while (rs.next()) {
-            int idHoaDon = rs.getInt("ID_HoaDon");
+            while (rs.next()) {
+                int idHoaDon = rs.getInt("ID_HoaDon");
 
-            HoaDon hoaDon = hoaDonMap.get(idHoaDon);
-            if (hoaDon == null) {
-                hoaDon = new HoaDon();
-                hoaDon.setID_HoaDon(idHoaDon);
-                hoaDon.setID_HopDong(rs.getInt("ID_HopDong"));
-                hoaDon.setNgay(rs.getDate("Ngay"));
-                hoaDon.setTrang_thai(rs.getByte("Trang_thai"));
-                hoaDon.setTong_gia_tien(rs.getInt("Tong_gia_tien"));
-                hoaDon.setNgayThanhToan(rs.getDate("NgayThanhToan"));
-                hoaDon.setNguoiTao(rs.getString("NguoiTao"));
-                hoaDon.setMoTa(rs.getString("MoTa"));
-                hoaDon.setDichVus(new ArrayList<>());
-                hoaDonMap.put(idHoaDon, hoaDon);
+                HoaDon hoaDon = hoaDonMap.get(idHoaDon);
+                if (hoaDon == null) {
+                    hoaDon = new HoaDon();
+                    hoaDon.setID_HoaDon(idHoaDon);
+                    hoaDon.setID_HopDong(rs.getInt("ID_HopDong"));
+                    hoaDon.setNgay(rs.getDate("Ngay"));
+                    hoaDon.setTrang_thai(rs.getByte("Trang_thai"));
+                    hoaDon.setTong_gia_tien(rs.getInt("Tong_gia_tien"));
+                    hoaDon.setNgayThanhToan(rs.getDate("NgayThanhToan"));
+                    hoaDon.setNguoiTao(rs.getString("NguoiTao"));
+                    hoaDon.setMoTa(rs.getString("MoTa"));
+                    hoaDon.setDichVus(new ArrayList<>());
+                    hoaDonMap.put(idHoaDon, hoaDon);
+                }
+
+                // Lấy thông tin dịch vụ nếu có
+                int idDichVu = rs.getInt("ID_DichVu");
+                if (idDichVu > 0) { // Chỉ thêm dịch vụ nếu ID hợp lệ
+                    DichVu dichVu = new DichVu();
+                    dichVu.setID_DichVu(idDichVu);
+                    dichVu.setTenDichVu(rs.getString("TenDichVu"));
+                    dichVu.setDon_gia(rs.getInt("Don_gia"));
+                    dichVu.setDon_vi(rs.getString("Don_vi"));
+                    hoaDon.getDichVus().add(dichVu);
+                }
             }
 
-            // Lấy thông tin dịch vụ nếu có
-            int idDichVu = rs.getInt("ID_DichVu");
-            if (idDichVu > 0) { // Chỉ thêm dịch vụ nếu ID hợp lệ
-                DichVu dichVu = new DichVu();
-                dichVu.setID_DichVu(idDichVu);
-                dichVu.setTenDichVu(rs.getString("TenDichVu"));
-                dichVu.setDon_gia(rs.getInt("Don_gia"));
-                dichVu.setDon_vi(rs.getString("Don_vi"));
-                hoaDon.getDichVus().add(dichVu);
-            }
+            hoaDons.addAll(hoaDonMap.values());
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-
-        hoaDons.addAll(hoaDonMap.values());
-
-    } catch (SQLException e) {
-        e.printStackTrace(); 
+        return hoaDons;
     }
-    return hoaDons;
-}
 
-    
 //    public static void main(String[] arg){
 //        HoaDonDAO hdd = new HoaDonDAO();
 //        
@@ -893,6 +888,65 @@ public class HoaDonDAO extends DBContext {
 //            System.out.println(hd);
 //        }
 //    }
+    public List<HoaDon> searchHoaDonByIdInRoom(int idPhong, int idHoaDon) {
+        List<HoaDon> hoaDons = new ArrayList<>();
+        String sql = "SELECT hd.ID_HoaDon, hd.ID_HopDong, hd.Ngay, hd.Trang_thai, "
+                + "hd.Tong_gia_tien, hd.NgayThanhToan, hd.MoTa, hd.NguoiTao, "
+                + "dv.ID_DichVu, dv.TenDichVu, dv.Don_gia, dv.Don_vi, dv.Mo_ta, "
+                + "hdv.ChiSo_Cu, hdv.ChiSo_Moi, hdv.DauNguoi, hdv.CurrentPrice "
+                + "FROM hoa_don hd "
+                + "INNER JOIN hop_dong h ON hd.ID_HopDong = h.ID_HopDong "
+                + "INNER JOIN phong_tro pt ON h.ID_PhongTro = pt.ID_Phong "
+                + "LEFT JOIN hoa_don_dich_vu hdv ON hd.ID_HoaDon = hdv.ID_HoaDon "
+                + "LEFT JOIN dich_vu dv ON hdv.ID_DichVu = dv.ID_DichVu "
+                + "WHERE pt.ID_Phong = ? AND hd.ID_HoaDon = ? AND hd.isActive = 1";
 
-    
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, idPhong); // Set ID_Phong into query
+            ps.setInt(2, idHoaDon); // Set ID_HoaDon into query
+            try (ResultSet rs = ps.executeQuery()) {
+                HoaDon hoaDon = null;
+                List<DichVu> dichVus = new ArrayList<>();
+                while (rs.next()) {
+                    if (hoaDon == null || hoaDon.getID_HoaDon() != rs.getInt("ID_HoaDon")) {
+                        if (hoaDon != null) {
+                            hoaDons.add(hoaDon); // Add previous HoaDon to the list
+                        }
+                        hoaDon = new HoaDon();
+                        hoaDon.setID_HoaDon(rs.getInt("ID_HoaDon"));
+                        hoaDon.setID_HopDong(rs.getInt("ID_HopDong"));
+                        hoaDon.setNgay(rs.getDate("Ngay"));
+                        hoaDon.setTrang_thai(rs.getInt("Trang_thai"));
+                        hoaDon.setTong_gia_tien(rs.getInt("Tong_gia_tien"));
+                        hoaDon.setNgayThanhToan(rs.getDate("NgayThanhToan"));
+                        hoaDon.setNguoiTao(rs.getString("NguoiTao"));
+                        hoaDon.setMoTa(rs.getNString("MoTa"));
+                        hoaDon.setDichVus(dichVus);
+                    }
+
+                    int idDichVu = rs.getInt("ID_DichVu");
+                    if (idDichVu != 0) {
+                        DichVu dichVu = new DichVu();
+                        dichVu.setID_DichVu(idDichVu);
+                        dichVu.setTenDichVu(rs.getString("TenDichVu"));
+                        dichVu.setDon_gia(rs.getInt("Don_gia"));
+                        dichVu.setDon_vi(rs.getString("Don_vi"));
+                        dichVu.setMo_ta(rs.getString("Mo_ta"));
+                        dichVu.setChiSoCu(rs.getInt("ChiSo_Cu"));
+                        dichVu.setChiSoMoi(rs.getInt("ChiSo_Moi"));
+                        dichVu.setDauNguoi(rs.getInt("DauNguoi"));
+                        dichVu.setOldPrice(rs.getInt("CurrentPrice"));
+                        dichVus.add(dichVu);
+                    }
+                }
+                if (hoaDon != null) {
+                    hoaDons.add(hoaDon); // Add last HoaDon to the list
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return hoaDons; // Return list of HoaDon found by ID_Phong and ID_HoaDon
+    }
+
 }
