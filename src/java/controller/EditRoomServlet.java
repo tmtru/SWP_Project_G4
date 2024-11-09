@@ -42,6 +42,14 @@ import model.QuanLy;
 public class EditRoomServlet extends HttpServlet {
 
     private static final String UPLOAD_IMAGES_DIR = "images";
+    
+    // Define allowed image types
+    private static final String[] ALLOWED_IMAGE_TYPES = {
+        "image/jpeg",
+        "image/png",
+        "image/gif",
+        "image/jpg"
+    };
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -124,6 +132,33 @@ public class EditRoomServlet extends HttpServlet {
                 errorMessage += "Giá phòng không hợp lệ. ";
             }
 
+            // Add image format validation
+            Collection<Part> fileParts = request.getParts();
+            boolean hasImages = false;
+
+            // Validate image formats if any images are uploaded
+            for (Part filePart : fileParts) {
+                if (filePart.getName().equals("urlPhongTro") && filePart.getSize() > 0) {
+                    hasImages = true;
+                    String contentType = filePart.getContentType();
+                    boolean isValidFormat = false;
+                    
+                    // Check if the file type is allowed
+                    for (String allowedType : ALLOWED_IMAGE_TYPES) {
+                        if (contentType.toLowerCase().equals(allowedType.toLowerCase())) {
+                            isValidFormat = true;
+                            break;
+                        }
+                    }
+                    
+                    if (!isValidFormat) {
+                        hasError = true;
+                        errorMessage += "Định dạng ảnh không hợp lệ. Chỉ chấp nhận các định dạng: JPEG, JPG, PNG, GIF. ";
+                        break;
+                    }
+                }
+            }
+
             // If there are errors, redirect back with error message
             if (hasError) {
                 HttpSession session = request.getSession();
@@ -136,54 +171,68 @@ public class EditRoomServlet extends HttpServlet {
                 return;
             }
 
-            // Handling image uploads
+            // Handle image uploads if there are any new images
             List<String> imageFiles = new ArrayList<>();
-            Collection<Part> fileParts = request.getParts();
+            if (hasImages) {
+                String applicationPath = getServletContext().getRealPath("");
+                String uploadFilePath = applicationPath + File.separator + UPLOAD_IMAGES_DIR;
 
-            String applicationPath = getServletContext().getRealPath("");
-            String uploadFilePath = applicationPath + File.separator + UPLOAD_IMAGES_DIR;
+                // Create upload directory if it doesn't exist
+                File uploadDir = new File(uploadFilePath);
+                if (!uploadDir.exists()) {
+                    uploadDir.mkdir();
+                }
 
-            File uploadDir = new File(uploadFilePath);
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
-
-            for (Part filePart : fileParts) {
-                if (filePart.getName().equals("urlPhongTro") && filePart.getSize() > 0) {
-                    String fileName = extractFileName(filePart);
-                    String imageFilePath = uploadFilePath + File.separator + fileName;
-                    try (InputStream fileContent = filePart.getInputStream()) {
-                        Path destinationPath = Paths.get(imageFilePath);
-                        if (!Files.exists(destinationPath)) {
-                            Files.copy(fileContent, new File(imageFilePath).toPath());
+                // Process each uploaded file
+                for (Part filePart : fileParts) {
+                    if (filePart.getName().equals("urlPhongTro") && filePart.getSize() > 0) {
+                        String fileName = extractFileName(filePart);
+                        String imageFilePath = uploadFilePath + File.separator + fileName;
+                        
+                        // Save the file
+                        try (InputStream fileContent = filePart.getInputStream()) {
+                            Path destinationPath = Paths.get(imageFilePath);
+                            if (!Files.exists(destinationPath)) {
+                                Files.copy(fileContent, new File(imageFilePath).toPath());
+                            }
                         }
+                        
+                        // Add the file path to the list
+                        imageFiles.add(UPLOAD_IMAGES_DIR + File.separator + fileName);
                     }
-                    imageFiles.add(UPLOAD_IMAGES_DIR + File.separator + fileName);
+                }
+
+                // Update the room's images in the database
+                if (!imageFiles.isEmpty()) {
+                    // Delete old images
+                    pdao.deleteImageByPhong(Integer.parseInt(id));
+                    
+                    // Insert new images
+                    for (String image : imageFiles) {
+                        pdao.insertRoomImage(Integer.parseInt(id), image);
+                    }
                 }
             }
 
-            if (imageFiles.size() > 0) {
-                // Delete old images and add new ones
-                pdao.deleteImageByPhong(Integer.parseInt(id));
-                for (String image : imageFiles) {
-                    pdao.insertRoomImage(Integer.parseInt(id), image);
-                }
-            }
-
-            // Update room - keeping the original trangThai
-            Phong updatedRoom = new Phong(Integer.parseInt(id), Integer.parseInt(loaiPhongId),
-                    tenPhongTro, Integer.parseInt(nhaTroId),
+            // Create updated room object
+            Phong updatedRoom = new Phong(
+                    Integer.parseInt(id),
+                    Integer.parseInt(loaiPhongId),
+                    tenPhongTro,
+                    Integer.parseInt(nhaTroId),
                     Integer.parseInt(tang),
                     oldRoom.getTrang_thai(), // Keep the original status
                     Float.parseFloat(dienTich),
-                    Integer.parseInt(gia));
+                    Integer.parseInt(gia)
+            );
 
+            // Update room in database
             pdao.updateRoom(updatedRoom);
 
-            // for action history
-            // Log the changes
-            StringBuilder changesLog = new StringBuilder("Cập nhật chi tiết nhà trọ: \n");
+            // Create log of changes for action history
+            StringBuilder changesLog = new StringBuilder("Cập nhật chi tiết phòng trọ: \n");
 
+            // Log name changes
             if (!oldRoom.getTenPhongTro().equals(tenPhongTro)) {
                 changesLog.append("Tên phòng trọ đổi từ '")
                         .append(oldRoom.getTenPhongTro())
@@ -191,6 +240,8 @@ public class EditRoomServlet extends HttpServlet {
                         .append(tenPhongTro)
                         .append("'.\n");
             }
+
+            // Log floor changes
             if (oldRoom.getTang() != Integer.parseInt(tang)) {
                 changesLog.append("Tầng đổi từ '")
                         .append(oldRoom.getTang())
@@ -198,9 +249,13 @@ public class EditRoomServlet extends HttpServlet {
                         .append(tang)
                         .append("'.\n");
             }
+
+            // Log room type changes
             if (oldRoom.getID_LoaiPhong() != Integer.parseInt(loaiPhongId)) {
                 changesLog.append("Đã thay đổi kiểu phòng.\n");
             }
+
+            // Log area changes
             if (oldRoom.getDien_tich() != Float.parseFloat(dienTich)) {
                 changesLog.append("Diện tích đã đổi từ '")
                         .append(oldRoom.getDien_tich())
@@ -208,6 +263,8 @@ public class EditRoomServlet extends HttpServlet {
                         .append(dienTich)
                         .append(" m²'.\n");
             }
+
+            // Log price changes
             if (oldRoom.getGia() != Integer.parseInt(gia)) {
                 changesLog.append("Giá đã đổi từ '")
                         .append(oldRoom.getGia())
@@ -216,34 +273,41 @@ public class EditRoomServlet extends HttpServlet {
                         .append("'.\n");
             }
 
-            if (imageFiles.size() > 0) {
+            // Log image changes
+            if (!imageFiles.isEmpty()) {
                 changesLog.append("Ảnh phòng đã cập nhật.\n");
             }
 
-            // Log the action if the user is a manager
+            // Record action history if user is a manager
             HttpSession session = request.getSession();
             Account account = (Account) session.getAttribute("account");
             if (account.getRole().equals("manager")) {
                 ActionHistoryDAO ahdao = new ActionHistoryDAO();
                 ActionHistory history = new ActionHistory();
 
+                // Get NhaTro information
                 NhaTroDAO ntdao = new NhaTroDAO();
                 NhaTro nhaTro = ntdao.getNhaTroByPhongTroId(updatedRoom.getID_Phong());
-
                 history.setNhaTro(nhaTro);
 
+                // Get QuanLy information
                 QuanLyDAO qldao = new QuanLyDAO();
                 QuanLy quanLy = qldao.getChuTroByAccountId(account.getID_Account());
                 history.setQuanLy(quanLy);
+
+                // Set history details
                 history.setTitle("Room Update");
                 history.setContent(changesLog.toString());
 
+                // Save action history
                 ahdao.insertActionHistory(history);
             }
 
+            // Redirect back to room page
             response.sendRedirect("room");
         } catch (Exception e) {
             e.printStackTrace();
+            response.sendRedirect("room"); // Redirect on error
         }
     }
 
@@ -284,5 +348,4 @@ public class EditRoomServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }
-
 }
