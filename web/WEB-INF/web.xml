@@ -547,4 +547,12 @@
         <servlet-name>searchHoaDon</servlet-name>
         <url-pattern>/searchHoaDon</url-pattern>
     </servlet-mapping>
+     <servlet>
+        <servlet-name>contactUs</servlet-name>
+        <servlet-class>controller.contactUs</servlet-class>
+    </servlet>
+        <servlet-mapping>
+        <servlet-name>contactUs</servlet-name>
+        <url-pattern>/thongtinlienhe</url-pattern>
+    </servlet-mapping>
 </web-app>

@@ -85,36 +85,55 @@ public class addThietBiToRoom extends HttpServlet {
                 throw new IllegalArgumentException("Vui lòng điền đầy đủ thông tin!");
             }
 
-            int idPhong = Integer.parseInt(idPhongStr);
-            int idThietBi = Integer.parseInt(idThietBiStr);
-            int soLuong = Integer.parseInt(soLuongStr);
-
-            ThietBiPhongDAO thietBiPhongDAO = new ThietBiPhongDAO();
-
+            // Validate số lượng trước khi parse sang int
             try {
-                boolean success = thietBiPhongDAO.addThietBiToPhong(idPhong, idThietBi, soLuong, trangThai, moTa);
-                if (success) {
-                    // Thiết bị đã được thêm thành công
+                int soLuong = Integer.parseInt(soLuongStr);
+
+                // Kiểm tra số lượng = 0
+                if (soLuong == 0) {
                     HttpSession session = request.getSession();
-                    session.setAttribute("successMessage", "Thêm thiết bị thành công!");
-                    response.sendRedirect("detailRoom?id=" + idPhong);
-                } else {
-                    // Không đủ số lượng thiết bị
+                    session.setAttribute("errorMessage", "Số lượng không thể bằng 0");
+                    response.sendRedirect("detailRoom?id=" + idPhongStr);
+                    return;
+                }
+
+                // Kiểm tra số lượng âm
+                if (soLuong < 0) {
                     HttpSession session = request.getSession();
-                    session.setAttribute("errorMessage", "Không đủ số lượng thiết bị để thêm vào phòng.");
+                    session.setAttribute("errorMessage", "Số lượng không thể là số âm");
+                    response.sendRedirect("detailRoom?id=" + idPhongStr);
+                    return;
+                }
+
+                int idPhong = Integer.parseInt(idPhongStr);
+                int idThietBi = Integer.parseInt(idThietBiStr);
+
+                ThietBiPhongDAO thietBiPhongDAO = new ThietBiPhongDAO();
+
+                try {
+                    boolean success = thietBiPhongDAO.addThietBiToPhong(idPhong, idThietBi, soLuong, trangThai, moTa);
+                    if (success) {
+                        // Thiết bị đã được thêm thành công
+                        HttpSession session = request.getSession();
+                        session.setAttribute("successMessage", "Thêm thiết bị thành công!");
+                        response.sendRedirect("detailRoom?id=" + idPhong);
+                    } else {
+                        // Không đủ số lượng thiết bị
+                        HttpSession session = request.getSession();
+                        session.setAttribute("errorMessage", "Không đủ số lượng thiết bị để thêm vào phòng.");
+                        response.sendRedirect("detailRoom?id=" + idPhong);
+                    }
+                } catch (IllegalArgumentException e) {
+                    // Bắt lỗi thiết bị đã tồn tại
+                    HttpSession session = request.getSession();
+                    session.setAttribute("errorMessage", e.getMessage());
                     response.sendRedirect("detailRoom?id=" + idPhong);
                 }
-            } catch (IllegalArgumentException e) {
-                // Bắt lỗi thiết bị đã tồn tại
+            } catch (NumberFormatException e) {
                 HttpSession session = request.getSession();
-                session.setAttribute("errorMessage", e.getMessage());
-                response.sendRedirect("detailRoom?id=" + idPhong);
+                session.setAttribute("errorMessage", "Số lượng phải là số nguyên hợp lệ!");
+                response.sendRedirect("detailRoom?id=" + idPhongStr);
             }
-        } catch (NumberFormatException e) {
-            String idPhong = request.getParameter("idPhong");
-            HttpSession session = request.getSession();
-            session.setAttribute("errorMessage", "Lỗi: Dữ liệu số không hợp lệ.");
-            response.sendRedirect("detailRoom?id=" + idPhong);
         } catch (Exception e) {
             String idPhong = request.getParameter("idPhong");
             HttpSession session = request.getSession();

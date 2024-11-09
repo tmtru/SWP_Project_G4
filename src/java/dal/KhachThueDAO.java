@@ -164,7 +164,7 @@ public class KhachThueDAO extends DBContext {
             }
         }
     }
-    
+
     public int getIdAccountByEmail(String email) {
         int idAccount = -1;
         String sql = "SELECT ID_Account FROM account WHERE Email = ?";
@@ -214,7 +214,11 @@ public class KhachThueDAO extends DBContext {
     }
 
     public int getKhachThueIdByCCCD(String Cmnd) {
-        String sql = "SELECT ID_KhachThue FROM khach_thue WHERE CCCD = ?";
+        String sql = "SELECT ID_KhachThue\n"
+                + "FROM khach_thue\n"
+                + "WHERE CCCD = ?\n"
+                + "ORDER BY ID_KhachThue DESC\n"
+                + "LIMIT 1;";
         int khachThueId = -1; // Default value if not found
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, Cmnd);
