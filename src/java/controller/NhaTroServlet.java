@@ -99,7 +99,7 @@ public class NhaTroServlet extends HttpServlet {
                 newNhaTro.setTenNhaTro(tenNhaTro);
                 newNhaTro.setDia_chi(diaChi);
                 newNhaTro.setMo_ta(moTa);
-                if (lat != null && lon != null) {
+                if (lat != null && lon != null && !lat.isEmpty()  && !lon.isEmpty() && !lat.equals("") && !lon.equals("")) {
                     newNhaTro.setLat(Double.parseDouble(lat));
                     newNhaTro.setLon(Double.parseDouble(lon));
                 }

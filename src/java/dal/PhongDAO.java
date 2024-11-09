@@ -1166,7 +1166,7 @@ public class PhongDAO extends DBContext {
     }
     
     public boolean updateTrangThaiPhongToD(int idPhong) {
-        String sql = "UPDATE phong_tro SET Trang_thai = 'D' WHERE ID_Phong = ?";
+        String sql = "UPDATE phong_tro SET Trang_thai = 'D' WHERE ID_Phong = ? AND Trang_thai = 'accept' and isActive = 1";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             
             pstmt.setInt(1, idPhong);

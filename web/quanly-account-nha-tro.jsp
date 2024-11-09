@@ -595,7 +595,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         // CCCD validation
         const cccd = document.getElementById("cccd").value.trim();
         const cccdError = document.getElementById("cccdError");
-        const cccdRegex = /^\d+$/;
+        const cccdRegex = /^\d{12}$/;
         if (!cccd || !cccdRegex.test(cccd)) {
             cccdError.textContent = "CCCD must contain digits only.";
             isValid = false;
