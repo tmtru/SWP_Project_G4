@@ -5,8 +5,6 @@
 package controller;
 
 import dal.HoaDonDAO;
-import dal.PhongDAO;
-import dal.TransactionDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,18 +12,16 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import model.HoaDon;
-import model.NhaTro;
 import model.Phong;
-import model.Transaction;
 
 /**
  *
  * @author Admin
  */
-public class loadHoaDonByRoom extends HttpServlet {
+public class searchHoaDon extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,10 +40,10 @@ public class loadHoaDonByRoom extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet loadHoaDonByRoom</title>");
+            out.println("<title>Servlet searchHoaDon</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet loadHoaDonByRoom at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet searchHoaDon at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -65,46 +61,32 @@ public class loadHoaDonByRoom extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
-
+        String searchId = request.getParameter("searchId");
+        HoaDonDAO hoaDonDAO = new HoaDonDAO();
         HttpSession session = request.getSession();
-        PhongDAO pdao = new PhongDAO();
-        TransactionDAO trdao = new TransactionDAO();
+        List<HoaDon> invoices = new ArrayList<>();
 
+        Phong p = (Phong) session.getAttribute("roomForSearchCode");
 
-        int idRoom = (int) (session.getAttribute("currentRoom") != null ? session.getAttribute("currentRoom") : -1);
-        int choseRoom = (request.getParameter("roomId") != null) ? Integer.parseInt(request.getParameter("roomId")) : -1;
-
-        Phong room = null;
-        List<HoaDon> listhd = null;
-
-        if (choseRoom != -1) {
-            session.setAttribute("currentRoom", choseRoom);
-            listhd = getListHoaDonOfRoom(choseRoom);
-            room = pdao.getDetailRoom(choseRoom);
-        } else if (idRoom != -1) {
-            listhd = getListHoaDonOfRoom(idRoom);
-            room = pdao.getDetailRoom(idRoom);
+        if (searchId != null && !searchId.isEmpty()) {
+            try {
+                int id = Integer.parseInt(searchId);
+                HoaDon hd = hoaDonDAO.getHoaDonById(id);
+                if (hd != null) {
+                    invoices.add(hd);
+                } else {
+                    request.setAttribute("errorMessage1", "Không tìm thấy hóa đơn với mã đã nhập.");
+                }
+            } catch (NumberFormatException e) {
+                request.setAttribute("errorMessage1", "Mã hóa đơn phải là một số nguyên.");
+            }
         } else {
-            request.setAttribute("errorMessage", "Không tìm thấy thông tin phòng.");
-            request.getRequestDispatcher("errorPage.jsp").forward(request, response);
-            return;
+            invoices = hoaDonDAO.getHoaDonByRoomId(p.getID_Phong());
         }
 
-
-        request.setAttribute("invoices", listhd);
-        request.setAttribute("currentRoomOfHoaDon", room);
-        session.setAttribute("roomForSearchCode", room);
- session.setAttribute("listInvoicesOfCurrentRoom", listhd);
+        request.setAttribute("invoices", invoices);
         request.getRequestDispatcher("HoaDonEachRoom.jsp").forward(request, response);
 
-    }
-
-    private static List<HoaDon> getListHoaDonOfRoom(int idRoom) {
-        HoaDonDAO hddao = new HoaDonDAO();
-        List<HoaDon> listHoaDon = hddao.getHoaDonByRoomId(idRoom);
-        return listHoaDon;
     }
 
     /**
@@ -118,7 +100,7 @@ public class loadHoaDonByRoom extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        processRequest(request, response);
     }
 
     /**

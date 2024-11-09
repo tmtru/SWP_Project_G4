@@ -6,28 +6,36 @@
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/js/main.js</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/controller/loadHoaDonForm.java</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/profile.jsp</file>
+            <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/controller/addDichVu.java</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/dal/TransactionDAO.java</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/js/filter.js</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/dal/DBContext.java</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/hoaDonForm.jsp</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/new-detail.jsp</file>
+            <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/controller/loadRoomsHome.java</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/TransactionForm.jsp</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/model/NhaTro.java</file>
+            <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/model/QuanLy.java</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/Step2AddFastInvoices.jsp</file>
+            <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/controller/actionDichvu.java</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/dal/HopDongDAO.java</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/controller/contactUs.java</file>
+            <file>file:/E:/clone%20SWP/SWP_Project_G4/web/sidebarNhaTroManagement.jsp</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/HoaDonEachRoom.jsp</file>
+            <file>file:/E:/clone%20SWP/SWP_Project_G4/web/room.jsp</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/GiaHanHopDong_Manager.jsp</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/js/hoadonForm.js</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/controller/LoadLikedRooms.java</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/filter/RoleFilterTQAT.java</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/danhSachHopDong_Admin.jsp</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/controller/lienhe.java</file>
+            <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/controller/ThongTinKhachThuePhongController.java</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/addNhaTro.jsp</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/DanhSachHopDong_Manager.jsp</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/Calendarbymanager.jsp</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/controller/NewDetailController.java</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/NhaTro.jsp</file>
+            <file>file:/E:/clone%20SWP/SWP_Project_G4/web/ThongTinKhachThuePhong.jsp</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/controller/LoadHoaDonByDate.java</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/nbproject/build-impl.xml</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/likedRooms.jsp</file>
@@ -40,10 +48,12 @@
             <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/controller/loadHoaDonNhaTro.java</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/contactUs_map.jsp</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/controller/FeedBackController.java</file>
+            <file>file:/E:/clone%20SWP/SWP_Project_G4/web/adminUserManagement/sidebar.jsp</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/css/style.css</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/dal/ThietBiDAO.java</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/WEB-INF/web.xml</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/dal/HoaDonDAO.java</file>
+            <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/model/QuanLi.java</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/news.jsp</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/hoaDonManagement.jsp</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/manage-news.jsp</file>
@@ -63,7 +73,9 @@
             <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/controller/addFastInvoices.java</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/home.jsp</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/category.jsp</file>
+            <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/controller/NhaTroServlet.java</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/dal/DichVuDAO.java</file>
+            <file>file:/E:/clone%20SWP/SWP_Project_G4/src/java/controller/Verification.java</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/DichVuDashBoard.jsp</file>
             <file>file:/E:/clone%20SWP/SWP_Project_G4/web/listNhaTroHome.jsp</file>
         </group>
