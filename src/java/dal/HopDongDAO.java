@@ -223,11 +223,12 @@ public class HopDongDAO extends DBContext {
     public List<HopDong> getHopDongByChuTro(int idChuTro) {
         List<HopDong> hopDongList = new ArrayList<>();
         String sql = "SELECT h.ID_HopDong, h.ID_PhongTro, p.TenPhongTro, h.Ngay_gia_tri, h.Ngay_het_han, h.Trang_thai, kt.Ten_khach\n"
-                + "FROM hop_dong h \n"
-                + "JOIN phong_tro p ON h.ID_PhongTro = p.ID_Phong \n"
-                + "JOIN nha_tro nt ON p.ID_NhaTro = nt.ID_NhaTro \n"
-                + "JOIN khach_thue kt ON h.ID_KhachThue = kt.ID_KhachThue \n"
-                + "WHERE nt.ID_ChuTro = ? AND h.Trang_thai IN ('pending', 'accept', 'active', 'reject', 'expired') \n"
+                + "FROM hop_dong h\n"
+                + "LEFT JOIN phong_tro p ON h.ID_PhongTro = p.ID_Phong\n"
+                + "LEFT JOIN nha_tro nt ON p.ID_NhaTro = nt.ID_NhaTro\n"
+                + "LEFT JOIN khach_thue kt ON h.ID_KhachThue = kt.ID_KhachThue\n"
+                + "WHERE nt.ID_ChuTro = ? \n"
+                + "AND h.Trang_thai IN ('pending', 'accept', 'active', 'reject', 'expired')\n"
                 + "ORDER BY h.ID_HopDong DESC;";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -406,7 +407,7 @@ public class HopDongDAO extends DBContext {
             e.printStackTrace();
         }
     }
-    
+
     public void updateHopDongStatus1(int hopDongId, String status) {
         String sql = "UPDATE hop_dong SET Trang_thai = 'active' WHERE ID_HopDong = ? AND Trang_thai = 'accept' and isActive = 1";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -469,11 +470,11 @@ public class HopDongDAO extends DBContext {
         String sql = "UPDATE hop_dong SET isActive = 0, Trang_thai = 'expired', Ngay_het_han = ? WHERE ID_HopDong = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, ngayHetHan);      
-            ps.setInt(2, hopDongId);         
+            ps.setString(1, ngayHetHan);
+            ps.setInt(2, hopDongId);
 
             int rowsUpdated = ps.executeUpdate();
-            return rowsUpdated > 0;          
+            return rowsUpdated > 0;
 
         } catch (SQLException e) {
             e.printStackTrace();

@@ -87,10 +87,13 @@ public class DanhSachCacHopDongByAdminController extends HttpServlet {
 
                 }
             } else if (ngayGiaTri != null && !ngayGiaTri.after(currentDate)) {
-                phongDao.updateTrangThaiPhongToD(ID_PhongTro);
-                if (!"active".equalsIgnoreCase(hopDong.getStatus())) {
-                hopDongDao.updateHopDongStatus1(hopDong.getID_HopDong(), "active");
-                }
+                long daysUntilExpiration = (ngayHetHan.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24);
+                    if (daysUntilExpiration >= 20) {
+                        phongDao.updateTrangThaiPhongToD(ID_PhongTro);
+                        if (!"active".equalsIgnoreCase(hopDong.getStatus())) {
+                            hopDongDao.updateHopDongStatus1(hopDong.getID_HopDong(), "active");
+                        }
+                    }
             }
 
         }
