@@ -152,21 +152,21 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         <li class="">
                             <a href="DanhSachCacHopDongByAdmin">
                                 <i class='bx bx-id-card icon' ></i>
-                            <span class="text nav-text">Hợp đồng</span>
-                            </a>
-                        </li>
-                    </c:if>
-                   
-                         <c:if test="${sessionScope.account.role == 'manager'}">
-                        <li class="">
-                            <a href="DanhSachCacHopDongByManager">
-                                <i class='bx bx-id-card icon' ></i>
-                            <span class="text nav-text">Hợp đồng</span>
+                                <span class="text nav-text">Hợp đồng</span>
                             </a>
                         </li>
                     </c:if>
 
-                    
+                    <c:if test="${sessionScope.account.role == 'manager'}">
+                        <li class="">
+                            <a href="DanhSachCacHopDongByManager">
+                                <i class='bx bx-id-card icon' ></i>
+                                <span class="text nav-text">Hợp đồng</span>
+                            </a>
+                        </li>
+                    </c:if>
+
+
 
                     <li class="">
                         <a href="hoadon" >
@@ -315,8 +315,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                             <strong>Address</strong> ${s.getDia_chi()}<br>
                                         </p>
                                         <p class="card-text">
-                                            <strong>Description</strong> ${s.getMo_ta()}<br>
-                                        </p>
+    <strong class="des-text">Description</strong>
+    <span id="description-${s.ID_NhaTro}">${s.getMo_ta()}</span><br>
+</p>
+
+
                                     </div>
                                     <div class="card-footer bg-transparent">
                                         <div class="d-flex justify-content-between">
@@ -359,67 +362,67 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
 
                             <!-- Edit Room Modal -->
 
-                                <div class="modal fade" id="editRoomModal-${s.getID_NhaTro()}" tabindex="-1" role="dialog" aria-labelledby="editRoomModalLabel-${s.getID_NhaTro()}" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="editRoomModalLabel-${s.getID_NhaTro()}">Chỉnh sửa nhà trọ</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <form id="editRoomForm-${s.getID_NhaTro()}" action="nhatro" method="post" enctype="multipart/form-data">
-                                                    <input type="hidden" name="action" value="edit">
-                                                    <input type="hidden" name="nhaTroId" value="${s.getID_NhaTro()}">
+                            <div class="modal fade" id="editRoomModal-${s.getID_NhaTro()}" tabindex="-1" role="dialog" aria-labelledby="editRoomModalLabel-${s.getID_NhaTro()}" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="editRoomModalLabel-${s.getID_NhaTro()}">Chỉnh sửa nhà trọ</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="editRoomForm-${s.getID_NhaTro()}" action="nhatro" method="post" enctype="multipart/form-data">
+                                                <input type="hidden" name="action" value="edit">
+                                                <input type="hidden" name="nhaTroId" value="${s.getID_NhaTro()}">
 
-                                                    <div class="form-group">
-                                                        <label for="tenNhaTro">Tên nhà trọ</label>
-                                                        <input type="text" class="form-control" name="tenNhaTro" value="${s.getTenNhaTro()}" >
+                                                <div class="form-group">
+                                                    <label for="tenNhaTro">Tên nhà trọ</label>
+                                                    <input type="text" class="form-control" name="tenNhaTro" value="${s.getTenNhaTro()}" >
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="addressInput-${s.getID_NhaTro()}" class="label mb-1">Vị trí</label>
+                                                    <div class="input-group">
+                                                        <input id="addressInput-${s.getID_NhaTro()}" type="text" class="form-control" name="address"
+                                                               placeholder="Địa điểm của bạn..." oninput="suggestAddress1(${s.getID_NhaTro()},this.value)" value="${s.getDia_chi()}" required />
                                                     </div>
+                                                    <div id="suggestions-${s.getID_NhaTro()}"></div>
+                                                    <input type="text" id="selectedlat-${s.getID_NhaTro()}" name="lat" hidden />
+                                                    <input type="text" id="selectedlon-${s.getID_NhaTro()}" name="lon" hidden />
+                                                </div>
 
-                                                    <div class="form-group">
-                                                        <label for="addressInput-${s.getID_NhaTro()}" class="label mb-1">Vị trí</label>
-                                                        <div class="input-group">
-                                                            <input id="addressInput-${s.getID_NhaTro()}" type="text" class="form-control" name="address"
-                                                                   placeholder="Địa điểm của bạn..." oninput="suggestAddress1(${s.getID_NhaTro()},this.value)" value="${s.getDia_chi()}" required />
-                                                        </div>
-                                                        <div id="suggestions-${s.getID_NhaTro()}"></div>
-                                                        <input type="text" id="selectedlat-${s.getID_NhaTro()}" name="lat" hidden />
-                                                        <input type="text" id="selectedlon-${s.getID_NhaTro()}" name="lon" hidden />
+                                                <div class="form-group">
+                                                    <label for="moTa">Mô tả</label>
+                                                    <textarea class="form-control" name="moTa" rows="3">${s.getMo_ta()}</textarea>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label>Hình ảnh hiện tại</label>
+                                                    <div class="current-images">
+                                                        <c:forEach var="image" items="${s.getAnhNhaTro()}">
+                                                            <div class="image-block">
+                                                                <img src="${image}" alt="Room Image" style="width: 100px; height: 100px;">
+                                                                <input type="checkbox" name="deleteImages" value="${image}"> Remove
+                                                            </div>
+                                                        </c:forEach>
                                                     </div>
+                                                </div>
 
+                                                <c:if test="${s.getAnhNhaTro().size() < 5}">
                                                     <div class="form-group">
-                                                        <label for="moTa">Mô tả</label>
-                                                        <textarea class="form-control" name="moTa" rows="3">${s.getMo_ta()}</textarea>
+                                                        <label for="images">Tải lên thêm hình ảnh (tối đa 5)</label>
+                                                        <input type="file" class="form-control" name="images" multiple accept="image/*">
                                                     </div>
+                                                </c:if>
 
-                                                    <div class="form-group">
-                                                        <label>Hình ảnh hiện tại</label>
-                                                        <div class="current-images">
-                                                            <c:forEach var="image" items="${s.getAnhNhaTro()}">
-                                                                <div class="image-block">
-                                                                    <img src="${image}" alt="Room Image" style="width: 100px; height: 100px;">
-                                                                    <input type="checkbox" name="deleteImages" value="${image}"> Remove
-                                                                </div>
-                                                            </c:forEach>
-                                                        </div>
-                                                    </div>
-
-                                                    <c:if test="${s.getAnhNhaTro().size() < 5}">
-                                                        <div class="form-group">
-                                                            <label for="images">Tải lên thêm hình ảnh (tối đa 5)</label>
-                                                            <input type="file" class="form-control" name="images" multiple accept="image/*">
-                                                        </div>
-                                                    </c:if>
-
-                                                    <button type="submit" class="btn btn-primary">Cập nhật</button>
-                                                </form>
-                                            </div>
+                                                <button type="submit" class="btn btn-primary">Cập nhật</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
-          
+                            </div>
+
 
                         </c:forEach>
                     </div>
@@ -523,6 +526,24 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 }
             }
 
+        </script>
+        <script>
+           document.addEventListener("DOMContentLoaded", function () {
+    // Select all elements with the description prefix
+    document.querySelectorAll("[id^='description-']").forEach(element => {
+        truncateText(element, 100); // Adjust the max length as needed
+    });
+});
+
+function truncateText(element, maxLength) {
+    const originalText = element.textContent.trim(); // Trim extra spaces
+
+    // Check if the text length exceeds max length
+    if (originalText.length > maxLength) {
+        // Truncate the text and add ellipsis
+        element.textContent = originalText.substring(0, maxLength) + "...";
+    }
+}
 
         </script>
         <script>

@@ -174,7 +174,7 @@ public class QuanLyAccountNhaTroController extends HttpServlet {
                     boolean isAdded = accountDAO.addManager(newAccount);
                     if (isAdded) {
                         Date dob = Date.valueOf(request.getParameter("dob"));
-
+                        NhaTro nt = nhaTroDAO.getNhaTroById(idNhaTro);
                         QuanLy newQuanLy = new QuanLy();
                         int accountID = accountDAO.getAccountIdByEmail(email);
                         Account newAccount2 = accountDAO.getAccountById2(accountID);
@@ -187,9 +187,15 @@ public class QuanLyAccountNhaTroController extends HttpServlet {
 
                         boolean isAddQuanLy = quanLyDAO.insertQuanLy(newQuanLy);
                         if (!isAddQuanLy) {
+
                             session.setAttribute("notificationErr", "Thêm quản lý thất bại.");
                             response.sendRedirect("quanly-account-nha-tro?id=" + idNhaTro);
                         } else {
+                            IJavaMail emailService = new EmailService();
+                            emailService.send(email, "Tài khoản của bạn đã được tạo thành công",
+                                    "Bạn đã được thêm thành quản lý của nhà trọ  <strong>" + nt.getTenNhaTro() + "</strong> \n"
+                                    + "Bạn có thể đăng nhập vào hệ thống bằng email: " + email + " và mật khẩu " + password + " \n"
+                                    + "Xin trân thành cảm ơn!");
                             session.setAttribute("notification", "Quản lý mới đã được thêm thành công.");
                             session.removeAttribute("username");
                             session.removeAttribute("password");

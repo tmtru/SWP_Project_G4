@@ -58,11 +58,11 @@ public class EmailService implements IJavaMail {
 
     public static void main(String[] args) {
         EmailService sv = new EmailService();
-        String to = "manhtrung2502@gmail.com";
+        String to = "tambiet2411@gmail.com";
         String subject = "Hello: \n world";
         String message = "Hello: \n world";
         IJavaMail emailService = new EmailService();
-        emailService.send(to, subject, message);
+        sv.send(to, subject, message);
     }
     
 }

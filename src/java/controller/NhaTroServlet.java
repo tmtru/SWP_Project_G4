@@ -105,6 +105,12 @@ public class NhaTroServlet extends HttpServlet {
                 }
                 newNhaTro.setID_ChuTro(chuTro.getId());
                 // Save the NhaTro to the database and get the generated ID
+              boolean isExist = nhaTroDAO.isExist(tenNhaTro, chuTro.getId());
+                if (isExist) {
+                    session.setAttribute("notificationErr", "Nhà trọ "+tenNhaTro +" đã tồn tại");
+                    response.sendRedirect("nhatro");
+                    return;
+                }
                 int nhaTroId = nhaTroDAO.saveNhaTro(newNhaTro);
 
                 // Define the directory to upload the files to

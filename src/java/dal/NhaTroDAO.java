@@ -416,6 +416,23 @@ public List<String> getImagesByPhongId(int idPhong) {
         return nhaTroId;  // Return the ID if found, otherwise -1
     }
 
+    public boolean isExist(String tenNhaTro, int chuTroId) {
+       
+        try {
+            String query = "SELECT ID_NhaTro FROM nha_tro WHERE TenNhaTro = ?  AND ID_ChuTro = ?";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, tenNhaTro);
+            ps.setInt(2, chuTroId);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+              return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;  // Return the ID if found, otherwise -1
+    }
     public void mapParams(PreparedStatement ps, List<Object> args) throws SQLException {
         int i = 1;
         for (Object arg : args) {
@@ -631,7 +648,7 @@ public List<String> getImagesByPhongId(int idPhong) {
 
     public static void main(String[] args) {
         NhaTroDAO dAO = new NhaTroDAO();
-        System.out.println(dAO.getNhaTroOfKhach(1));
+        System.out.println(dAO.isExist("Nhà trọ BìnsAn",1));
 
 //        // Kiểm tra phương thức getAll
 //        System.out.println("Danh sách nhà trọ:");

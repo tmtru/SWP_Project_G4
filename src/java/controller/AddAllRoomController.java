@@ -94,7 +94,7 @@ public class AddAllRoomController extends HttpServlet {
                 }
 
                 // Get selected devices from the form
-                String[] selectedDevices = request.getParameterValues("thietBi[]");
+//                String[] selectedDevices = request.getParameterValues("thietBi[]");
 
                 // Loop through each room and save room, images, and devices
                 for (String roomName : roomNames) {
@@ -108,7 +108,7 @@ public class AddAllRoomController extends HttpServlet {
                     }
                     // Step 1: Insert the room and get its ID
                     Phong phong = new Phong();
-                    phong.setTenPhongTro(roomName);
+                    phong.setTenPhongTro(modifiedRoomName);
                     phong.setTang(floor);
                     phong.setID_LoaiPhong(loaiPhongId);
                     phong.setID_NhaTro(nhaTroId);
@@ -147,17 +147,17 @@ public class AddAllRoomController extends HttpServlet {
                     }
 
                     // Step 3: Insert associated devices for the room
-                    if (selectedDevices != null) {
-                        for (String deviceId : selectedDevices) {
-                            int id = phongDAO.getThietBiID(deviceId);
-                            int deviceQuantity = Integer.parseInt(request.getParameter("soLuong" + deviceId)); // Get the quantity for the device
-                            String deviceStatus = "New"; // Default device status
-                            String deviceDescription = "Default description"; // Update based on form data
-
-                            // Insert into thietBiPhong table
-                            phongDAO.insertThietBiPhong(roomId, id, deviceStatus, deviceDescription, deviceQuantity);
-                        }
-                    }
+//                    if (selectedDevices != null) {
+//                        for (String deviceId : selectedDevices) {
+//                            int id = phongDAO.getThietBiID(deviceId);
+//                            int deviceQuantity = Integer.parseInt(request.getParameter("soLuong" + deviceId)); // Get the quantity for the device
+//                            String deviceStatus = "New"; // Default device status
+//                            String deviceDescription = "Default description"; // Update based on form data
+//
+//                            // Insert into thietBiPhong table
+//                            phongDAO.insertThietBiPhong(roomId, id, deviceStatus, deviceDescription, deviceQuantity);
+//                        }
+//                    }
                 }
                 session.setAttribute("notification", "Rooms and images added successfully!");
                 response.sendRedirect("room?nhaTro=" + nhaTroId);

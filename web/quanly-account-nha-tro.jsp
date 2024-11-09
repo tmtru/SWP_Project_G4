@@ -250,14 +250,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                 </div>
                             </div>
 
-                            <!-- Email Field -->
-                            <div class="form-group col-md-3">
-                                <div class="col-md-12 row">
-                                    <label for="email">Email <span class="require">*</span></label>
-                                    <input type="text" class="form-control" id="email" name="email" value="${email}">
-                                    <small id="emailError" class="text-danger error-message"></small>
-                                </div>
-                            </div>
+                           
 
                             <!-- Password Field -->
                             <div class="form-group col-md-3">
@@ -267,9 +260,24 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                     <small id="passwordError" class="text-danger error-message"></small>
                                 </div>
                             </div>
-
+                            <!-- Re-enter Password Field -->
+                            <div class="form-group col-md-3">
+                                <div class="col-md-12 row">
+                                    <label for="repassword">Nhập lại mật khẩu <span class="require">*</span></label>
+                                    <input type="password" class="form-control" id="repassword" name="repassword">
+                                    <small id="repasswordError" class="text-danger error-message"></small>
+                                </div>
+                            </div>
+ <!-- Email Field -->
+                            <div class="form-group col-md-3">
+                                <div class="col-md-12 row">
+                                    <label for="email">Email <span class="require">*</span></label>
+                                    <input type="text" class="form-control" id="email" name="email" value="${email}">
+                                    <small id="emailError" class="text-danger error-message"></small>
+                                </div>
+                            </div>
                             <!-- Phone Field -->
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-3">
                                 <div class="col-md-12 row">
                                     <label for="phone">SDT <span class="require">*</span></label>
                                     <input type="text" class="form-control" id="phone" name="phone" value="${phone}">
@@ -278,7 +286,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                             </div>
 
                             <!-- Date of Birth Field -->
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-3">
                                 <div class="col-md-12 row">
                                     <label for="dob">Ngày sinh <span class="require">*</span></label>
                                     <input type="date" class="form-control" id="dob" name="dob"  value="${dob}">
@@ -287,7 +295,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                             </div>
 
                             <!-- CCCD Field -->
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-3">
                                 <div class="col-md-12 row">
                                     <label for="cccd">CCCD <span class="require">*</span></label>
                                     <input type="text" class="form-control" id="cccd" name="cccd" value="${cccd}">
@@ -518,95 +526,106 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 </div>
             </section>
         </c:if>
-
+       
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script>
-    function validateForm() {
-        let isValid = true;
+        <script>
+             function validateForm() {
+    let isValid = true;
 
-        // Username validation
-        const username = document.getElementById("username").value.trim();
-        const usernameError = document.getElementById("usernameError");
-        const usernameRegex = /^[a-zA-Z0-9]+$/;
-        if (!username || !usernameRegex.test(username)) {
-            usernameError.textContent = "Username cannot be empty and must not contain special characters.";
-            isValid = false;
-        } else {
-            usernameError.textContent = "";
-        }
-
-        // Name validation
-        const name = document.getElementById("name").value.trim();
-        const nameError = document.getElementById("nameError");
-        const nameRegex = /^[a-zA-Z\s]+$/;
-        if (!name || !nameRegex.test(name) || name.trim() === "") {
-            nameError.textContent = "Name must contain only letters and spaces and cannot be empty or only spaces.";
-            isValid = false;
-        } else {
-            nameError.textContent = "";
-        }
-
-        // Email validation
-        const email = document.getElementById("email").value.trim();
-        const emailError = document.getElementById("emailError");
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!email || !emailRegex.test(email)) {
-            emailError.textContent = "Please enter a valid email address.";
-            isValid = false;
-        } else {
-            emailError.textContent = "";
-        }
-
-        // Password validation
-        const password = document.getElementById("password").value;
-        const passwordError = document.getElementById("passwordError");
-        if (!password || password.length < 6) {
-            passwordError.textContent = "Password must be at least 6 characters long.";
-            isValid = false;
-        } else {
-            passwordError.textContent = "";
-        }
-
-        // Phone validation
-        const phone = document.getElementById("phone").value.trim();
-        const phoneError = document.getElementById("phoneError");
-        const phoneRegex = /^0\d{9}$/;
-        if (!phone || !phoneRegex.test(phone)) {
-            phoneError.textContent = "Phone must start with 0 and have exactly 10 digits.";
-            isValid = false;
-        } else {
-            phoneError.textContent = "";
-        }
-
-        // DOB validation
-        const dob = document.getElementById("dob").value;
-        const dobError = document.getElementById("dobError");
-        const currentDate = new Date();
-        const dobDate = new Date(dob);
-        if (!dob || dobDate >= currentDate) {
-            dobError.textContent = "Date of Birth must be earlier than the current date.";
-            isValid = false;
-        } else {
-            dobError.textContent = "";
-        }
-
-        // CCCD validation
-        const cccd = document.getElementById("cccd").value.trim();
-        const cccdError = document.getElementById("cccdError");
-        const cccdRegex = /^\d+$/;
-        if (!cccd || !cccdRegex.test(cccd)) {
-            cccdError.textContent = "CCCD must contain digits only.";
-            isValid = false;
-        } else {
-            cccdError.textContent = "";
-        }
-
-        // Prevent form submission if validation fails
-        return isValid;
+    // Username validation
+    const username = document.getElementById("username").value.trim();
+    const usernameError = document.getElementById("usernameError");
+    const usernameRegex = /^[a-zA-Z0-9]+$/;
+    if (!username || !usernameRegex.test(username)) {
+        usernameError.textContent = "Username cannot be empty and must not contain special characters.";
+        isValid = false;
+    } else {
+        usernameError.textContent = "";
     }
-</script>
+
+    // Name validation (allowing Vietnamese characters)
+    const name = document.getElementById("name").value.trim();
+    const nameError = document.getElementById("nameError");
+    const nameRegex = /^[a-zA-ZÀ-ỹ\s]+$/u;
+    if (!name || !nameRegex.test(name)) {
+        nameError.textContent = "Name can not have special characters";
+        isValid = false;
+    } else {
+        nameError.textContent = "";
+    }
+
+    // Email validation
+    const email = document.getElementById("email").value.trim();
+    const emailError = document.getElementById("emailError");
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+        emailError.textContent = "Please enter a valid email address.";
+        isValid = false;
+    } else {
+        emailError.textContent = "";
+    }
+
+    // Password validation
+    const password = document.getElementById("password").value;
+    const passwordError = document.getElementById("passwordError");
+    if (!password || password.length < 6) {
+        passwordError.textContent = "Password must be at least 6 characters long.";
+        isValid = false;
+    } else {
+        passwordError.textContent = "";
+    }
+
+    // Re-enter Password validation
+    const repassword = document.getElementById("repassword").value;
+    const repasswordError = document.getElementById("repasswordError");
+    if (repassword !== password) {
+        repasswordError.textContent = "Passwords do not match.";
+        isValid = false;
+    } else {
+        repasswordError.textContent = "";
+    }
+
+    // Phone validation
+    const phone = document.getElementById("phone").value.trim();
+    const phoneError = document.getElementById("phoneError");
+    const phoneRegex = /^0\d{9}$/;
+    if (!phone || !phoneRegex.test(phone)) {
+        phoneError.textContent = "Phone must start with 0 and have exactly 10 digits.";
+        isValid = false;
+    } else {
+        phoneError.textContent = "";
+    }
+
+    // DOB validation
+    const dob = document.getElementById("dob").value;
+    const dobError = document.getElementById("dobError");
+    const currentDate = new Date();
+    const dobDate = new Date(dob);
+    if (!dob || dobDate >= currentDate) {
+        dobError.textContent = "Date of Birth must be earlier than the current date.";
+        isValid = false;
+    } else {
+        dobError.textContent = "";
+    }
+
+    // CCCD validation (exactly 12 digits)
+    const cccd = document.getElementById("cccd").value.trim();
+    const cccdError = document.getElementById("cccdError");
+    const cccdRegex = /^\d{12}$/;
+    if (!cccd || !cccdRegex.test(cccd)) {
+        cccdError.textContent = "CCCD must contain exactly 12 digits.";
+        isValid = false;
+    } else {
+        cccdError.textContent = "";
+    }
+
+    // Prevent form submission if validation fails
+    return isValid;
+}
+
+        </script>
 
     </body>
 </html>

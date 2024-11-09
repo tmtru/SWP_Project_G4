@@ -770,7 +770,7 @@ public class AccountDAO extends DBContext {
         }
     }
     public boolean isCCCDExist(String CCCD) {
-        String sql = "SELECT * FROM ACCOUNT WHERE CCCD = ?";
+        String sql = "SELECT * FROM quan_ly WHERE CCCD = ?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
 
             st.setString(1, CCCD);
