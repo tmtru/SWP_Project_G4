@@ -19,7 +19,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Bootstrap CSS -->
 
-
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <!----======== CSS ======== -->
         <link rel="stylesheet" href="css/styleRoom.css">
         <link rel="stylesheet" href="css/modelDelete.css">
@@ -85,6 +85,7 @@
                         <a class="btn btn-success" href="loadHoaDonForm?roomId=${currentRoomOfHoaDon.ID_Phong}" >+ Thêm hóa đơn tiền phòng</a>
 
                     </div>
+
                     <div class="col-lg-10 mt-1 ml-2">
                         <!--                        <div class="row filter">
                         
@@ -104,173 +105,241 @@
                                         ${errorMessage}
                                     </div>
                                 </c:if>
+                                <div class="container my-3">
+                                    <div class="row justify-content-center">
+                                        <div class="col-md-6">
+                                            <form action="searchHoaDon" method="get">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" placeholder="Nhập mã hóa đơn" name="searchId" aria-label="Search Invoice ID">
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-primary" type="submit">
+                                                            <i class="fas fa-search"></i> Tìm kiếm
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <c:if test="${not empty errorMessage1}">
+                                    <div class="alert alert-danger">${errorMessage1}</div>
+                                </c:if>
 
                             </div>
+
                             <div class="card-body pt-4 p-3">
                                 <ul class="list-group">
-                                    <c:forEach var="hd" items="${invoices}">
-                                        <div class="mb-3">
-                                            <li class="list-group-item list-hoadon d-flex p-4 bg-gray-100 border-radius-lg"
-                                                style="border-left: 5px solid ${hd.trang_thai == 1 ? 'green' : 'red'}">
+                                    <% 
+                   // Retrieve existing query parameters
+                   String queryString = request.getQueryString();
+                   if (queryString == null) {
+                       queryString = "";
+                   } else {
+                       // Remove any existing page parameter from the query string
+                       queryString = queryString.replaceAll("&?page=\\d*", "");
+                       if (!queryString.isEmpty() && !queryString.endsWith("&")) {
+                           queryString += "&";
+                       }
+                   }
+                   request.setAttribute("queryString",queryString );
+                                    %>
 
-                                                <div class="d-flex flex-column">
-                                                    <% 
-                                                        // Lấy ID hóa đơn từ đối tượng hd bằng cách sử dụng EL
-                                                        int idHoadon = (Integer) ((HoaDon)  pageContext.getAttribute("hd")).getID_HoaDon();
-                                                        TransactionDAO tdao= new TransactionDAO();
-                                                        float totalAmount=tdao.getTotalMoneyByIdHoaDon(idHoadon);
-                                                        request.setAttribute("Paid", totalAmount);
-                                                        // Lấy danh sách giao dịch cho hóa đơn hiện tại
-                                                        List<Transaction> transactions = tdao.getTransactionsByIdHoaDon(idHoadon);
-                                                        request.setAttribute("transactions", transactions);
-                                                    %>
-                                                    <div class="d-flex header-invoice">
-                                                        <span class="badge
-                                                              ${hd.trang_thai == 1 ? 'badge-success' : 'badge-danger'}" 
-                                                              >
-                                                            ${hd.trang_thai == 1 ? 'Đã thanh toán' : 'Chưa thanh toán'}
+
+                                    <c:set var="page" value="${param.page != null ? param.page : 0}" />
+                                    <c:set var="items" value="0" />
+                                    <c:set var="limitItems" value="10" />
+                                    <c:set var="startItem" value="${page * limitItems}" />
+                                    <c:set var="endItem" value="${startItem + limitItems}" />
+                                    <c:set var="numOfPages" value="${(invoices.size() + limitItems - 1) / limitItems}" />
+
+                                    <c:forEach var="hd" items="${invoices}" varStatus="status">
+                                        <c:if test="${status.index >= startItem && status.index < endItem}">
+
+                                            <div class="mb-3">
+                                                <li class="list-group-item list-hoadon d-flex p-4 bg-gray-100 border-radius-lg"
+                                                    style="border-left: 5px solid ${hd.trang_thai == 1 ? 'green' : 'red'}">
+
+                                                    <div class="d-flex flex-column">
+                                                        <% 
+                                                            // Lấy ID hóa đơn từ đối tượng hd bằng cách sử dụng EL
+                                                            int idHoadon = (Integer) ((HoaDon)  pageContext.getAttribute("hd")).getID_HoaDon();
+                                                            TransactionDAO tdao= new TransactionDAO();
+                                                            float totalAmount=tdao.getTotalMoneyByIdHoaDon(idHoadon);
+                                                            request.setAttribute("Paid", totalAmount);
+                                                            // Lấy danh sách giao dịch cho hóa đơn hiện tại
+                                                            List<Transaction> transactions = tdao.getTransactionsByIdHoaDon(idHoadon);
+                                                            request.setAttribute("transactions", transactions);
+                                                        %>
+                                                        <div class="d-flex header-invoice">
+                                                            <h6 class="mb-3 text-sm"> Mã hóa đơn: ${hd.ID_HoaDon}</h6>
+                                                            <span class="badge
+                                                                  ${hd.trang_thai == 1 ? 'badge-success' : 'badge-danger'}" 
+                                                                  >
+                                                                ${hd.trang_thai == 1 ? 'Đã thanh toán' : 'Chưa thanh toán'}
+                                                            </span>
+                                                        </div>
+                                                        <span class="mb-2">Tổng tiền: 
+                                                            <span class="text-dark ms-sm-2 font-weight-bold">
+                                                                <fmt:formatNumber value="${hd.tong_gia_tien}" type="number" groupingUsed="true"/> VND
+                                                            </span>
                                                         </span>
-                                                    </div>
-                                                    <span class="mb-2">Tổng tiền: 
-                                                        <span class="text-dark ms-sm-2 font-weight-bold">
-                                                            <fmt:formatNumber value="${hd.tong_gia_tien}" type="number" groupingUsed="true"/> VND
+                                                        <span class="text-xs">Người tạo: <span class="text-dark ms-sm-2 font-weight-bold">${hd.nguoiTao}</span></span>
+
+                                                        <span class="text-xs">Đã thanh toán: 
+                                                            <span class="text-dark ms-sm-2 font-weight-bold">
+                                                                <fmt:formatNumber value="${Paid}" type="number" groupingUsed="true"/> VND
+                                                            </span>
                                                         </span>
-                                                    </span>
-                                                    <span class="text-xs">Người tạo: <span class="text-dark ms-sm-2 font-weight-bold">${hd.nguoiTao}</span></span>
-
-                                                    <span class="text-xs">Đã thanh toán: 
-                                                        <span class="text-dark ms-sm-2 font-weight-bold">
-                                                            <fmt:formatNumber value="${Paid}" type="number" groupingUsed="true"/> VND
-                                                        </span>
-                                                    </span>
-                                                    <button class="icon-transaction border-0 border-radius-lg btn-info mt-2" type="button" data-toggle="collapse" data-target="#collapsehd${hd.ID_HoaDon}" aria-expanded="false" aria-controls="collapseOne">
-                                                        <i class="fa-solid fa-circle-arrow-down"></i> <span class="text-xs"> Danh sách chuyển tiền</span>
-                                                    </button>
-
-
-                                                </div>
-                                                <div class=" pl-5 dich-vu-invoice">
-                                                    <h6>Dịch vụ sử dụng: </h6>
-                                                    <div class="ml-3">
-                                                        <c:forEach var="dichVu" items="${hd.dichVus}">
-                                                            <div class="service-item text-xs mr-2 mb-2">
-                                                                <span class="text-primary ms-sm-2 font-weight-bold">Tên dịch vụ: ${dichVu.tenDichVu}</span> <br/>
-
-                                                                <c:choose>
-                                                                    <c:when test="${dichVu.don_vi != 'Tháng'}">
-                                                                        <span class="text-dark ms-sm-2">
-                                                                            <span class="text-dark ms-sm-2 font-weight-bold">Chỉ số:</span> 
-                                                                            ${dichVu.chiSoCu} - ${dichVu.chiSoMoi}
-                                                                        </span>
-                                                                    </c:when>
-                                                                    <c:otherwise>
-                                                                        <span class="text-dark ms-sm-2">
-                                                                            <span class="text-dark ms-sm-2 font-weight-bold">Đầu người:</span> 
-                                                                            ${dichVu.dauNguoi}
-                                                                        </span>
-                                                                    </c:otherwise>
-                                                                </c:choose>
-
-                                                            </div>
-
-                                                        </c:forEach>
-                                                    </div>
-
-                                                </div>
-                                                <div class="ms-auto text-end">
-                                                    <div class="text-right">
-                                                        <span class="mb-2 text-xs">Ngày tạo: <span class="text-dark font-weight-bold ms-sm-2">${hd.ngay}</span></span>
-                                                    </div>
-                                                    <div class="mt-2">
-                                                        <a class="btn btn-link text-success px-3 mb-0" href="TransactionForm.jsp?id=${hd.ID_HoaDon}"><i class="fa-solid fa-plus"></i>Thêm giao dịch</a>
-
-                                                        <button type="button" class="btn btn-link text-danger text-gradient px-3 mb-0" data-toggle="modal" data-target="#myModalDelete${hd.ID_HoaDon}">
-                                                            <i class="fa-solid fa-trash"></i>Delete
+                                                        <button class="icon-transaction border-0 border-radius-lg btn-info mt-2" type="button" data-toggle="collapse" data-target="#collapsehd${hd.ID_HoaDon}" aria-expanded="false" aria-controls="collapseOne">
+                                                            <i class="fa-solid fa-circle-arrow-down"></i> <span class="text-xs"> Danh sách chuyển tiền</span>
                                                         </button>
-                                                        <div id="myModalDelete${hd.ID_HoaDon}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                            <div class="modal-dialog modal-confirm-delete">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header flex-column">
-                                                                        <div class="icon-box">
-                                                                            <i class="material-icons"><i class="fa-solid fa-circle-xmark"></i></i>
+
+
+                                                    </div>
+                                                    <div class=" pl-5 dich-vu-invoice">
+                                                        <h6>Dịch vụ sử dụng: </h6>
+                                                        <div class="ml-3">
+                                                            <c:forEach var="dichVu" items="${hd.dichVus}">
+                                                                <div class="service-item text-xs mr-2 mb-2">
+                                                                    <span class="text-primary ms-sm-2 font-weight-bold">Tên dịch vụ: ${dichVu.tenDichVu}</span> <br/>
+
+                                                                    <c:choose>
+                                                                        <c:when test="${dichVu.don_vi != 'Tháng'}">
+                                                                            <span class="text-dark ms-sm-2">
+                                                                                <span class="text-dark ms-sm-2 font-weight-bold">Chỉ số:</span> 
+                                                                                ${dichVu.chiSoCu} - ${dichVu.chiSoMoi}
+                                                                            </span>
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            <span class="text-dark ms-sm-2">
+                                                                                <span class="text-dark ms-sm-2 font-weight-bold">Đầu người:</span> 
+                                                                                ${dichVu.dauNguoi}
+                                                                            </span>
+                                                                        </c:otherwise>
+                                                                    </c:choose>
+
+                                                                </div>
+
+                                                            </c:forEach>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="ms-auto text-end">
+                                                        <div class="text-right">
+                                                            <span class="mb-2 text-xs">Ngày tạo: <span class="text-dark font-weight-bold ms-sm-2">${hd.ngay}</span></span>
+                                                        </div>
+                                                        <div class="mt-2">
+                                                            <a class="btn btn-link text-success px-3 mb-0" href="TransactionForm.jsp?id=${hd.ID_HoaDon}"><i class="fa-solid fa-plus"></i>Thêm giao dịch</a>
+
+                                                            <button type="button" class="btn btn-link text-danger text-gradient px-3 mb-0" data-toggle="modal" data-target="#myModalDelete${hd.ID_HoaDon}">
+                                                                <i class="fa-solid fa-trash"></i>Delete
+                                                            </button>
+                                                            <div id="myModalDelete${hd.ID_HoaDon}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                <div class="modal-dialog modal-confirm-delete">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header flex-column">
+                                                                            <div class="icon-box">
+                                                                                <i class="material-icons"><i class="fa-solid fa-circle-xmark"></i></i>
+                                                                            </div>
+                                                                            <h5 class="modal-title w-100">Bạn có chắc chắn bạn muốn xóa hóa đơn ?<br/> <span style="color: #5932ea"></span></h5>
                                                                         </div>
-                                                                        <h5 class="modal-title w-100">Bạn có chắc chắn bạn muốn xóa hóa đơn ?<br/> <span style="color: #5932ea"></span></h5>
-                                                                    </div>
-                                                                    <div class="modal-footer justify-content-center">
-                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                                                                        <button type="button" class="btn btn-danger">
-                                                                            <a href="actionhoadon?action=dele&id=${hd.ID_HoaDon}&exit=" class="edit-film" style="color: white !important;">Xóa hóa đơn</a>
-                                                                        </button>
+                                                                        <div class="modal-footer justify-content-center">
+                                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                                                                            <button type="button" class="btn btn-danger">
+                                                                                <a href="actionhoadon?action=dele&id=${hd.ID_HoaDon}&exit=" class="edit-film" style="color: white !important;">Xóa hóa đơn</a>
+                                                                            </button>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <br/>
+                                                    <br/>
 
-                                            </li>
-                                            <div id="collapsehd${hd.ID_HoaDon}" class="collapse" >
-                                                <ul class="list-group transaction">
-                                                    <c:forEach var="tr" items="${transactions}">
+                                                </li>
+                                                <div id="collapsehd${hd.ID_HoaDon}" class="collapse" >
+                                                    <ul class="list-group transaction">
+                                                        <c:forEach var="tr" items="${transactions}">
 
-                                                        <li class="list-group-item d-flex justify-content-between ps-0 border-radius-lg">
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="icon-transaction" >
-                                                                    <i class="fa-solid fa-circle-arrow-down"></i>
-                                                                </div>
-                                                                <div class="d-flex flex-column">
-                                                                    <div class="d-flex align-items-center text-success text-gradient text-sm font-weight-bold">
-                                                                        + <fmt:formatNumber value="${tr.amount}" type="number" groupingUsed="true"/> VND
+                                                            <li class="list-group-item d-flex justify-content-between ps-0 border-radius-lg">
+                                                                <div class="d-flex align-items-center">
+                                                                    <div class="icon-transaction" >
+                                                                        <i class="fa-solid fa-circle-arrow-down"></i>
                                                                     </div>
-                                                                    <span class="text-xs">${tr.transaction}</span>
-                                                                    <span class="mb-2 text-xs">Phương thức thanh toán: ${tr.paymentMethod}</span>
-                                                                    <span class="mb-2 text-xs">Mã giao dịch: ${tr.maGiaoDich}</span>
-                                                                    <span class="mb-2 text-xs">Mô tả: ${tr.moTa}</span>
-                                                                </div>
-
-                                                            </div>
-                                                            <c:if test="${a!=null}">
-                                                                <c:if test="${a.role.equals('landlord')}">
-                                                                    <div class="ms-auto text-end">
-                                                                        <button type="button" class="col-4 btn btn-link text-danger text-gradient px-3 mb-0" data-toggle="modal" data-target="#myModalDelete${tr.ID_Transaction}">
-                                                                            <i class="fa-solid fa-trash"></i>Delete
-
-                                                                        </button>
+                                                                    <div class="d-flex flex-column">
+                                                                        <div class="d-flex align-items-center text-success text-gradient text-sm font-weight-bold">
+                                                                            + <fmt:formatNumber value="${tr.amount}" type="number" groupingUsed="true"/> VND
+                                                                        </div>
+                                                                        <span class="text-xs">${tr.transaction}</span>
+                                                                        <span class="mb-2 text-xs">Phương thức thanh toán: ${tr.paymentMethod}</span>
+                                                                        <span class="mb-2 text-xs">Mã giao dịch: ${tr.maGiaoDich}</span>
+                                                                        <span class="mb-2 text-xs">Mô tả: ${tr.moTa}</span>
                                                                     </div>
-                                                                    <div id="myModalDelete${tr.ID_Transaction}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                                        <div class="modal-dialog modal-confirm-delete">
-                                                                            <div class="modal-content">
-                                                                                <div class="modal-header flex-column">
-                                                                                    <div class="icon-box">
-                                                                                        <i class="material-icons"><i class="fa-solid fa-circle-xmark"></i></i>
+
+                                                                </div>
+                                                                <c:if test="${a!=null}">
+                                                                    <c:if test="${a.role.equals('landlord')}">
+                                                                        <div class="ms-auto text-end">
+                                                                            <button type="button" class="col-4 btn btn-link text-danger text-gradient px-3 mb-0" data-toggle="modal" data-target="#myModalDelete${tr.ID_Transaction}">
+                                                                                <i class="fa-solid fa-trash"></i>Delete
+
+                                                                            </button>
+                                                                        </div>
+                                                                        <div id="myModalDelete${tr.ID_Transaction}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                            <div class="modal-dialog modal-confirm-delete">
+                                                                                <div class="modal-content">
+                                                                                    <div class="modal-header flex-column">
+                                                                                        <div class="icon-box">
+                                                                                            <i class="material-icons"><i class="fa-solid fa-circle-xmark"></i></i>
+                                                                                        </div>
+                                                                                        <h5 class="modal-title w-100">Bạn có chắc chắn bạn muốn xóa giao dịch ?<br/> <span style="color: #5932ea"></span></h5>
                                                                                     </div>
-                                                                                    <h5 class="modal-title w-100">Bạn có chắc chắn bạn muốn xóa giao dịch ?<br/> <span style="color: #5932ea"></span></h5>
-                                                                                </div>
-                                                                                <div class="modal-footer justify-content-center">
-                                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                                                                                    <button type="button" class="btn btn-danger">
-                                                                                        <a href="actionTransaction?action=dele&id=${tr.ID_Transaction}&exit=" class="edit-film" style="color: white !important;">Xóa giao dịch</a>
-                                                                                    </button>
+                                                                                    <div class="modal-footer justify-content-center">
+                                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                                                                                        <button type="button" class="btn btn-danger">
+                                                                                            <a href="actionTransaction?action=dele&id=${tr.ID_Transaction}&exit=" class="edit-film" style="color: white !important;">Xóa giao dịch</a>
+                                                                                        </button>
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
+                                                                    </c:if>
                                                                 </c:if>
-                                                            </c:if>
 
 
 
-                                                        </li>
+                                                            </li>
 
-                                                    </c:forEach>
-                                                </ul>
+                                                        </c:forEach>
+                                                    </ul>
+                                                </div>
                                             </div>
-                                        </div>
+                                        </c:if>
                                     </c:forEach>
 
 
                                 </ul>
+                            </div>
+                            <div class="pagination-bar">
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination justify-content-center">
+                                        <c:if test="${page > 0}">
+                                            <li class="page-item">
+                                                <a class="page-link" href="?${queryString}page=${page - 1}">Previous</a>
+                                            </li>
+                                        </c:if>
+                                        <c:forEach begin="0" end="${numOfPages - 1}" var="i">
+                                            <li class="page-item ${page == i ? 'active' : ''}">
+                                                <a class="page-link" href="?${queryString}page=${i}">${i + 1}</a>
+                                            </li>
+                                        </c:forEach>
+                                        <c:if test="${page < numOfPages - 2}">
+                                            <li class="page-item">
+                                                <a class="page-link" href="?${queryString}page=${page + 1}">Next</a>
+                                            </li>
+                                        </c:if>
+                                    </ul>
+                                </nav>
                             </div>
                         </div>
                     </div>
@@ -280,7 +349,9 @@
         </section>
 
         <!-- Bootstrap JS and dependencies -->
-
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <!--Date Range Picker-->
         <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>

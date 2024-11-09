@@ -587,7 +587,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                         <!-- Room Name and Add Contract Button Positioned at the Top -->
                                         <div class="d-flex justify-content-between align-items-center">
                                             <h5 class="card-title">${room.tenPhongTro}</h5>
-                                            <c:if test="${room.trang_thai == 'T' || room.trang_thai == 'DT'}">
+                                            <c:if test="${(room.trang_thai == 'T' || room.trang_thai == 'DT') && sessionScope.account.role == 'manager'}">
                                                 <form action="addContract" method="post" style="display: inline;">
                                                     <input type="hidden" name="roomId" value="${room.ID_Phong}">
                                                     <button type="submit" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;">

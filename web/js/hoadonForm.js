@@ -29,19 +29,18 @@ function toggleServiceInputs(serviceName, donvi, servicePrice, checkbox) {
         clearInvoiceService(checkbox.id);
     }
     console.log(checkbox.id);
-    // Cập nhật hóa đơn nếu cần
 
 }
 function toggleInvoiceRoom(checkbox) {
     console.log(checkbox);
     var roomSelect = document.getElementById("phong");
     var selectedOption = roomSelect.options[roomSelect.selectedIndex];
-    var roomPrice = parseFloat(selectedOption.getAttribute("data-price")); // Lấy giá phòng từ data-price
-    var roomName = selectedOption.text; // Lấy tên phòng
+    var roomPrice = parseFloat(selectedOption.getAttribute("data-price"));
+    var roomName = selectedOption.text; 
     console.log(roomName);
 
     var invoiceTable = document.getElementById("invoiceServicesBody");
-    var serviceRow = document.getElementById("service_room"); // ID hàng phòng
+    var serviceRow = document.getElementById("service_room"); 
 
     if (checkbox.checked) {
         // Nếu checkbox được tick và hàng chưa có
@@ -54,7 +53,7 @@ function toggleInvoiceRoom(checkbox) {
 
             var priceCell = document.createElement("td");
             priceCell.classList.add("text-right");
-            priceCell.innerText = roomPrice.toLocaleString() + " VND"; // Định dạng giá
+            priceCell.innerText = roomPrice.toLocaleString() + " VND"; 
 
             serviceRow.appendChild(nameCell);
             serviceRow.appendChild(priceCell);
@@ -135,8 +134,6 @@ function clearInvoiceService(serviceId) {
 function updateTotalPrice() {
     var total = 0;
     var serviceRows = document.querySelectorAll("#invoiceServicesBody tr");
-
-    // Tính tổng giá trị các dịch vụ trong bảng
     serviceRows.forEach(function (row) {
         var priceText = row.cells[1].innerText.replace(" VND", "").replace(/,/g, "");
         total += parseFloat(priceText);
@@ -151,7 +148,7 @@ function updateInvoiceOnRoomChange() {
     var roomName = roomSelect.options[roomSelect.selectedIndex].text;
     var roomPrice = parseFloat(roomSelect.options[roomSelect.selectedIndex].getAttribute("data-price")); // Lấy giá phòng
 
-    var checkbox = document.getElementById("tinhTienPhong"); // ID của checkbox tiền phòng
+    var checkbox = document.getElementById("tinhTienPhong"); 
     if (checkbox.checked) {
         toggleInvoiceRoom(checkbox);
 
@@ -160,36 +157,37 @@ function updateInvoiceOnRoomChange() {
 //valid data form
 function validateForm12() {
     const dichVuCheckboxes = document.querySelectorAll('input[name="dichVuId"]');
-    let isValid = true; // Khởi tạo là true
+    let isValid = true; 
     let errorMessage = "";
 
     dichVuCheckboxes.forEach((checkbox) => {
         if (checkbox.checked) {
             const dichVuId = checkbox.value;
 
-            // Khai báo biến
+
             let chiSoCu, chiSoMoi, dauNguoi;
             const chiSoCuInput = document.getElementById(`chiSoCu_dichVu_${dichVuId}`);
             const chiSoMoiInput = document.getElementById(`chiSoMoi_dichVu_${dichVuId}`);
             const dauNguoiInput = document.getElementById(`dauNguoiInput_dichVu_${dichVuId}`);
 
-            // Kiểm tra chỉ số cũ và chỉ số mới
+
             if (chiSoCuInput !== null) {
                 if (chiSoCuInput.value !== "") {
                     chiSoCu = parseFloat(chiSoCuInput.value);
                 } else {
-                    isValid = false; // Nếu không có giá trị, không hợp lệ
+                       errorMessage += "Yêu cầu nhập chỉ số đầy đủ";
+                    isValid = false; 
                     chiSoCuInput.classList.add("is-invalid");
                 }
 
                 if (chiSoMoiInput.value !== "") {
                     chiSoMoi = parseFloat(chiSoMoiInput.value);
                 } else {
-                    isValid = false; // Nếu không có giá trị, không hợp lệ
+                    errorMessage += "Yêu cầu nhập chỉ số đầy đủ";
+                    isValid = false; 
                     chiSoMoiInput.classList.add("is-invalid");
                 }
 
-                // Kiểm tra nếu chỉ số cũ lớn hơn chỉ số mới
                 if (chiSoCu > chiSoMoi) {
                     errorMessage += `Chỉ số cũ không được lớn hơn chỉ số mới cho dịch vụ ${dichVuId}!\n`;
                     isValid = false;
@@ -200,17 +198,15 @@ function validateForm12() {
                     chiSoMoiInput.classList.remove("is-invalid");
                 }
             } else {
-                // Nếu không có trường chỉ số cũ và mới, kiểm tra đầu người
                 if (dauNguoiInput !== null) {
                     if (dauNguoiInput.value !== "") {
                         dauNguoi = parseFloat(dauNguoiInput.value);
                     } else {
-                        isValid = false; // Nếu không có giá trị, không hợp lệ
+                        isValid = false; 
                         dauNguoiInput.classList.add("is-invalid");
                     }
                 }
 
-                // Kiểm tra đầu người phải lớn hơn 0
                 if (dauNguoi <= 0) {
                     errorMessage += `Đầu người phải lớn hơn 0 cho dịch vụ ${dichVuId}!\n`;
                     isValid = false;
@@ -231,7 +227,7 @@ function validateForm12() {
         notification.style.display = "none";
     }
 
-    return isValid; // Trả về giá trị của isValid
+    return isValid;
 }
 
 

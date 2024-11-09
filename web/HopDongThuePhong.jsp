@@ -313,7 +313,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="depositAmount">Tiền đặt cọc:</label>
-                        <input type="number" id="depositAmount" name="depositAmount" value="${depositAmount}" placeholder="Nhập tiền đặt cọc" required>
+                        <input type="number" id="depositAmount" name="depositAmount" value="${depositAmount}" placeholder="Nhập tiền đặt cọc" min="0" required>
                     </div>
 
                     <div class="form-group">
@@ -329,7 +329,7 @@
                     </div>
                 </div>
                 <label for="endDate">Ghi Chú:</label>
-                <input type="text" id="ghichu" name="ghichu" value="${ghichu}" required>
+                <input type="text" id="ghichu" name="ghichu" value="${ghichu}" >
 
                 <label for="contractContent">Nội dung hợp đồng:</label>
                 <textarea id="contractContent" name="contractContent"></textarea>
@@ -352,6 +352,8 @@
         const startDate = new Date(startDateInput.value);
         const endDate = new Date(endDateInput.value);
         const today = new Date(); // Lấy ngày hiện tại
+                const todayOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
 
         // Lấy các phần tử thông báo lỗi
         const startDateError = document.getElementById('startDate-error');
@@ -371,6 +373,11 @@
         endDateError.style.display = 'none'; // Ẩn thông báo lỗi
         }
 
+        if (endDate <= todayOnly) {
+        endDateError.innerText = "Ngày kết thúc phải sau ngày hiện tại.";
+        endDateError.style.display = 'inline';
+        isValid = false;
+        }
         // Nếu ngày bắt đầu không hợp lệ
         if (!isValid) {
         startDateInput.setCustomValidity("Ngày bắt đầu không hợp lệ.");

@@ -102,14 +102,10 @@
                         </div>
                         <div class="stats-container">
                             <div class="stat-item">
-                                <span class="stat-value">7.4%</span>
-                                <span class="stat-label">Property Return Rate</span>
+                                <span class="stat-value">Bạn có thể vào từng nhà trọ để chat trực tiếp với chúng tôi.</span>
+
                             </div>
                             <div class="stat-divider" aria-hidden="true"></div>
-                            <div class="stat-item">
-                                <span class="stat-value">3,856</span>
-                                <span class="stat-label">Property in Sell & Rent</span>
-                            </div>
                         </div>
                     </div>
                 </div>

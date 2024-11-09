@@ -214,10 +214,6 @@
         <servlet-class>controller.CalendarByManagerController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>contactUs</servlet-name>
-        <servlet-class>controller.contactUs</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>lienhe</servlet-name>
         <servlet-class>controller.lienhe</servlet-class>
     </servlet>
@@ -233,7 +229,10 @@
         <servlet-name>ContactUs</servlet-name>
         <servlet-class>controller.ContactUs</servlet-class>
     </servlet>
-
+    <servlet>
+        <servlet-name>searchHoaDon</servlet-name>
+        <servlet-class>controller.searchHoaDon</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CalendarByManagerController</servlet-name>
         <url-pattern>/CalendarByManager</url-pattern>
@@ -276,10 +275,6 @@
         <servlet-class>controller.detailRoomServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>searchRoomByName</servlet-name>
-        <servlet-class>controller.searchRoomByName</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>AccountControllerServlet</servlet-name>
         <servlet-class>controller.AccountControllerServlet</servlet-class>
     </servlet>
@@ -314,10 +309,6 @@
     <servlet-mapping>
         <servlet-name>filterRoomsHome</servlet-name>
         <url-pattern>/filterrooms</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>searchRoomByName</servlet-name>
-        <url-pattern>/searchRoomByName</url-pattern>
     </servlet-mapping>
     <!--For Dich vu in Dashboard-->
     <servlet>
@@ -525,10 +516,6 @@
         <url-pattern>/DeleteGhiChuByManager</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>contactUs</servlet-name>
-        <url-pattern>/thongtinlienhe</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>lienhe</servlet-name>
         <url-pattern>/lienhe</url-pattern>
     </servlet-mapping>
@@ -548,14 +535,16 @@
         <servlet-name>DanhSachPhongTroCalenderController</servlet-name>
         <url-pattern>/DanhSachPhongTroCalender</url-pattern>
     </servlet-mapping>
-        <servlet>
+    <servlet>
         <servlet-name>FeedBackController</servlet-name>
         <servlet-class>controller.FeedBackController</servlet-class>
     </servlet>
-<servlet-mapping>
+    <servlet-mapping>
         <servlet-name>FeedBackController</servlet-name>
         <url-pattern>/feedback</url-pattern>
     </servlet-mapping>
-
-     
+    <servlet-mapping>
+        <servlet-name>searchHoaDon</servlet-name>
+        <url-pattern>/searchHoaDon</url-pattern>
+    </servlet-mapping>
 </web-app>

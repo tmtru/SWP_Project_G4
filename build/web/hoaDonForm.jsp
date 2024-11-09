@@ -361,11 +361,10 @@
                     }
                 }, cb);
 
-                // Gọi hàm callback với giá trị khởi tạo
                 cb(start, end);
 
                 $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
-                    $('#dateRangeForm').submit(); // Gửi form đến servlet
+                    $('#dateRangeForm').submit(); 
                 });
             });
         </script>

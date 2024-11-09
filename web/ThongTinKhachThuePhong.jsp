@@ -138,9 +138,10 @@
             birthDateInput.addEventListener('change', function () {
                 const birthDate = new Date(birthDateInput.value);
                 const today = new Date();
-
+                const birthDateOnly = new Date(birthDate.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+            const todayOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
                 // Kiểm tra ngày sinh
-                if (birthDate > today) {
+                if (birthDateOnly > todayOnly) {
                     dobError.style.display = 'inline'; // Hiện thông báo lỗi
                 } else {
                     dobError.style.display = 'none'; // Ẩn thông báo lỗi

@@ -39,7 +39,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <style>
-              .dropdown-menu {
+            .dropdown-menu {
                 display: none;
                 list-style: none;
                 padding: 0px 27px;
@@ -120,12 +120,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         </a>
                     </li>
                     <c:if test="${sessionScope.account.role == 'landlord'}">
-                     <li class="">
+                        <li class="">
                             <a href="manage-new" class="">
                                 <i class='bx bx-bell icon ' ></i>
                                 <span class="text nav-text">Thông báo</span>
                             </a>                      
-                     </li>
+                        </li>
                     </c:if>
                     <li class="">
                         <a href="room" >
@@ -148,12 +148,25 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         </a>
                     </li>
 
-                    <li class="">
-                        <a href="hop-dong">
-                            <i class='bx bx-id-card icon' ></i>
+                    <c:if test="${sessionScope.account.role == 'landlord'}">
+                        <li class="">
+                            <a href="DanhSachCacHopDongByAdmin">
+                                <i class='bx bx-id-card icon' ></i>
                             <span class="text nav-text">Hợp đồng</span>
-                        </a>
-                    </li>
+                            </a>
+                        </li>
+                    </c:if>
+                   
+                         <c:if test="${sessionScope.account.role == 'manager'}">
+                        <li class="">
+                            <a href="DanhSachCacHopDongByManager">
+                                <i class='bx bx-id-card icon' ></i>
+                            <span class="text nav-text">Hợp đồng</span>
+                            </a>
+                        </li>
+                    </c:if>
+
+                    
 
                     <li class="">
                         <a href="hoadon" >
@@ -193,17 +206,17 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 <h2>Danh sách nhà trọ</h2>
 
                 <div class="action-buttons" style="margin-bottom: 20px">
-                    
+
                     <button class="btn add-property" data-toggle="modal" data-target="#addRoomModal">+ Thêm nhà trọ</button>
-                    
+
                     <form action="nhatro" method="get" class="filters">
                         <input type="text" name="search" value="${param.search}" placeholder="Search..">
                         <button type="submit"><i class='bx bx-search icon'></i></button>
-                        
-                        
-                           
-                   
-                        
+
+
+
+
+
                     </form>
                 </div>
                 <c:if test="${not empty sessionScope.notification}">
@@ -234,17 +247,17 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                
+
                                 <h5 class="modal-title" id="addRoomModalLabel">Thêm nhà trọ</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
-                               
+
                             </div>
-                             
-                                    
-                            
-                                
+
+
+
+
                             <div class="modal-body">
                                 <form id="addRoomForm" action="nhatro" method="post" enctype="multipart/form-data">
                                     <input type="hidden" name="action" value="add">
@@ -255,8 +268,17 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="diaChi">Địa chỉ</label>
-                                        <input type="text" class="form-control" id="diaChi" name="diaChi" >
+                                        <div class="form-input" data-target-input="nearest">
+                                            <label for="addressInput" class="label mb-1">Vị trí</label>
+                                            <div class="input-group">
+                                                <input id="addressInput" type="text" class="form-control" name="address"
+                                                       placeholder="Địa điểm của bạn..." oninput="suggestAddress(this.value)" required />
+
+                                            </div>
+                                            <div id="suggestions"></div>
+                                            <input type="text" id="selectedlat" name="lat" hidden />
+                                            <input type="text" id="selectedlon" name="lon" hidden />
+                                        </div>
                                     </div>
 
                                     <div class="form-group">
@@ -325,7 +347,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                                 <a href="add-all-room?id=${s.ID_NhaTro}" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;">
                                                     <i class="bx bx-plus"></i>
                                                 </a>
-                                                
+
                                             </c:if>
                                             <a href="quanly-account-nha-tro?id=${s.ID_NhaTro}" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;">
                                                 <i class="bx bx-user-plus"></i> 
@@ -336,60 +358,69 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                             </div>
 
                             <!-- Edit Room Modal -->
-                            <div class="modal fade" id="editRoomModal-${s.getID_NhaTro()}" tabindex="-1" role="dialog" aria-labelledby="editRoomModalLabel-${s.getID_NhaTro()}" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="editRoomModalLabel-${s.getID_NhaTro()}">Chỉnh sửa nhà trọ</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form id="editRoomForm-${s.getID_NhaTro()}" action="nhatro" method="post" enctype="multipart/form-data">
-                                                <input type="hidden" name="action" value="edit">
-                                                <input type="hidden" name="nhaTroId" value="${s.getID_NhaTro()}">
 
-                                                <div class="form-group">
-                                                    <label for="tenNhaTro">Tên nhà trọ</label>
-                                                    <input type="text" class="form-control" name="tenNhaTro" value="${s.getTenNhaTro()}" >
-                                                </div>
+                                <div class="modal fade" id="editRoomModal-${s.getID_NhaTro()}" tabindex="-1" role="dialog" aria-labelledby="editRoomModalLabel-${s.getID_NhaTro()}" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="editRoomModalLabel-${s.getID_NhaTro()}">Chỉnh sửa nhà trọ</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form id="editRoomForm-${s.getID_NhaTro()}" action="nhatro" method="post" enctype="multipart/form-data">
+                                                    <input type="hidden" name="action" value="edit">
+                                                    <input type="hidden" name="nhaTroId" value="${s.getID_NhaTro()}">
 
-                                                <div class="form-group">
-                                                    <label for="diaChi">Địa chỉ</label>
-                                                    <input type="text" class="form-control" name="diaChi" value="${s.getDia_chi()}" >
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label for="moTa">Mô tả</label>
-                                                    <textarea class="form-control" name="moTa" rows="3">${s.getMo_ta()}</textarea>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label>Hình ảnh hiện tại</label>
-                                                    <div class="current-images">
-                                                        <c:forEach var="image" items="${s.getAnhNhaTro()}">
-                                                            <div class="image-block">
-                                                                <img src="${image}" alt="Room Image" style="width: 100px; height: 100px;">
-                                                                <input type="checkbox" name="deleteImages" value="${image}"> Remove
-                                                            </div>
-                                                        </c:forEach>
-                                                    </div>
-                                                </div>
-
-                                                <c:if test="${s.getAnhNhaTro().size() < 5}">
                                                     <div class="form-group">
-                                                        <label for="images">Tải lên thêm hình ảnh (tối đa 5)</label>
-                                                        <input type="file" class="form-control" name="images" multiple accept="image/*">
+                                                        <label for="tenNhaTro">Tên nhà trọ</label>
+                                                        <input type="text" class="form-control" name="tenNhaTro" value="${s.getTenNhaTro()}" >
                                                     </div>
-                                                </c:if>
 
-                                                <button type="submit" class="btn btn-primary">Cập nhật</button>
-                                            </form>
+                                                    <div class="form-group">
+                                                        <label for="addressInput-${s.getID_NhaTro()}" class="label mb-1">Vị trí</label>
+                                                        <div class="input-group">
+                                                            <input id="addressInput-${s.getID_NhaTro()}" type="text" class="form-control" name="address"
+                                                                   placeholder="Địa điểm của bạn..." oninput="suggestAddress1(${s.getID_NhaTro()},this.value)" value="${s.getDia_chi()}" required />
+                                                        </div>
+                                                        <div id="suggestions-${s.getID_NhaTro()}"></div>
+                                                        <input type="text" id="selectedlat-${s.getID_NhaTro()}" name="lat" hidden />
+                                                        <input type="text" id="selectedlon-${s.getID_NhaTro()}" name="lon" hidden />
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label for="moTa">Mô tả</label>
+                                                        <textarea class="form-control" name="moTa" rows="3">${s.getMo_ta()}</textarea>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Hình ảnh hiện tại</label>
+                                                        <div class="current-images">
+                                                            <c:forEach var="image" items="${s.getAnhNhaTro()}">
+                                                                <div class="image-block">
+                                                                    <img src="${image}" alt="Room Image" style="width: 100px; height: 100px;">
+                                                                    <input type="checkbox" name="deleteImages" value="${image}"> Remove
+                                                                </div>
+                                                            </c:forEach>
+                                                        </div>
+                                                    </div>
+
+                                                    <c:if test="${s.getAnhNhaTro().size() < 5}">
+                                                        <div class="form-group">
+                                                            <label for="images">Tải lên thêm hình ảnh (tối đa 5)</label>
+                                                            <input type="file" class="form-control" name="images" multiple accept="image/*">
+                                                        </div>
+                                                    </c:if>
+
+                                                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+          
+
                         </c:forEach>
                     </div>
 
@@ -416,6 +447,131 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 </div>
             </section>
         </section>
+        <script>
+            // JavaScript
+            let debounceTimeout;
+
+            function suggestAddress(input) {
+                if (debounceTimeout) {
+                    clearTimeout(debounceTimeout);
+                }
+
+                debounceTimeout = setTimeout(() => {
+                    if (input.length < 3) {
+                        document.getElementById('suggestions').innerHTML = '';
+                        return;
+                    }
+
+                    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=\${input}&addressdetails=1&countrycodes=VN`)
+                            .then(response => response.json())
+                            .then(data => {
+                                let suggestions = document.getElementById('suggestions');
+                                suggestions.innerHTML = '';
+
+                                data.forEach(item => {
+                                    let div = document.createElement('div');
+                                    div.className = 'suggestion-item';
+                                    div.textContent = item.display_name;
+                                    div.onclick = () => {
+                                        selectAddress(item.lat, item.lon, item.display_name);
+                                        document.getElementById('addressInput').value = item.display_name;
+                                    }
+                                    suggestions.appendChild(div);
+                                });
+                            })
+                            .catch(error => console.error('Error:', error));
+                }, 100); // Đợi 500ms trước khi gọi API
+            }
+
+
+            function selectAddress(lat, lon, address) {
+
+                document.getElementById("selectedlat").value = lat;
+                document.getElementById("selectedlon").value = lon;
+                document.getElementById('suggestions').innerHTML = '';
+            }
+            function checkLatLon() {
+                const lat = document.getElementById('selectedlat').value;
+                const lon = document.getElementById('selectedlon').value;
+                if (!lat || !lon) {
+                    const firstSuggestion = document.querySelector('#suggestions .suggestion-item');
+                    if (firstSuggestion) {
+                        firstSuggestion.click();
+                    } else {
+
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+            function useCurrentLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                            function (position) {
+                                document.getElementById("selectedlat").value = position.coords.latitude;
+                                document.getElementById("selectedlon").value = position.coords.longitude;
+                                document.getElementById("addressInput").value = "Vị trí hiện tại của bạn";
+                                document.querySelector("form").submit();
+                            },
+                            function (error) {
+                                alert("Không thể lấy vị trí hiện tại. Hãy kiểm tra quyền truy cập vị trí của trình duyệt.");
+                            }
+                    );
+                } else {
+                    alert("Trình duyệt của bạn không hỗ trợ lấy vị trí.");
+                }
+            }
+
+
+        </script>
+        <script>
+            // JavaScript
+
+
+            function suggestAddress1(id, input) {
+                let debounceTimeout;
+                if (debounceTimeout) {
+                    clearTimeout(debounceTimeout);
+                }
+
+                debounceTimeout = setTimeout(() => {
+                    if (input.length < 3) {
+                        document.getElementById(`suggestions-\${id}`).innerHTML = '';
+                        return;
+                    }
+
+                    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=\${input}&addressdetails=1&countrycodes=VN`)
+                            .then(response => response.json())
+                            .then(data => {
+                                let suggestions = document.getElementById(`suggestions-\${id}`);
+                                suggestions.innerHTML = '';
+
+                                data.forEach(item => {
+                                    let div = document.createElement('div');
+                                    div.className = 'suggestion-item';
+                                    div.textContent = item.display_name;
+                                    div.onclick = () => {
+                                        selectAddress1(id, item.lat, item.lon, item.display_name);
+                                        document.getElementById(`addressInput-\${id}`).value = item.display_name;
+                                    }
+                                    suggestions.appendChild(div);
+                                });
+                            })
+                            .catch(error => console.error('Error:', error));
+                }, 100); // Delay 100ms before calling API
+            }
+
+// Function to select address from suggestions
+            function selectAddress1(id, lat, lon, address) {
+                document.getElementById(`selectedlat-\${id}`).value = lat;
+                document.getElementById(`selectedlon-\${id}`).value = lon;
+                document.getElementById(`suggestions-\${id}`).innerHTML = '';
+            }
+
+
+
+        </script>
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 // Add validation for addRoomForm

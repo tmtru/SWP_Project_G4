@@ -408,10 +408,9 @@ public class HopDongDAO extends DBContext {
     }
     
     public void updateHopDongStatus1(int hopDongId, String status) {
-        String sql = "UPDATE hop_dong SET Trang_thai = ? WHERE ID_HopDong = ? AND Trang_thai = 'accept' and isActive = 1";
+        String sql = "UPDATE hop_dong SET Trang_thai = 'active' WHERE ID_HopDong = ? AND Trang_thai = 'accept' and isActive = 1";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, status);
-            ps.setInt(2, hopDongId);
+            ps.setInt(1, hopDongId);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
