@@ -32,10 +32,10 @@
             <header>
                 <div class="image-text">
                     <a href="home.jsp">
-                    <span class="image">
-                        <img src="${pageContext.request.contextPath}/assets/img/Logo_nhatro.png" alt="alt" style="margin-top: 15px; width: 100%; margin-left:10px"/>
-                        <!--<img src="logo.png" alt="">-->
-                    </span>
+                        <span class="image">
+                            <img src="${pageContext.request.contextPath}/assets/img/Logo_nhatro.png" alt="alt" style="margin-top: 15px; width: 100%; margin-left:10px"/>
+                            <!--<img src="logo.png" alt="">-->
+                        </span>
                     </a>
                 </div>
 
@@ -87,7 +87,7 @@
                         </li>
 
                         <li class="">
-                            <a href="#">
+                            <a href="DanhSachCacHopDongByManager">
                                 <i class='bx bx-id-card icon' ></i>
                                 <span class="text nav-text">Hợp đồng</span>
                             </a>
@@ -136,7 +136,7 @@
 
         </nav>
 
-        
+
 
         <script>
             const body = document.querySelector('body'),
@@ -144,6 +144,20 @@
                     toggle = body.querySelector(".toggle"),
                     modeSwitch = body.querySelector(".toggle-switch"),
                     modeText = body.querySelector(".mode-text");
+
+            // Kiểm tra xem trang hiện tại có phải là /HopDong.jsp không
+            const currentPath = window.location.pathname;
+
+            if (currentPath.includes('/ThemKhachThuePhong.jsp') || currentPath.includes('/DangKyDichVuPhongTro') || currentPath.includes('/HopDongThuePhong.jsp')) {
+                // Xóa class 'active' khỏi tất cả các nút đang active
+                const activeLinks = document.querySelectorAll('.menu-links a.active');
+                activeLinks.forEach(link => link.classList.remove('active'));
+
+                // Tìm nút "Hợp đồng" và thêm class 'active'
+                const hopDongLink = document.querySelector('a[href="#"] i.bx-id-card').parentElement;
+                hopDongLink.classList.add('active');
+            }
+
             // Check if dark mode is enabled on page load
             if (localStorage.getItem("darkMode") === "disabled") {
                 body.classList.add("light");
@@ -184,7 +198,7 @@
                 }
             }
         </script>
-        
+
 
     </body>
 </html>

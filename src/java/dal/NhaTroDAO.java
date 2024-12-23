@@ -503,12 +503,46 @@ public class NhaTroDAO extends DBContext {
         return nhaTro;
     }
     
+ public Phong getRoomDetailsByHopDongId(int idHopDong) {
+    Phong roomDetails = null; // Đối tượng chứa thông tin phòng
+    String sql = "SELECT n.Dia_chi, p.Gia, h.Trang_thai " +
+                 "FROM hop_dong h " +
+                 "JOIN phong_tro p ON h.ID_PhongTro = p.ID_Phong " +
+                 "JOIN nha_tro n ON p.ID_NhaTro = n.ID_NhaTro " +
+                 "WHERE h.ID_HopDong = ?";
+
+    try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        statement.setInt(1, idHopDong);
+        ResultSet resultSet = statement.executeQuery();
+
+        if (resultSet.next()) {
+            String diaChiPhongTro = resultSet.getString("Dia_chi");
+            int Gia = resultSet.getInt("Gia");
+            String Trang_thai = resultSet.getString("Trang_thai");
+
+            roomDetails = new Phong(Trang_thai, Gia, diaChiPhongTro); // Gán đối tượng mới cho biến roomDetails
+        }
+    } catch (SQLException e) {
+        e.printStackTrace(); // Log exception or handle it as needed
+    }
+
+    return roomDetails; // Trả về đối tượng roomDetails
+}
+
+ 
     public static void main(String[] args) {
         NhaTroDAO dAO = new NhaTroDAO();
-        List<String> list = dAO.getImagesForNhaTro(2);
-        for (String string : list) {
-            System.out.println(string);
-        }
+        int sampleHopDongId = 1; // Change this ID based on your test data
+    Phong roomDetails = dAO.getRoomDetailsByHopDongId(sampleHopDongId);
+
+    // Print the room details
+    if (roomDetails != null) {
+        System.out.println("Address: " + roomDetails.getDiaChiPhongTro());
+        System.out.println("Price: " + roomDetails.getGia());
+        System.out.println("Status: " + roomDetails.getTrang_thai());
+    } else {
+        System.out.println("No room details found for Hop Dong ID: " + sampleHopDongId);
+    }
 //        // Kiểm tra phương thức getAll
 //        System.out.println("Danh sách nhà trọ:");
 //        ArrayList<NhaTro> danhSachNhaTro = nhaTroDAO.getAll();

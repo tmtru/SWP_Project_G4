@@ -112,7 +112,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         </li>
 
                         <li class="">
-                            <a href="hop-dong">
+                            <a href="DanhSachCacHopDongByManager">
                                 <i class='bx bx-id-card icon' ></i>
                                 <span class="text nav-text">Hợp đồng</span>
                             </a>
@@ -192,11 +192,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
 
 
                 <!-- hien thi export -->
-  
+
                 <div class="room-actions">
                     <button class="btn add-room" data-toggle="modal" data-target="#addRoomModal">+ Thêm phòng trọ</button>
                     <button class="btn quick-add-room">+ Thêm phòng trọ nhanh</button>
-                   
+
                     <form action="/NhaTroTQAT/addRoomExcel" method="get" style="display: inline; background-color: green; border-radius: 5px">
                         <button type="submit" class="btn export-to-excel">
                             <i class="bx bxs-file-export"></i>
@@ -373,19 +373,41 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         <c:forEach var="room" items="${rooms}">
                             <div class="col-md-3 mb-4">
                                 <div class="card h-100">
-
                                     <div class="card-body">
-                                        <h5 class="card-title">${room.tenPhongTro}</h5>
+                                        <!-- Room Name and Add Contract Button Positioned at the Top -->
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h5 class="card-title">${room.tenPhongTro}</h5>
+                                            <c:if test="${room.trang_thai == 'T' || room.trang_thai == 'DT'}">
+                                                <form action="addContract" method="post" style="display: inline;">
+                                                    <input type="hidden" name="roomId" value="${room.ID_Phong}">
+                                                    <button type="submit" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;">
+                                                        <i class="bx bx-file"></i> Thêm khách
+                                                    </button>
+                                                </form>
+                                            </c:if>
+
+                                        </div>
+
                                         <p class="card-text">
                                             <strong>Tầng:</strong> ${room.tang}<br>
                                             <strong>Diện tích:</strong> ${room.dien_tich} m²<br>
                                             <strong>Giá tiền:</strong> <fmt:formatNumber value="${room.gia}" type="currency" currencyCode="VND"/><br>
-                                            <strong>Trạng thái:</strong> 
-                                            <span class="badge
-                                                  ${room.trang_thai == 'T' ? 'badge-success' : 'badge-danger'}">
-                                                ${room.trang_thai == 'T' ? 'Trống' : 'Đang thuê'}
-                                            </span>
 
+                                            <strong>Trạng thái:</strong> 
+                                            <c:choose>
+                                                <c:when test="${room.trang_thai == 'T'}">
+                                                    <span class="badge badge-success">Trống</span>
+                                                </c:when>
+                                                <c:when test="${room.trang_thai == 'D'}">
+                                                    <span class="badge badge-danger">Đang thuê</span>
+                                                </c:when>
+                                                <c:when test="${room.trang_thai == 'DS'}">
+                                                    <span class="badge badge-warning">Đang sửa</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span class="badge badge-secondary">Trống</span>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </p>
                                     </div>
                                     <div class="card-footer bg-transparent">
@@ -393,35 +415,39 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                             <a href="detailRoom?id=${room.ID_Phong}" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;">
                                                 <i class="bx bx-info-circle"></i> Chi tiết
                                             </a>
-                                            <a href="#" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;"
-                                               onclick='openEditModal(
-                                                               "${room.ID_Phong}",
-                                                               "${room.tenPhongTro}",
-                                                               "${room.tang}",
-                                                               "${room.dien_tich}",
-                                                               "${room.gia}",
-                                                               "${room.trang_thai}",
-                                                               "${room.ID_NhaTro}",
-                                                               "${room.ID_LoaiPhong}",
-                                                       [<c:forEach var="image" items="${room.images}" varStatus="status">
-                                                       "${fn:replace(image, '\\', '/')}"
-                                                   <c:if test="${!status.last}">,</c:if>
-                                               </c:forEach>]
-                                                               );
-                                                       return false;'>
-                                                <i class="bx bx-edit"></i> Chỉnh sửa
-                                            </a>
-                                            <a href="#" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;" 
-                                               onclick="confirmDelete(${room.ID_Phong});
-                                                       return false;">
-                                                <i class="bx bx-minus-circle"></i> Xóa
-                                            </a>
+
+                                            <!-- Edit and Delete Buttons -->
+                                            <c:if test="${!empty room.trang_thai}">
+                                                <a href="#" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;"
+                                                   onclick='openEditModal(
+                                                                   "${room.ID_Phong}",
+                                                                   "${room.tenPhongTro}",
+                                                                   "${room.tang}",
+                                                                   "${room.dien_tich}",
+                                                                   "${room.gia}",
+                                                                   "${room.trang_thai}",
+                                                                   "${room.ID_NhaTro}",
+                                                                   "${room.ID_LoaiPhong}",
+                                                           [<c:forEach var="image" items="${room.images}" varStatus="status">
+                                                           "${fn:replace(image, '\\', '/')}"
+                                                       <c:if test="${!status.last}">,</c:if>
+                                                   </c:forEach>]
+                                                                   );
+                                                           return false;'>
+                                                    <i class="bx bx-edit"></i> Chỉnh sửa
+                                                </a>
+                                                <a href="#" class="btn btn-outline-secondary btn-sm custom-btn" style="color: black;" 
+                                                   onclick="confirmDelete(${room.ID_Phong});
+                                                           return false;">
+                                                    <i class="bx bx-minus-circle"></i> Xóa
+                                                </a>
+                                            </c:if>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </c:forEach>
+
                     </div>
                     <div class="pagination">
                         <c:if test="${currentPage > 1}">

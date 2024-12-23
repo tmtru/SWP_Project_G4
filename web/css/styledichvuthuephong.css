@@ -1,0 +1,155 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+    max-width: 1400px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    font-size: 28px;
+    color: #333;
+}
+
+.buttons .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+}
+
+.btn.save {
+    background-color: #4CAF50;
+}
+
+.btn.return {
+    background-color: #FF9800;
+}
+
+.tabs {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.tab {
+    padding: 10px 15px;
+    margin-right: 10px;
+    background-color: #e0e0e0; 
+    border: none;
+    cursor: pointer;
+    text-decoration: none; 
+    color: #333; 
+    border-radius: 4px; 
+}
+
+
+.tab.active {
+    background-color: #2196F3;
+    color: white;
+}
+
+/* Định dạng phần cảnh báo lưu ý */
+.alert {
+    background-color: #FFEB3B;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.alert strong {
+    font-weight: bold;
+}
+
+/* Bảng dịch vụ */
+.service-section {
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.service-section h2 {
+    margin-bottom: 10px;
+    font-size: 24px;
+    text-align: center;
+}
+
+.service-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.service-table th, .service-table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.service-table th {
+    background-color: #f2f2f2;
+}
+
+.service-table input[type="text"],
+.service-table input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.service-table input[type="checkbox"] {
+    transform: scale(1.5);
+    margin: 0 10px;
+}
+.people-section {
+    display: flex;  /* Sử dụng flexbox để sắp xếp theo dòng */
+    align-items: center;  /* Căn giữa theo chiều dọc */
+    gap: 10px; /* Khoảng cách giữa label và input */
+    margin-bottom: 15px; /* Khoảng cách dưới section */
+}
+
+.people-label {
+    margin: 0; /* Bỏ khoảng cách mặc định của heading */
+    font-weight: bold; /* Để chữ đậm hơn */
+}
+
+.input-group input[type="number"] {
+    width: 160px; /* Chiều rộng cho input số lượng, bạn có thể điều chỉnh */
+    padding: 5px; /* Padding cho input */
+    border-radius: 4px; /* Bo góc nhẹ cho input */
+    border: 1px solid #ccc; /* Viền input */
+}
