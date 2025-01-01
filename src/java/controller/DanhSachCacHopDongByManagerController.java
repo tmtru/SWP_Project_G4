@@ -9,6 +9,7 @@ import dal.DichVuDAO;
 import dal.HopDongDAO;
 import dal.KhachThueDAO;
 import dal.NhaTroDAO;
+import dal.PhongDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -70,6 +71,7 @@ public class DanhSachCacHopDongByManagerController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HopDongDAO hopDongDao = new HopDongDAO();
+        PhongDAO phongDao = new PhongDAO();
         HttpSession session = request.getSession(false);
         if (session != null) {
             int ID_Account = (int) session.getAttribute("ID_Account");
@@ -79,17 +81,19 @@ public class DanhSachCacHopDongByManagerController extends HttpServlet {
             for (HopDong hopDong : hopDongList) {
                 Date ngayGiaTri = hopDong.getNgay_gia_tri();
                 Date ngayHetHan = hopDong.getNgay_het_han();
-
+                 int ID_PhongTro = hopDong.getID_Phongtro();
                 if (ngayHetHan != null && ngayHetHan.before(currentDate)) {
+                    phongDao.updateTrangThaiPhongToT(ID_PhongTro);
                     if (!"expired".equalsIgnoreCase(hopDong.getStatus())) {
                         hopDong.setStatus("expired");
                         hopDongDao.updateHopDongStatus(hopDong.getID_HopDong(), "expired");
+                        
                     }
                 } else if (ngayGiaTri != null && !ngayGiaTri.after(currentDate)) {
                     // If ngayGiaTri is today or a past date, set status to 'active'
                     if (!"active".equalsIgnoreCase(hopDong.getStatus())) {
-//                        hopDong.setStatus("active");
-                        hopDongDao.updateHopDongStatus(hopDong.getID_HopDong(), "active");
+                        hopDong.setStatus("active");
+                        hopDongDao.updateHopDongStatus1(hopDong.getID_HopDong(), "active");
                     }
                 }
             }

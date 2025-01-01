@@ -222,7 +222,7 @@ public class HopDongDAO extends DBContext {
 
     public List<HopDong> getHopDongByChuTro(int idChuTro) {
         List<HopDong> hopDongList = new ArrayList<>();
-        String sql = "SELECT h.ID_HopDong, p.TenPhongTro, h.Ngay_gia_tri, h.Ngay_het_han, h.Trang_thai, kt.Ten_khach\n"
+        String sql = "SELECT h.ID_HopDong, h.ID_PhongTro, p.TenPhongTro, h.Ngay_gia_tri, h.Ngay_het_han, h.Trang_thai, kt.Ten_khach\n"
                 + "FROM hop_dong h \n"
                 + "JOIN phong_tro p ON h.ID_PhongTro = p.ID_Phong \n"
                 + "JOIN nha_tro nt ON p.ID_NhaTro = nt.ID_NhaTro \n"
@@ -237,6 +237,7 @@ public class HopDongDAO extends DBContext {
             while (rs.next()) {
                 HopDong hopDong = new HopDong();
                 hopDong.setID_HopDong(rs.getInt("ID_HopDong"));
+                hopDong.setID_Phongtro(rs.getInt("ID_PhongTro"));
                 hopDong.setTenPhongTro(rs.getString("TenPhongTro"));
                 hopDong.setNgay_gia_tri(rs.getDate("Ngay_gia_tri"));
                 hopDong.setNgay_het_han(rs.getDate("Ngay_het_han"));
@@ -396,7 +397,18 @@ public class HopDongDAO extends DBContext {
     }
 
     public void updateHopDongStatus(int hopDongId, String status) {
-        String sql = "UPDATE hop_dong SET Trang_thai = ? WHERE ID_HopDong = ? and isActive = 1";
+        String sql = "UPDATE hop_dong SET Trang_thai = ?, isActive = 0 WHERE ID_HopDong = ? and isActive = 1";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ps.setInt(2, hopDongId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void updateHopDongStatus1(int hopDongId, String status) {
+        String sql = "UPDATE hop_dong SET Trang_thai = ? WHERE ID_HopDong = ? AND Trang_thai = 'accept' and isActive = 1";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, status);
             ps.setInt(2, hopDongId);
